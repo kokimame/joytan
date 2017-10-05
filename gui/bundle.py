@@ -5,12 +5,11 @@ class BundleUi(QListWidgetItem):
         QListWidgetItem.__init__(self)
 
 class BundleItemUi(QWidget):
-    def __init__(self, fm, bundle, parent=None):
+    def __init__(self, setting, bundle, parent=None):
         super(BundleItemUi, self).__init__(parent)
         self.initFont()
         self.bundle = bundle
-        self.fm = fm
-        self.pref = fm.pref
+        self.setting = setting
         self.defEdits = []
         self.exEdits = []
         self.setupUi()
@@ -18,7 +17,7 @@ class BundleItemUi(QWidget):
     # Fixme: The UI setup is too messy!
     def setupUi(self):
         # Definitions per bundle and Examples per definition
-        dpb, epd = self.pref['dpb'], self.pref['epd']
+        dpb, epd = self.setting['dpb'], self.setting['epd']
         namelabel = QLabel("%d. %s" % (self.bundle.index, self.bundle.name))
         namelabel.setFont(self.boldFont)
 
@@ -61,14 +60,15 @@ class BundleItemUi(QWidget):
 
     def updateEditors(self):
         # Fixme: Need to operate labels and editors better way than with simple lists
+        # Fixme: Exception caches too many Errors!
         # Definitions per bundle and Examples per definition
-        dpb, epd = self.fm.pref['dpb'], self.fm.pref['epd']
+        dpb, epd = self.setting['dpb'], self.setting['epd']
 
         for i, dedt in enumerate(self.defEdits[0:min(len(self.defEdits), dpb)]):
             try:
                 dedt.setText(self.bundle.items[i]['define'])
                 dedt.setCursorPosition(0)
-            except (KeyError, IndexError):
+            except (KeyError, IndexError, TypeError):
                 print("Cannot find definition %d of %s" % (i+1, self.bundle.name))
                 continue
 
@@ -76,6 +76,6 @@ class BundleItemUi(QWidget):
                 try:
                     eedt.setText(self.bundle.items[i]['example'])
                     eedt.setCursorPosition(0)
-                except (KeyError, IndexError):
+                except (KeyError, IndexError, TypeError):
                     print("Cannot find ex%d-%d of %s" % (i+1, j+1, self.bundle.name))
                     continue

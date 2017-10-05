@@ -2,7 +2,8 @@
 
 from bavl.frame import FrameManager
 from gui.qt import *
-from gui.bundle import *
+from gui.bundle import BundleItemUi, BundleUi
+from gui.framelist import FrameList
 from gui.utils import isMac, isLin, isWin
 import gui
 
@@ -26,38 +27,29 @@ class BavlMW(QMainWindow):
     def initUi(self):
         self.setupMainWindow()
         self.setupMenus()
+        self.setupFrameList()
         self.setupButtons()
-
-    def updateFrameList(self):
-        for bundle in self.fm.getBundlesToRender():
-            bui, bitui = BundleUi(), BundleItemUi(self.fm, bundle)
-            bui.setSizeHint(bitui.sizeHint())
-            self.form.frameList.addItem(bui)
-            self.form.frameList.setItemWidget(bui, bitui)
-            self.fm.setToRenderState(bundle, False)
-
-    def updateBundleItemUi(self):
-        mw = self.form
-        for i in range(mw.frameList.count()):
-            bitui = mw.frameList.itemWidget(mw.frameList.item(i))
-            if bitui.toUpdate():
-                bitui.updateEditors()
 
     def setupMainWindow(self):
         self.form = gui.forms.main.Ui_MainWindow()
         self.form.setupUi(self)
         self.setWindowTitle("Emotan えも単")
 
+    def setupFrameList(self):
+        framelist = FrameList(self.fm)
+        self.form.verticalLayout.addWidget(framelist)
+        self.framelist = framelist
+
     def setupMenus(self):
-        mw = self.form
-        mw.actionExtract.triggered.connect(self.onExtract)
-        mw.actionPreferences.triggered.connect(self.onPreferences)
+        form = self.form
+        form.actionExtract.triggered.connect(self.onExtract)
+        form.actionPreferences.triggered.connect(self.onPreferences)
 
     def setupButtons(self):
-        mw = self.form
-        mw.mp3Button.clicked.connect(self.onMp3Compile)
-        mw.pdfButton.clicked.connect(lambda x: print("-- Under constriction --"))
-        mw.dlcButton.clicked.connect(self.onDownload)
+        form = self.form
+        form.mp3Button.clicked.connect(self.onMp3Compile)
+        form.pdfButton.clicked.connect(lambda x: print("-- Under constriction --"))
+        form.dlcButton.clicked.connect(self.onDownload)
 
     def onPreferences(self):
         import gui.preferences

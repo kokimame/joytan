@@ -12,7 +12,8 @@ def onDownload(mw):
     # - e.g partialDownload(mw, parser)
     parser = Parsers[mw.fm.targetDict]()
     ignorantDownload(mw.fm, parser)
-    mw.updateBundleItemUi()
+
+    mw.framelist.updateBundles()
 
 
 def ignorantDownload(fm, parser, gstat=False):

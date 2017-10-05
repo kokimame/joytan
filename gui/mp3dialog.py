@@ -4,7 +4,6 @@ from gui.utils import getFile, getFileNameFromPath, isLin, isMac, processCoreEve
 from bavl.cmder.mp3cmder import mp3Duration, hhmmss2secCmd, getMp3Info
 
 def onMp3Dialog(mw):
-    frameList = mw.form.frameList
     gui.dialogs.open("Mp3Setting", mw)
 
 class SfxTableItem(QTableWidgetItem):
@@ -116,6 +115,7 @@ class Mp3Setting(QDialog):
         # Setting up the properties of audio files such as bitrate and sampling rate
         cmder = Mp3Cmder(self.fm.getRootPath(), setting)
 
+        # Fixme: Only use bundles shown in the framelist of the main window
         for bundle in self.fm.getAllBundles():
             cmder.ttsBundle(bundle)
             pdcnt += 1

@@ -61,15 +61,21 @@ class FrameManager():
     def getRootPath(self):
         return self.pref['workdir'] + '/' + self.pref['title']
 
+    def getNewBundles(self, ids):
+        newbds = []
+        for bundle in self._Frame:
+            if bundle.name not in ids:
+                newbds.append(bundle)
+        return newbds
 
     def getPreferences(self):
         # Get setting of frame e.g. numbers of def and ex required etc
         if isLin:
             return {
                 "workdir": "/home/kokimame/Emotan/workspace",
-                "sfxdir": "/home/kokimame/Dropbox/Python/bavl/templates/sfx",
-                "worddir": "/home/kokimame/Dropbox/Python/bavl/templates/wordlist",
-                "bgmdir": "/home/kokimame/Dropbox/Python/bavl/templates/song",
+                "sfxdir": "/home/kokimame/Dropbox/Python/emotan/templates/sfx",
+                "worddir": "/home/kokimame/Dropbox/Python/emotan/templates/wordlist",
+                "bgmdir": "/home/kokimame/Dropbox/Python/emotan/templates/song",
                 "title": "word50-gre",
                 "dpb": 2, # Definition per bundle
                 "epd": 1,  # Examples per definition
@@ -78,9 +84,9 @@ class FrameManager():
         elif isMac:
             return {
                 "workdir": "/Users/Koki/Emotan/workspace",
-                "sfxdir": "/Users/Koki/Dropbox/Python/bavl/templates/sfx",
-                "worddir": "/Users/Koki/Dropbox/Python/bavl/templates/wordlist",
-                "bgmdir": "/Users/Koki/Dropbox/Python/bavl/templates/song",
+                "sfxdir": "/Users/Koki/Dropbox/Python/emotan/templates/sfx",
+                "worddir": "/Users/Koki/Dropbox/Python/emotan/templates/wordlist",
+                "bgmdir": "/Users/Koki/Dropbox/Python/emotan/templates/song",
                 "title": "word50-gre",
                 "dpb": 2, # Definition to be saved in a bundle
                 "epd": 1,  # Examples per definition

@@ -14,55 +14,36 @@
    <string>Bavl</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QCommandLinkButton" name="dlcButton">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>520</y>
-      <width>211</width>
-      <height>41</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Get DLC via Online Dictionary</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="mp3Button">
-    <property name="geometry">
-     <rect>
-      <x>380</x>
-      <y>530</y>
-      <width>99</width>
-      <height>27</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Get MP3</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="pdfButton">
-    <property name="geometry">
-     <rect>
-      <x>380</x>
-      <y>560</y>
-      <width>99</width>
-      <height>27</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Get PDF</string>
-    </property>
-   </widget>
-   <widget class="QListWidget" name="frameList">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>10</y>
-      <width>501</width>
-      <height>511</height>
-     </rect>
-    </property>
-   </widget>
+   <layout class="QVBoxLayout" name="verticalLayout_2">
+    <item>
+     <layout class="QVBoxLayout" name="verticalLayout"/>
+    </item>
+    <item>
+     <layout class="QGridLayout" name="gridLayout">
+      <item row="0" column="0">
+       <widget class="QCommandLinkButton" name="dlcButton">
+        <property name="text">
+         <string>Get DLC via Online Dictionary</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QPushButton" name="mp3Button">
+        <property name="text">
+         <string>Get MP3</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="2">
+       <widget class="QPushButton" name="pdfButton">
+        <property name="text">
+         <string>Get PDF</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+   </layout>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">

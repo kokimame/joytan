@@ -2,7 +2,6 @@
 
 from bavl.frame import FrameManager
 from gui.qt import *
-from gui.bundle import BundleItemUi, BundleUi
 from gui.framelist import FrameList
 from gui.utils import isMac, isLin, isWin
 import gui

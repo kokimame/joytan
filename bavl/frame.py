@@ -25,9 +25,7 @@ class FrameManager():
             "oxford": "https://en.oxforddictionaries.com/definition/",
             "wiktionary": "https://en.wiktionary.org/wiki/"
         }
-
         rmdir(self.getRootPath())
-        #self.createWorkspace()
 
     def initBundle(self, name, index):
         # Do some setup for bundles using "Frame preference"
@@ -36,6 +34,7 @@ class FrameManager():
             raise Exception("Exception: Bundle with name %s already exists." % name)
         return Bundle(name, index)
 
+    # This should be done by ID not name
     def setBitemByName(self, name, bitem):
         for bundle in self._Frame:
             if bundle.name == name:
@@ -43,10 +42,6 @@ class FrameManager():
                 return
         raise Exception("Error: Bundle with name '%s' is not found in the Frame" % name)
 
-    def setBundleUpdateState(self, bundle, state):
-        for b in self._Frame:
-            if b == bundle:
-                bundle.isUpdated = state
 
     def addBundle(self, name):
         index = self.getFrameLength() + 1
@@ -114,12 +109,6 @@ class FrameManager():
 
     def updateSetting(self):
         pass
-
-    def getBundlesToRender(self):
-        return [b for b in self._Frame if b.toRender]
-
-    def setToRenderState(self, bundle, state):
-        bundle.toRender = state
 
     def getAllBundles(self):
         return [b for b in self._Frame]

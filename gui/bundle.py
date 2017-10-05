@@ -45,7 +45,7 @@ class BundleItemUi(QWidget):
         for i in range(1, dpw+1):
             dlbl = QLabel("Def%d" % i)
             dlbl.setFont(self.italFont)
-            dlbl.setStyleSheet("QLabel { background-color : red; }")
+            dlbl.setStyleSheet("QLabel { background-color : rgb(255, 180, 230); }")
             dedt = QLineEdit()
             grid.addWidget(dlbl, row, 0)
             grid.addWidget(dedt, row, 1)
@@ -53,7 +53,7 @@ class BundleItemUi(QWidget):
             for j in range(1, epd+1):
                 elbl = QLabel("Ex%d-%d" % (i, j))
                 elbl.setFont(self.italFont)
-                elbl.setStyleSheet("QLabel { background-color : blue; color : white; }")
+                elbl.setStyleSheet("QLabel { background-color : rgb(180, 230, 255); }")
                 eedt = QLineEdit()
                 grid.addWidget(elbl, row+1, 0)
                 grid.addWidget(eedt, row+1, 1)

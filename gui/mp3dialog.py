@@ -80,7 +80,8 @@ class Mp3Setting(QDialog):
         form = self.form
         setting = {}
         setting['repeat'] = form.wordSpin.value()
-        setting['dpb'], setting['epd']=  self.fm.pref['dpb'], self.fm.pref['epd']
+        setting['dpw'], setting['epd'] = \
+            self.mw.bdfactory.pref['dpw'], self.mw.bdfactory.pref['epd']
 
         sfxdir = {}
         for i, group in enumerate(['word', 'definitions', 'examples']):
@@ -108,6 +109,7 @@ class Mp3Setting(QDialog):
         from bavl.cmder.mp3cmder import Mp3Cmder
         from gui.progress import ProgressDialog
 
+        # Fixme: Here is the wrong progress length assumption!
         pd = ProgressDialog(self.fm.getFrameLength()*3, msg="Creating MP3...")
         pdcnt = 0
         pd.show()
@@ -116,6 +118,7 @@ class Mp3Setting(QDialog):
         cmder = Mp3Cmder(self.fm.getRootPath(), setting)
 
         # Fixme: Only use bundles shown in the framelist of the main window
+        # TODO: Thus no need to pass FM but should pass a ref to framelist ui
         for bundle in self.fm.getAllBundles():
             cmder.ttsBundle(bundle)
             pdcnt += 1

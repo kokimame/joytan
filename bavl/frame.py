@@ -13,10 +13,6 @@ class FrameManager():
         # In future, the list may be extended to a new class.
         self._Frame = []
 
-
-        self.pref = self.getPreferences()
-        print(self.pref)
-
         # Fixme: Set this None initially and use system preference
         self.targetDict = "dictionary-com"
 
@@ -27,6 +23,30 @@ class FrameManager():
             "oxford": "https://en.oxforddictionaries.com/definition/",
             "wiktionary": "https://en.wiktionary.org/wiki/"
         }
+
+        if isLin:
+            self.pref = {
+                "workdir": "/home/kokimame/Emotan/workspace",
+                "sfxdir": "/home/kokimame/Dropbox/Python/emotan/templates/sfx",
+                "worddir": "/home/kokimame/Dropbox/Python/emotan/templates/wordlist",
+                "bgmdir": "/home/kokimame/Dropbox/Python/emotan/templates/song",
+                "title": "word50-gre",
+                "synonym": 0
+            }
+        elif isMac:
+            self.pref = {
+                "workdir": "/Users/Koki/Emotan/workspace",
+                "sfxdir": "/Users/Koki/Dropbox/Python/emotan/templates/sfx",
+                "worddir": "/Users/Koki/Dropbox/Python/emotan/templates/wordlist",
+                "bgmdir": "/Users/Koki/Dropbox/Python/emotan/templates/song",
+                "title": "word50-gre",
+                "synonym": 0
+            }
+        else:
+            print("Sorry, Windows is now under development!")
+
+        print(self.pref)
+
         rmdir(self.getRootPath())
 
     def initBundle(self, name, index):
@@ -65,42 +85,6 @@ class FrameManager():
                 newbds.append(bundle)
         return newbds
 
-    def getPreferences(self):
-        # Get setting of frame e.g. numbers of def and ex required etc
-        if isLin:
-            return {
-                "workdir": "/home/kokimame/Emotan/workspace",
-                "sfxdir": "/home/kokimame/Dropbox/Python/emotan/templates/sfx",
-                "worddir": "/home/kokimame/Dropbox/Python/emotan/templates/wordlist",
-                "bgmdir": "/home/kokimame/Dropbox/Python/emotan/templates/song",
-                "title": "word50-gre",
-                "dpb": 2, # Definition per bundle
-                "epd": 1,  # Examples per definition
-                "synonym": 0
-            }
-        elif isMac:
-            return {
-                "workdir": "/Users/Koki/Emotan/workspace",
-                "sfxdir": "/Users/Koki/Dropbox/Python/emotan/templates/sfx",
-                "worddir": "/Users/Koki/Dropbox/Python/emotan/templates/wordlist",
-                "bgmdir": "/Users/Koki/Dropbox/Python/emotan/templates/song",
-                "title": "word50-gre",
-                "dpb": 2, # Definition to be saved in a bundle
-                "epd": 1,  # Examples per definition
-                "synonym": 0
-            }
-        elif isWin:
-            raise Exception("Windows ver is now under development.")
-
-    def printFrame(self):
-        print(self._Frame)
-
-    #def createFrameDirs(self):
-    #   root = self.getRootPath()
-    #    mkdir(root)
-    #    for bundle in self._Frame:
-    #        mkdir(root + '/' + bundle.name)
-    #    print("Frame Dirs created")
 
     def createWorkspace(self):
         mkdir(self.pref['workdir'])

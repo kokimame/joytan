@@ -81,13 +81,13 @@ class Mp3Cmder:
         curdir = "{root}/{name}".format(root=self.root, name=bundle.name)
         assert os.path.exists(curdir)
 
-        dpb, epd = self.setting['dpb'], self.setting['epd']
+        dpw, epd = self.setting['dpw'], self.setting['epd']
         self.seq[bundle.name] = []
-        for i in range(dpb):
+        for i in range(dpw):
             try:
                 define = bundle.items[i]['define']
             except IndexError:
-                print("Definitions of '%s' found were less than DPB" % bundle.name)
+                print("Definitions of '%s' found were less than DPW" % bundle.name)
                 continue
             if define == '': continue
 

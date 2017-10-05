@@ -1,29 +1,48 @@
 from gui.qt import *
 
+class BundleFactory:
+    def __init__(self):
+        # TODO: More should be coming
+        self.pref = {
+            "dpw": 2,
+            "epd": 1
+        }
+
+    def createUi(self, bundle):
+        bdui, bditem = BundleUi(), BundleItemUi(bundle, self.pref)
+        bdui.setSizeHint(bditem.sizeHint())
+        return bdui, bditem
+
+
 class BundleUi(QListWidgetItem):
     def __init__(self):
         QListWidgetItem.__init__(self)
 
 class BundleItemUi(QWidget):
-    def __init__(self, setting, bundle, parent=None):
+    def __init__(self, bundle, pref, parent=None):
         super(BundleItemUi, self).__init__(parent)
         self.initFont()
         self.bundle = bundle
-        self.setting = setting
+        # TODO: these two variables will be stored in a Factory class
+        self.dpw = pref['dpw']
+        self.epd = pref['epd']
+
+
         self.defEdits = []
         self.exEdits = []
         self.setupUi()
 
+
     # Fixme: The UI setup is too messy!
     def setupUi(self):
         # Definitions per bundle and Examples per definition
-        dpb, epd = self.setting['dpb'], self.setting['epd']
+        dpw, epd = self.dpw, self.epd
         namelabel = QLabel("%d. %s" % (self.bundle.index, self.bundle.name))
         namelabel.setFont(self.boldFont)
 
         grid = QGridLayout()
         row = 1
-        for i in range(1, dpb+1):
+        for i in range(1, dpw+1):
             dlbl = QLabel("Def%d" % i)
             dlbl.setFont(self.italFont)
             dedt = QLineEdit()
@@ -62,9 +81,9 @@ class BundleItemUi(QWidget):
         # Fixme: Need to operate labels and editors better way than with simple lists
         # Fixme: Exception caches too many Errors!
         # Definitions per bundle and Examples per definition
-        dpb, epd = self.setting['dpb'], self.setting['epd']
+        dpw, epd = self.dpw, self.epd
 
-        for i, dedt in enumerate(self.defEdits[0:min(len(self.defEdits), dpb)]):
+        for i, dedt in enumerate(self.defEdits[0:min(len(self.defEdits), dpw)]):
             try:
                 dedt.setText(self.bundle.items[i]['define'])
                 dedt.setCursorPosition(0)

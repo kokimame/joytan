@@ -12,6 +12,8 @@ class FrameManager():
         # Frame is merely a built-in list for now.
         # In future, the list may be extended to a new class.
         self._Frame = []
+
+
         self.pref = self.getPreferences()
         print(self.pref)
 

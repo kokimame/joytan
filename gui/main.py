@@ -3,6 +3,7 @@
 from bavl.frame import FrameManager
 from gui.qt import *
 from gui.framelist import FrameList
+from gui.bundle import BundleFactory
 from gui.utils import isMac, isLin, isWin
 import gui
 
@@ -13,6 +14,7 @@ class BavlMW(QMainWindow):
         self.app = app
 
         self.fm = FrameManager()
+        self.bdfactory = BundleFactory()
 
         try:
             self.initUi()
@@ -35,7 +37,7 @@ class BavlMW(QMainWindow):
         self.setWindowTitle("Emotan えも単")
 
     def setupFrameList(self):
-        framelist = FrameList(self.fm)
+        framelist = FrameList(self)
         self.form.verticalLayout.addWidget(framelist)
         self.framelist = framelist
 
@@ -53,7 +55,6 @@ class BavlMW(QMainWindow):
     def onPreferences(self):
         import gui.preferences
         gui.dialogs.open("Preferences", self)
-
 
     def onExtract(self):
         import gui.extract

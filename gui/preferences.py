@@ -8,9 +8,34 @@ class Preferences(QDialog):
         self.mw = mw
         self.form = gui.forms.preferences.Ui_preferences()
         self.form.setupUi(self)
-        self.form.buttonBox.button(QDialogButtonBox.Help).setAutoDefault(False)
-        self.form.buttonBox.button(QDialogButtonBox.Close).setAutoDefault(False)
+        self.initUi()
         self.show()
+
+    def initUi(self):
+        self.setupButtons()
+        self.setupSpins()
+
+    def setupButtons(self):
+        form = self.form
+        form.buttonBox.button(QDialogButtonBox.Ok).clicked.connect(self.onOk)
+
+    def setupSpins(self):
+        form = self.form
+        factory = self.mw.bdfactory
+        form.dpwSpin.setValue(factory.pref['dpw'])
+        form.epdSpin.setValue(factory.pref['epd'])
+
+
+    def onOk(self):
+        self.updateBundlePref()
+        self.reject()
+
+    def updateBundlePref(self):
+        form = self.form
+        factory = self.mw.bdfactory
+        factory.pref['dpw'] = form.dpwSpin.value()
+        factory.pref['epd'] = form.epdSpin.value()
+
 
     def reject(self):
         self.done(0)

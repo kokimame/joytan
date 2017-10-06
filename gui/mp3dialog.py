@@ -117,7 +117,8 @@ class Mp3Setting(QDialog):
         # Setting up the properties of audio files such as bitrate and sampling rate
         cmder = Mp3Cmder(self.fm.getRootPath(), setting)
 
-        # Fixme: Only use bundles shown in the framelist of the main window
+        # Fixme: Only use bundles shown in the framelist of the main window,
+        # i.e. Remove getAllBundles
         # TODO: Thus no need to pass FM but should pass a ref to framelist ui
         for bundle in self.fm.getAllBundles():
             cmder.ttsBundle(bundle)

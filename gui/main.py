@@ -48,7 +48,7 @@ class BavlMW(QMainWindow):
 
     def setupButtons(self):
         form = self.form
-        form.mp3Button.clicked.connect(self.onMp3Compile)
+        form.mp3Button.clicked.connect(self.onCreateMp3)
         form.pdfButton.clicked.connect(lambda x: print("-- Under constriction --"))
         form.dlcButton.clicked.connect(self.onDownload)
 
@@ -64,15 +64,9 @@ class BavlMW(QMainWindow):
         import gui.download
         gui.download.onDownload(self)
 
-    def onMp3Compile(self):
+    def onCreateMp3(self):
         import gui.mp3dialog
         gui.mp3dialog.onMp3Dialog(self)
-
-    def onMp3Convert(self):
-        pass
-
-    def onPdfConvert(self):
-        pass
 
     def center(self):
         qr = self.frameGeometry()

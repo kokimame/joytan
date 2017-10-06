@@ -30,8 +30,6 @@ class BundleItemUi(QWidget):
         self.editors = {}
         self.setupUi()
 
-
-    # Fixme: The UI setup is too messy!
     def setupUi(self):
         # Definitions per bundle and Examples per definition
         dpw, epd = self.dpw, self.epd

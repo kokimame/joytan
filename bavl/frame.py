@@ -31,7 +31,6 @@ class FrameManager():
                 "worddir": "/home/kokimame/Dropbox/Python/emotan/templates/wordlist",
                 "bgmdir": "/home/kokimame/Dropbox/Python/emotan/templates/song",
                 "title": "word50-gre",
-                "synonym": 0
             }
         elif isMac:
             self.pref = {
@@ -40,7 +39,6 @@ class FrameManager():
                 "worddir": "/Users/Koki/Dropbox/Python/emotan/templates/wordlist",
                 "bgmdir": "/Users/Koki/Dropbox/Python/emotan/templates/song",
                 "title": "word50-gre",
-                "synonym": 0
             }
         else:
             print("Sorry, Windows is now under development!")

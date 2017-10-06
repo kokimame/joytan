@@ -18,7 +18,7 @@ def onDownload(mw):
     # And also probably selecting a dictionary parser and passing it to the method,
     # which abstract parser for each downloading method sounds good.
     # - e.g partialDownload(mw, parser)
-    parser = Parsers[mw.onlineRef]()
+    parser = Parsers[mw.pref['onlineRef']]()
     ignorantDownload(mw, parser)
 
     mw.framelist.updateBundles()
@@ -33,7 +33,7 @@ def ignorantDownload(mw, parser, gstat=False):
         pd.setValue(cnt)
         processCoreEvents()
 
-        r = requests.get(dictUrls[mw.onlineRef] + name)
+        r = requests.get(dictUrls[mw.pref['onlineRef']] + name)
         data = r.text
         bitems = parser.run(data)
 

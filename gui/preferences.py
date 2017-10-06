@@ -15,6 +15,10 @@ class Preferences(QDialog):
         self.setupButtons()
         self.setupSpins()
         self.setupEditors()
+        self.setupCombo()
+
+    def setupCombo(self):
+        self.form.dictCombo.setCurrentText(self.mw.pref['onlineRef'])
 
     def setupButtons(self):
         form = self.form
@@ -38,8 +42,9 @@ class Preferences(QDialog):
 
     def onOk(self):
         self.updateBundlePref()
-        self.updateFramePref()
+        self.updateMainPref()
         self.reject()
+
 
     def updateBundlePref(self):
         form = self.form
@@ -47,7 +52,7 @@ class Preferences(QDialog):
         factory.pref['dpw'] = form.dpwSpin.value()
         factory.pref['epd'] = form.epdSpin.value()
 
-    def updateFramePref(self):
+    def updateMainPref(self):
         form = self.form
         mw = self.mw
         mw.pref['title'] = form.titleEdit.text()
@@ -55,6 +60,7 @@ class Preferences(QDialog):
         mw.pref['worddir'] = form.wordEdit.text()
         mw.pref['bgmdir'] = form.bgmEdit.text()
         mw.pref['sfxdir'] = form.sfxEdit.text()
+        mw.pref['onlineRef'] = form.dictCombo.currentText()
 
 
     def reject(self):

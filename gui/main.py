@@ -7,21 +7,28 @@ from gui.bundle import BundleFactory
 from gui.utils import isMac, isLin, isWin
 import gui
 
-defaultLinPref = {
-    "workdir": "/home/kokimame/Emotan/workspace",
-    "sfxdir": "/home/kokimame/Dropbox/Python/emotan/templates/sfx",
-    "worddir": "/home/kokimame/Dropbox/Python/emotan/templates/wordlist",
-    "bgmdir": "/home/kokimame/Dropbox/Python/emotan/templates/song",
-    "title": "emotan-sample",
-}
 
-defaultMacPref = {
-    "workdir": "/Users/Koki/Emotan/workspace",
-    "sfxdir": "/Users/Koki/Dropbox/Python/emotan/templates/sfx",
-    "worddir": "/Users/Koki/Dropbox/Python/emotan/templates/wordlist",
-    "bgmdir": "/Users/Koki/Dropbox/Python/emotan/templates/song",
-    "title": "emotan-sample",
-}
+def defaultPref():
+    import os
+    cwd = os.getcwd()
+    workdir = None
+
+    if isLin:
+        workdir = "/home/kokimame/Emotan/workspace"
+    elif isMac:
+        workdir = "/Users/Koki/Emotan/workspace"
+    else:
+        print("Sorry only support Mac and Linux for now.")
+        exit(1)
+
+    return {
+        "workdir": workdir,
+        "sfxdir": cwd + "/templates/sfx",
+        "worddir": cwd + "/templates/wordlist",
+        "bgmdir": cwd + "/templates/song",
+        "title": "emotan-sample",
+        "onlineRef": "dictionary-com"
+    }
 
 class BavlMW(QMainWindow):
     def __init__(self, app, args):
@@ -29,14 +36,7 @@ class BavlMW(QMainWindow):
         gui.mw = self
         self.app = app
 
-        self.onlineRef = "dictionary-com"
-        if isLin:
-            self.pref = defaultLinPref
-        elif isMac:
-            self.pref = defaultMacPref
-        else:
-            print("Sorry, Windows is now under development!")
-
+        self.pref = defaultPref()
         print(self.pref)
 
         self.fm = FrameManager(self)

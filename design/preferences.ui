@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>461</width>
-    <height>347</height>
+    <height>405</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -59,6 +59,41 @@
        </item>
        <item>
         <layout class="QVBoxLayout" name="verticalLayout">
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_5">
+           <item>
+            <widget class="QLabel" name="label_8">
+             <property name="text">
+              <string>Online Dictionary</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QComboBox" name="dictCombo">
+             <item>
+              <property name="text">
+               <string>Dictionary.com</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Wiktionary</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Cambridge Dictionary</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Oxford English Dictionary</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+          </layout>
+         </item>
          <item>
           <layout class="QHBoxLayout" name="horizontalLayout_3">
            <item>
@@ -133,17 +168,11 @@
         </layout>
        </item>
        <item>
-        <spacer name="verticalSpacer">
+        <widget class="Line" name="line">
          <property name="orientation">
-          <enum>Qt::Vertical</enum>
+          <enum>Qt::Horizontal</enum>
          </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>40</height>
-          </size>
-         </property>
-        </spacer>
+        </widget>
        </item>
        <item>
         <layout class="QGridLayout" name="gridLayout">
@@ -190,8 +219,6 @@
         </layout>
        </item>
       </layout>
-      <zorder>verticalSpacer</zorder>
-      <zorder>horizontalLayoutWidget</zorder>
      </widget>
      <widget class="QWidget" name="tabMP3">
       <attribute name="title">

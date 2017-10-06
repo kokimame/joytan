@@ -68,7 +68,7 @@ def run():
         QMessageBox.critical(None, "Startup Error")
 
 def _run():
-    global mw, app # Main window
+    global mw, app# Main window
     print("Run the GUI")
 
     app = BavlApp(sys.argv)

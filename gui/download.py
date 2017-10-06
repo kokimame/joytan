@@ -4,34 +4,42 @@ from bavl.parser import Parsers
 from gui.progress import ProgressDialog
 from gui.utils import processCoreEvents
 
+# These url will be set through Preferences
+dictUrls = {
+    "dictionary-com": "http://dictionary.com/browse/",
+    "cambridge": "http://dictionary.cambridge.org/dictionary/english/",
+    "oxford": "https://en.oxforddictionaries.com/definition/",
+    "wiktionary": "https://en.wiktionary.org/wiki/"
+}
+
 def onDownload(mw):
     # Look up Frame Manager of the MainWindow for the state of contents in bundles
     # to choose the right downloading method, i.e. needs to download partially or totally?
     # And also probably selecting a dictionary parser and passing it to the method,
     # which abstract parser for each downloading method sounds good.
     # - e.g partialDownload(mw, parser)
-    parser = Parsers[mw.fm.targetDict]()
-    ignorantDownload(mw.fm, parser)
+    parser = Parsers[mw.onlineRef]()
+    ignorantDownload(mw, parser)
 
     mw.framelist.updateBundles()
 
 
-def ignorantDownload(fm, parser, gstat=False):
-    pd = ProgressDialog(fm.getFrameSize(), msg="Downloading...")
+def ignorantDownload(mw, parser, gstat=False):
+    pd = ProgressDialog(mw.fm.getFrameSize(), msg="Downloading...")
     pd.show()
 
-    for cnt, name in enumerate(fm.getBundleNames()):
+    for cnt, name in enumerate(mw.fm.getBundleNames()):
         # This tip probably makes pd faster to display.
         pd.setValue(cnt)
         processCoreEvents()
 
-        r = requests.get(fm.dictURLs[fm.targetDict] + name)
+        r = requests.get(dictUrls[mw.onlineRef] + name)
         data = r.text
         bitems = parser.run(data)
 
-        downloadGstaticSound(name, "{dir}/{name}/gstatic.mp3".format(dir=fm.getRootPath(), name=name))
+        downloadGstaticSound(name, "{dir}/{name}/gstatic.mp3".format(dir=mw.getRootPath(), name=name))
 
-        fm.setBitemByName(name, bitems)
+        mw.fm.setBitemByName(name, bitems)
 
 def downloadGstaticSound(word, filename):
     url = "http://ssl.gstatic.com/dictionary/static/sounds/oxford/"

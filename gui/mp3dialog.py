@@ -29,7 +29,6 @@ class Mp3Setting(QDialog):
     def __init__(self, mw, framelist):
         QDialog.__init__(self, mw, Qt.Window)
         self.mw = mw
-        self.fm = mw.fm
         self.framelist = framelist
         self.form = gui.forms.mp3dialog.Ui_Mp3Dialog()
         self.form.setupUi(self)
@@ -113,7 +112,7 @@ class Mp3Setting(QDialog):
         pd.show()
 
         # Setting up the properties of audio files such as bitrate and sampling rate
-        cmder = Mp3Cmder(self.fm.getRootPath(), setting)
+        cmder = Mp3Cmder(self.mw.getRootPath(), setting)
 
         # Fixme: Only use bundles shown in the framelist of the main window,
         # i.e. Remove getAllBundles, WYSIWYG!
@@ -148,7 +147,7 @@ class Mp3Setting(QDialog):
         list = self.form.bgmList
         try:
             file = getFile(self.mw, "Add song to BGM Loop",
-                        dir=self.fm.pref['bgmdir'], filter="*.mp3")
+                        dir=self.mw.pref['bgmdir'], filter="*.mp3")
             item = BgmListItem(file)
             row = list.count() + 1
             item.setText("%3d. %s: %s" % (row, item.duration, item.bgmname))
@@ -163,7 +162,7 @@ class Mp3Setting(QDialog):
         if col == 1:
             try:
                 file = getFile(self.mw, "Select Sound effect",
-                       dir=self.fm.pref['sfxdir'], filter="*.mp3")
+                       dir=self.mw.pref['sfxdir'], filter="*.mp3")
                 item.setPath(file)
                 item.setText(item.sfxname)
             except IndexError:

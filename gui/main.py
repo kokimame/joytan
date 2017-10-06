@@ -7,20 +7,42 @@ from gui.bundle import BundleFactory
 from gui.utils import isMac, isLin, isWin
 import gui
 
+defaultLinPref = {
+    "workdir": "/home/kokimame/Emotan/workspace",
+    "sfxdir": "/home/kokimame/Dropbox/Python/emotan/templates/sfx",
+    "worddir": "/home/kokimame/Dropbox/Python/emotan/templates/wordlist",
+    "bgmdir": "/home/kokimame/Dropbox/Python/emotan/templates/song",
+    "title": "word50-gre",
+}
+
+defaultMacPref = {
+    "workdir": "/Users/Koki/Emotan/workspace",
+    "sfxdir": "/Users/Koki/Dropbox/Python/emotan/templates/sfx",
+    "worddir": "/Users/Koki/Dropbox/Python/emotan/templates/wordlist",
+    "bgmdir": "/Users/Koki/Dropbox/Python/emotan/templates/song",
+    "title": "word50-gre",
+}
+
 class BavlMW(QMainWindow):
     def __init__(self, app, args):
         QMainWindow.__init__(self)
         gui.mw = self
         self.app = app
 
-        self.fm = FrameManager()
-        self.bdfactory = BundleFactory()
+        self.onlineRef = "dictionary-com"
+        if isLin:
+            self.pref = defaultLinPref
+        elif isMac:
+            self.pref = defaultMacPref
+        else:
+            print("Sorry, Windows is now under development!")
 
-        try:
-            self.initUi()
-        except Exception as e:
-            print("Error occurred on initUI", e)
-            sys.exit(1)
+        print(self.pref)
+
+        self.fm = FrameManager(self)
+        self.bdfactory = BundleFactory()
+        self.initUi()
+
 
         self.center()
         self.show()
@@ -30,6 +52,9 @@ class BavlMW(QMainWindow):
         self.setupMenus()
         self.setupFrameList()
         self.setupButtons()
+
+    def getRootPath(self):
+        return self.pref['workdir'] + '/' + self.pref['title']
 
     def setupMainWindow(self):
         self.form = gui.forms.main.Ui_MainWindow()

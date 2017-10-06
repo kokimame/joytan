@@ -7,45 +7,14 @@ class _Frame():
         pass
 
 class FrameManager():
-    def __init__(self):
+    def __init__(self, mw):
         # Private. Don't access Frame directly from the outside of FrameManager
         # Frame is merely a built-in list for now.
         # In future, the list may be extended to a new class.
         self._Frame = []
+        self.mw = mw
 
-        # Fixme: Set this None initially and use system preference
-        self.targetDict = "dictionary-com"
-
-        # These url will be set through Preferences
-        self.dictURLs = {
-            "dictionary-com": "http://dictionary.com/browse/",
-            "cambridge": "http://dictionary.cambridge.org/dictionary/english/",
-            "oxford": "https://en.oxforddictionaries.com/definition/",
-            "wiktionary": "https://en.wiktionary.org/wiki/"
-        }
-
-        if isLin:
-            self.pref = {
-                "workdir": "/home/kokimame/Emotan/workspace",
-                "sfxdir": "/home/kokimame/Dropbox/Python/emotan/templates/sfx",
-                "worddir": "/home/kokimame/Dropbox/Python/emotan/templates/wordlist",
-                "bgmdir": "/home/kokimame/Dropbox/Python/emotan/templates/song",
-                "title": "word50-gre",
-            }
-        elif isMac:
-            self.pref = {
-                "workdir": "/Users/Koki/Emotan/workspace",
-                "sfxdir": "/Users/Koki/Dropbox/Python/emotan/templates/sfx",
-                "worddir": "/Users/Koki/Dropbox/Python/emotan/templates/wordlist",
-                "bgmdir": "/Users/Koki/Dropbox/Python/emotan/templates/song",
-                "title": "word50-gre",
-            }
-        else:
-            print("Sorry, Windows is now under development!")
-
-        print(self.pref)
-
-        rmdir(self.getRootPath())
+        rmdir(self.mw.getRootPath())
 
     def initBundle(self, name, index):
         # Do some setup for bundles using "Frame preference"
@@ -68,13 +37,10 @@ class FrameManager():
         try:
             b = self.initBundle(name, index)
             self._Frame.append(b)
-            mkdir(self.getRootPath() + '/' + name)
+            mkdir(self.mw.getRootPath() + '/' + name)
         except Exception as e:
             print(e)
             return
-
-    def getRootPath(self):
-        return self.pref['workdir'] + '/' + self.pref['title']
 
     def getNewBundles(self, ids):
         newbds = []
@@ -82,9 +48,6 @@ class FrameManager():
             if bundle.name not in ids:
                 newbds.append(bundle)
         return newbds
-
-    def createWorkspace(self):
-        mkdir(self.pref['workdir'])
 
     def getBundleNames(self):
         return [bundle.name for bundle in self._Frame]

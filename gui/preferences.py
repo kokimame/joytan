@@ -28,12 +28,12 @@ class Preferences(QDialog):
 
     def setupEditors(self):
         form = self.form
-        fm = self.mw.fm
-        form.titleEdit.setText(fm.pref['title'])
-        form.workingEdit.setText(fm.pref['workdir'])
-        form.wordEdit.setText(fm.pref['worddir'])
-        form.bgmEdit.setText(fm.pref['bgmdir'])
-        form.sfxEdit.setText(fm.pref['sfxdir'])
+        mw = self.mw
+        form.titleEdit.setText(mw.pref['title'])
+        form.workingEdit.setText(mw.pref['workdir'])
+        form.wordEdit.setText(mw.pref['worddir'])
+        form.bgmEdit.setText(mw.pref['bgmdir'])
+        form.sfxEdit.setText(mw.pref['sfxdir'])
 
 
     def onOk(self):
@@ -49,12 +49,12 @@ class Preferences(QDialog):
 
     def updateFramePref(self):
         form = self.form
-        fm = self.mw.fm
-        fm.pref['title'] = form.titleEdit.text()
-        fm.pref['workdir'] = form.workingEdit.text()
-        fm.pref['worddir'] = form.wordEdit.text()
-        fm.pref['bgmdir'] = form.bgmEdit.text()
-        fm.pref['sfxdir'] = form.sfxEdit.text()
+        mw = self.mw
+        mw.pref['title'] = form.titleEdit.text()
+        mw.pref['workdir'] = form.workingEdit.text()
+        mw.pref['worddir'] = form.wordEdit.text()
+        mw.pref['bgmdir'] = form.bgmEdit.text()
+        mw.pref['sfxdir'] = form.sfxEdit.text()
 
 
     def reject(self):

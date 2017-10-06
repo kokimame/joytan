@@ -12,7 +12,7 @@ defaultLinPref = {
     "sfxdir": "/home/kokimame/Dropbox/Python/emotan/templates/sfx",
     "worddir": "/home/kokimame/Dropbox/Python/emotan/templates/wordlist",
     "bgmdir": "/home/kokimame/Dropbox/Python/emotan/templates/song",
-    "title": "word50-gre",
+    "title": "emotan-sample",
 }
 
 defaultMacPref = {
@@ -20,7 +20,7 @@ defaultMacPref = {
     "sfxdir": "/Users/Koki/Dropbox/Python/emotan/templates/sfx",
     "worddir": "/Users/Koki/Dropbox/Python/emotan/templates/wordlist",
     "bgmdir": "/Users/Koki/Dropbox/Python/emotan/templates/song",
-    "title": "word50-gre",
+    "title": "emotan-sample",
 }
 
 class BavlMW(QMainWindow):

@@ -88,13 +88,6 @@ class FrameManager():
     def createWorkspace(self):
         mkdir(self.pref['workdir'])
 
-
-    # TODO: Delete the method
-    # FrameManager only accepts requests for a part of bundles from other components
-    # Don't give them all of it to manage bundles by their own.
-    def getAllBundles(self):
-        return [b for b in self._Frame]
-
     def getBundleNames(self):
         return [bundle.name for bundle in self._Frame]
 

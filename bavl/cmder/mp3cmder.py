@@ -69,7 +69,7 @@ class Mp3Cmder:
                 inputs += "%s %s " % (sfxdir['examples']['path'], cont)
         catMp3(inputs, "", "{root}/{name}.mp3".format(root=self.root, name=name))
 
-    def ttsBundle(self, bundle):
+    def ttsBitem(self, bitem):
         if isLin:
             ttscmd = espeakMp3
         elif isMac:
@@ -77,32 +77,29 @@ class Mp3Cmder:
         else:
             raise Exception("Windows is not supported!")
 
-
-        curdir = "{root}/{name}".format(root=self.root, name=bundle.name)
+        curdir = "{root}/{name}".format(root=self.root, name=bitem.name)
         assert os.path.exists(curdir)
 
-        dpw, epd = self.setting['dpw'], self.setting['epd']
-        self.seq[bundle.name] = []
-        for i in range(dpw):
-            try:
-                define = bundle.items[i]['define']
-            except IndexError:
-                print("Definitions of '%s' found were less than DPW" % bundle.name)
-                continue
+        dpw, epd = bitem.dpw, bitem.epd
+
+        self.seq[bitem.name] = []
+
+        for i in range(1, dpw+1):
+            define = bitem.editors['def-%d' %  i].text()
             if define == '': continue
 
-            filename = "{dir}/{name}-def-{i}".format(dir=curdir, name=bundle.name, i=(i+1))
+            filename = "{dir}/{name}-def-{i}".format(dir=curdir, name=bitem.name, i=i)
             ttscmd(define, filename)
-            self.seq[bundle.name].append({"def": filename})
+            self.seq[bitem.name].append({"def": filename})
 
-            for j in range(epd):
-                examp = bundle.items[i]['example']
+            for j in range(1, epd+1):
+                examp = bitem.editors['ex-%d-%d' % (i, j)].text()
                 if examp == '': continue
 
                 filename = "{dir}/{name}-ex-{i}-{j}".format\
-                    (dir=curdir, name=bundle.name, i=(i+1), j=(j+1))
+                    (dir=curdir, name=bitem.name, i=i, j=j)
                 ttscmd(examp, filename)
-                self.seq[bundle.name].append({"ex": filename})
+                self.seq[bitem.name].append({"ex": filename})
 
 
     def mergeDirMp3(self):

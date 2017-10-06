@@ -4,7 +4,7 @@ from gui.utils import getFile, getFileNameFromPath, isLin, isMac, processCoreEve
 from bavl.cmder.mp3cmder import mp3Duration, hhmmss2secCmd, getMp3Info
 
 def onMp3Dialog(mw):
-    gui.dialogs.open("Mp3Setting", mw)
+    gui.dialogs.open("Mp3Setting", mw, mw.framelist)
 
 class SfxTableItem(QTableWidgetItem):
     def __init__(self, parent=None):
@@ -26,10 +26,11 @@ class BgmListItem(QListWidgetItem):
 
 # TODO: Name change to Mp3Dialog
 class Mp3Setting(QDialog):
-    def __init__(self, mw):
+    def __init__(self, mw, framelist):
         QDialog.__init__(self, mw, Qt.Window)
         self.mw = mw
         self.fm = mw.fm
+        self.framelist = framelist
         self.form = gui.forms.mp3dialog.Ui_Mp3Dialog()
         self.form.setupUi(self)
         self.setupButton()
@@ -75,13 +76,10 @@ class Mp3Setting(QDialog):
         if isLin:
             form.ttsCombo.setCurrentIndex(1)
 
-
     def onCreate(self):
         form = self.form
         setting = {}
         setting['repeat'] = form.wordSpin.value()
-        setting['dpw'], setting['epd'] = \
-            self.mw.bdfactory.pref['dpw'], self.mw.bdfactory.pref['epd']
 
         sfxdir = {}
         for i, group in enumerate(['word', 'definitions', 'examples']):
@@ -110,7 +108,7 @@ class Mp3Setting(QDialog):
         from gui.progress import ProgressDialog
 
         # Fixme: Here is the wrong progress length assumption!
-        pd = ProgressDialog(self.fm.getFrameSize() * 3, msg="Creating MP3...")
+        pd = ProgressDialog(self.framelist.count() * 3, msg="Creating MP3...")
         pdcnt = 0
         pd.show()
 
@@ -118,16 +116,18 @@ class Mp3Setting(QDialog):
         cmder = Mp3Cmder(self.fm.getRootPath(), setting)
 
         # Fixme: Only use bundles shown in the framelist of the main window,
-        # i.e. Remove getAllBundles
+        # i.e. Remove getAllBundles, WYSIWYG!
         # TODO: Thus no need to pass FM but should pass a ref to framelist ui
-        for bundle in self.fm.getAllBundles():
-            cmder.ttsBundle(bundle)
+
+        for i in range(self.framelist.count()):
+            bitem = self.framelist.getWidgetItem(i)
+            cmder.ttsBitem(bitem)
             pdcnt += 1
             pd.setValue(pdcnt)
             processCoreEvents()
 
-        for name in self.fm.getBundleNames():
-            cmder.compileBundle(name)
+        for id in self.framelist.currentIds:
+            cmder.compileBundle(id)
             pdcnt += 1
             pd.setValue(pdcnt)
             processCoreEvents()
@@ -136,7 +136,7 @@ class Mp3Setting(QDialog):
         cmder.createBgmLoop()
 
         # Fixme: More preciously define the progress out of TTS session
-        pdcnt += int(self.fm.getFrameSize() / 2)
+        pdcnt += int(self.framelist.count() / 2)
         pd.setValue(pdcnt)
         processCoreEvents()
 

@@ -19,10 +19,10 @@ class FrameList(QListWidget):
         newbds = self.fm.getNewBundles(self.currentIds)
 
         for bundle in newbds:
-            bdui, bditem = self.mw.bdfactory.createUi(bundle)
-            self.addItem(bdui)
-            self.setItemWidget(bdui, bditem)
             self.setNewId(bundle.name)
+            bui, bitem = self.mw.bdfactory.createUi(bundle)
+            self.addItem(bui)
+            self.setItemWidget(bui, bitem)
 
 
     def updateBundles(self):
@@ -32,12 +32,14 @@ class FrameList(QListWidget):
             bditUi = self.itemWidget(self.item(i))
             bditUi.updateEditors()
 
+    def setNewId(self, id):
+        self.currentIds.append(id)
+
+    def getWidgetItem(self, num):
+        return self.itemWidget(self.item(num))
 
     def updateItem(self, Item):
         pass
-
-    def setNewId(self, id):
-        self.currentIds.append(id)
 
     def add(self, item, widget):
         pass

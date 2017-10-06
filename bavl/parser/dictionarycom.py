@@ -25,6 +25,15 @@ class DictionaryComParser(BaseParser):
             except ValueError:
                 define, examp = defc, ""
                 define = define.strip()
-            bitems.append({'define': define, 'example': examp})
+            bitems.append({'define': define, 'examples': [examp]})
+
+            """
+            Bundle item format (temporally)
+            {
+                'define' : 'a definition of a word'
+                'examples' : ['a example for the definition', 'another example', ...]
+            }
+            
+            """
 
         return bitems

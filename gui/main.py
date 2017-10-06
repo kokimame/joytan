@@ -27,7 +27,7 @@ def defaultPref():
         "worddir": cwd + "/templates/wordlist",
         "bgmdir": cwd + "/templates/song",
         "title": "emotan-sample",
-        "onlineRef": "dictionary-com"
+        "onlineRef": "Dictionary.com"
     }
 
 class BavlMW(QMainWindow):

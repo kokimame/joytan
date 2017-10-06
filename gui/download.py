@@ -6,10 +6,10 @@ from gui.utils import processCoreEvents
 
 # These url will be set through Preferences
 dictUrls = {
-    "dictionary-com": "http://dictionary.com/browse/",
-    "cambridge": "http://dictionary.cambridge.org/dictionary/english/",
-    "oxford": "https://en.oxforddictionaries.com/definition/",
-    "wiktionary": "https://en.wiktionary.org/wiki/"
+    "Dictionary.com": "http://dictionary.com/browse/",
+    "Cambridge Dictionary": "http://dictionary.cambridge.org/dictionary/english/",
+    "Oxford English Dictionary": "https://en.oxforddictionaries.com/definition/",
+    "Wiktionary": "https://en.wiktionary.org/wiki/"
 }
 
 def onDownload(mw):

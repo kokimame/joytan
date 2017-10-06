@@ -17,7 +17,7 @@ def onDownload(mw):
 
 
 def ignorantDownload(fm, parser, gstat=False):
-    pd = ProgressDialog(fm.getFrameLength(), msg="Downloading...")
+    pd = ProgressDialog(fm.getFrameSize(), msg="Downloading...")
     pd.show()
 
     for cnt, name in enumerate(fm.getBundleNames()):

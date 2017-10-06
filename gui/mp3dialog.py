@@ -110,7 +110,7 @@ class Mp3Setting(QDialog):
         from gui.progress import ProgressDialog
 
         # Fixme: Here is the wrong progress length assumption!
-        pd = ProgressDialog(self.fm.getFrameLength()*3, msg="Creating MP3...")
+        pd = ProgressDialog(self.fm.getFrameSize() * 3, msg="Creating MP3...")
         pdcnt = 0
         pd.show()
 
@@ -135,7 +135,7 @@ class Mp3Setting(QDialog):
         cmder.createBgmLoop()
 
         # Fixme: More preciously define the progress out of TTS session
-        pdcnt += int(self.fm.getFrameLength()/2)
+        pdcnt += int(self.fm.getFrameSize() / 2)
         pd.setValue(pdcnt)
         processCoreEvents()
 

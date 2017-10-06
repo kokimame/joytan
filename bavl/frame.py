@@ -66,7 +66,7 @@ class FrameManager():
 
 
     def addBundle(self, name):
-        index = self.getFrameLength() + 1
+        index = self.getFrameSize() + 1
         try:
             b = self.initBundle(name, index)
             self._Frame.append(b)
@@ -85,16 +85,9 @@ class FrameManager():
                 newbds.append(bundle)
         return newbds
 
-
     def createWorkspace(self):
         mkdir(self.pref['workdir'])
 
-
-    def loadSetting(self):
-        pass
-
-    def updateSetting(self):
-        pass
 
     def getAllBundles(self):
         return [b for b in self._Frame]
@@ -102,5 +95,5 @@ class FrameManager():
     def getBundleNames(self):
         return [bundle.name for bundle in self._Frame]
 
-    def getFrameLength(self):
+    def getFrameSize(self):
         return len(self._Frame)

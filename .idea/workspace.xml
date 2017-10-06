@@ -2,10 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f7b2dda3-dca7-4381-9f00-cd9e71478e90" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/templates/wordlist/brave15.txt" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bavl/parser/__init__.py" afterPath="$PROJECT_DIR$/bavl/parser/__init__.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/gui/download.py" afterPath="$PROJECT_DIR$/gui/download.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/gui/main.py" afterPath="$PROJECT_DIR$/gui/main.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -93,11 +91,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="__init__.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="__init__.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/bavl/parser/__init__.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="120">
-              <caret line="8" column="22" lean-forward="false" selection-start-line="8" selection-start-column="22" selection-end-line="8" selection-end-column="22" />
+            <state relative-caret-position="165">
+              <caret line="11" column="0" lean-forward="true" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
               <folding>
                 <element signature="e#0#57#0" expanded="true" />
               </folding>
@@ -105,14 +103,12 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="utils.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/gui/utils.py">
+      <file leaf-file-name="brave15.txt" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/templates/wordlist/brave15.txt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-104">
-              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-              <folding>
-                <element signature="e#0#14#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="210">
+              <caret line="14" column="8" lean-forward="false" selection-start-line="14" selection-start-column="8" selection-end-line="14" selection-end-column="8" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -203,6 +199,7 @@
         <option value="$PROJECT_DIR$/gui/download.py" />
         <option value="$PROJECT_DIR$/gui/main.py" />
         <option value="$PROJECT_DIR$/bavl/parser/__init__.py" />
+        <option value="$PROJECT_DIR$/templates/wordlist/brave15.txt" />
       </list>
     </option>
   </component>
@@ -251,6 +248,56 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="tools" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="emotan" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="emotan" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="tests" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="emotan" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="emotan" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="tests" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="misc" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="emotan" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="emotan" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="templates" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="wordlist" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -604,7 +651,14 @@
       <option name="project" value="LOCAL" />
       <updated>1507304372643</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Name changes: reference to dictionaries">
+      <created>1507305449578</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1507305449578</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -652,7 +706,8 @@
     <MESSAGE value="Small clean-up" />
     <MESSAGE value="Change default title" />
     <MESSAGE value="Made dictionary editable" />
-    <option name="LAST_COMMIT_MESSAGE" value="Made dictionary editable" />
+    <MESSAGE value="Name changes: reference to dictionaries" />
+    <option name="LAST_COMMIT_MESSAGE" value="Name changes: reference to dictionaries" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -661,14 +716,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/gui/download.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="375">
-          <caret line="29" column="9" lean-forward="true" selection-start-line="29" selection-start-column="9" selection-end-line="29" selection-end-column="9" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/bavl/frame.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1365">
@@ -906,11 +953,19 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/bavl/parser/__init__.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="8" column="22" lean-forward="false" selection-start-line="8" selection-start-column="22" selection-end-line="8" selection-end-column="22" />
+        <state relative-caret-position="165">
+          <caret line="11" column="0" lean-forward="true" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
           <folding>
             <element signature="e#0#57#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/wordlist/brave15.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="210">
+          <caret line="14" column="8" lean-forward="false" selection-start-line="14" selection-start-column="8" selection-end-line="14" selection-end-column="8" />
+          <folding />
         </state>
       </provider>
     </entry>

@@ -29,6 +29,7 @@ class Preferences(QDialog):
     def setupEditors(self):
         form = self.form
         fm = self.mw.fm
+        form.titleEdit.setText(fm.pref['title'])
         form.workingEdit.setText(fm.pref['workdir'])
         form.wordEdit.setText(fm.pref['worddir'])
         form.bgmEdit.setText(fm.pref['bgmdir'])
@@ -49,6 +50,7 @@ class Preferences(QDialog):
     def updateFramePref(self):
         form = self.form
         fm = self.mw.fm
+        fm.pref['title'] = form.titleEdit.text()
         fm.pref['workdir'] = form.workingEdit.text()
         fm.pref['worddir'] = form.wordEdit.text()
         fm.pref['bgmdir'] = form.bgmEdit.text()

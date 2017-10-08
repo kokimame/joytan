@@ -6,6 +6,7 @@ class FrameList(QListWidget):
 
     def __init__(self, mw, parent=None):
         super(FrameList, self).__init__(parent)
+        self.setSelectionMode(QAbstractItemView.NoSelection)
         self.mw = mw
         self.fm = mw.fm
         # Store the ID of bundles whicn the UI is rendering
@@ -21,6 +22,7 @@ class FrameList(QListWidget):
         for bundle in newbds:
             self.setNewId(bundle.name)
             bui, bitem = self.mw.bdfactory.createUi(bundle)
+            print(bundle.name, bui.sizeHint(), bitem.sizeHint())
             self.addItem(bui)
             self.setItemWidget(bui, bitem)
 
@@ -29,8 +31,15 @@ class FrameList(QListWidget):
         # Update the inside of the bundles in the list
         print("Bundle updates")
         for i in range(self.count()):
-            bditUi = self.itemWidget(self.item(i))
-            bditUi.updateEditors()
+            bui = self.item(i)
+            bitem = self.itemWidget(bui)
+            bitem.update()
+            print(bitem.name, bitem.sizeHint())
+            bui.setSizeHint(bitem.sizeHint())
+
+        self.repaint()
+
+
 
     def setNewId(self, id):
         self.currentIds.append(id)

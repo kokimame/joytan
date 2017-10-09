@@ -23,12 +23,24 @@ class FrameList(QListWidget):
             self.addBundle(bundle)
 
     def addBundle(self, bundle):
-        bui, bitem = self.mw.bdfactory.createUi(self.count() + 1, bundle)
+        bui, bitem = self.mw.bdfactory.createUi(self.count() + 1, bundle, parent=self)
         self.addItem(bui)
         self.setItemWidget(bui, bitem)
         # Fixme: Use real ID to check existing bundles in the list
         self.setNewId(bundle.name)
 
+    def deleteUi(self, ui):
+        self.takeItem(ui.index - 1)
+        self.currentIds.remove(ui.name)
+        self.updateIndex(ui.index - 1)
+
+    def updateIndex(self, n):
+        # Update index of bundles after Nth bundle
+        for i in range(n, self.count()):
+            bitem = self.getWidgetItem(i)
+            print(bitem)
+            bitem.index -= 1
+            bitem.updateIndex()
 
     def updateBundles(self):
         # Update the inside of the bundles in the list
@@ -41,7 +53,6 @@ class FrameList(QListWidget):
             bui.setSizeHint(bitem.sizeHint())
 
         self.repaint()
-
 
 
     def setNewId(self, id):

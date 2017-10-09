@@ -8,8 +8,8 @@ class BundleFactory:
             "epd": 1
         }
 
-    def createUi(self, index, bundle):
-        bui, bitem = BundleUi(), BundleItemUi(index, bundle, self.pref)
+    def createUi(self, index, bundle, parent=None):
+        bui, bitem = BundleUi(), BundleItemUi(index, bundle, self.pref, parent=parent)
         bui.setSizeHint(bitem.sizeHint())
         return bui, bitem
 
@@ -22,6 +22,7 @@ class BundleItemUi(QWidget):
     def __init__(self, index, bundle, pref, parent=None):
         super(BundleItemUi, self).__init__(parent)
         self.initFont()
+        self.parent = parent
         self.index = index
         self.bundle = bundle
         self.name = bundle.name
@@ -43,6 +44,11 @@ class BundleItemUi(QWidget):
         self.setupEditors()
         self.setLayout(self.stackedLayout)
 
+    def updateIndex(self):
+        self.dispName.setText(self.html.format
+                           (content=self.nameFormat.format(num=self.index, name=self.name)))
+        self.editName.setText("%d. %s" % (self.index, self.name))
+
     def updateMode(self, newMode):
         if newMode == self.mode: return
 
@@ -54,22 +60,27 @@ class BundleItemUi(QWidget):
             self.stackedLayout.setCurrentIndex(1)
             self.mode = newMode
 
+    def deleteSelf(self):
+        print("Delete this ui")
+        self.parent.deleteUi(self)
+
     def setupDisplay(self):
         dispWidget = QWidget()
         dispLayout = QVBoxLayout()
         editBtn = QPushButton("Edit")
         editBtn.clicked.connect(lambda: self.updateMode("Edit"))
         delBtn = QPushButton("Delete")
+        delBtn.clicked.connect(self.deleteSelf)
         btnBox = QHBoxLayout()
         btnBox.addWidget(editBtn)
         btnBox.addWidget(delBtn)
         btnBox.addStretch()
         dispLayout.addLayout(btnBox)
 
-        self.label = QLabel()
-        self.label.setText(self.html.format
+        self.dispName = QLabel()
+        self.dispName.setText(self.html.format
                            (content=self.nameFormat.format(num=self.index, name=self.name)))
-        dispLayout.addWidget(self.label)
+        dispLayout.addWidget(self.dispName)
         dispWidget.setLayout(dispLayout)
         self.stackedLayout.addWidget(dispWidget)
 
@@ -84,13 +95,15 @@ class BundleItemUi(QWidget):
         delBtn = QPushButton("Delete")
         btnBox.addWidget(okBtn)
         btnBox.addWidget(delBtn)
+        delBtn.clicked.connect(self.deleteSelf)
         btnBox.addStretch()
         editLayout.addLayout(btnBox)
 
         dpw, epd = self.dpw, self.epd
-        namelabel = QLabel("%d. %s" % (self.index, self.name))
-        namelabel.setFont(self.boldFont)
-        editLayout.addWidget(namelabel)
+        self.editName = QLabel()
+        self.editName.setText("%d. %s" % (self.index, self.name))
+        self.editName.setFont(self.boldFont)
+        editLayout.addWidget(self.editName)
 
         grid = QGridLayout()
         row = 1

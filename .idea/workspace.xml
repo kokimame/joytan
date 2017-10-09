@@ -3,7 +3,9 @@
   <component name="ChangeListManager">
     <list default="true" id="f7b2dda3-dca7-4381-9f00-cd9e71478e90" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/gui/bundle.py" afterPath="$PROJECT_DIR$/gui/bundle.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/design/mp3dialog.ui" afterPath="$PROJECT_DIR$/design/mp3dialog.ui" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/gui/forms/mp3dialog.py" afterPath="$PROJECT_DIR$/gui/forms/mp3dialog.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/gui/mp3dialog.py" afterPath="$PROJECT_DIR$/gui/mp3dialog.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -27,7 +29,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="bundle.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="bundle.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/gui/bundle.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="465">
@@ -39,11 +41,21 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="mp3dialog.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="build_ui.sh" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/tools/build_ui.sh">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="375">
+              <caret line="25" column="29" lean-forward="true" selection-start-line="25" selection-start-column="29" selection-end-line="25" selection-end-column="29" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="mp3dialog.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/gui/mp3dialog.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-312">
-              <caret line="113" column="41" lean-forward="false" selection-start-line="113" selection-start-column="41" selection-end-line="113" selection-end-column="41" />
+            <state relative-caret-position="75">
+              <caret line="68" column="22" lean-forward="false" selection-start-line="68" selection-start-column="22" selection-end-line="68" selection-end-column="22" />
               <folding />
             </state>
           </provider>
@@ -107,9 +119,9 @@
         <option value="$PROJECT_DIR$/test/tts_test.py" />
         <option value="$PROJECT_DIR$/test/make_mp3.py" />
         <option value="$PROJECT_DIR$/gui/framelist.py" />
-        <option value="$PROJECT_DIR$/gui/mp3dialog.py" />
         <option value="$PROJECT_DIR$/gui/bundle.py" />
         <option value="$PROJECT_DIR$/bavl/cmder/mp3cmder.py" />
+        <option value="$PROJECT_DIR$/gui/mp3dialog.py" />
       </list>
     </option>
   </component>
@@ -156,25 +168,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="tests" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="emotan" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="emotan" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="tests" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="misc" />
+              <option name="myItemId" value="tools" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -203,6 +197,20 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="gui" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="emotan" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="emotan" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="design" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -337,6 +345,17 @@
       <option name="EMULATE_TERMINAL" value="false" />
       <method />
     </configuration>
+    <configuration default="false" name="build_ui.sh" type="BashConfigurationType" factoryName="Bash" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="INTERPRETER_PATH" value="/bin/bash" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/tools/build_ui.sh" />
+      <option name="PARAMETERS" value="" />
+      <module name="earword" />
+      <envs />
+      <method />
+    </configuration>
     <configuration default="true" type="BashConfigurationType" factoryName="Bash">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="INTERPRETER_PATH" value="/bin/bash" />
@@ -412,18 +431,20 @@
       <option name="_new_targetType" value="&quot;PATH&quot;" />
       <method />
     </configuration>
-    <list size="4">
+    <list size="5">
       <item index="0" class="java.lang.String" itemvalue="Python.bs4_chrome" />
       <item index="1" class="java.lang.String" itemvalue="Python.word_mp3" />
       <item index="2" class="java.lang.String" itemvalue="Python.test_words_101" />
       <item index="3" class="java.lang.String" itemvalue="Python.runapp" />
+      <item index="4" class="java.lang.String" itemvalue="Bash.build_ui.sh" />
     </list>
     <recent_temporary>
-      <list size="4">
+      <list size="5">
         <item index="0" class="java.lang.String" itemvalue="Python.runapp" />
-        <item index="1" class="java.lang.String" itemvalue="Python.test_words_101" />
-        <item index="2" class="java.lang.String" itemvalue="Python.word_mp3" />
-        <item index="3" class="java.lang.String" itemvalue="Python.bs4_chrome" />
+        <item index="1" class="java.lang.String" itemvalue="Bash.build_ui.sh" />
+        <item index="2" class="java.lang.String" itemvalue="Python.test_words_101" />
+        <item index="3" class="java.lang.String" itemvalue="Python.word_mp3" />
+        <item index="4" class="java.lang.String" itemvalue="Python.bs4_chrome" />
       </list>
     </recent_temporary>
   </component>
@@ -455,13 +476,21 @@
       <option name="project" value="LOCAL" />
       <updated>1507559029532</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="small bug fix">
+      <created>1507560194801</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1507560194801</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="24" width="977" height="1020" extended-state="0" />
+    <editor active="true" />
     <layout>
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2517912" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2517912" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -487,7 +516,8 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Use frame count() to index bundle ui" />
     <MESSAGE value="Make delete button and update indices" />
-    <option name="LAST_COMMIT_MESSAGE" value="Make delete button and update indices" />
+    <MESSAGE value="small bug fix" />
+    <option name="LAST_COMMIT_MESSAGE" value="small bug fix" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -653,13 +683,6 @@
     <entry file="file://$PROJECT_DIR$/test/word_mp3.py" />
     <entry file="file://$PROJECT_DIR$/test/make_mp3.py" />
     <entry file="file://$PROJECT_DIR$/test/test_words_101.py" />
-    <entry file="file://$PROJECT_DIR$/tools/build_ui.sh">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/gui/framelist.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="390">
@@ -693,16 +716,8 @@
         <state relative-caret-position="75">
           <caret line="95" column="64" lean-forward="true" selection-start-line="95" selection-start-column="13" selection-end-line="95" selection-end-column="64" />
           <folding>
-            <element signature="e#0#9#0" expanded="true" />
+            <element signature="e#0#9#0" expanded="false" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/gui/mp3dialog.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-312">
-          <caret line="113" column="41" lean-forward="false" selection-start-line="113" selection-start-column="41" selection-end-line="113" selection-end-column="41" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -712,6 +727,16 @@
           <caret line="31" column="27" lean-forward="true" selection-start-line="31" selection-start-column="27" selection-end-line="31" selection-end-column="27" />
           <folding>
             <element signature="e#0#19#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/bavl/cmder/mp3cmder.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="435">
+          <caret line="77" column="29" lean-forward="true" selection-start-line="77" selection-start-column="29" selection-end-line="77" selection-end-column="29" />
+          <folding>
+            <element signature="e#0#13#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -726,13 +751,19 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/bavl/cmder/mp3cmder.py">
+    <entry file="file://$PROJECT_DIR$/tools/build_ui.sh">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="435">
-          <caret line="77" column="29" lean-forward="true" selection-start-line="77" selection-start-column="29" selection-end-line="77" selection-end-column="29" />
-          <folding>
-            <element signature="e#0#13#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="375">
+          <caret line="25" column="29" lean-forward="true" selection-start-line="25" selection-start-column="29" selection-end-line="25" selection-end-column="29" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/gui/mp3dialog.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="75">
+          <caret line="68" column="22" lean-forward="false" selection-start-line="68" selection-start-column="22" selection-end-line="68" selection-end-column="22" />
+          <folding />
         </state>
       </provider>
     </entry>

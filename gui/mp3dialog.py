@@ -66,7 +66,7 @@ class Mp3Setting(QDialog):
     def setupButton(self):
         form = self.form
         form.createBtn.clicked.connect(self.onCreate)
-        form.bgmAddBtn.clicked.connect(self.onBgmClicked)
+        form.addBgmBtn.clicked.connect(self.onBgmClicked)
 
     def setupComboBox(self):
         form = self.form
@@ -144,6 +144,7 @@ class Mp3Setting(QDialog):
         self.reject()
 
     def onBgmClicked(self):
+        print("called")
         list = self.form.bgmList
         try:
             file = getFile(self.mw, "Add song to BGM Loop",

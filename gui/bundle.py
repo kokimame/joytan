@@ -8,8 +8,8 @@ class BundleFactory:
             "epd": 1
         }
 
-    def createUi(self, bundle):
-        bui, bitem = BundleUi(), BundleItemUi(bundle, self.pref)
+    def createUi(self, index, bundle):
+        bui, bitem = BundleUi(), BundleItemUi(index, bundle, self.pref)
         bui.setSizeHint(bitem.sizeHint())
         return bui, bitem
 
@@ -19,12 +19,12 @@ class BundleUi(QListWidgetItem):
         QListWidgetItem.__init__(self)
 
 class BundleItemUi(QWidget):
-    def __init__(self, bundle, pref, parent=None):
+    def __init__(self, index, bundle, pref, parent=None):
         super(BundleItemUi, self).__init__(parent)
         self.initFont()
+        self.index = index
         self.bundle = bundle
         self.name = bundle.name
-        self.index = bundle.index
         self.dpw = pref['dpw']
         self.epd = pref['epd']
 
@@ -88,7 +88,7 @@ class BundleItemUi(QWidget):
         editLayout.addLayout(btnBox)
 
         dpw, epd = self.dpw, self.epd
-        namelabel = QLabel("%d. %s" % (self.bundle.index, self.name))
+        namelabel = QLabel("%d. %s" % (self.index, self.name))
         namelabel.setFont(self.boldFont)
         editLayout.addWidget(namelabel)
 

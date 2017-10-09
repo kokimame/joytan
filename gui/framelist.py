@@ -20,11 +20,14 @@ class FrameList(QListWidget):
         newbds = self.fm.getNewBundles(self.currentIds)
 
         for bundle in newbds:
-            self.setNewId(bundle.name)
-            bui, bitem = self.mw.bdfactory.createUi(bundle)
-            print(bundle.name, bui.sizeHint(), bitem.sizeHint())
-            self.addItem(bui)
-            self.setItemWidget(bui, bitem)
+            self.addBundle(bundle)
+
+    def addBundle(self, bundle):
+        bui, bitem = self.mw.bdfactory.createUi(self.count() + 1, bundle)
+        self.addItem(bui)
+        self.setItemWidget(bui, bitem)
+        # Fixme: Use real ID to check existing bundles in the list
+        self.setNewId(bundle.name)
 
 
     def updateBundles(self):

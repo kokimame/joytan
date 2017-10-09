@@ -152,7 +152,7 @@ class BundleItemUi(QWidget):
                 if ex == '': continue
                 content += self.exFormat.format(example=ex)
 
-        self.label.setText(self.html.format(content=content))
+        self.dispName.setText(self.html.format(content=content))
 
     def setEditingResult(self):
         content = self.nameFormat.format(num=self.index, name=self.name)

@@ -32,6 +32,7 @@ class FrameList(QListWidget):
     def deleteUi(self, ui):
         self.takeItem(ui.index - 1)
         self.currentIds.remove(ui.name)
+        self.fm.remove(ui.bundle)
         self.updateIndex(ui.index - 1)
 
     def updateIndex(self, n):

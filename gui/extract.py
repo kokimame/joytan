@@ -15,7 +15,7 @@ def onExtract(mw):
     # Extract files one by one
     for file in files:
         words = extract(file)
-        [mw.fm.addBundle(word) for word in words]
+        [mw.fm.add(word) for word in words]
 
     mw.framelist.setNewBundles()
 

@@ -31,8 +31,11 @@ class FrameManager():
                 return
         raise Exception("Error: Bundle with name '%s' is not found in the Frame" % name)
 
+    def remove(self, bundle):
+        self._Frame.remove(bundle)
 
-    def addBundle(self, name):
+
+    def add(self, name):
         index = self.getFrameSize() + 1
         try:
             b = self.initBundle(name, index)

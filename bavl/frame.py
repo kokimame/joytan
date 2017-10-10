@@ -24,10 +24,10 @@ class FrameManager():
         return Bundle(name, index)
 
     # This should be done by ID not name
-    def setBitemByName(self, name, bitem):
+    def setItemByName(self, name, item):
         for bundle in self._Frame:
             if bundle.name == name:
-                bundle.updateItems(bitem)
+                bundle.updateItems(item)
                 return
         raise Exception("Error: Bundle with name '%s' is not found in the Frame" % name)
 

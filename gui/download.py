@@ -25,19 +25,21 @@ def onDownload(mw):
 
 
 def ignorantDownload(mw, parser, gstat=False):
-    pd = ProgressDialog(mw.fm.getFrameSize(), msg="Downloading...")
+    pd = ProgressDialog(mw.framelist.count(), msg="Downloading...")
     pd.show()
 
-    for cnt, name in enumerate(mw.fm.getBundleNames()):
+    for i in range(mw.framelist.count()):
         # This tip probably makes pd faster to display.
-        pd.setValue(cnt)
+        pd.setValue(i)
         processCoreEvents()
 
-        r = requests.get(dictUrls[mw.pref['onlineRef']] + name)
-        data = r.text
-        bitems = parser.run(data)
+        bitem = mw.framelist.getWidgetItem(i)
 
-        mw.fm.setBitemByName(name, bitems)
+        r = requests.get(dictUrls[mw.pref['onlineRef']] + bitem.name)
+        data = r.text
+        items = parser.run(data)
+
+        mw.fm.setItemByName(bitem.name, items)
 
 def downloadGstaticSound(word, filename):
     url = "http://ssl.gstatic.com/dictionary/static/sounds/oxford/"

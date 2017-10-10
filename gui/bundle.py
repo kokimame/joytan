@@ -45,9 +45,9 @@ class BundleItemUi(QWidget):
         self.setLayout(self.stackedLayout)
 
     def updateIndex(self):
-        self.dispName.setText(self.html.format
+        self.dispLabel.setText(self.html.format
                            (content=self.nameFormat.format(num=self.index, name=self.name)))
-        self.editName.setText("%d. %s" % (self.index, self.name))
+        self.editLabel.setText("%d. %s" % (self.index, self.name))
 
     def getDirname(self):
         # Make string number from the index of the bundle from 00000 to 99999
@@ -59,6 +59,7 @@ class BundleItemUi(QWidget):
         if newMode == self.mode: return
 
         if newMode == "Disp":
+            # Save editing result before changing to Display mode
             self.setEditingResult()
             self.stackedLayout.setCurrentIndex(0)
             self.mode = newMode
@@ -82,10 +83,10 @@ class BundleItemUi(QWidget):
         btnBox.addStretch()
         dispLayout.addLayout(btnBox)
 
-        self.dispName = QLabel()
-        self.dispName.setText(self.html.format
+        self.dispLabel = QLabel()
+        self.dispLabel.setText(self.html.format
                            (content=self.nameFormat.format(num=self.index, name=self.name)))
-        dispLayout.addWidget(self.dispName)
+        dispLayout.addWidget(self.dispLabel)
         dispWidget.setLayout(dispLayout)
         self.stackedLayout.addWidget(dispWidget)
 
@@ -105,10 +106,10 @@ class BundleItemUi(QWidget):
         editLayout.addLayout(btnBox)
 
         dpw, epd = self.dpw, self.epd
-        self.editName = QLabel()
-        self.editName.setText("%d. %s" % (self.index, self.name))
-        self.editName.setFont(self.boldFont)
-        editLayout.addWidget(self.editName)
+        self.editLabel = QLabel()
+        self.editLabel.setText("%d. %s" % (self.index, self.name))
+        self.editLabel.setFont(self.boldFont)
+        editLayout.addWidget(self.editLabel)
 
         grid = QGridLayout()
         row = 1
@@ -157,7 +158,7 @@ class BundleItemUi(QWidget):
                 if ex == '': continue
                 content += self.exFormat.format(example=ex)
 
-        self.dispName.setText(self.html.format(content=content))
+        self.dispLabel.setText(self.html.format(content=content))
 
     def setEditingResult(self):
         content = self.nameFormat.format(num=self.index, name=self.name)
@@ -170,7 +171,7 @@ class BundleItemUi(QWidget):
                 examp = self.editors['ex-%d-%d' % (i, j)].text()
                 if examp != '':
                     content += self.exFormat.format(example=examp)
-        self.editName.setText(self.html.format(content=content))
+        self.dispLabel.setText(self.html.format(content=content))
 
 
     def updateEditors(self):

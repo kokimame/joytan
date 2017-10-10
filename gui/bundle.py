@@ -67,7 +67,6 @@ class BundleItemUi(QWidget):
             self.mode = newMode
 
     def deleteSelf(self):
-        print("Delete this ui")
         self.parent.deleteUi(self)
 
     def setupDisplay(self):

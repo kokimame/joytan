@@ -38,7 +38,6 @@ class FrameList(QListWidget):
         # Update index of bundles after Nth bundle
         for i in range(n, self.count()):
             bitem = self.getWidgetItem(i)
-            print(bitem)
             bitem.index -= 1
             bitem.updateIndex()
 
@@ -49,7 +48,6 @@ class FrameList(QListWidget):
             bui = self.item(i)
             bitem = self.itemWidget(bui)
             bitem.update()
-            print(bitem.name, bitem.sizeHint())
             bui.setSizeHint(bitem.sizeHint())
 
         self.repaint()

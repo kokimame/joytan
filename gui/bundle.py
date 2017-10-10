@@ -165,7 +165,7 @@ class BundleItemUi(QWidget):
                 examp = self.editors['ex-%d-%d' % (i, j)].text()
                 if examp != '':
                     content += self.exFormat.format(example=examp)
-        self.label.setText(self.html.format(content=content))
+        self.editName.setText(self.html.format(content=content))
 
 
     def updateEditors(self):

@@ -54,7 +54,7 @@ class BavlMW(QMainWindow):
         self.setupButtons()
 
     def getRootPath(self):
-        return self.pref['workdir'] + '/' + self.pref['title']
+        return "{workdir}/{title}".format(workdir=self.pref['workdir'], title=self.pref['title'])
 
     def setupMainWindow(self):
         self.form = gui.forms.main.Ui_MainWindow()

@@ -37,8 +37,6 @@ def ignorantDownload(mw, parser, gstat=False):
         data = r.text
         bitems = parser.run(data)
 
-        downloadGstaticSound(name, "{dir}/{name}/gstatic.mp3".format(dir=mw.getRootPath(), name=name))
-
         mw.fm.setBitemByName(name, bitems)
 
 def downloadGstaticSound(word, filename):
@@ -52,8 +50,6 @@ def downloadGstaticSound(word, filename):
             break
         elif w_key == "x" + word and not r.ok:
             raise Exception("Audio for '" + word + "' not found")
-
-    os.makedirs(os.path.dirname(filename), exist_ok=True)
 
     with open(filename, "wb") as f:
         f.write(r.content)

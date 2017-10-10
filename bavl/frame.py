@@ -37,7 +37,6 @@ class FrameManager():
         try:
             b = self.initBundle(name, index)
             self._Frame.append(b)
-            mkdir(self.mw.getRootPath() + '/' + name)
         except Exception as e:
             print(e)
             return

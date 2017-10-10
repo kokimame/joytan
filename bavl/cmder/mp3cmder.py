@@ -19,6 +19,14 @@ class Mp3Cmder:
         self.setupAudio()
         # Fixme: Name 'seq' somothing more obvious and descriptive
         self.seq = {}
+
+        if isLin:
+            self.ttscmd = espeakMp3
+        elif isMac:
+            self.ttscmd = sayMp3
+        else:
+            raise Exception("Windows is not supported!")
+
         print(self.setting)
 
     def setupAudio(self):
@@ -49,35 +57,34 @@ class Mp3Cmder:
 
 
 
-    def compileBundle(self, name):
-        curdir = '{root}/{name}'.format(root=self.root, name=name)
-        assert os.path.exists(curdir + '/gstatic.mp3')
+    def compileBundle(self, bitem, isGstatic=True):
+        curdir = '{root}/{dirname}'.format(root=self.root, dirname=bitem.getDirname())
+
+        if isGstatic:
+            from gui.download import downloadGstaticSound
+            downloadGstaticSound(bitem.name, "{curdir}/pronounce.mp3".format(curdir=curdir))
+        else:
+            self.ttscmd(bitem.name, "{curdir}/pronounce".format(curdir=curdir))
+
+        wordhead = repeatMp3('{curdir}/pronounce.mp3'.format(curdir=curdir), self.setting['repeat'])
 
         sfxdir = self.setting['sfx']
-        wordhead = repeatMp3(curdir +'/gstatic.mp3', self.setting['repeat'])
         assert sfxdir['word'] != None
-        wordheader = curdir + '/wordheader.mp3'
+        wordheader = '{curdir}/wordheader.mp3'.format(curdir=curdir)
         catMp3(sfxdir['word']['path'], wordhead, wordheader)
 
         inputs = "%s " % wordheader
-        for cont in self.seq[name]:
+        for cont in self.seq[bitem.name]:
             try:
                 cont = cont['def'] + ".mp3"
                 inputs += "%s %s " % (sfxdir['definitions']['path'], cont)
             except KeyError:
                 cont = cont['ex'] + ".mp3"
                 inputs += "%s %s " % (sfxdir['examples']['path'], cont)
-        catMp3(inputs, "", "{root}/{name}.mp3".format(root=self.root, name=name))
+        catMp3(inputs, "", "{root}/{dirname}.mp3".format(root=self.root, dirname=bitem.getDirname()))
 
     def ttsBitem(self, bitem):
-        if isLin:
-            ttscmd = espeakMp3
-        elif isMac:
-            ttscmd = sayMp3
-        else:
-            raise Exception("Windows is not supported!")
-
-        curdir = "{root}/{name}".format(root=self.root, name=bitem.name)
+        curdir = "{root}/{dirname}".format(root=self.root, dirname=bitem.getDirname())
         assert os.path.exists(curdir)
 
         dpw, epd = bitem.dpw, bitem.epd
@@ -89,7 +96,7 @@ class Mp3Cmder:
             if define == '': continue
 
             filename = "{dir}/{name}-def-{i}".format(dir=curdir, name=bitem.name, i=i)
-            ttscmd(define, filename)
+            self.ttscmd(define, filename)
             self.seq[bitem.name].append({"def": filename})
 
             for j in range(1, epd+1):
@@ -98,7 +105,7 @@ class Mp3Cmder:
 
                 filename = "{dir}/{name}-ex-{i}-{j}".format\
                     (dir=curdir, name=bitem.name, i=i, j=j)
-                ttscmd(examp, filename)
+                self.ttscmd(examp, filename)
                 self.seq[bitem.name].append({"ex": filename})
 
 
@@ -122,7 +129,7 @@ def convertBps(original, bitkps, output):
     call(cmd, shell=True)
 
 def createLoopMp3(dir, loop, length, output):
-    tmpMp3 = "{directory}/temp-bgm-removed.mp3".format(directory=dir)
+    tmpMp3 = "{dir}/temp-bgm-removed.mp3".format(dir=dir)
     cmd = "cat "
     bgmlen = 0
     done = False

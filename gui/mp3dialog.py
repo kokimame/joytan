@@ -77,6 +77,7 @@ class Mp3Setting(QDialog):
 
     def onCreate(self):
         form = self.form
+        isGstatic = form.gstaticCheck.isChecked()
         setting = {}
         setting['repeat'] = form.wordSpin.value()
 
@@ -120,13 +121,15 @@ class Mp3Setting(QDialog):
 
         for i in range(self.framelist.count()):
             bitem = self.framelist.getWidgetItem(i)
+            os.makedirs("{root}/{dirname}".format(
+                        root=self.mw.getRootPath(), dirname=bitem.getDirname()), exist_ok=True)
+
             cmder.ttsBitem(bitem)
             pdcnt += 1
             pd.setValue(pdcnt)
             processCoreEvents()
 
-        for id in self.framelist.currentIds:
-            cmder.compileBundle(id)
+            cmder.compileBundle(bitem, isGstatic=isGstatic)
             pdcnt += 1
             pd.setValue(pdcnt)
             processCoreEvents()

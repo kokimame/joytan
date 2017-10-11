@@ -6,23 +6,21 @@ from bavl.cmder.mp3cmder import mp3Duration, hhmmss2secCmd, getMp3Info
 def onMp3Dialog(mw):
     gui.dialogs.open("Mp3Setting", mw, mw.framelist)
 
-class SfxTableItem(QTableWidgetItem):
-    def __init__(self, parent=None):
-        super(SfxTableItem, self).__init__(parent)
-        self.sfxpath = None
-        self.sfxname = None
 
-    def setPath(self, path):
-        self.sfxpath = path
-        self.sfxname = getFileNameFromPath(path)
+class Mp3ListItem(QListWidgetItem):
+    def __init__(self, mp3path, parent=None):
+        super(Mp3ListItem, self).__init__(parent)
+        self.mp3path = mp3path
+        self.filename = getFileNameFromPath(mp3path)
+        self.duration = mp3Duration(self.mp3path)
 
+class Mp3TreeItem(QTreeWidgetItem):
+    def __init__(self, mp3path, parent=None):
+        super(Mp3TreeItem, self).__init__(parent)
+        self.mp3path = mp3path
+        self.filename = getFileNameFromPath(mp3path)
+        self.duration = mp3Duration(self.mp3path)
 
-class BgmListItem(QListWidgetItem):
-    def __init__(self, bgmpath, parent=None):
-        super(BgmListItem, self).__init__(parent)
-        self.bgmpath = bgmpath
-        self.bgmname = getFileNameFromPath(bgmpath)
-        self.duration = mp3Duration(self.bgmpath)
 
 # TODO: Name change to Mp3Dialog
 class Mp3Setting(QDialog):
@@ -33,34 +31,18 @@ class Mp3Setting(QDialog):
         self.form = gui.forms.mp3dialog.Ui_Mp3Dialog()
         self.form.setupUi(self)
         self.setupButton()
-        self.setupSfxTable()
         self.setupComboBox()
-
+        self.setupSfxTree()
         self.show()
 
-    # Fixme: UI setup is too messy!
-    def setupSfxTable(self):
-        column = ["Set with", "Sound Effect"]
-        row = ["Word", "Definitions", "Examples"]
-        table = self.form.sfxTable
-        table.setColumnCount(2)
-        table.setRowCount(3)
+    def setupSfxTree(self):
+        tree = self.form.sfxTree
+        tree.itemClicked.connect(self.onSfxClicked)
 
-        for n in range(len(column)):
-            for m in range(3):
-                newitem = SfxTableItem()
-                if n == 0:
-                    newitem.setText(row[m])
-                table.setItem(m, n, newitem)
-
-
-        table.itemClicked.connect(self.onSfxClicked)
-        table.setHorizontalHeaderLabels(column)
-        table.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
-
-        table.setColumnWidth(0, 90)
-        table.setColumnWidth(1, table.width() - 120)
-        [table.setRowHeight(i, 25) for i in range(3)]
+        for group in ['Word', 'Definition', 'Example']:
+            groupItem = QTreeWidgetItem(tree)
+            groupItem.setExpanded(True)
+            groupItem.setText(0, group)
 
 
     def setupButton(self):
@@ -147,31 +129,32 @@ class Mp3Setting(QDialog):
         self.reject()
 
     def onBgmClicked(self):
-        print("called")
         list = self.form.bgmList
         try:
             file = getFile(self.mw, "Add song to BGM Loop",
                         dir=self.mw.pref['bgmdir'], filter="*.mp3")
-            item = BgmListItem(file)
+            item = Mp3ListItem(file)
             row = list.count() + 1
-            item.setText("%3d. %s: %s" % (row, item.duration, item.bgmname))
+            item.setText("%3d. %s: %s" % (row, item.duration, item.filename))
             list.addItem(item)
         except IndexError:
             print("Index Error passed")
             pass
 
 
-    def onSfxClicked(self, item):
-        row, col = item.row(), item.column()
-        if col == 1:
-            try:
-                file = getFile(self.mw, "Select Sound effect",
-                       dir=self.mw.pref['sfxdir'], filter="*.mp3")
-                item.setPath(file)
-                item.setText(item.sfxname)
-            except IndexError:
-                print("Index error passed")
-                pass
+    def onSfxClicked(self, item, column):
+        if item.text(0) == '': return
+        try:
+            file = getFile(self.mw, "Chose a SFX",
+                        dir=self.mw.pref['sfxdir'], filter="*.mp3")
+            child = Mp3TreeItem(file, parent=item)
+            child.setText(1, child.filename)
+            child.setText(2, child.duration)
+            item.addChild(child)
+
+        except IndexError:
+            print("Index Error passed")
+            pass
 
     def reject(self):
         self.done(0)

@@ -45,8 +45,7 @@ class BundleItemUi(QWidget):
         self.setLayout(self.stackedLayout)
 
     def updateIndex(self):
-        self.dispLabel.setText(self.html.format
-                           (content=self.nameFormat.format(num=self.index, name=self.name)))
+        self.setEditingResult()
         self.editLabel.setText("%d. %s" % (self.index, self.name))
 
     def getDirname(self):

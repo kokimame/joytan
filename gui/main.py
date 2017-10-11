@@ -74,7 +74,7 @@ class BavlMW(QMainWindow):
     def setupButtons(self):
         form = self.form
         form.mp3Button.clicked.connect(self.onCreateMp3)
-        form.pdfButton.clicked.connect(lambda x: print("-- Under constriction --"))
+        form.pdfButton.clicked.connect(lambda x: print("-- Under construction --"))
         form.dlcButton.clicked.connect(self.onDownload)
 
     def onPreferences(self):

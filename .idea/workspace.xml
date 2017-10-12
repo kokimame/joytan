@@ -3,6 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="f7b2dda3-dca7-4381-9f00-cd9e71478e90" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/gui/framelist.py" afterPath="$PROJECT_DIR$/gui/framelist.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -41,18 +42,8 @@
       <file leaf-file-name="bundle.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/gui/bundle.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="689">
+            <state relative-caret-position="1560">
               <caret line="104" column="62" lean-forward="false" selection-start-line="104" selection-start-column="62" selection-end-line="104" selection-end-column="62" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="build_ui.sh" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/tools/build_ui.sh">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -85,8 +76,8 @@
       <file leaf-file-name="framelist.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/gui/framelist.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="195">
-              <caret line="14" column="46" lean-forward="false" selection-start-line="14" selection-start-column="46" selection-end-line="14" selection-end-column="46" />
+            <state relative-caret-position="210">
+              <caret line="18" column="75" lean-forward="false" selection-start-line="18" selection-start-column="75" selection-end-line="18" selection-end-column="75" />
               <folding />
             </state>
           </provider>
@@ -607,7 +598,14 @@
       <option name="project" value="LOCAL" />
       <updated>1507792246354</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Added new icon images">
+      <created>1507792285626</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1507792285626</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -653,7 +651,8 @@
     <MESSAGE value="Designed tree of sfx" />
     <MESSAGE value="Added button icons" />
     <MESSAGE value="Added bottom line of bundle ui" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added bottom line of bundle ui" />
+    <MESSAGE value="Added new icon images" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added new icon images" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -871,7 +870,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/gui/bundle.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="689">
+        <state relative-caret-position="1560">
           <caret line="104" column="62" lean-forward="false" selection-start-line="104" selection-start-column="62" selection-end-line="104" selection-end-column="62" />
           <folding />
         </state>
@@ -879,8 +878,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/gui/framelist.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="195">
-          <caret line="14" column="46" lean-forward="false" selection-start-line="14" selection-start-column="46" selection-end-line="14" selection-end-column="46" />
+        <state relative-caret-position="210">
+          <caret line="18" column="75" lean-forward="false" selection-start-line="18" selection-start-column="75" selection-end-line="18" selection-end-column="75" />
           <folding />
         </state>
       </provider>

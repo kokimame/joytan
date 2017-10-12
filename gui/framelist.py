@@ -15,7 +15,8 @@ class FrameList(QListWidget):
         self.setStyleSheet("QListWidget::item { border-bottom: 1px solid black; }")
 
     def setNewBundles(self):
-        # TODO: Move FM out of the class and make two classes comunicate with each other(?)
+        # TODO: Move FM out of the class and make two classes communicate with each other(?)
+        # TODO: Or delete FM class at all and make FrameList do everything.
         # like Signal & Slot (?)
         # Check newly created bundles in the frame of the FrameManager
         newbds = self.fm.getNewBundles(self.currentIds)

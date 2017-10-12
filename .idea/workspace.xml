@@ -2,8 +2,50 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f7b2dda3-dca7-4381-9f00-cd9e71478e90" name="Default" comment="">
+      <change type="DELETED" beforePath="$PROJECT_DIR$/misc/development.txt" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tests/.idea/inspectionProfiles/Project_Default.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tests/.idea/misc.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tests/.idea/modules.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tests/.idea/test.iml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tests/.idea/workspace.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tests/WiktionaryParser" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tests/anki_uis/part1.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tests/anki_uis/part2.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tests/anki_uis/part3.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tests/anki_uis/part4.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tests/anki_uis/part5.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tests/anki_uis/part6.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tests/misc/101_mac.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tests/misc/basic_test.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tests/misc/bs4_chrome.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tests/misc/bs4_firefox.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tests/misc/bs4_phantom.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tests/misc/collect_words.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tests/misc/disclaimer-sample.txt" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tests/misc/formatter.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tests/misc/google_search.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tests/misc/gui.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tests/misc/inspect_all.sh" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tests/misc/inspect_mp3.sh" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tests/misc/json_test.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tests/misc/make_mp3.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tests/misc/mario.txt" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tests/misc/merge_temps.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tests/misc/mp3duration.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tests/misc/mp3loop.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tests/misc/mp3mix.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tests/misc/packet.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tests/misc/packet_test.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tests/misc/runtime.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tests/misc/sample_xml.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tests/misc/say_test.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tests/misc/scrshot-092317.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tests/misc/tag_finding.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tests/misc/test_bitrate.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tests/misc/test_sox.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tests/misc/test_words_101.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tests/misc/tts_test.py" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/gui/framelist.py" afterPath="$PROJECT_DIR$/gui/framelist.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -53,7 +95,7 @@
         <entry file="file://$PROJECT_DIR$/bavl/cmder/mp3cmder.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="135">
-              <caret line="75" column="33" lean-forward="true" selection-start-line="75" selection-start-column="33" selection-end-line="75" selection-end-column="33" />
+              <caret line="75" column="33" lean-forward="false" selection-start-line="75" selection-start-column="33" selection-end-line="75" selection-end-column="33" />
               <folding />
             </state>
           </provider>
@@ -76,8 +118,8 @@
       <file leaf-file-name="framelist.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/gui/framelist.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="210">
-              <caret line="18" column="75" lean-forward="false" selection-start-line="18" selection-start-column="75" selection-end-line="18" selection-end-column="75" />
+            <state relative-caret-position="104">
+              <caret line="14" column="71" lean-forward="false" selection-start-line="14" selection-start-column="71" selection-end-line="14" selection-end-column="71" />
               <folding />
             </state>
           </provider>
@@ -191,52 +233,6 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="tools" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="emotan" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="emotan" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="tests" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="emotan" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="emotan" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="tests" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="misc" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="emotan" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="emotan" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="misc" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -605,7 +601,14 @@
       <option name="project" value="LOCAL" />
       <updated>1507792285626</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="Update comment">
+      <created>1507792432601</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1507792432601</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -652,7 +655,8 @@
     <MESSAGE value="Added button icons" />
     <MESSAGE value="Added bottom line of bundle ui" />
     <MESSAGE value="Added new icon images" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added new icon images" />
+    <MESSAGE value="Update comment" />
+    <option name="LAST_COMMIT_MESSAGE" value="Update comment" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -845,7 +849,7 @@
     <entry file="file://$PROJECT_DIR$/bavl/cmder/mp3cmder.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="135">
-          <caret line="75" column="33" lean-forward="true" selection-start-line="75" selection-start-column="33" selection-end-line="75" selection-end-column="33" />
+          <caret line="75" column="33" lean-forward="false" selection-start-line="75" selection-start-column="33" selection-end-line="75" selection-end-column="33" />
           <folding />
         </state>
       </provider>
@@ -878,8 +882,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/gui/framelist.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="210">
-          <caret line="18" column="75" lean-forward="false" selection-start-line="18" selection-start-column="75" selection-end-line="18" selection-end-column="75" />
+        <state relative-caret-position="104">
+          <caret line="14" column="71" lean-forward="false" selection-start-line="14" selection-start-column="71" selection-end-line="14" selection-end-column="71" />
           <folding />
         </state>
       </provider>

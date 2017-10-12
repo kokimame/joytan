@@ -72,13 +72,16 @@ class BundleItemUi(QWidget):
     def setupDisplay(self):
         dispWidget = QWidget()
         dispLayout = QVBoxLayout()
-        editBtn = QPushButton("Edit")
-        editBtn.clicked.connect(lambda: self.updateMode("Edit"))
-        delBtn = QPushButton("Delete")
-        delBtn.clicked.connect(self.deleteSelf)
+
         btnBox = QHBoxLayout()
-        btnBox.addWidget(editBtn)
+        delBtn = QPushButton()
+        delBtn.clicked.connect(self.deleteSelf)
+        delBtn.setIcon(QIcon('design/icons/delete_button.png'))
+        editBtn = QPushButton()
+        editBtn.clicked.connect(lambda: self.updateMode("Edit"))
+        editBtn.setIcon(QIcon('design/icons/edit_button.png'))
         btnBox.addWidget(delBtn)
+        btnBox.addWidget(editBtn)
         btnBox.addStretch()
         dispLayout.addLayout(btnBox)
 
@@ -95,12 +98,13 @@ class BundleItemUi(QWidget):
         editLayout = QVBoxLayout()
 
         btnBox = QHBoxLayout()
+        delBtn = QPushButton()
+        delBtn.clicked.connect(self.deleteSelf)
+        delBtn.setIcon(QIcon('design/icons/delete_button.png'))
         okBtn = QPushButton("OK")
         okBtn.clicked.connect(lambda: self.updateMode("Disp"))
-        delBtn = QPushButton("Delete")
-        btnBox.addWidget(okBtn)
         btnBox.addWidget(delBtn)
-        delBtn.clicked.connect(self.deleteSelf)
+        btnBox.addWidget(okBtn)
         btnBox.addStretch()
         editLayout.addLayout(btnBox)
 

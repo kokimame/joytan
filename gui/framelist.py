@@ -12,6 +12,7 @@ class FrameList(QListWidget):
         # Store the ID of bundles whicn the UI is rendering
         # Fixme: For now, the ID is just the name of bundle but should be like hash
         self.currentIds = []
+        self.setStyleSheet("QListWidget::item { border-bottom: 1px solid black; }")
 
     def setNewBundles(self):
         # TODO: Move FM out of the class and make two classes comunicate with each other(?)

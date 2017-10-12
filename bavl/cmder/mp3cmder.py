@@ -34,26 +34,37 @@ class Mp3Cmder:
         fs = self.setting['sampling']
         bps = self.setting['bitrate']
 
-        for i, songDir in enumerate(self.setting['loop']):
-            if songDir['sampling'] != fs:
-                output = self.finalDir + "/%s-resamp-%d.mp3" % (songDir['filename'].split(".")[0], i+1)
-                resampling(songDir['path'], fs, output)
-                songDir['path'] = output
-                print("%s resampled!" % songDir['filename'])
+        for i, loopDir in enumerate(self.setting['loop']):
+            if loopDir['sampling'] != fs:
+                output = self.finalDir + "/%s-resamp-%d.mp3" % (loopDir['filename'].split(".")[0], i+1)
+                resampling(loopDir['path'], fs, output)
+                loopDir['path'] = output
+                print("%s resampled!" % loopDir['filename'])
 
         sfxGroup = self.setting['sfx']
-        for i, sfxDir in enumerate([sfxGroup['word'], sfxGroup['definitions'], sfxGroup['examples']]):
-            if sfxDir['sampling'] != fs:
-                output = self.finalDir + "/%s-resamp-%d.mp3" % (sfxDir['filename'].split(".")[0], i+1)
-                resampling(sfxDir['path'], fs, output)
-                sfxDir['path'] = output
-                print("%s resampled!" % sfxDir['filename'])
+        """ {
+                'Word': [{ ... items ... }, {...},
+                'Definition' : ...
+            }
+        """
+        for group, sfxs in sfxGroup.items():
+            sfxlist = []
+            for i, sfxInfo in enumerate(sfxs):
+                if sfxInfo['sampling'] != fs:
+                    output = self.finalDir + "/%s-resamp-%d.mp3" % (sfxInfo['filename'].split(".")[0], i+1)
+                    resampling(sfxInfo['path'], fs, output)
+                    sfxInfo['path'] = output
+                    sfxInfo['filename'] = getFileNameFromPath(output)
+                    print("%s resampled!" % sfxInfo['filename'])
 
-            if sfxDir['bitrate'] != bps:
-                output = self.finalDir + "/%s-bps-%d.mp3" % (sfxDir['filename'].split(".")[0], i+1)
-                convertBps(sfxDir['path'], bps, output)
-                sfxDir['path'] = output
-                print("%s bitrate modified!" % sfxDir['filename'])
+                if sfxInfo['bitrate'] != bps:
+                    output = self.finalDir + "/%s-bps-%d.mp3" % (sfxInfo['filename'].split(".")[0], i+1)
+                    convertBps(sfxInfo['path'], bps, output)
+                    sfxInfo['path'] = output
+                    sfxInfo['filename'] = getFileNameFromPath(output)
+                    print("%s bitrate modified!" % sfxInfo['filename'])
+                sfxlist.append(sfxInfo['path'])
+            catListMp3(sfxlist, "{finalDir}/{group}-sfx.mp3".format(finalDir=self.finalDir, group=group))
 
 
 
@@ -69,18 +80,18 @@ class Mp3Cmder:
         wordhead = repeatMp3('{curdir}/pronounce.mp3'.format(curdir=curdir), self.setting['repeat'])
 
         sfxdir = self.setting['sfx']
-        assert sfxdir['word'] != None
+        assert len(sfxdir['Word']) != 0, print("Choose at least one sfx accompanying with a word")
         wordheader = '{curdir}/wordheader.mp3'.format(curdir=curdir)
-        catMp3(sfxdir['word']['path'], wordhead, wordheader)
+        catMp3("{finalDir}/Word-sfx.mp3".format(finalDir=self.finalDir), wordhead, wordheader)
 
         inputs = "%s " % wordheader
         for cont in self.seq[bitem.name]:
             try:
                 cont = cont['def'] + ".mp3"
-                inputs += "%s %s " % (sfxdir['definitions']['path'], cont)
+                inputs += "%s %s " % ("{finalDir}/Definition-sfx.mp3".format(finalDir=self.finalDir), cont)
             except KeyError:
                 cont = cont['ex'] + ".mp3"
-                inputs += "%s %s " % (sfxdir['examples']['path'], cont)
+                inputs += "%s %s " % ("{finalDir}/Example-sfx.mp3".format(finalDir=self.finalDir), cont)
         catMp3(inputs, "", "{root}/{dirname}.mp3".format(root=self.root, dirname=bitem.getDirname()))
 
     def ttsBitem(self, bitem):
@@ -174,9 +185,18 @@ def repeatMp3(file, repeat):
     call(cmd, shell=True)
     return output
 
+
+# TODO: Merge two methods below into one
 def catMp3(file1, file2, output):
     cmd = "cat %s %s > %s" % (file1, file2, output)
     print(cmd)
+    call(cmd, shell=True)
+
+def catListMp3(filelist, output):
+    cmd = "cat "
+    for file in filelist:
+        cmd += "%s " % file
+    cmd += "> %s" % output
     call(cmd, shell=True)
 
 def getMp3Info(mp3file):

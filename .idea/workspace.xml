@@ -3,8 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="f7b2dda3-dca7-4381-9f00-cd9e71478e90" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/design/mp3dialog.ui" afterPath="$PROJECT_DIR$/design/mp3dialog.ui" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/gui/forms/mp3dialog.py" afterPath="$PROJECT_DIR$/gui/forms/mp3dialog.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bavl/cmder/mp3cmder.py" afterPath="$PROJECT_DIR$/bavl/cmder/mp3cmder.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/gui/mp3dialog.py" afterPath="$PROJECT_DIR$/gui/mp3dialog.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -14,36 +13,14 @@
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="DockManager">
-    <window id="1">
-      <content type="file-editors">
-        <state>
-          <leaf>
-            <file leaf-file-name="treeui.py" pinned="false" current-in-tab="true">
-              <entry file="file://$PROJECT_DIR$/tests/misc/treeui.py">
-                <provider selected="true" editor-type-id="text-editor">
-                  <state relative-caret-position="300">
-                    <caret line="20" column="25" lean-forward="true" selection-start-line="20" selection-start-column="25" selection-end-line="20" selection-end-column="25" />
-                    <folding>
-                      <element signature="e#0#29#0" expanded="true" />
-                    </folding>
-                  </state>
-                </provider>
-              </entry>
-            </file>
-          </leaf>
-        </state>
-      </content>
-    </window>
-  </component>
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file leaf-file-name="frame.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/bavl/frame.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="105">
-              <caret line="7" column="0" lean-forward="true" selection-start-line="7" selection-start-column="0" selection-end-line="7" selection-end-column="0" />
+            <state relative-caret-position="75">
+              <caret line="7" column="0" lean-forward="false" selection-start-line="7" selection-start-column="0" selection-end-line="7" selection-end-column="0" />
               <folding>
                 <element signature="e#0#41#0" expanded="true" />
               </folding>
@@ -66,35 +43,9 @@
       <file leaf-file-name="bundle.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/gui/bundle.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1050">
-              <caret line="70" column="0" lean-forward="false" selection-start-line="70" selection-start-column="0" selection-end-line="70" selection-end-column="0" />
-              <folding>
-                <marker date="1507694249000" expanded="true" signature="515:7058" ph="..." />
-                <marker date="1507694249000" expanded="true" signature="1538:1779" ph="..." />
-                <marker date="1507694249000" expanded="true" signature="1815:2182" ph="..." />
-                <marker date="1507694249000" expanded="true" signature="1886:2070" ph="..." />
-                <marker date="1507694249000" expanded="true" signature="2100:2182" ph="..." />
-                <marker date="1507694249000" expanded="true" signature="2209:2244" ph="..." />
-                <marker date="1507694249000" expanded="true" signature="2273:3003" ph="..." />
-                <marker date="1507694249000" expanded="true" signature="3032:4760" ph="..." />
-                <marker date="1507694249000" expanded="true" signature="3816:4633" ph="..." />
-                <marker date="1507694249000" expanded="true" signature="4201:4612" ph="..." />
-                <marker date="1507694249000" expanded="true" signature="4786:4924" ph="..." />
-                <marker date="1507694249000" expanded="true" signature="4947:5005" ph="..." />
-                <marker date="1507694249000" expanded="true" signature="5035:5541" ph="..." />
-                <marker date="1507694249000" expanded="true" signature="5161:5474" ph="..." />
-                <marker date="1507694249000" expanded="true" signature="5333:5474" ph="..." />
-                <marker date="1507694249000" expanded="true" signature="5574:6115" ph="..." />
-                <marker date="1507694249000" expanded="true" signature="5687:6049" ph="..." />
-                <marker date="1507694249000" expanded="true" signature="5885:6049" ph="..." />
-                <marker date="1507694249000" expanded="true" signature="6146:7058" ph="..." />
-                <marker date="1507694249000" expanded="true" signature="6195:7058" ph="..." />
-                <marker date="1507694249000" expanded="true" signature="6268:6548" ph="..." />
-                <marker date="1507694249000" expanded="true" signature="6328:6445" ph="..." />
-                <marker date="1507694249000" expanded="true" signature="6582:6954" ph="..." />
-                <marker date="1507694249000" expanded="true" signature="6667:6851" ph="..." />
-                <marker date="1507694249000" expanded="true" signature="6972:7058" ph="..." />
-              </folding>
+            <state relative-caret-position="300">
+              <caret line="47" column="31" lean-forward="true" selection-start-line="47" selection-start-column="31" selection-end-line="47" selection-end-column="31" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -114,8 +65,8 @@
       <file leaf-file-name="mp3cmder.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/bavl/cmder/mp3cmder.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="345">
-              <caret line="87" column="37" lean-forward="true" selection-start-line="87" selection-start-column="37" selection-end-line="87" selection-end-column="37" />
+            <state relative-caret-position="2355">
+              <caret line="161" column="20" lean-forward="false" selection-start-line="161" selection-start-column="20" selection-end-line="161" selection-end-column="20" />
               <folding />
             </state>
           </provider>
@@ -124,12 +75,10 @@
       <file leaf-file-name="mp3dialog.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/gui/mp3dialog.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="261">
-              <caret line="145" column="37" lean-forward="false" selection-start-line="145" selection-start-column="37" selection-end-line="145" selection-end-column="37" />
+            <state relative-caret-position="540">
+              <caret line="126" column="22" lean-forward="true" selection-start-line="126" selection-start-column="22" selection-end-line="126" selection-end-column="22" />
               <folding>
-                <element signature="e#1868#4427#0" expanded="false" />
-                <marker date="1507738899708" expanded="true" signature="1516:1609" ph="..." />
-                <marker date="1507738899708" expanded="true" signature="4456:4895" ph="..." />
+                <marker date="1507788089654" expanded="true" signature="1711:1804" ph="..." />
               </folding>
             </state>
           </provider>
@@ -138,7 +87,7 @@
       <file leaf-file-name="framelist.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/gui/framelist.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="210">
+            <state relative-caret-position="30">
               <caret line="15" column="28" lean-forward="true" selection-start-line="15" selection-start-column="28" selection-end-line="15" selection-end-column="28" />
               <folding />
             </state>
@@ -148,7 +97,7 @@
       <file leaf-file-name="main.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/gui/main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="385">
+            <state relative-caret-position="831">
               <caret line="88" column="27" lean-forward="true" selection-start-line="88" selection-start-column="27" selection-end-line="88" selection-end-column="27" />
               <folding />
             </state>
@@ -179,6 +128,9 @@
       <find>l</find>
       <find>sfxTa</find>
       <find>getFile</find>
+      <find>loopDir</find>
+      <find>catMp3</find>
+      <find>cat</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -200,14 +152,15 @@
         <option value="$PROJECT_DIR$/gui/framelist.py" />
         <option value="$PROJECT_DIR$/gui/main.py" />
         <option value="$PROJECT_DIR$/tests/misc/treeui.py" />
+        <option value="$PROJECT_DIR$/bavl/cmder/mp3cmder.py" />
         <option value="$PROJECT_DIR$/gui/mp3dialog.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="-1" />
-    <option name="y" value="24" />
-    <option name="width" value="1044" />
+    <option name="x" value="10" />
+    <option name="y" value="34" />
+    <option name="width" value="1265" />
     <option name="height" value="1020" />
   </component>
   <component name="ProjectView">
@@ -225,6 +178,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -396,7 +350,6 @@
         </subPane>
       </pane>
       <pane id="Scratches" />
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -617,14 +570,21 @@
       <option name="project" value="LOCAL" />
       <updated>1507731907864</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Designed tree of sfx">
+      <created>1507739018312</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1507739018312</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-1" y="24" width="1044" height="1020" extended-state="0" />
+    <frame x="10" y="34" width="1265" height="1020" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.27011493" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2229249" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3293348" sideWeight="0.50361013" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3293348" sideWeight="0.4963899" order="2" side_tool="false" content_ui="tabs" />
@@ -649,7 +609,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="fixed typo" />
-    <option name="LAST_COMMIT_MESSAGE" value="fixed typo" />
+    <MESSAGE value="Designed tree of sfx" />
+    <option name="LAST_COMMIT_MESSAGE" value="Designed tree of sfx" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -670,9 +631,7 @@
         <state relative-caret-position="220">
           <caret line="127" column="44" lean-forward="false" selection-start-line="127" selection-start-column="44" selection-end-line="127" selection-end-column="44" />
           <folding>
-            <element signature="e#1868#4427#0" expanded="false" />
-            <marker date="1507738899708" expanded="true" signature="1516:1609" ph="..." />
-            <marker date="1507738899708" expanded="true" signature="4456:4895" ph="..." />
+            <marker date="1507788089654" expanded="true" signature="1711:1804" ph="..." />
           </folding>
         </state>
       </provider>
@@ -699,33 +658,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="270">
           <caret line="18" column="38" lean-forward="false" selection-start-line="18" selection-start-column="38" selection-end-line="18" selection-end-column="38" />
-          <folding>
-            <marker date="1507694249000" expanded="true" signature="515:7058" ph="..." />
-            <marker date="1507694249000" expanded="true" signature="1538:1779" ph="..." />
-            <marker date="1507694249000" expanded="true" signature="1815:2182" ph="..." />
-            <marker date="1507694249000" expanded="true" signature="1886:2070" ph="..." />
-            <marker date="1507694249000" expanded="true" signature="2100:2182" ph="..." />
-            <marker date="1507694249000" expanded="true" signature="2209:2244" ph="..." />
-            <marker date="1507694249000" expanded="true" signature="2273:3003" ph="..." />
-            <marker date="1507694249000" expanded="true" signature="3032:4760" ph="..." />
-            <marker date="1507694249000" expanded="true" signature="3816:4633" ph="..." />
-            <marker date="1507694249000" expanded="true" signature="4201:4612" ph="..." />
-            <marker date="1507694249000" expanded="true" signature="4786:4924" ph="..." />
-            <marker date="1507694249000" expanded="true" signature="4947:5005" ph="..." />
-            <marker date="1507694249000" expanded="true" signature="5035:5541" ph="..." />
-            <marker date="1507694249000" expanded="true" signature="5161:5474" ph="..." />
-            <marker date="1507694249000" expanded="true" signature="5333:5474" ph="..." />
-            <marker date="1507694249000" expanded="true" signature="5574:6115" ph="..." />
-            <marker date="1507694249000" expanded="true" signature="5687:6049" ph="..." />
-            <marker date="1507694249000" expanded="true" signature="5885:6049" ph="..." />
-            <marker date="1507694249000" expanded="true" signature="6146:7058" ph="..." />
-            <marker date="1507694249000" expanded="true" signature="6195:7058" ph="..." />
-            <marker date="1507694249000" expanded="true" signature="6268:6548" ph="..." />
-            <marker date="1507694249000" expanded="true" signature="6328:6445" ph="..." />
-            <marker date="1507694249000" expanded="true" signature="6582:6954" ph="..." />
-            <marker date="1507694249000" expanded="true" signature="6667:6851" ph="..." />
-            <marker date="1507694249000" expanded="true" signature="6972:7058" ph="..." />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -766,33 +699,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="555">
           <caret line="37" column="22" lean-forward="true" selection-start-line="37" selection-start-column="22" selection-end-line="37" selection-end-column="22" />
-          <folding>
-            <marker date="1507694249000" expanded="true" signature="515:7058" ph="..." />
-            <marker date="1507694249000" expanded="true" signature="1538:1779" ph="..." />
-            <marker date="1507694249000" expanded="true" signature="1815:2182" ph="..." />
-            <marker date="1507694249000" expanded="true" signature="1886:2070" ph="..." />
-            <marker date="1507694249000" expanded="true" signature="2100:2182" ph="..." />
-            <marker date="1507694249000" expanded="true" signature="2209:2244" ph="..." />
-            <marker date="1507694249000" expanded="true" signature="2273:3003" ph="..." />
-            <marker date="1507694249000" expanded="true" signature="3032:4760" ph="..." />
-            <marker date="1507694249000" expanded="true" signature="3816:4633" ph="..." />
-            <marker date="1507694249000" expanded="true" signature="4201:4612" ph="..." />
-            <marker date="1507694249000" expanded="true" signature="4786:4924" ph="..." />
-            <marker date="1507694249000" expanded="true" signature="4947:5005" ph="..." />
-            <marker date="1507694249000" expanded="true" signature="5035:5541" ph="..." />
-            <marker date="1507694249000" expanded="true" signature="5161:5474" ph="..." />
-            <marker date="1507694249000" expanded="true" signature="5333:5474" ph="..." />
-            <marker date="1507694249000" expanded="true" signature="5574:6115" ph="..." />
-            <marker date="1507694249000" expanded="true" signature="5687:6049" ph="..." />
-            <marker date="1507694249000" expanded="true" signature="5885:6049" ph="..." />
-            <marker date="1507694249000" expanded="true" signature="6146:7058" ph="..." />
-            <marker date="1507694249000" expanded="true" signature="6195:7058" ph="..." />
-            <marker date="1507694249000" expanded="true" signature="6268:6548" ph="..." />
-            <marker date="1507694249000" expanded="true" signature="6328:6445" ph="..." />
-            <marker date="1507694249000" expanded="true" signature="6582:6954" ph="..." />
-            <marker date="1507694249000" expanded="true" signature="6667:6851" ph="..." />
-            <marker date="1507694249000" expanded="true" signature="6972:7058" ph="..." />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -863,64 +770,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/gui/bundle.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1050">
-          <caret line="70" column="0" lean-forward="false" selection-start-line="70" selection-start-column="0" selection-end-line="70" selection-end-column="0" />
-          <folding>
-            <marker date="1507694249000" expanded="true" signature="515:7058" ph="..." />
-            <marker date="1507694249000" expanded="true" signature="1538:1779" ph="..." />
-            <marker date="1507694249000" expanded="true" signature="1815:2182" ph="..." />
-            <marker date="1507694249000" expanded="true" signature="1886:2070" ph="..." />
-            <marker date="1507694249000" expanded="true" signature="2100:2182" ph="..." />
-            <marker date="1507694249000" expanded="true" signature="2209:2244" ph="..." />
-            <marker date="1507694249000" expanded="true" signature="2273:3003" ph="..." />
-            <marker date="1507694249000" expanded="true" signature="3032:4760" ph="..." />
-            <marker date="1507694249000" expanded="true" signature="3816:4633" ph="..." />
-            <marker date="1507694249000" expanded="true" signature="4201:4612" ph="..." />
-            <marker date="1507694249000" expanded="true" signature="4786:4924" ph="..." />
-            <marker date="1507694249000" expanded="true" signature="4947:5005" ph="..." />
-            <marker date="1507694249000" expanded="true" signature="5035:5541" ph="..." />
-            <marker date="1507694249000" expanded="true" signature="5161:5474" ph="..." />
-            <marker date="1507694249000" expanded="true" signature="5333:5474" ph="..." />
-            <marker date="1507694249000" expanded="true" signature="5574:6115" ph="..." />
-            <marker date="1507694249000" expanded="true" signature="5687:6049" ph="..." />
-            <marker date="1507694249000" expanded="true" signature="5885:6049" ph="..." />
-            <marker date="1507694249000" expanded="true" signature="6146:7058" ph="..." />
-            <marker date="1507694249000" expanded="true" signature="6195:7058" ph="..." />
-            <marker date="1507694249000" expanded="true" signature="6268:6548" ph="..." />
-            <marker date="1507694249000" expanded="true" signature="6328:6445" ph="..." />
-            <marker date="1507694249000" expanded="true" signature="6582:6954" ph="..." />
-            <marker date="1507694249000" expanded="true" signature="6667:6851" ph="..." />
-            <marker date="1507694249000" expanded="true" signature="6972:7058" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/gui/framelist.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="210">
-          <caret line="15" column="28" lean-forward="true" selection-start-line="15" selection-start-column="28" selection-end-line="15" selection-end-column="28" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/gui/main.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="385">
-          <caret line="88" column="27" lean-forward="true" selection-start-line="88" selection-start-column="27" selection-end-line="88" selection-end-column="27" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/bavl/cmder/mp3cmder.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="345">
-          <caret line="87" column="37" lean-forward="true" selection-start-line="87" selection-start-column="37" selection-end-line="87" selection-end-column="37" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/bavl/utils.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -935,7 +784,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -944,29 +792,59 @@
         <state relative-caret-position="300">
           <caret line="20" column="25" lean-forward="true" selection-start-line="20" selection-start-column="25" selection-end-line="20" selection-end-column="25" />
           <folding>
-            <element signature="e#0#29#0" expanded="true" />
+            <element signature="e#0#29#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/bavl/frame.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="7" column="0" lean-forward="true" selection-start-line="7" selection-start-column="0" selection-end-line="7" selection-end-column="0" />
+        <state relative-caret-position="75">
+          <caret line="7" column="0" lean-forward="false" selection-start-line="7" selection-start-column="0" selection-end-line="7" selection-end-column="0" />
           <folding>
             <element signature="e#0#41#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/gui/framelist.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="30">
+          <caret line="15" column="28" lean-forward="true" selection-start-line="15" selection-start-column="28" selection-end-line="15" selection-end-column="28" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/gui/bundle.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="300">
+          <caret line="47" column="31" lean-forward="true" selection-start-line="47" selection-start-column="31" selection-end-line="47" selection-end-column="31" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/bavl/cmder/mp3cmder.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2355">
+          <caret line="161" column="20" lean-forward="false" selection-start-line="161" selection-start-column="20" selection-end-line="161" selection-end-column="20" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/gui/main.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="831">
+          <caret line="88" column="27" lean-forward="true" selection-start-line="88" selection-start-column="27" selection-end-line="88" selection-end-column="27" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/gui/mp3dialog.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="261">
-          <caret line="145" column="37" lean-forward="false" selection-start-line="145" selection-start-column="37" selection-end-line="145" selection-end-column="37" />
+        <state relative-caret-position="540">
+          <caret line="126" column="22" lean-forward="true" selection-start-line="126" selection-start-column="22" selection-end-line="126" selection-end-column="22" />
           <folding>
-            <element signature="e#1868#4427#0" expanded="false" />
-            <marker date="1507738899708" expanded="true" signature="1516:1609" ph="..." />
-            <marker date="1507738899708" expanded="true" signature="4456:4895" ph="..." />
+            <marker date="1507788089654" expanded="true" signature="1711:1804" ph="..." />
           </folding>
         </state>
       </provider>

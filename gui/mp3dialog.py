@@ -12,14 +12,16 @@ class Mp3ListItem(QListWidgetItem):
         super(Mp3ListItem, self).__init__(parent)
         self.mp3path = mp3path
         self.filename = getFileNameFromPath(mp3path)
-        self.duration = mp3Duration(self.mp3path)
+        self.hhmmss = mp3Duration(mp3path)
+        self.duration, self.fskhz, self.bitkbs = getMp3Info(mp3path)
 
 class Mp3TreeItem(QTreeWidgetItem):
     def __init__(self, mp3path, parent=None):
         super(Mp3TreeItem, self).__init__(parent)
         self.mp3path = mp3path
         self.filename = getFileNameFromPath(mp3path)
-        self.duration = mp3Duration(self.mp3path)
+        self.hhmmss = mp3Duration(mp3path)
+        self.duration, self.fskhz, self.bitkbs = getMp3Info(mp3path)
 
 
 # TODO: Name change to Mp3Dialog
@@ -38,11 +40,13 @@ class Mp3Setting(QDialog):
     def setupSfxTree(self):
         tree = self.form.sfxTree
         tree.itemClicked.connect(self.onSfxClicked)
+        self.sfxGroup = []
 
         for group in ['Word', 'Definition', 'Example']:
             groupItem = QTreeWidgetItem(tree)
             groupItem.setExpanded(True)
             groupItem.setText(0, group)
+            self.sfxGroup.append(groupItem)
 
 
     def setupButton(self):
@@ -64,27 +68,31 @@ class Mp3Setting(QDialog):
         setting['repeat'] = form.wordSpin.value()
 
         sfxdir = {}
-        for i, group in enumerate(['word', 'definitions', 'examples']):
-            path = form.sfxTable.item(i, 1).sfxpath
-            duration, fskhz, bitkbs = getMp3Info(path)
-            sfxdir[group] = {"path": path,
-                             "filename": getFileNameFromPath(path),
-                             "duration": duration,
-                             "sampling": fskhz,
-                             "bitrate": bitkbs,
-                             }
+        for item in self.sfxGroup:
+            # SFXs for a group shown in column 0
+            group = item.text(0)
+            sfxdir[group] = []
+            for i in range(item.childCount()):
+                child = item.child(i)
+                sfxdir[group].append({
+                    "path": child.mp3path,
+                    "filename": child.filename,
+                    "duration": child.duration,
+                    "sampling": child.fskhz,
+                    "bitrate": child.bitkbs
+                })
         setting['sfx'] = sfxdir
 
         bgmloop = []
         for i in range(form.bgmList.count()):
             item = form.bgmList.item(i)
-            duration, fskhz, bitkbs = getMp3Info(item.bgmpath)
-            bgmloop.append({"path": item.bgmpath,
-                            "filename": getFileNameFromPath(item.bgmpath),
-                            "duration": duration,
-                            "sampling": fskhz,
-                            "bitrate": bitkbs,})
+            bgmloop.append({"path": item.mp3path,
+                            "filename": item.filename,
+                            "duration": item.duration,
+                            "sampling": item.fskhz,
+                            "bitrate": item.bitkbs,})
         setting['loop'] = bgmloop
+
 
         from bavl.cmder.mp3cmder import Mp3Cmder
         from gui.progress import ProgressDialog
@@ -135,7 +143,7 @@ class Mp3Setting(QDialog):
                         dir=self.mw.pref['bgmdir'], filter="*.mp3")
             item = Mp3ListItem(file)
             row = list.count() + 1
-            item.setText("%3d. %s: %s" % (row, item.duration, item.filename))
+            item.setText("%3d. %s: %s" % (row, item.hhmmss, item.filename))
             list.addItem(item)
         except IndexError:
             print("Index Error passed")
@@ -149,7 +157,7 @@ class Mp3Setting(QDialog):
                         dir=self.mw.pref['sfxdir'], filter="*.mp3")
             child = Mp3TreeItem(file, parent=item)
             child.setText(1, child.filename)
-            child.setText(2, child.duration)
+            child.setText(2, child.hhmmss)
             item.addChild(child)
 
         except IndexError:

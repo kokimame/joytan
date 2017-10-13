@@ -50,7 +50,7 @@ class FrameList(QListWidget):
         for i in range(self.count()):
             bui = self.item(i)
             bitem = self.itemWidget(bui)
-            bitem.update()
+            bitem.updateUi()
             bui.setSizeHint(bitem.sizeHint())
 
         self.repaint()

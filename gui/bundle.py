@@ -148,7 +148,7 @@ class BundleItemUi(QWidget):
         self.italFont = QFont()
         self.italFont.setItalic(True)
 
-    def update(self):
+    def updateUi(self):
         self.updateDisplay()
         self.updateEditors()
 

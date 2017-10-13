@@ -8,7 +8,7 @@ class DictionaryComParser(BaseParser):
         BaseParser.__init__(self)
 
     def run(self, data):
-        bitems = []
+        defex = []
         soup = BeautifulSoup(data, "html.parser")
         defcs = soup.find_all(attrs={"class": "def-content"})
 
@@ -25,7 +25,7 @@ class DictionaryComParser(BaseParser):
             except ValueError:
                 define, examp = defc, ""
                 define = define.strip()
-            bitems.append({'define': define, 'examples': [examp]})
+            defex.append({'define': define, 'examples': [examp]})
 
             """
             Bundle item format (temporally)
@@ -36,4 +36,4 @@ class DictionaryComParser(BaseParser):
             
             """
 
-        return bitems
+        return defex

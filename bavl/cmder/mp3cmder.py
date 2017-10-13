@@ -227,7 +227,7 @@ def soxMp3Duration(mp3file):
 def mp3Duration(mp3file):
     # SOLVED!
     # Fixme: Why ffmpeg show duration too long (maybe twice longer)
-    # This is a bung from ffmpeg and they say users can do nothing.
+    # This is a bug from ffmpeg and they say users can do nothing.
     # So carefully choose alternative tools such as mutagen.
     # This divided-by-two method is less evident.
     # -- PART 2 --

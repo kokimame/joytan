@@ -22,7 +22,7 @@ class DictionaryComParser(BaseParser):
                 define, examp = defc.split(":")
                 define = define.strip()
                 examp = examp.strip()
-            except ValueError:
+            except ValueError: # If definition has no example
                 define, examp = defc, ""
                 define = define.strip()
             defex.append({'define': define, 'examples': [examp]})

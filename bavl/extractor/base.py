@@ -13,4 +13,6 @@ class Extractor:
 
 
     def _run(self):
+        # Return the list of words in a given file with a specific format.
+        # The run with underscore is only called from the base's run method
         raise NotImplementedError

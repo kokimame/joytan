@@ -4,7 +4,7 @@ from bavl.frame import FrameManager
 from gui.qt import *
 from gui.framelist import FrameList
 from gui.bundle import BundleFactory
-from gui.utils import isMac, isLin, isWin
+from gui.utils import isMac, isLin, isWin, rmdir
 import gui
 
 
@@ -37,6 +37,7 @@ class BavlMW(QMainWindow):
         self.app = app
 
         self.pref = defaultPref()
+        rmdir(self.getRootPath())
         print(self.pref)
 
         self.fm = FrameManager(self)

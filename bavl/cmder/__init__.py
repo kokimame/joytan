@@ -1,4 +1,4 @@
-from bavl.utils import isMac, isLin, isWin
+from gui.utils import isMac, isLin, isWin
 import shutil
 
 assert shutil.which("cat") != None, "cat not found."

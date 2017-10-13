@@ -1,5 +1,4 @@
 from gui.utils import isMac, isLin, isWin
-from bavl.utils import mkdir, rmdir
 from bavl.bundle import Bundle
 
 class _Frame():
@@ -13,8 +12,6 @@ class FrameManager():
         # In future, the list may be extended to a new class.
         self._Frame = []
         self.mw = mw
-
-        rmdir(self.mw.getRootPath())
 
     def initBundle(self, name, index):
         # Do some setup for bundles using "Frame preference"

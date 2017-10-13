@@ -43,3 +43,11 @@ def getFileNameFromPath(longpath):
 
 def processCoreEvents():
     gui.app.processEvents()
+
+def mkdir(path):
+    call("rm -rf {path}".format(path=path), shell=True)
+    assert not os.path.exists(path)
+    os.makedirs(path)
+
+def rmdir(path):
+    call("rm -rf {path}".format(path=path), shell=True)

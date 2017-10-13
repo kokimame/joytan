@@ -1,8 +1,7 @@
 import os, re
 from subprocess import call, check_output
 
-from bavl.utils import mkdir, isLin, isMac
-from gui.utils import getFileNameFromPath
+from gui.utils import getFileNameFromPath, mkdir, isLin, isMac
 
 class Mp3Cmder:
     def __init__(self, root, setting):

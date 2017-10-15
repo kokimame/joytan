@@ -43,6 +43,7 @@ class BavlMW(QMainWindow):
         self.fm = FrameManager(self)
         self.bdfactory = BundleFactory()
         self.initUi()
+        self.frameMode = "Disp"
 
 
         self.center()
@@ -78,12 +79,12 @@ class BavlMW(QMainWindow):
         form.delButton.setIcon(QIcon('design/icons/minus_button_red.png'))
         form.editButton.setIcon(QIcon('design/icons/edit_button.png'))
         form.configButton.setIcon(QIcon('design/icons/config_button.png'))
-        form.addButton.clicked.connect(lambda x: print("-- Under construction --"))
+        form.addButton.clicked.connect(lambda: print("-- Under construction --"))
         form.delButton.clicked.connect(self.framelist.deleteSelectedUi)
-        form.editButton.clicked.connect(lambda x: print("-- Under construction --"))
-        form.configButton.clicked.connect(lambda x: print("-- Under construction --"))
+        form.editButton.clicked.connect(self.onUpdateFrameMode)
+        form.configButton.clicked.connect(lambda: print("-- Under construction --"))
         form.mp3Button.clicked.connect(self.onCreateMp3)
-        form.pdfButton.clicked.connect(lambda x: print("-- Under construction --"))
+        form.pdfButton.clicked.connect(lambda: print("-- Under construction --"))
         form.dlcButton.clicked.connect(self.onDownload)
 
     def onPreferences(self):
@@ -93,6 +94,18 @@ class BavlMW(QMainWindow):
     def onExtract(self):
         import gui.extract
         gui.extract.onExtract(self)
+
+    def onUpdateFrameMode(self):
+        if self.frameMode == "Disp":
+            # Change Frame Mode to "Edit" and the icon to "Display"
+            self.form.editButton.setIcon(QIcon("design/icons/disp_button.png"))
+            self.framelist.updateMode("Edit")
+            self.frameMode = "Edit"
+        elif self.frameMode == "Edit":
+            self.form.editButton.setIcon(QIcon("design/icons/edit_button.png"))
+            self.framelist.updateMode("Disp")
+            self.frameMode = "Disp"
+
 
     def onDownload(self):
         import gui.download

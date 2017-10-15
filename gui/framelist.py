@@ -60,6 +60,10 @@ class FrameList(QListWidget):
 
         self.repaint()
 
+    def updateMode(self, newMode):
+        for i in range(self.count()):
+            bitem = self.getWidgetItem(i)
+            bitem.updateMode(newMode)
 
     def setNewId(self, id):
         self.currentIds.append(id)

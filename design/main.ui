@@ -77,6 +77,10 @@
     <property name="title">
      <string>&amp;Tools</string>
     </property>
+    <addaction name="actionWav2Mp3"/>
+    <addaction name="actionMp3Volume"/>
+    <addaction name="actionNewSfx"/>
+    <addaction name="actionRecording"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
@@ -116,6 +120,26 @@
   <action name="actionPreferences">
    <property name="text">
     <string>Preferences</string>
+   </property>
+  </action>
+  <action name="actionWav2Mp3">
+   <property name="text">
+    <string>Convert WAV to MP3</string>
+   </property>
+  </action>
+  <action name="actionMp3Volume">
+   <property name="text">
+    <string>Change volume of MP3 file</string>
+   </property>
+  </action>
+  <action name="actionNewSfx">
+   <property name="text">
+    <string>Create new sound effect</string>
+   </property>
+  </action>
+  <action name="actionRecording">
+   <property name="text">
+    <string>Voice recoder</string>
    </property>
   </action>
  </widget>

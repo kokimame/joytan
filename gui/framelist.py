@@ -11,7 +11,11 @@ class FrameList(QListWidget):
         # Store the ID of bundles whicn the UI is rendering
         # Fixme: For now, the ID is just the name of bundle but should be like hash
         self.currentIds = []
-        self.setStyleSheet("QListWidget::item { border-bottom: 1px solid black; }")
+        self.setSelectionMode(QAbstractItemView.ExtendedSelection)
+        self.setStyleSheet("""
+                            QListWidget::item { border-bottom: 1px solid black; }
+                            QListWidget::item:selected { background: rgba(0,255,255,30); }
+                           """)
 
     def setNewBundles(self):
         # TODO: Move FM out of the class and make two classes communicate with each other(?)
@@ -30,11 +34,13 @@ class FrameList(QListWidget):
         # Fixme: Use real ID to check existing bundles in the list
         self.setNewId(bundle.name)
 
-    def deleteUi(self, ui):
-        self.takeItem(ui.index - 1)
-        self.currentIds.remove(ui.name)
-        self.fm.remove(ui.bundle)
-        self.updateIndex(ui.index - 1)
+    def deleteSelectedUi(self):
+        for bui in self.selectedItems():
+            bitem = self.itemWidget(bui)
+            self.takeItem(bitem.index - 1)
+            self.currentIds.remove(bitem.name)
+            self.fm.remove(bitem.bundle)
+            self.updateIndex(bitem.index - 1)
 
     def updateIndex(self, n):
         # Update index of bundles after Nth bundle

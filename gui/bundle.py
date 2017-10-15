@@ -73,18 +73,6 @@ class BundleItemUi(QWidget):
         dispWidget = QWidget()
         dispLayout = QVBoxLayout()
 
-        btnBox = QHBoxLayout()
-        delBtn = QPushButton()
-        delBtn.clicked.connect(self.deleteSelf)
-        delBtn.setIcon(QIcon('design/icons/delete_button.png'))
-        editBtn = QPushButton()
-        editBtn.clicked.connect(lambda: self.updateMode("Edit"))
-        editBtn.setIcon(QIcon('design/icons/edit_button.png'))
-        btnBox.addWidget(delBtn)
-        btnBox.addWidget(editBtn)
-        btnBox.addStretch()
-        dispLayout.addLayout(btnBox)
-
         self.dispLabel = QLabel()
         self.dispLabel.setText(self.html.format
                            (content=self.nameFormat.format(num=self.index, name=self.name)))
@@ -96,18 +84,6 @@ class BundleItemUi(QWidget):
         # Definitions per bundle and Examples per definition
         editWidget = QWidget()
         editLayout = QVBoxLayout()
-
-        btnBox = QHBoxLayout()
-        delBtn = QPushButton()
-        delBtn.clicked.connect(self.deleteSelf)
-        delBtn.setIcon(QIcon('design/icons/delete_button.png'))
-        okBtn = QPushButton()
-        okBtn.clicked.connect(lambda: self.updateMode("Disp"))
-        okBtn.setIcon(QIcon('design/icons/ok_button.png'))
-        btnBox.addWidget(delBtn)
-        btnBox.addWidget(okBtn)
-        btnBox.addStretch()
-        editLayout.addLayout(btnBox)
 
         dpw, epd = self.dpw, self.epd
         self.editLabel = QLabel()

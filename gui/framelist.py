@@ -6,7 +6,6 @@ class FrameList(QListWidget):
 
     def __init__(self, mw, parent=None):
         super(FrameList, self).__init__(parent)
-        self.setSelectionMode(QAbstractItemView.NoSelection)
         self.mw = mw
         self.fm = mw.fm
         # Store the ID of bundles whicn the UI is rendering

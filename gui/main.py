@@ -64,7 +64,7 @@ class BavlMW(QMainWindow):
 
     def setupFrameList(self):
         framelist = FrameList(self)
-        self.form.verticalLayout.addWidget(framelist)
+        self.form.verticalLayout.insertWidget(0, framelist)
         self.framelist = framelist
 
     def setupMenus(self):
@@ -74,6 +74,10 @@ class BavlMW(QMainWindow):
 
     def setupButtons(self):
         form = self.form
+        form.addButton.setIcon(QIcon('design/icons/plus_button_green.png'))
+        form.delButton.setIcon(QIcon('design/icons/minus_button_red.png'))
+        form.editButton.setIcon(QIcon('design/icons/edit_button.png'))
+        form.configButton.setIcon(QIcon('design/icons/config_button.png'))
         form.mp3Button.clicked.connect(self.onCreateMp3)
         form.pdfButton.clicked.connect(lambda x: print("-- Under construction --"))
         form.dlcButton.clicked.connect(self.onDownload)

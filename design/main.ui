@@ -200,11 +200,17 @@
    </property>
   </action>
   <action name="actionNewSfx">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>Create new sound effect</string>
    </property>
   </action>
   <action name="actionRecording">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>Voice recoder</string>
    </property>

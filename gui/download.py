@@ -20,14 +20,16 @@ def onDownload(mw):
     # - e.g partialDownload(mw, parser)
     parser = Parsers[mw.pref['onlineRef']]()
     ignorantDownload(mw, parser)
+    mw.framelist._update()
 
-    mw.framelist.updateBundles()
 
 
 def ignorantDownload(mw, parser, gstat=False):
     pd = ProgressDialog(mw.framelist.count(), msg="Downloading...")
     pd.show()
 
+    # Fixme: Download contents of everything in the list even if it's already downloaded.
+    # This is why the method called ignorant.
     for i in range(mw.framelist.count()):
         # This tip probably makes pd faster to display.
         pd.setValue(i)
@@ -39,7 +41,7 @@ def ignorantDownload(mw, parser, gstat=False):
         data = r.text
         items = parser.run(data)
 
-        mw.fm.setItemByName(bitem.name, items)
+        mw.framelist.updateBundle(bitem.name, items)
 
 def downloadGstaticSound(word, filename):
     url = "http://ssl.gstatic.com/dictionary/static/sounds/oxford/"

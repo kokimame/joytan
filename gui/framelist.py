@@ -34,7 +34,6 @@ class FrameList(QListWidget):
     def __init__(self, mw, parent=None):
         super(FrameList, self).__init__(parent)
         self.mw = mw
-        self.fm = FrameList.FrameManager()
         # Fixme: Framelist become frame itself. No need to store ids
         self.currentIds = []
         self.setSelectionMode(QAbstractItemView.ExtendedSelection)
@@ -43,14 +42,17 @@ class FrameList(QListWidget):
                             QListWidget::item:selected { background: rgba(0,255,255,30); }
                            """)
 
-    def updateItem(self, Item):
-        pass
-
     def add(self, name):
         if name in self.getCurrentNames():
             raise Exception("Exception: Bundle with name %s already exists." % name)
         self.addBundle(Bundle(name, self.count() + 1))
 
+    def updateBundle(self, name, items):
+        for bundle in self.getCurrentBundles():
+            if bundle.name == name:
+                bundle.updateItems(items)
+                return
+        raise Exception("Error: Bundle with name '%s' is not found in the Frame" % name)
 
     def remove(self):
         pass
@@ -88,7 +90,7 @@ class FrameList(QListWidget):
             bitem.index -= 1
             bitem.updateIndex()
 
-    def updateBundles(self):
+    def _update(self):
         # Update the inside of the bundles in the list
         print("Bundle updates")
         for i in range(self.count()):
@@ -109,6 +111,9 @@ class FrameList(QListWidget):
 
     def getCurrentNames(self):
         return [self.getWidgetItem(i).name for i in range(self.count())]
+
+    def getCurrentBundles(self):
+        return [self.getWidgetItem(i).bundle for i in range(self.count())]
 
 
     def getWidgetItem(self, num):

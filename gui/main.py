@@ -56,7 +56,6 @@ class EmotanMW(QMainWindow):
     def setupMainWindow(self):
         self.form = gui.forms.main.Ui_MainWindow()
         self.form.setupUi(self)
-        self.setWindowTitle("Emotan えも単")
 
     def setupFrameList(self):
         framelist = FrameList()

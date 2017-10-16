@@ -115,7 +115,7 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "Bavl"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "Emotan えも単"))
         self.dlcButton.setText(_translate("MainWindow", "Get DLC via Online Dictionary"))
         self.mp3Button.setText(_translate("MainWindow", "Get MP3"))
         self.pdfButton.setText(_translate("MainWindow", "Get PDF"))

@@ -4,7 +4,6 @@ from gui.bundle import BundleFactory
 # TODO: Move Bundle class into gui.bundle
 from bavl.bundle import Bundle
 
-# TODO: Rename to Frame
 class FrameList(QListWidget):
 
     def __init__(self, parent=None):

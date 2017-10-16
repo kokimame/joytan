@@ -50,7 +50,7 @@ class DialogManager:
 dialogs = DialogManager()
 
 
-class BavlApp(QApplication):
+class EmotanApp(QApplication):
     def __init___(self, argv):
         QApplication.__init__(self, argv)
         self._argv = argv
@@ -69,9 +69,9 @@ def _run():
     global mw, app# Main window
     print("Run the GUI")
 
-    app = BavlApp(sys.argv)
+    app = EmotanApp(sys.argv)
     QCoreApplication.setApplicationName("Emotan")
 
     import gui.main
-    mw = gui.main.BavlMW(app, sys.argv)
+    mw = gui.main.EmotanMW(app, sys.argv)
     app.exec_()

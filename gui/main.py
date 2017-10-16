@@ -27,7 +27,7 @@ def defaultPref():
         "onlineRef": "Dictionary.com"
     }
 
-class BavlMW(QMainWindow):
+class EmotanMW(QMainWindow):
     def __init__(self, app, args):
         QMainWindow.__init__(self)
         gui.mw = self

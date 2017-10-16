@@ -1,6 +1,6 @@
 import re
 
-import bavl.extractor as extractor
+import tools.extractor as extractor
 from gui.utils import getFiles
 
 def onExtract(mw):

@@ -1,7 +1,7 @@
 import re
 
 from bs4 import BeautifulSoup
-from bavl.parser.base import BaseParser
+from tools.parser.base import BaseParser
 
 class DictionaryComParser(BaseParser):
     def __init__(self):

@@ -1,6 +1,6 @@
 import os, requests
 
-from bavl.parser import Parsers
+from tools.parser import Parsers
 from gui.progress import ProgressDialog
 from gui.utils import processCoreEvents
 

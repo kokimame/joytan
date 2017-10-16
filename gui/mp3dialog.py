@@ -1,7 +1,7 @@
 from gui.qt import *
 import gui
 from gui.utils import getFile, getFileNameFromPath, isLin, isMac, processCoreEvents
-from bavl.cmder.mp3cmder import mp3Duration, hhmmss2secCmd, getMp3Info
+from tools.cmder.mp3cmder import mp3Duration, hhmmss2secCmd, getMp3Info
 
 def onMp3Dialog(mw):
     gui.dialogs.open("Mp3Setting", mw, mw.framelist)
@@ -94,7 +94,7 @@ class Mp3Setting(QDialog):
         setting['loop'] = bgmloop
 
 
-        from bavl.cmder.mp3cmder import Mp3Cmder
+        from tools.cmder.mp3cmder import Mp3Cmder
         from gui.progress import ProgressDialog
 
         # Fixme: Here is the wrong progress length assumption!

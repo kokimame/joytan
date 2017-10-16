@@ -1,4 +1,4 @@
-from bavl.extractor.base import Extractor
+from tools.extractor.base import Extractor
 
 class NewlineExtractor(Extractor):
     def __init__(self, file):

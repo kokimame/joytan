@@ -31,7 +31,7 @@ class FrameList(QListWidget):
         self.addItem(bui)
         self.setItemWidget(bui, bw)
 
-    def deleteSelectedUi(self):
+    def deleteBundle(self):
         for bui in self.selectedItems():
             bw = self.itemWidget(bui)
             self.takeItem(bw.index - 1)

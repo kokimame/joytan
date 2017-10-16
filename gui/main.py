@@ -75,7 +75,7 @@ class BavlMW(QMainWindow):
         form.editButton.setIcon(QIcon('design/icons/edit_button.png'))
         form.configButton.setIcon(QIcon('design/icons/config_button.png'))
         form.addButton.clicked.connect(lambda: print("-- Under construction --"))
-        form.delButton.clicked.connect(self.framelist.deleteSelectedUi)
+        form.delButton.clicked.connect(self.framelist.deleteBundle)
         form.editButton.clicked.connect(self.onUpdateFrameMode)
         form.configButton.clicked.connect(lambda: print("-- Under construction --"))
         form.mp3Button.clicked.connect(self.onCreateMp3)

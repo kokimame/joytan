@@ -21,9 +21,6 @@ def onExtract(mw):
         mw.framelist.add(word)
 
 
-    # TODO: remove this line. mw.framelist.setNewBundles()
-
-
 def extract(file):
     # Various Extractor will be available for a lot of file formats
     # For now, we only extract from a file with one word in each line

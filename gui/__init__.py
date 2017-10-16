@@ -1,18 +1,16 @@
 # Copyright: Koki Mametani <kokimametani@gmail.com>
 
-from bavl import version as _version
-
-import getpass
-import sys
-import optparse
-import tempfile
-import builtins
-import locale
-import gettext
-
 from gui.qt import *
 
-appVersion = _version
+if sys.version_info[0] < 3:
+    raise Exception("Emotan requires Python 3.x")
+
+if sys.getfilesystemencoding().lower() in ("ascii", "ansi_x3.4-1968"):
+    raise Exception("Emotan requires a UTF-8 locale.")
+
+# build scripts grep this line, so keep this format
+appVersion = "0.0.1beta1"
+
 mw = None # Main window set in runtime
 
 moduleDir = os.path.split(os.path.dirname(os.path.abspath(__file__)))[0]

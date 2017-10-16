@@ -1,8 +1,6 @@
 
 from gui.qt import *
 from gui.bundle import BundleFactory
-# TODO: Move Bundle class into gui.bundle
-from bavl.bundle import Bundle
 
 class FrameList(QListWidget):
 
@@ -15,12 +13,6 @@ class FrameList(QListWidget):
                             QListWidget::item:selected { background: rgba(0,255,255,30); }
                            """)
 
-    def add(self, name):
-        if name in self.getCurrentNames():
-            print("Bundle with name %s already exists." % name)
-            return
-        self.addBundle(Bundle(name, self.count() + 1))
-
     def updateBundle(self, name, items):
         for bundle in self.getCurrentBundles():
             if bundle.name == name:
@@ -29,7 +21,12 @@ class FrameList(QListWidget):
         raise Exception("Error: Bundle with name '%s' is not found in the Frame" % name)
 
 
-    def addBundle(self, bundle):
+    def addBundle(self, name):
+        if name in self.getCurrentNames():
+            print("Bundle with name %s already exists." % name)
+            return
+
+        bundle = self.bf.makeBundle(name, self.count() + 1)
         bui, bw = self.bf.createUi(self.count() + 1, bundle, parent=self)
         self.addItem(bui)
         self.setItemWidget(bui, bw)

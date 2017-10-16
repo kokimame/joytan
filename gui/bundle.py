@@ -1,6 +1,20 @@
 from gui.qt import *
 
+
 class BundleFactory:
+    class Bundle():
+        # Bundle for a word containing a number of meaning and example usage of its word
+        def __init__(self, name, index):
+            self.index = index
+            self.name = name
+            self.title = None
+            self.dir = None
+            # TODO: Alter this var name to "DLC" related term.
+            self.items = None  # DLC
+
+        def updateItems(self, items):
+            self.items = items
+
     def __init__(self):
         # TODO: More should be coming
         self.pref = {
@@ -8,11 +22,13 @@ class BundleFactory:
             "epd": 1
         }
 
+    def makeBundle(self, name, index):
+        return BundleFactory.Bundle(name, index)
+
     def createUi(self, index, bundle, parent=None):
         bui, bw = BundleUi(), BundleWidget(index, bundle, self.pref, parent=parent)
         bui.setSizeHint(bw.sizeHint())
         return bui, bw
-
 
 class BundleUi(QListWidgetItem):
     def __init__(self):

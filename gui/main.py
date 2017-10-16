@@ -1,6 +1,4 @@
 # Copyright: Koki Mametani <kokimametani@gmail.com>
-
-from bavl.frame import FrameManager
 from gui.qt import *
 from gui.framelist import FrameList
 from gui.bundle import BundleFactory

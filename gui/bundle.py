@@ -25,8 +25,8 @@ class BundleFactory:
     def makeBundle(self, name, index):
         return BundleFactory.Bundle(name, index)
 
-    def createUi(self, index, bundle, parent=None):
-        bui, bw = BundleUi(), BundleWidget(index, bundle, self.pref, parent=parent)
+    def createUi(self, index, bundle, mode, parent=None):
+        bui, bw = BundleUi(), BundleWidget(index, bundle, mode, self.pref, parent=parent)
         bui.setSizeHint(bw.sizeHint())
         return bui, bw
 
@@ -35,12 +35,13 @@ class BundleUi(QListWidgetItem):
         QListWidgetItem.__init__(self)
 
 class BundleWidget(QWidget):
-    def __init__(self, index, bundle, pref, parent=None):
+    def __init__(self, index, bundle, mode, pref, parent=None):
         super(BundleWidget, self).__init__(parent)
         self.initFont()
         self.parent = parent
         self.index = index
         self.bundle = bundle
+        self.mode = mode
         self.dpw = pref['dpw']
         self.epd = pref['epd']
 
@@ -50,7 +51,6 @@ class BundleWidget(QWidget):
         self.exFormat = '<p><span style="color:#8d8d8d;">&quot;{example}&quot;</span></p>'
         self.editors = {}
         self.stackedLayout = QStackedLayout()
-        self.mode = "Disp"
 
         self.setupUi(bundle.name)
 
@@ -58,10 +58,13 @@ class BundleWidget(QWidget):
         self.setupDisplay()
         self.setupEditors(name=name)
         self.setLayout(self.stackedLayout)
+        if self.mode == "Disp":
+            self.stackedLayout.setCurrentIndex(0)
+        if self.mode == "Edit":
+            self.stackedLayout.setCurrentIndex(1)
 
     def updateIndex(self):
         self.saveEditingResult()
-        self.editLabel.setText("%d. %s" % (self.index, self.bundle.name))
 
     def getDirname(self):
         # Make string number from the index of the bundle from 00000 to 99999
@@ -89,13 +92,18 @@ class BundleWidget(QWidget):
         dispLayout = QVBoxLayout()
 
         self.dispLabel = QLabel()
+
+        if self.bundle.name == '':
+            name = "Anonymous bundle"
+        else:
+            name = self.bundle.name
         self.dispLabel.setText(self.html.format
-                           (content=self.nameFormat.format(num=self.index, name=self.bundle.name)))
+                           (content=self.nameFormat.format(num=self.index, name=name)))
         dispLayout.addWidget(self.dispLabel)
         dispWidget.setLayout(dispLayout)
         self.stackedLayout.addWidget(dispWidget)
 
-    def setupEditors(self, name='Empty bundle'):
+    def setupEditors(self, name):
         # Definitions per bundle and Examples per definition
         editWidget = QWidget()
         editLayout = QGridLayout()
@@ -145,7 +153,11 @@ class BundleWidget(QWidget):
         self.updateEditors()
 
     def updateDisplay(self):
-        content = self.nameFormat.format(num=self.index, name=self.bundle.name)
+        if self.bundle.name == '':
+            name = "Anonymous bundle"
+        else:
+            name = self.bundle.name
+        content = self.nameFormat.format(num=self.index, name=name)
         for i, item in enumerate(self.bundle.items):
             if i + 1 > self.dpw: break
             content += self.defFormat.format(num=(i+1), define=item['define'])
@@ -158,7 +170,11 @@ class BundleWidget(QWidget):
 
     def saveEditingResult(self):
         self.bundle.name = self.editors['name'].text()
-        content = self.nameFormat.format(num=self.index, name=self.bundle.name)
+        if self.bundle.name == '':
+            name = "Anonymous bundle"
+        else:
+            name = self.bundle.name
+        content = self.nameFormat.format(num=self.index, name=name)
 
         for i in range(1, self.dpw+1):
             define = self.editors['def-%d' % i].text()

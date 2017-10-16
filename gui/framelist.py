@@ -21,13 +21,14 @@ class FrameList(QListWidget):
         raise Exception("Error: Bundle with name '%s' is not found in the Frame" % name)
 
 
-    def addBundle(self, name):
-        if name in self.getCurrentNames():
+    def addBundle(self, name, mode):
+        if name == '': pass
+        elif name in self.getCurrentNames():
             print("Bundle with name %s already exists." % name)
             return
 
         bundle = self.bf.makeBundle(name, self.count() + 1)
-        bui, bw = self.bf.createUi(self.count() + 1, bundle, parent=self)
+        bui, bw = self.bf.createUi(self.count() + 1, bundle, mode, parent=self)
         self.addItem(bui)
         self.setItemWidget(bui, bw)
 

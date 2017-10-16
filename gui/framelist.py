@@ -2,20 +2,65 @@
 from gui.qt import *
 from gui.bundle import BundleItemUi, BundleUi
 
+# TODO: Move Bundle class into gui.bundle
+from bavl.bundle import Bundle
+
+# TODO: Rename to Frame
 class FrameList(QListWidget):
+
+    class FrameManager():
+        def initBundle(self, name, names, index):
+            # Do some setup for bundles using "Frame preference"
+            # before its initialization
+            if name in names:
+                raise Exception("Exception: Bundle with name %s already exists." % name)
+            return Bundle(name, index)
+
+        # This should be done by ID not name
+        def setItemByName(self, name, item):
+            for bundle in self._Frame:
+                if bundle.name == name:
+                    bundle.updateItems(item)
+                    return
+            raise Exception("Error: Bundle with name '%s' is not found in the Frame" % name)
+
+        def remove(self, bundle):
+            self._Frame.remove(bundle)
+
+        def getBundleNames(self):
+            return [bundle.name for bundle in self._Frame]
+
 
     def __init__(self, mw, parent=None):
         super(FrameList, self).__init__(parent)
         self.mw = mw
-        self.fm = mw.fm
-        # Store the ID of bundles whicn the UI is rendering
-        # Fixme: For now, the ID is just the name of bundle but should be like hash
+        self.fm = FrameList.FrameManager()
+        # Fixme: Framelist become frame itself. No need to store ids
         self.currentIds = []
         self.setSelectionMode(QAbstractItemView.ExtendedSelection)
         self.setStyleSheet("""
                             QListWidget::item { border-bottom: 1px solid black; }
                             QListWidget::item:selected { background: rgba(0,255,255,30); }
                            """)
+
+    def updateItem(self, Item):
+        pass
+
+    def add(self, name):
+        if name in self.getCurrentNames():
+            raise Exception("Exception: Bundle with name %s already exists." % name)
+        self.addBundle(Bundle(name, self.count() + 1))
+
+
+    def remove(self):
+        pass
+
+    def addBundle(self, bundle):
+        bui, bitem = self.mw.bdfactory.createUi(self.count() + 1, bundle, parent=self)
+        self.addItem(bui)
+        self.setItemWidget(bui, bitem)
+        # Fixme: Use real ID to check existing bundles in the list
+        self.setNewId(bundle.name)
 
     def setNewBundles(self):
         # TODO: Move FM out of the class and make two classes communicate with each other(?)
@@ -27,12 +72,6 @@ class FrameList(QListWidget):
         for bundle in newbds:
             self.addBundle(bundle)
 
-    def addBundle(self, bundle):
-        bui, bitem = self.mw.bdfactory.createUi(self.count() + 1, bundle, parent=self)
-        self.addItem(bui)
-        self.setItemWidget(bui, bitem)
-        # Fixme: Use real ID to check existing bundles in the list
-        self.setNewId(bundle.name)
 
     def deleteSelectedUi(self):
         for bui in self.selectedItems():
@@ -68,14 +107,9 @@ class FrameList(QListWidget):
     def setNewId(self, id):
         self.currentIds.append(id)
 
+    def getCurrentNames(self):
+        return [self.getWidgetItem(i).name for i in range(self.count())]
+
+
     def getWidgetItem(self, num):
         return self.itemWidget(self.item(num))
-
-    def updateItem(self, Item):
-        pass
-
-    def add(self, item, widget):
-        pass
-
-    def remove(self):
-        pass

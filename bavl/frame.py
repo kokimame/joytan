@@ -1,17 +1,7 @@
 from gui.utils import isMac, isLin, isWin
 from bavl.bundle import Bundle
 
-class _Frame():
-    def __init__(self):
-        pass
-
 class FrameManager():
-    def __init__(self, mw):
-        # Private. Don't access Frame directly from the outside of FrameManager
-        # Frame is merely a built-in list for now.
-        # In future, the list may be extended to a new class.
-        self._Frame = []
-        self.mw = mw
 
     def initBundle(self, name, index):
         # Do some setup for bundles using "Frame preference"

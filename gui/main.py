@@ -40,7 +40,6 @@ class BavlMW(QMainWindow):
         rmdir(self.getRootPath())
         print(self.pref)
 
-        self.fm = FrameManager(self)
         self.bdfactory = BundleFactory()
         self.initUi()
         self.frameMode = "Disp"

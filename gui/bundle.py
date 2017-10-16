@@ -9,18 +9,18 @@ class BundleFactory:
         }
 
     def createUi(self, index, bundle, parent=None):
-        bui, bitem = BundleUi(), BundleItemUi(index, bundle, self.pref, parent=parent)
-        bui.setSizeHint(bitem.sizeHint())
-        return bui, bitem
+        bui, bw = BundleUi(), BundleWidget(index, bundle, self.pref, parent=parent)
+        bui.setSizeHint(bw.sizeHint())
+        return bui, bw
 
 
 class BundleUi(QListWidgetItem):
     def __init__(self):
         QListWidgetItem.__init__(self)
 
-class BundleItemUi(QWidget):
+class BundleWidget(QWidget):
     def __init__(self, index, bundle, pref, parent=None):
-        super(BundleItemUi, self).__init__(parent)
+        super(BundleWidget, self).__init__(parent)
         self.initFont()
         self.parent = parent
         self.index = index

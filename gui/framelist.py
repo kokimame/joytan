@@ -31,45 +31,45 @@ class FrameList(QListWidget):
 
 
     def addBundle(self, bundle):
-        bui, bitem = self.bf.createUi(self.count() + 1, bundle, parent=self)
+        bui, bw = self.bf.createUi(self.count() + 1, bundle, parent=self)
         self.addItem(bui)
-        self.setItemWidget(bui, bitem)
+        self.setItemWidget(bui, bw)
 
     def deleteSelectedUi(self):
         for bui in self.selectedItems():
-            bitem = self.itemWidget(bui)
-            self.takeItem(bitem.index - 1)
-            self.updateIndex(bitem.index - 1)
+            bw = self.itemWidget(bui)
+            self.takeItem(bw.index - 1)
+            self.updateIndex(bw.index - 1)
 
     def updateIndex(self, n):
         # Update index of bundles after Nth bundle
         for i in range(n, self.count()):
-            bitem = self.getWidgetItem(i)
-            bitem.index -= 1
-            bitem.updateIndex()
+            bw = self.getBundleWidget(i)
+            bw.index -= 1
+            bw.updateIndex()
 
     def _update(self):
         # Update the inside of the bundles in the list
         print("Bundle updates")
         for i in range(self.count()):
             bui = self.item(i)
-            bitem = self.itemWidget(bui)
-            bitem.updateUi()
-            bui.setSizeHint(bitem.sizeHint())
+            bw = self.itemWidget(bui)
+            bw.updateUi()
+            bui.setSizeHint(bw.sizeHint())
 
         self.repaint()
 
     def updateMode(self, newMode):
         for i in range(self.count()):
-            bitem = self.getWidgetItem(i)
-            bitem.updateMode(newMode)
+            bw = self.getBundleWidget(i)
+            bw.updateMode(newMode)
 
     def getCurrentNames(self):
-        return [self.getWidgetItem(i).name for i in range(self.count())]
+        return [self.getBundleWidget(i).name for i in range(self.count())]
 
     def getCurrentBundles(self):
-        return [self.getWidgetItem(i).bundle for i in range(self.count())]
+        return [self.getBundleWidget(i).bundle for i in range(self.count())]
 
 
-    def getWidgetItem(self, num):
+    def getBundleWidget(self, num):
         return self.itemWidget(self.item(num))

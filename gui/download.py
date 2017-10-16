@@ -35,13 +35,13 @@ def ignorantDownload(mw, parser, gstat=False):
         pd.setValue(i)
         processCoreEvents()
 
-        bitem = mw.framelist.getWidgetItem(i)
+        bw = mw.framelist.getBundleWidget(i)
 
-        r = requests.get(dictUrls[mw.pref['onlineRef']] + bitem.name)
+        r = requests.get(dictUrls[mw.pref['onlineRef']] + bw.name)
         data = r.text
         items = parser.run(data)
 
-        mw.framelist.updateBundle(bitem.name, items)
+        mw.framelist.updateBundle(bw.name, items)
 
 def downloadGstaticSound(word, filename):
     url = "http://ssl.gstatic.com/dictionary/static/sounds/oxford/"

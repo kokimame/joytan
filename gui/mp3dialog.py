@@ -110,16 +110,16 @@ class Mp3Setting(QDialog):
         # TODO: Thus no need to pass FM but should pass a ref to framelist ui
 
         for i in range(self.framelist.count()):
-            bitem = self.framelist.getWidgetItem(i)
+            bw = self.framelist.getBundleWidget(i)
             os.makedirs("{root}/{dirname}".format(
-                        root=self.mw.getRootPath(), dirname=bitem.getDirname()), exist_ok=True)
+                        root=self.mw.getRootPath(), dirname=bw.getDirname()), exist_ok=True)
 
-            cmder.ttsBitem(bitem)
+            cmder.ttsBundleWidget(bw)
             pdcnt += 1
             pd.setValue(pdcnt)
             processCoreEvents()
 
-            cmder.compileBundle(bitem, isGstatic=isGstatic)
+            cmder.compileBundle(bw, isGstatic=isGstatic)
             pdcnt += 1
             pd.setValue(pdcnt)
             processCoreEvents()

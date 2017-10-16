@@ -67,14 +67,14 @@ class Mp3Cmder:
 
 
 
-    def compileBundle(self, bitem, isGstatic=True):
-        curdir = '{root}/{dirname}'.format(root=self.root, dirname=bitem.getDirname())
+    def compileBundle(self, bw, isGstatic=True):
+        curdir = '{root}/{dirname}'.format(root=self.root, dirname=bw.getDirname())
 
         if isGstatic:
             from gui.download import downloadGstaticSound
-            downloadGstaticSound(bitem.name, "{curdir}/pronounce.mp3".format(curdir=curdir))
+            downloadGstaticSound(bw.name, "{curdir}/pronounce.mp3".format(curdir=curdir))
         else:
-            self.ttscmd(bitem.name, "{curdir}/pronounce".format(curdir=curdir))
+            self.ttscmd(bw.name, "{curdir}/pronounce".format(curdir=curdir))
 
         wordhead = repeatMp3('{curdir}/pronounce.mp3'.format(curdir=curdir), self.setting['repeat'])
 
@@ -84,39 +84,39 @@ class Mp3Cmder:
         catMp3("{finalDir}/Word-sfx.mp3".format(finalDir=self.finalDir), wordhead, wordheader)
 
         inputs = "%s " % wordheader
-        for cont in self.seq[bitem.name]:
+        for cont in self.seq[bw.name]:
             try:
                 cont = cont['def'] + ".mp3"
                 inputs += "%s %s " % ("{finalDir}/Definition-sfx.mp3".format(finalDir=self.finalDir), cont)
             except KeyError:
                 cont = cont['ex'] + ".mp3"
                 inputs += "%s %s " % ("{finalDir}/Example-sfx.mp3".format(finalDir=self.finalDir), cont)
-        catMp3(inputs, "", "{root}/{dirname}.mp3".format(root=self.root, dirname=bitem.getDirname()))
+        catMp3(inputs, "", "{root}/{dirname}.mp3".format(root=self.root, dirname=bw.getDirname()))
 
-    def ttsBitem(self, bitem):
-        curdir = "{root}/{dirname}".format(root=self.root, dirname=bitem.getDirname())
+    def ttsBundleWidget(self, bw):
+        curdir = "{root}/{dirname}".format(root=self.root, dirname=bw.getDirname())
         assert os.path.exists(curdir)
 
-        dpw, epd = bitem.dpw, bitem.epd
+        dpw, epd = bw.dpw, bw.epd
 
-        self.seq[bitem.name] = []
+        self.seq[bw.name] = []
 
         for i in range(1, dpw+1):
-            define = bitem.editors['def-%d' %  i].text()
+            define = bw.editors['def-%d' % i].text()
             if define == '': continue
 
-            filename = "{dir}/{name}-def-{i}".format(dir=curdir, name=bitem.name, i=i)
+            filename = "{dir}/{name}-def-{i}".format(dir=curdir, name=bw.name, i=i)
             self.ttscmd(define, filename)
-            self.seq[bitem.name].append({"def": filename})
+            self.seq[bw.name].append({"def": filename})
 
             for j in range(1, epd+1):
-                examp = bitem.editors['ex-%d-%d' % (i, j)].text()
+                examp = bw.editors['ex-%d-%d' % (i, j)].text()
                 if examp == '': continue
 
                 filename = "{dir}/{name}-ex-{i}-{j}".format\
-                    (dir=curdir, name=bitem.name, i=i, j=j)
+                    (dir=curdir, name=bw.name, i=i, j=j)
                 self.ttscmd(examp, filename)
-                self.seq[bitem.name].append({"ex": filename})
+                self.seq[bw.name].append({"ex": filename})
 
 
     def mergeDirMp3(self):

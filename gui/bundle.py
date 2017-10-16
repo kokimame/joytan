@@ -181,7 +181,7 @@ class BundleWidget(QWidget):
                     editor.setText(self.bundle.items[num]['define'])
                     editor.setCursorPosition(0)
                 except (KeyError, IndexError):
-                    print("Error : Editor update", key)
+                    print("Error : Editor cannot update", key)
             elif keys[0] == "ex":
                 num1, num2 = int(keys[1]) - 1, int(keys[2]) - 1
                 try:
@@ -189,7 +189,7 @@ class BundleWidget(QWidget):
                     editor.setText(self.bundle.items[num1]['examples'][num2])
                     editor.setCursorPosition(0)
                 except (KeyError, IndexError):
-                    print("Error : Editor update", key)
+                    print("Error : Editor cannot update", key)
             else:
                 print("Error: Unknown editor type found")
                 sys.exit(1)

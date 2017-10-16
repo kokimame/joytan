@@ -1,7 +1,6 @@
 # Copyright: Koki Mametani <kokimametani@gmail.com>
 from gui.qt import *
 from gui.framelist import FrameList
-from gui.bundle import BundleFactory
 from gui.utils import isMac, isLin, isWin, rmdir
 import gui
 
@@ -38,7 +37,6 @@ class BavlMW(QMainWindow):
         rmdir(self.getRootPath())
         print(self.pref)
 
-        self.bdfactory = BundleFactory()
         self.initUi()
         self.frameMode = "Disp"
 
@@ -61,7 +59,7 @@ class BavlMW(QMainWindow):
         self.setWindowTitle("Emotan えも単")
 
     def setupFrameList(self):
-        framelist = FrameList(self)
+        framelist = FrameList()
         self.form.verticalLayout.insertWidget(0, framelist)
         self.framelist = framelist
 

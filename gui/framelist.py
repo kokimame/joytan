@@ -1,14 +1,15 @@
 
 from gui.qt import *
+from gui.bundle import BundleFactory
 # TODO: Move Bundle class into gui.bundle
 from bavl.bundle import Bundle
 
 # TODO: Rename to Frame
 class FrameList(QListWidget):
 
-    def __init__(self, mw, parent=None):
+    def __init__(self, parent=None):
         super(FrameList, self).__init__(parent)
-        self.mw = mw
+        self.bf = BundleFactory()
         self.setSelectionMode(QAbstractItemView.ExtendedSelection)
         self.setStyleSheet("""
                             QListWidget::item { border-bottom: 1px solid black; }
@@ -30,7 +31,7 @@ class FrameList(QListWidget):
 
 
     def addBundle(self, bundle):
-        bui, bitem = self.mw.bdfactory.createUi(self.count() + 1, bundle, parent=self)
+        bui, bitem = self.bf.createUi(self.count() + 1, bundle, parent=self)
         self.addItem(bui)
         self.setItemWidget(bui, bitem)
 

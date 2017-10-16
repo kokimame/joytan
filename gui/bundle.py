@@ -41,7 +41,6 @@ class BundleWidget(QWidget):
         self.parent = parent
         self.index = index
         self.bundle = bundle
-        self.name = bundle.name
         self.dpw = pref['dpw']
         self.epd = pref['epd']
 
@@ -53,29 +52,29 @@ class BundleWidget(QWidget):
         self.stackedLayout = QStackedLayout()
         self.mode = "Disp"
 
-        self.setupUi()
+        self.setupUi(bundle.name)
 
-    def setupUi(self):
+    def setupUi(self, name):
         self.setupDisplay()
-        self.setupEditors()
+        self.setupEditors(name=name)
         self.setLayout(self.stackedLayout)
 
     def updateIndex(self):
-        self.setEditingResult()
-        self.editLabel.setText("%d. %s" % (self.index, self.name))
+        self.saveEditingResult()
+        self.editLabel.setText("%d. %s" % (self.index, self.bundle.name))
 
     def getDirname(self):
         # Make string number from the index of the bundle from 00000 to 99999
         snum = (5 - len(str(self.index))) * '0' + str(self.index)
         # Return directory name
-        return "{snum}-{name}".format(snum=snum, name=self.name)
+        return "{snum}-{name}".format(snum=snum, name=self.bundle.name)
 
     def updateMode(self, newMode):
         if newMode == self.mode: return
 
         if newMode == "Disp":
             # Save editing result before changing to Display mode
-            self.setEditingResult()
+            self.saveEditingResult()
             self.stackedLayout.setCurrentIndex(0)
             self.mode = newMode
         if newMode == "Edit":
@@ -91,44 +90,45 @@ class BundleWidget(QWidget):
 
         self.dispLabel = QLabel()
         self.dispLabel.setText(self.html.format
-                           (content=self.nameFormat.format(num=self.index, name=self.name)))
+                           (content=self.nameFormat.format(num=self.index, name=self.bundle.name)))
         dispLayout.addWidget(self.dispLabel)
         dispWidget.setLayout(dispLayout)
         self.stackedLayout.addWidget(dispWidget)
 
-    def setupEditors(self):
+    def setupEditors(self, name='Empty bundle'):
         # Definitions per bundle and Examples per definition
         editWidget = QWidget()
-        editLayout = QVBoxLayout()
+        editLayout = QGridLayout()
 
-        dpw, epd = self.dpw, self.epd
-        self.editLabel = QLabel()
-        self.editLabel.setText("%d. %s" % (self.index, self.name))
-        self.editLabel.setFont(self.boldFont)
-        editLayout.addWidget(self.editLabel)
+        namelabel = QLabel("Name")
+        namelabel.setFont(self.italFont)
+        namelabel.setStyleSheet("QLabel { background-color : rgb(255, 255, 180); }")
+        nameedit = QLineEdit(name)
+        editLayout.addWidget(namelabel, 0, 0)
+        editLayout.addWidget(nameedit, 0, 1)
+        self.editors["name"] = nameedit
 
-        grid = QGridLayout()
         row = 1
+        dpw, epd = self.dpw, self.epd
         for i in range(1, dpw+1):
             deflabel = QLabel("Def%d" % i)
             deflabel.setFont(self.italFont)
             deflabel.setStyleSheet("QLabel { background-color : rgb(255, 180, 230); }")
             defedit = QLineEdit()
-            grid.addWidget(deflabel, row, 0)
-            grid.addWidget(defedit, row, 1)
+            editLayout.addWidget(deflabel, row, 0)
+            editLayout.addWidget(defedit, row, 1)
             self.editors["def-%d" % i] = defedit
             for j in range(1, epd+1):
                 exlabel = QLabel("Ex%d-%d" % (i, j))
                 exlabel.setFont(self.italFont)
                 exlabel.setStyleSheet("QLabel { background-color : rgb(180, 230, 255); }")
                 exedit = QLineEdit()
-                grid.addWidget(exlabel, row+1, 0)
-                grid.addWidget(exedit, row+1, 1)
+                editLayout.addWidget(exlabel, row+1, 0)
+                editLayout.addWidget(exedit, row+1, 1)
                 self.editors["ex-%d-%d" % (i, j)] = exedit
                 row += 1
             row += 1
 
-        editLayout.addLayout(grid)
         editWidget.setLayout(editLayout)
 
         self.stackedLayout.addWidget(editWidget)
@@ -145,7 +145,7 @@ class BundleWidget(QWidget):
         self.updateEditors()
 
     def updateDisplay(self):
-        content = self.nameFormat.format(num=self.index, name=self.name)
+        content = self.nameFormat.format(num=self.index, name=self.bundle.name)
         for i, item in enumerate(self.bundle.items):
             if i + 1 > self.dpw: break
             content += self.defFormat.format(num=(i+1), define=item['define'])
@@ -156,8 +156,9 @@ class BundleWidget(QWidget):
 
         self.dispLabel.setText(self.html.format(content=content))
 
-    def setEditingResult(self):
-        content = self.nameFormat.format(num=self.index, name=self.name)
+    def saveEditingResult(self):
+        self.bundle.name = self.editors['name'].text()
+        content = self.nameFormat.format(num=self.index, name=self.bundle.name)
 
         for i in range(1, self.dpw+1):
             define = self.editors['def-%d' % i].text()
@@ -172,6 +173,7 @@ class BundleWidget(QWidget):
 
     def updateEditors(self):
         for key, editor in self.editors.items():
+            if key == "name": continue
             keys = list(key.split("-"))
             if keys[0] == "def":
                 num = int(keys[1]) - 1

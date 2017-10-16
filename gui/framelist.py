@@ -61,7 +61,7 @@ class FrameList(QListWidget):
             bw.updateMode(newMode)
 
     def getCurrentNames(self):
-        return [self.getBundleWidget(i).name for i in range(self.count())]
+        return [self.getBundleWidget(i).bundle.name for i in range(self.count())]
 
     def getCurrentBundles(self):
         return [self.getBundleWidget(i).bundle for i in range(self.count())]

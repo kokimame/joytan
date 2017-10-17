@@ -5,12 +5,8 @@ class BundleFactory:
     class Bundle():
         # Bundle for a word containing a number of meaning and example usage of its word
         def __init__(self, name, index):
-            self.index = index
             self.name = name
-            self.title = None
-            self.dir = None
-            # TODO: Alter this var name to "DLC" related term.
-            self.items = None  # DLC
+            self.items = None
 
         def updateItems(self, items):
             self.items = items
@@ -62,9 +58,6 @@ class BundleWidget(QWidget):
             self.stackedLayout.setCurrentIndex(0)
         if self.mode == "Edit":
             self.stackedLayout.setCurrentIndex(1)
-
-    def updateIndex(self):
-        self.saveEditors()
 
     def getDirname(self):
         # Make string number from the index of the bundle from 00000 to 99999

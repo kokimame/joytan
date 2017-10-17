@@ -43,7 +43,7 @@ class FrameList(QListWidget):
         for i in range(n, self.count()):
             bw = self.getBundleWidget(i)
             bw.index -= 1
-            bw.updateIndex()
+            bw.saveEditors()
 
     def _update(self):
         # Update the inside of the bundles in the list

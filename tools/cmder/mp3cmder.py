@@ -72,9 +72,9 @@ class Mp3Cmder:
 
         if isGstatic:
             from gui.download import downloadGstaticSound
-            downloadGstaticSound(bw.name, "{curdir}/pronounce.mp3".format(curdir=curdir))
+            downloadGstaticSound(bw.bundle.name, "{curdir}/pronounce.mp3".format(curdir=curdir))
         else:
-            self.ttscmd(bw.name, "{curdir}/pronounce".format(curdir=curdir))
+            self.ttscmd(bw.bundle.name, "{curdir}/pronounce".format(curdir=curdir))
 
         wordhead = repeatMp3('{curdir}/pronounce.mp3'.format(curdir=curdir), self.setting['repeat'])
 
@@ -84,7 +84,7 @@ class Mp3Cmder:
         catMp3("{finalDir}/Word-sfx.mp3".format(finalDir=self.finalDir), wordhead, wordheader)
 
         inputs = "%s " % wordheader
-        for cont in self.seq[bw.name]:
+        for cont in self.seq[bw.bundle.name]:
             try:
                 cont = cont['def'] + ".mp3"
                 inputs += "%s %s " % ("{finalDir}/Definition-sfx.mp3".format(finalDir=self.finalDir), cont)
@@ -99,24 +99,24 @@ class Mp3Cmder:
 
         dpw, epd = bw.dpw, bw.epd
 
-        self.seq[bw.name] = []
+        self.seq[bw.bundle.name] = []
 
         for i in range(1, dpw+1):
             define = bw.editors['def-%d' % i].text()
             if define == '': continue
 
-            filename = "{dir}/{name}-def-{i}".format(dir=curdir, name=bw.name, i=i)
+            filename = "{dir}/{name}-def-{i}".format(dir=curdir, name=bw.bundle.name, i=i)
             self.ttscmd(define, filename)
-            self.seq[bw.name].append({"def": filename})
+            self.seq[bw.bundle.name].append({"def": filename})
 
             for j in range(1, epd+1):
                 examp = bw.editors['ex-%d-%d' % (i, j)].text()
                 if examp == '': continue
 
                 filename = "{dir}/{name}-ex-{i}-{j}".format\
-                    (dir=curdir, name=bw.name, i=i, j=j)
+                    (dir=curdir, name=bw.bundle.name, i=i, j=j)
                 self.ttscmd(examp, filename)
-                self.seq[bw.name].append({"ex": filename})
+                self.seq[bw.bundle.name].append({"ex": filename})
 
 
     def mergeDirMp3(self):

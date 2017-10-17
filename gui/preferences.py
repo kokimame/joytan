@@ -26,7 +26,7 @@ class Preferences(QDialog):
 
     def setupSpins(self):
         form = self.form
-        factory = self.mw.bdfactory
+        factory = self.mw.framelist.bf
         form.dpwSpin.setValue(factory.pref['dpw'])
         form.epdSpin.setValue(factory.pref['epd'])
 
@@ -48,7 +48,7 @@ class Preferences(QDialog):
 
     def updateBundlePref(self):
         form = self.form
-        factory = self.mw.bdfactory
+        factory = self.mw.framelist.bf
         factory.pref['dpw'] = form.dpwSpin.value()
         factory.pref['epd'] = form.epdSpin.value()
 

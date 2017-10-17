@@ -52,7 +52,7 @@ def downloadGstaticSound(word, filename):
         r = requests.get(url + w_key, stream=True)
         if r.ok:
             break
-        elif w_key == "x" + word and not r.ok:
+        elif w_key == "x" + word + gb18 and not r.ok:
             raise Exception("Audio for '" + word + "' not found")
 
     with open(filename, "wb") as f:

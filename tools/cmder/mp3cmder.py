@@ -72,7 +72,11 @@ class Mp3Cmder:
 
         if isGstatic:
             from gui.download import downloadGstaticSound
-            downloadGstaticSound(bw.bundle.name, "{curdir}/pronounce.mp3".format(curdir=curdir))
+            try:
+                downloadGstaticSound(bw.bundle.name, "{curdir}/pronounce.mp3".format(curdir=curdir))
+            except:
+                # If gstatic pronunciation file is not found, use TTS.
+                self.ttscmd(bw.bundle.name, "{curdir}/pronounce".format(curdir=curdir))
         else:
             self.ttscmd(bw.bundle.name, "{curdir}/pronounce".format(curdir=curdir))
 

@@ -18,8 +18,8 @@ class BundleFactory:
     def __init__(self):
         # TODO: More should be coming
         self.pref = {
-            "dpw": 2,
-            "epd": 1
+            "dpw": 1,       # Definitions per Bundle
+            "epd": 1        # Examples per Definition
         }
 
     def makeBundle(self, name, index):

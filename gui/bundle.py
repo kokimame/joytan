@@ -64,7 +64,7 @@ class BundleWidget(QWidget):
             self.stackedLayout.setCurrentIndex(1)
 
     def updateIndex(self):
-        self.saveEditingResult()
+        self.saveEditors()
 
     def getDirname(self):
         # Make string number from the index of the bundle from 00000 to 99999
@@ -77,7 +77,7 @@ class BundleWidget(QWidget):
 
         if newMode == "Disp":
             # Save editing result before changing to Display mode
-            self.saveEditingResult()
+            self.saveEditors()
             self.stackedLayout.setCurrentIndex(0)
             self.mode = newMode
         if newMode == "Edit":
@@ -168,7 +168,7 @@ class BundleWidget(QWidget):
 
         self.dispLabel.setText(self.html.format(content=content))
 
-    def saveEditingResult(self):
+    def saveEditors(self):
         self.bundle.name = self.editors['name'].text()
         if self.bundle.name == '':
             name = "Anonymous bundle"

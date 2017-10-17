@@ -61,6 +61,11 @@ class FrameList(QListWidget):
             bw = self.getBundleWidget(i)
             bw.updateMode(newMode)
 
+    def saveEditingResult(self):
+        for i in range(self.count()):
+            bw = self.getBundleWidget(i)
+            bw.saveEditors()
+
     def getCurrentNames(self):
         return [self.getBundleWidget(i).bundle.name for i in range(self.count())]
 

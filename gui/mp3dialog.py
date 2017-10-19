@@ -10,10 +10,18 @@ def onMp3Dialog(mw):
 class MediaPlayer(QMediaPlayer):
     def __init__(self):
         super(MediaPlayer, self).__init__()
+        self.nowPlaying = None
 
     def playContent(self, content):
+        if self.nowPlaying == content:
+            self.stop()
+            self.nowPlaying = None
+            return
+
+        self.stop()
         self.setMedia(content)
         self.play()
+        self.nowPlaying = content
 
 class Mp3Widget(QWidget):
     def __init__(self, mediaPlayer, mp3path, index, parent=None):
@@ -171,5 +179,6 @@ class Mp3Dialog(QDialog):
 
 
     def reject(self):
+        self.mp.stop()
         self.done(0)
         gui.dialogs.close("Mp3Dialog")

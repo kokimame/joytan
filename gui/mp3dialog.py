@@ -15,19 +15,30 @@ class MediaPlayer(QMediaPlayer):
         self.setMedia(content)
         self.play()
 
-class Mp3ListItem(QListWidgetItem):
-    def __init__(self,mp3path, row, parent=None):
-        super(Mp3ListItem, self).__init__(parent)
+class Mp3Widget(QWidget):
+    def __init__(self, mediaPlayer, mp3path, index, parent=None):
+        super(Mp3Widget, self).__init__(parent)
+        self.mp = mediaPlayer
         self.mp3path = mp3path
         self.filename = getFileNameFromPath(mp3path)
         self.hhmmss = mp3Duration(mp3path)
         self.duration, self.fskhz, self.bitkbs = getMp3Info(mp3path)
-        self.row = row
+        self.index = index
+        self.content = QMediaContent(QUrl.fromLocalFile(mp3path))
 
         self.initUi()
 
     def initUi(self):
-        self.setText("%3d. %s: %s" % (self.row, self.hhmmss, self.filename))
+        label = QLabel("{index}. {name} {hhmmss}".
+                       format(index=self.index, name=self.filename, hhmmss=self.hhmmss))
+
+        playBtn = QPushButton("Play")
+        playBtn.clicked.connect(lambda: self.mp.playContent(self.content))
+
+        hbox = QHBoxLayout()
+        hbox.addWidget(label)
+        hbox.addWidget(playBtn)
+        self.setLayout(hbox)
 
 
 
@@ -36,6 +47,7 @@ class Mp3Dialog(QDialog):
         QDialog.__init__(self, mw, Qt.Window)
         self.mw = mw
         self.framelist = mw.framelist
+        self.mp = MediaPlayer()
         self.form = gui.forms.mp3dialog.Ui_Mp3Dialog()
         self.form.setupUi(self)
         self.setupButton()
@@ -49,7 +61,7 @@ class Mp3Dialog(QDialog):
 
     def setupBgmList(self):
         bgmBar = QListWidgetItem()
-        addBtn = QPushButton("BGM")
+        addBtn = QPushButton("+ BGM")
         addBtn.setStyleSheet("QPushButton { background-color: rgb(200,200,200); "
                              "Text-align: left; }")
         addBtn.clicked.connect(self.onBgmClicked)
@@ -149,8 +161,10 @@ class Mp3Dialog(QDialog):
             file = getFile(self.mw, "Add song to BGM Loop",
                         dir=self.mw.pref['bgmdir'], filter="*.mp3")
             assert os.path.isdir(file) != True
-            item = Mp3ListItem(file, list.count())
-            list.addItem(item)
+            lw, w = QListWidgetItem(), Mp3Widget(self.mp, file, list.count())
+            lw.setSizeHint(w.sizeHint())
+            list.addItem(lw)
+            list.setItemWidget(lw, w)
         except (IndexError, AssertionError):
             print("Invalid file is selected.")
             pass

@@ -52,7 +52,7 @@ class BundleWidget(QWidget):
 
     def setupUi(self, name):
         self.setupDisplay()
-        self.setupEditors(name=name)
+        self.setupEditors(name)
         self.setLayout(self.stackedLayout)
         if self.mode == "Disp":
             self.stackedLayout.setCurrentIndex(0)

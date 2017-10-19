@@ -41,18 +41,25 @@ class Mp3Dialog(QDialog):
         self.setupButton()
         self.setupComboBox()
         self.setupSfxList()
+        self.setupBgmList()
         self.show()
 
     def setupSfxList(self):
         pass
 
     def setupBgmList(self):
-        pass
+        bgmBar = QListWidgetItem()
+        addBtn = QPushButton("BGM")
+        addBtn.setStyleSheet("QPushButton { background-color: rgb(200,200,200); "
+                             "Text-align: left; }")
+        addBtn.clicked.connect(self.onBgmClicked)
+        bgmBar.setSizeHint(addBtn.sizeHint())
+        self.form.bgmList.addItem(bgmBar)
+        self.form.bgmList.setItemWidget(bgmBar, addBtn)
 
     def setupButton(self):
         form = self.form
         form.createBtn.clicked.connect(self.onCreate)
-        form.addBgmBtn.clicked.connect(self.onBgmClicked)
 
     def setupComboBox(self):
         form = self.form
@@ -142,7 +149,7 @@ class Mp3Dialog(QDialog):
             file = getFile(self.mw, "Add song to BGM Loop",
                         dir=self.mw.pref['bgmdir'], filter="*.mp3")
             assert os.path.isdir(file) != True
-            item = Mp3ListItem(file, list.count() + 1)
+            item = Mp3ListItem(file, list.count())
             list.addItem(item)
         except (IndexError, AssertionError):
             print("Invalid file is selected.")

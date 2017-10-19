@@ -10,10 +10,17 @@ def onMp3Dialog(mw):
 class MediaPlayer(QMediaPlayer):
     def __init__(self):
         super(MediaPlayer, self).__init__()
+        self.playing = False
 
     def playContent(self, content):
-        self.setMedia(content)
-        self.play()
+        if not self.playing:
+            self.setMedia(content)
+            self.play()
+            self.playing = True
+        else:
+            self.stop()
+            self.playing = False
+
 
 class Mp3Widget(QWidget):
     def __init__(self, mp3path, index, parent=None):
@@ -44,7 +51,7 @@ class Mp3Widget(QWidget):
         hbox.addWidget(volSld)
         self.setLayout(hbox)
 
-    def stop(self):
+    def forceStop(self):
         self.mp.stop()
 
 
@@ -183,7 +190,7 @@ class Mp3Dialog(QDialog):
 
         for i in range(1, bgmList.count()):
             w = bgmList.itemWidget(bgmList.item(i))
-            w.stop()
+            w.forceStop()
 
 
 

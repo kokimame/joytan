@@ -21,21 +21,20 @@ class MediaPlayer(QMediaPlayer):
 
 
 class Mp3Widget(QWidget):
-    def __init__(self, mp3path, index, parent=None):
+    def __init__(self, mp3path, parent=None):
         super(Mp3Widget, self).__init__(parent)
         self.mp = MediaPlayer(self)
         self.mp3path = mp3path
         self.filename = getFileNameFromPath(mp3path)
         self.hhmmss = mp3Duration(mp3path)
         self.duration, self.fskhz, self.bitkbs = getMp3Info(mp3path)
-        self.index = index
         self.content = QMediaContent(QUrl.fromLocalFile(mp3path))
 
         self.initUi()
 
     def initUi(self):
-        label = QLabel("{index}. {name} {hhmmss}".
-                       format(index=self.index, name=self.filename, hhmmss=self.hhmmss))
+        label = QLabel("{name} {hhmmss}".
+                       format(name=self.filename, hhmmss=self.hhmmss))
         self.playBtn = QPushButton("Play")
         self.playBtn.clicked.connect(lambda: self.mp.playContent(self.content))
         volSld = QSlider(Qt.Horizontal)
@@ -47,6 +46,7 @@ class Mp3Widget(QWidget):
         hbox.addWidget(label)
         hbox.addWidget(self.playBtn)
         hbox.addWidget(volSld)
+
         self.setLayout(hbox)
 
     def iconChange(self, state):
@@ -60,10 +60,11 @@ class Mp3Widget(QWidget):
         self.mp.stop()
 
 class GroupButton(QPushButton):
-    def __init__(self, group, trigger):
+    def __init__(self, trigger, group=None, idx=None):
         super(GroupButton, self).__init__()
         self.trigger = trigger
         self.group = group
+        self.idx = idx
         self.initUi()
 
     def initUi(self):
@@ -74,7 +75,7 @@ class GroupButton(QPushButton):
         else:
             group = self.group
         self.setText("+ {group}".format(group=group))
-        self.clicked.connect(lambda: self.trigger(self.group))
+        self.clicked.connect(lambda: self.trigger(group=group, idx=self.idx))
 
 
 
@@ -93,15 +94,17 @@ class Mp3Dialog(QDialog):
 
     def setupSfxList(self):
         sfxList = self.form.sfxList
-        for group in ['word', 'definition', 'example']:
-            lw, gb = QListWidgetItem(), GroupButton(group, self.onSfxClicked)
+        groups = ['word', 'definition', 'example']
+        self.sfxCnt = [1] * len(groups)
+        for i, group in enumerate(groups):
+            lw, gb = QListWidgetItem(), GroupButton(self.onSfxClicked, group=group, idx=i)
             lw.setSizeHint(gb.sizeHint())
             sfxList.addItem(lw)
             sfxList.setItemWidget(lw, gb)
 
 
     def setupBgmList(self):
-        lw, gb = QListWidgetItem(), GroupButton("BGM", self.onBgmClicked)
+        lw, gb = QListWidgetItem(), GroupButton(self.onBgmClicked, group="BGM")
         lw.setSizeHint(gb.sizeHint())
         self.form.bgmList.addItem(lw)
         self.form.bgmList.setItemWidget(lw, gb)
@@ -193,29 +196,34 @@ class Mp3Dialog(QDialog):
 
         self.reject()
 
-    def onSfxClicked(self, group):
+    def onSfxClicked(self, group=None, idx=None):
         list = self.form.sfxList
         try:
             file = getFile(self.mw, "Add song to BGM Loop",
                         dir=self.mw.pref['sfxdir'], filter="*.mp3")
             assert os.path.isdir(file) != True
-            lw, w = QListWidgetItem(), Mp3Widget(file, list.count())
+            lw, w = QListWidgetItem(), Mp3Widget(file)
             lw.setSizeHint(w.sizeHint())
-            list.addItem(lw)
+
+            row = sum(self.sfxCnt[0:idx+1])
+            self.sfxCnt[idx] += 1
+
+
+            list.insertItem(row, lw)
             list.setItemWidget(lw, w)
         except (IndexError, AssertionError):
             print("Invalid file is selected.")
             pass
 
-    def onBgmClicked(self, group):
-        # The group parameter is not in use,
+    def onBgmClicked(self, group=None, idx=None):
+        # group and idx parameter are not in use,
         # but it cannot be removed in order to have the same interface with SFX.
         list = self.form.bgmList
         try:
             file = getFile(self.mw, "Add song to BGM Loop",
                         dir=self.mw.pref['bgmdir'], filter="*.mp3")
             assert os.path.isdir(file) != True
-            lw, w = QListWidgetItem(), Mp3Widget(file, list.count())
+            lw, w = QListWidgetItem(), Mp3Widget(file)
             lw.setSizeHint(w.sizeHint())
             list.addItem(lw)
             list.setItemWidget(lw, w)

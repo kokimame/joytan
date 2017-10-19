@@ -54,6 +54,23 @@ class Mp3Widget(QWidget):
     def forceStop(self):
         self.mp.stop()
 
+class GroupButton(QPushButton):
+    def __init__(self, group, trigger):
+        super(GroupButton, self).__init__()
+        self.trigger = trigger
+        self.group = group
+        self.initUi()
+
+    def initUi(self):
+        self.setStyleSheet("QPushButton { background-color: rgb(200,200,200); "
+                             "Text-align: left; }")
+        if not self.group.isupper():
+            group = self.group.title()
+        else:
+            group = self.group
+        self.setText("+ {group}".format(group=group))
+        self.clicked.connect(lambda: self.trigger(self.group))
+
 
 
 class Mp3Dialog(QDialog):
@@ -70,17 +87,19 @@ class Mp3Dialog(QDialog):
         self.show()
 
     def setupSfxList(self):
-        pass
+        sfxList = self.form.sfxList
+        for group in ['word', 'definition', 'example']:
+            lw, gb = QListWidgetItem(), GroupButton(group, self.onSfxClicked)
+            lw.setSizeHint(gb.sizeHint())
+            sfxList.addItem(lw)
+            sfxList.setItemWidget(lw, gb)
+
 
     def setupBgmList(self):
-        bgmBar = QListWidgetItem()
-        addBtn = QPushButton("+ BGM")
-        addBtn.setStyleSheet("QPushButton { background-color: rgb(200,200,200); "
-                             "Text-align: left; }")
-        addBtn.clicked.connect(self.onBgmClicked)
-        bgmBar.setSizeHint(addBtn.sizeHint())
-        self.form.bgmList.addItem(bgmBar)
-        self.form.bgmList.setItemWidget(bgmBar, addBtn)
+        lw, gb = QListWidgetItem(), GroupButton("BGM", self.onBgmClicked)
+        lw.setSizeHint(gb.sizeHint())
+        self.form.bgmList.addItem(lw)
+        self.form.bgmList.setItemWidget(lw, gb)
 
     def setupButton(self):
         form = self.form
@@ -169,7 +188,23 @@ class Mp3Dialog(QDialog):
 
         self.reject()
 
-    def onBgmClicked(self):
+    def onSfxClicked(self, group):
+        list = self.form.sfxList
+        try:
+            file = getFile(self.mw, "Add song to BGM Loop",
+                        dir=self.mw.pref['sfxdir'], filter="*.mp3")
+            assert os.path.isdir(file) != True
+            lw, w = QListWidgetItem(), Mp3Widget(file, list.count())
+            lw.setSizeHint(w.sizeHint())
+            list.addItem(lw)
+            list.setItemWidget(lw, w)
+        except (IndexError, AssertionError):
+            print("Invalid file is selected.")
+            pass
+
+    def onBgmClicked(self, group):
+        # The group parameter is not in use,
+        # but it cannot be removed in order to have the same interface with SFX.
         list = self.form.bgmList
         try:
             file = getFile(self.mw, "Add song to BGM Loop",

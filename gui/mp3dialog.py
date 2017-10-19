@@ -8,12 +8,18 @@ def onMp3Dialog(mw):
 
 
 class Mp3ListItem(QListWidgetItem):
-    def __init__(self, mp3path, parent=None):
+    def __init__(self,mp3path, row, parent=None):
         super(Mp3ListItem, self).__init__(parent)
         self.mp3path = mp3path
         self.filename = getFileNameFromPath(mp3path)
         self.hhmmss = mp3Duration(mp3path)
         self.duration, self.fskhz, self.bitkbs = getMp3Info(mp3path)
+        self.row = row
+
+        self.initUi()
+
+    def initUi(self):
+        self.setText("%3d. %s: %s" % (self.row, self.hhmmss, self.filename))
 
 class Mp3TreeItem(QTreeWidgetItem):
     def __init__(self, mp3path, parent=None):
@@ -147,9 +153,7 @@ class Mp3Dialog(QDialog):
             file = getFile(self.mw, "Add song to BGM Loop",
                         dir=self.mw.pref['bgmdir'], filter="*.mp3")
             assert os.path.isdir(file) != True
-            item = Mp3ListItem(file)
-            row = list.count() + 1
-            item.setText("%3d. %s: %s" % (row, item.hhmmss, item.filename))
+            item = Mp3ListItem(file, list.count() + 1)
             list.addItem(item)
         except (IndexError, AssertionError):
             print("Invalid file is selected.")

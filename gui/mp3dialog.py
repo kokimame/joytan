@@ -23,6 +23,12 @@ class Mp3TreeItem(QTreeWidgetItem):
         self.hhmmss = mp3Duration(mp3path)
         self.duration, self.fskhz, self.bitkbs = getMp3Info(mp3path)
 
+        self.initUi()
+
+    def initUi(self):
+        self.setText(1, self.filename)
+        self.setText(2, self.hhmmss)
+
 
 class Mp3Dialog(QDialog):
     def __init__(self, mw):
@@ -155,8 +161,6 @@ class Mp3Dialog(QDialog):
             file = getFile(self.mw, "Chose a SFX",
                         dir=self.mw.pref['sfxdir'], filter="*.mp3")
             child = Mp3TreeItem(file, parent=item)
-            child.setText(1, child.filename)
-            child.setText(2, child.hhmmss)
             item.addChild(child)
 
         except IndexError:

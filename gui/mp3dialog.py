@@ -75,7 +75,7 @@ class GroupButton(QPushButton):
         else:
             group = self.group
         self.setText("+ {group}".format(group=group))
-        self.clicked.connect(lambda: self.trigger(group=group, idx=self.idx))
+        self.clicked.connect(lambda: self.trigger(idx=self.idx))
 
 
 
@@ -94,6 +94,10 @@ class Mp3Dialog(QDialog):
 
     def setupSfxList(self):
         sfxList = self.form.sfxList
+        sfxList.setStyleSheet("""
+                              QListWidget::item { border-bottom: 1px solid black; }
+                              QListWidget::item { background-color: rgb(200,200,200); }
+                              """)
         groups = ['word', 'definition', 'example']
         self.sfxCnt = [1] * len(groups)
         for i, group in enumerate(groups):
@@ -104,10 +108,15 @@ class Mp3Dialog(QDialog):
 
 
     def setupBgmList(self):
+        bgmList = self.form.bgmList
+        bgmList.setStyleSheet("""
+                              QListWidget::item { border-bottom: 1px solid black; }
+                              QListWidget::item { background-color: rgb(200,200,200); }
+                              """)
         lw, gb = QListWidgetItem(), GroupButton(self.onBgmClicked, group="BGM")
         lw.setSizeHint(gb.sizeHint())
-        self.form.bgmList.addItem(lw)
-        self.form.bgmList.setItemWidget(lw, gb)
+        bgmList.addItem(lw)
+        bgmList.setItemWidget(lw, gb)
 
     def setupButton(self):
         form = self.form
@@ -196,7 +205,7 @@ class Mp3Dialog(QDialog):
 
         self.reject()
 
-    def onSfxClicked(self, group=None, idx=None):
+    def onSfxClicked(self, idx=None):
         list = self.form.sfxList
         try:
             file = getFile(self.mw, "Add song to BGM Loop",
@@ -215,8 +224,8 @@ class Mp3Dialog(QDialog):
             print("Invalid file is selected.")
             pass
 
-    def onBgmClicked(self, group=None, idx=None):
-        # group and idx parameter are not in use,
+    def onBgmClicked(self, idx=None):
+        # idx parameter is not in use,
         # but it cannot be removed in order to have the same interface with SFX.
         list = self.form.bgmList
         try:

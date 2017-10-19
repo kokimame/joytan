@@ -249,13 +249,27 @@ class Mp3Dialog(QDialog):
             pass
 
     def onDeleteSfx(self, lwi):
-        pass
+        sfxList = self.form.sfxList
+        for i in range(sfxList.count()):
+            if lwi == sfxList.item(i):
+                sfxList.takeItem(i)
+                # Update counter for sfx
+                sum = 0
+                for j, cnt in enumerate(self.sfxCnt):
+                    sum += cnt
+                    if sum > i:
+                        self.sfxCnt[j] -= 1
+                        break
+
+                break
+
 
     def onDeleteBgm(self, lwi):
         bgmList = self.form.bgmList
         for i in range(bgmList.count()):
             if lwi == bgmList.item(i):
                 bgmList.takeItem(i)
+                break
 
     def stopAllAudio(self):
         bgmList = self.form.bgmList

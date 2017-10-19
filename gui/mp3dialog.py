@@ -160,11 +160,12 @@ class Mp3Dialog(QDialog):
         try:
             file = getFile(self.mw, "Chose a SFX",
                         dir=self.mw.pref['sfxdir'], filter="*.mp3")
+            assert os.path.isdir(file) != True
             child = Mp3TreeItem(file, parent=item)
             item.addChild(child)
 
-        except IndexError:
-            print("Index Error passed")
+        except (IndexError, AssertionError):
+            print("Invalid file is selected.")
             pass
 
     def reject(self):

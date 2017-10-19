@@ -4,7 +4,7 @@ from gui.utils import getFile, getFileNameFromPath, isLin, isMac, processCoreEve
 from tools.cmder.mp3cmder import mp3Duration, hhmmss2secCmd, getMp3Info
 
 def onMp3Dialog(mw):
-    gui.dialogs.open("Mp3Setting", mw, mw.framelist)
+    gui.dialogs.open("Mp3Dialog", mw)
 
 
 class Mp3ListItem(QListWidgetItem):
@@ -24,12 +24,11 @@ class Mp3TreeItem(QTreeWidgetItem):
         self.duration, self.fskhz, self.bitkbs = getMp3Info(mp3path)
 
 
-# TODO: Name change to Mp3Dialog
-class Mp3Setting(QDialog):
-    def __init__(self, mw, framelist):
+class Mp3Dialog(QDialog):
+    def __init__(self, mw):
         QDialog.__init__(self, mw, Qt.Window)
         self.mw = mw
-        self.framelist = framelist
+        self.framelist = mw.framelist
         self.form = gui.forms.mp3dialog.Ui_Mp3Dialog()
         self.form.setupUi(self)
         self.setupButton()
@@ -166,4 +165,4 @@ class Mp3Setting(QDialog):
 
     def reject(self):
         self.done(0)
-        gui.dialogs.close("Mp3Setting")
+        gui.dialogs.close("Mp3Dialog")

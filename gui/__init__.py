@@ -28,7 +28,7 @@ from gui import preferences, mp3dialog
 class DialogManager:
     _dialogs = {
         "Preferences": [preferences.Preferences, None],
-        "Mp3Setting": [mp3dialog.Mp3Setting, None]
+        "Mp3Dialog": [mp3dialog.Mp3Dialog, None]
     }
 
     def open(self, name, *args):

@@ -146,12 +146,13 @@ class Mp3Dialog(QDialog):
         try:
             file = getFile(self.mw, "Add song to BGM Loop",
                         dir=self.mw.pref['bgmdir'], filter="*.mp3")
+            assert os.path.isdir(file) != True
             item = Mp3ListItem(file)
             row = list.count() + 1
             item.setText("%3d. %s: %s" % (row, item.hhmmss, item.filename))
             list.addItem(item)
-        except IndexError:
-            print("Index Error passed")
+        except (IndexError, AssertionError):
+            print("Invalid file is selected.")
             pass
 
 

@@ -7,6 +7,15 @@ def onMp3Dialog(mw):
     gui.dialogs.open("Mp3Dialog", mw)
 
 
+class MediaPlayer(QMediaPlayer):
+    def __init__(self):
+        super(MediaPlayer, self).__init__()
+
+    def playContent(self, content):
+        self.setMedia(content)
+        self.play()
+
+
 class Mp3ListItem(QListWidgetItem):
     def __init__(self,mp3path, row, parent=None):
         super(Mp3ListItem, self).__init__(parent)

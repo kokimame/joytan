@@ -10,23 +10,15 @@ def onMp3Dialog(mw):
 class MediaPlayer(QMediaPlayer):
     def __init__(self):
         super(MediaPlayer, self).__init__()
-        self.nowPlaying = None
 
     def playContent(self, content):
-        if self.nowPlaying == content:
-            self.stop()
-            self.nowPlaying = None
-            return
-
-        self.stop()
         self.setMedia(content)
         self.play()
-        self.nowPlaying = content
 
 class Mp3Widget(QWidget):
-    def __init__(self, mediaPlayer, mp3path, index, parent=None):
+    def __init__(self, mp3path, index, parent=None):
         super(Mp3Widget, self).__init__(parent)
-        self.mp = mediaPlayer
+        self.mp = MediaPlayer()
         self.mp3path = mp3path
         self.filename = getFileNameFromPath(mp3path)
         self.hhmmss = mp3Duration(mp3path)
@@ -39,14 +31,21 @@ class Mp3Widget(QWidget):
     def initUi(self):
         label = QLabel("{index}. {name} {hhmmss}".
                        format(index=self.index, name=self.filename, hhmmss=self.hhmmss))
-
         playBtn = QPushButton("Play")
         playBtn.clicked.connect(lambda: self.mp.playContent(self.content))
+        volSld = QSlider(Qt.Horizontal)
+        volSld.setRange(0, 100)
+        volSld.setValue(100)
+        volSld.valueChanged.connect(self.mp.setVolume)
 
         hbox = QHBoxLayout()
         hbox.addWidget(label)
         hbox.addWidget(playBtn)
+        hbox.addWidget(volSld)
         self.setLayout(hbox)
+
+    def stop(self):
+        self.mp.stop()
 
 
 
@@ -55,7 +54,6 @@ class Mp3Dialog(QDialog):
         QDialog.__init__(self, mw, Qt.Window)
         self.mw = mw
         self.framelist = mw.framelist
-        self.mp = MediaPlayer()
         self.form = gui.forms.mp3dialog.Ui_Mp3Dialog()
         self.form.setupUi(self)
         self.setupButton()
@@ -169,7 +167,7 @@ class Mp3Dialog(QDialog):
             file = getFile(self.mw, "Add song to BGM Loop",
                         dir=self.mw.pref['bgmdir'], filter="*.mp3")
             assert os.path.isdir(file) != True
-            lw, w = QListWidgetItem(), Mp3Widget(self.mp, file, list.count())
+            lw, w = QListWidgetItem(), Mp3Widget(file, list.count())
             lw.setSizeHint(w.sizeHint())
             list.addItem(lw)
             list.setItemWidget(lw, w)
@@ -177,8 +175,18 @@ class Mp3Dialog(QDialog):
             print("Invalid file is selected.")
             pass
 
+    def stopAllAudio(self):
+        bgmList = self.form.bgmList
+        if bgmList.count() <= 0:
+            return
+
+        for i in range(1, bgmList.count()):
+            w = bgmList.itemWidget(bgmList.item(i))
+            w.stop()
+
+
 
     def reject(self):
-        self.mp.stop()
+        self.stopAllAudio()
         self.done(0)
         gui.dialogs.close("Mp3Dialog")

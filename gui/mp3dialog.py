@@ -8,24 +8,22 @@ def onMp3Dialog(mw):
 
 
 class MediaPlayer(QMediaPlayer):
-    def __init__(self):
+    def __init__(self, parent):
         super(MediaPlayer, self).__init__()
-        self.playing = False
+        self.stateChanged.connect(parent.iconChange)
 
     def playContent(self, content):
-        if not self.playing:
+        if not self.state(): # default state is 0 (Audio stopped)
             self.setMedia(content)
             self.play()
-            self.playing = True
         else:
             self.stop()
-            self.playing = False
 
 
 class Mp3Widget(QWidget):
     def __init__(self, mp3path, index, parent=None):
         super(Mp3Widget, self).__init__(parent)
-        self.mp = MediaPlayer()
+        self.mp = MediaPlayer(self)
         self.mp3path = mp3path
         self.filename = getFileNameFromPath(mp3path)
         self.hhmmss = mp3Duration(mp3path)
@@ -38,8 +36,8 @@ class Mp3Widget(QWidget):
     def initUi(self):
         label = QLabel("{index}. {name} {hhmmss}".
                        format(index=self.index, name=self.filename, hhmmss=self.hhmmss))
-        playBtn = QPushButton("Play")
-        playBtn.clicked.connect(lambda: self.mp.playContent(self.content))
+        self.playBtn = QPushButton("Play")
+        self.playBtn.clicked.connect(lambda: self.mp.playContent(self.content))
         volSld = QSlider(Qt.Horizontal)
         volSld.setRange(0, 100)
         volSld.setValue(100)
@@ -47,9 +45,16 @@ class Mp3Widget(QWidget):
 
         hbox = QHBoxLayout()
         hbox.addWidget(label)
-        hbox.addWidget(playBtn)
+        hbox.addWidget(self.playBtn)
         hbox.addWidget(volSld)
         self.setLayout(hbox)
+
+    def iconChange(self, state):
+        if state:
+            self.playBtn.setText("Stop")
+        else:
+            self.playBtn.setText("Play")
+
 
     def forceStop(self):
         self.mp.stop()

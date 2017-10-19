@@ -36,7 +36,8 @@ class Mp3Widget(QWidget):
         self.initUi()
 
     def initUi(self):
-        delBtn = QPushButton("x")
+        delBtn = QPushButton()
+        delBtn.setIcon(QIcon("design/icons/delete_button.png"))
         delBtn.clicked.connect(lambda: self.delTrigger(self.lwi))
         label = QLabel("{name} {hhmmss}".
                        format(name=self.filename, hhmmss=self.hhmmss))

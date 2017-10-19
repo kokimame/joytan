@@ -78,6 +78,7 @@ class Mp3Dialog(QDialog):
     def setupButton(self):
         form = self.form
         form.createBtn.clicked.connect(self.onCreate)
+        form.cancelBtn.clicked.connect(self.reject)
 
     def setupComboBox(self):
         form = self.form

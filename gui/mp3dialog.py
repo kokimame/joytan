@@ -15,7 +15,6 @@ class MediaPlayer(QMediaPlayer):
         self.setMedia(content)
         self.play()
 
-
 class Mp3ListItem(QListWidgetItem):
     def __init__(self,mp3path, row, parent=None):
         super(Mp3ListItem, self).__init__(parent)
@@ -30,19 +29,6 @@ class Mp3ListItem(QListWidgetItem):
     def initUi(self):
         self.setText("%3d. %s: %s" % (self.row, self.hhmmss, self.filename))
 
-class Mp3TreeItem(QTreeWidgetItem):
-    def __init__(self, mp3path, parent=None):
-        super(Mp3TreeItem, self).__init__(parent)
-        self.mp3path = mp3path
-        self.filename = getFileNameFromPath(mp3path)
-        self.hhmmss = mp3Duration(mp3path)
-        self.duration, self.fskhz, self.bitkbs = getMp3Info(mp3path)
-
-        self.initUi()
-
-    def initUi(self):
-        self.setText(1, self.filename)
-        self.setText(2, self.hhmmss)
 
 
 class Mp3Dialog(QDialog):
@@ -54,20 +40,14 @@ class Mp3Dialog(QDialog):
         self.form.setupUi(self)
         self.setupButton()
         self.setupComboBox()
-        self.setupSfxTree()
+        self.setupSfxList()
         self.show()
 
-    def setupSfxTree(self):
-        tree = self.form.sfxTree
-        tree.itemClicked.connect(self.onSfxClicked)
-        self.sfxGroup = []
+    def setupSfxList(self):
+        pass
 
-        for group in ['Word', 'Definition', 'Example']:
-            groupItem = QTreeWidgetItem(tree)
-            groupItem.setExpanded(True)
-            groupItem.setText(0, group)
-            self.sfxGroup.append(groupItem)
-
+    def setupBgmList(self):
+        pass
 
     def setupButton(self):
         form = self.form
@@ -168,19 +148,6 @@ class Mp3Dialog(QDialog):
             print("Invalid file is selected.")
             pass
 
-
-    def onSfxClicked(self, item, column):
-        if item.text(0) == '': return
-        try:
-            file = getFile(self.mw, "Chose a SFX",
-                        dir=self.mw.pref['sfxdir'], filter="*.mp3")
-            assert os.path.isdir(file) != True
-            child = Mp3TreeItem(file, parent=item)
-            item.addChild(child)
-
-        except (IndexError, AssertionError):
-            print("Invalid file is selected.")
-            pass
 
     def reject(self):
         self.done(0)

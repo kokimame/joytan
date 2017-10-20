@@ -206,14 +206,14 @@ def espeakMp3(script, output):
     call(["rm", "-f", output])
     os.makedirs(os.path.dirname(output), exist_ok=True)
     cmd = 'espeak "%s" --stdout | ' \
-          'ffmpeg -loglevel panic -i - -ar 44100 -ab 64k -f mp3 %s.mp3' % (script, output)
+          'ffmpeg -loglevel panic -i - -ac 2 -ar 44100 -ab 64k -f mp3 %s.mp3' % (script, output)
     call(cmd, shell=True)
 
 
 def sayMp3(script, output):
     os.makedirs(os.path.dirname(output), exist_ok=True)
     cmd = 'say "%s" -o %s.aiff;' \
-          'ffmpeg -loglevel panic -i %s.aiff -acodec libmp3lame -ar 44100 -ab 64k -f mp3 %s.mp3' \
+          'ffmpeg -loglevel panic -i %s.aiff -ac 2 -acodec libmp3lame -ar 44100 -ab 64k -f mp3 %s.mp3' \
           % (script, output, output, output)
     call(cmd, shell=True)
 

@@ -149,6 +149,16 @@ class Mp3Cmder:
         cmd = "sox -m %s %s %s" % (self.bgmMp3, self.compMp3, self.finalMp3)
         call(cmd, shell=True)
 
+def previewTts():
+    script = "This is the preview of Text-To-Speech."
+    if isLin:
+        cmd = 'espeak "%s"' % script
+    elif isMac:
+        cmd = 'say "%s"' % script
+    else:
+        print("Only support Linux and Mac for now!")
+    call(cmd, shell=True)
+
 def resampling(original, fskhz, output):
     cmd = "sox %s -r %d %s" % (original, fskhz, output)
     call(cmd, shell=True)

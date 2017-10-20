@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>472</width>
-    <height>565</height>
+    <width>507</width>
+    <height>618</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -39,6 +39,13 @@
              <string>espeak</string>
             </property>
            </item>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="previewBtn">
+           <property name="text">
+            <string>Preview</string>
+           </property>
           </widget>
          </item>
          <item>

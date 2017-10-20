@@ -11,7 +11,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_Mp3Dialog(object):
     def setupUi(self, Mp3Dialog):
         Mp3Dialog.setObjectName("Mp3Dialog")
-        Mp3Dialog.resize(472, 565)
+        Mp3Dialog.resize(507, 618)
         self.verticalLayout_2 = QtWidgets.QVBoxLayout(Mp3Dialog)
         self.verticalLayout_2.setObjectName("verticalLayout_2")
         self.verticalLayout = QtWidgets.QVBoxLayout()
@@ -28,6 +28,9 @@ class Ui_Mp3Dialog(object):
         self.ttsCombo.addItem("")
         self.ttsCombo.addItem("")
         self.horizontalLayout_2.addWidget(self.ttsCombo)
+        self.previewBtn = QtWidgets.QPushButton(Mp3Dialog)
+        self.previewBtn.setObjectName("previewBtn")
+        self.horizontalLayout_2.addWidget(self.previewBtn)
         spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout_2.addItem(spacerItem)
         self.horizontalLayout_4 = QtWidgets.QHBoxLayout()
@@ -93,6 +96,7 @@ class Ui_Mp3Dialog(object):
         self.label.setText(_translate("Mp3Dialog", "TTS"))
         self.ttsCombo.setItemText(0, _translate("Mp3Dialog", "say"))
         self.ttsCombo.setItemText(1, _translate("Mp3Dialog", "espeak"))
+        self.previewBtn.setText(_translate("Mp3Dialog", "Preview"))
         self.label_5.setText(_translate("Mp3Dialog", "Repeat word"))
         self.label_6.setText(_translate("Mp3Dialog", "times"))
         self.gstaticCheck.setText(_translate("Mp3Dialog", "Download nice pronunciation"))

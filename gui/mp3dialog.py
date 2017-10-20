@@ -130,6 +130,9 @@ class Mp3Dialog(QDialog):
         form.createBtn.clicked.connect(self.onCreate)
         form.cancelBtn.clicked.connect(self.reject)
 
+        from tools.cmder.mp3cmder import previewTts
+        form.previewBtn.clicked.connect(previewTts)
+
     def setupComboBox(self):
         form = self.form
         if isMac:

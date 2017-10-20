@@ -70,7 +70,6 @@ class Mp3Cmder:
                     sfxInfo['path'] = output
                     sfxInfo['filename'] = getFileNameFromPath(output)
                     print("%s bitrate modified!" % sfxInfo['filename'])
-                sfxlist.append(sfxInfo['path'])
 
                 # Adjusting volume by reducing it
                 if sfxInfo['volume'] != 100:
@@ -78,6 +77,7 @@ class Mp3Cmder:
                     reduceVolume(sfxInfo['path'], sfxInfo['volume'], output)
                     sfxInfo['path'] = output
                     print("%s volume reduced!" % sfxInfo['filename'])
+                sfxlist.append(sfxInfo['path'])
             catListMp3(sfxlist, "{finalDir}/{group}-sfx.mp3".format(finalDir=self.finalDir, group=group))
 
 

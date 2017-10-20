@@ -63,20 +63,20 @@ class Mp3Cmder:
                     sfxInfo['filename'] = getFileNameFromPath(output)
                     print("%s resampled!" % sfxInfo['filename'])
 
-                # Unifying bitrate
-                if sfxInfo['bitrate'] != bps:
-                    output = self.finalDir + "/%s-bps-%d.mp3" % (sfxInfo['filename'].split(".")[0], i+1)
-                    convertBps(sfxInfo['path'], bps, output)
-                    sfxInfo['path'] = output
-                    sfxInfo['filename'] = getFileNameFromPath(output)
-                    print("%s bitrate modified!" % sfxInfo['filename'])
-
                 # Adjusting volume by reducing it
                 if sfxInfo['volume'] != 100:
                     output = self.finalDir + "/%s-revol-%d.mp3" % (sfxInfo['filename'].split(".")[0], i+1)
                     reduceVolume(sfxInfo['path'], sfxInfo['volume'], output)
                     sfxInfo['path'] = output
                     print("%s volume reduced!" % sfxInfo['filename'])
+
+                # Unifying bitrate. Bitrate modification is the last otherwise causes mp3 duration bug.
+                if sfxInfo['bitrate'] != bps:
+                    output = self.finalDir + "/%s-bps-%d.mp3" % (sfxInfo['filename'].split(".")[0], i+1)
+                    convertBps(sfxInfo['path'], bps, output)
+                    sfxInfo['path'] = output
+                    sfxInfo['filename'] = getFileNameFromPath(output)
+                    print("%s bitrate modified!" % sfxInfo['filename'])
                 sfxlist.append(sfxInfo['path'])
             catListMp3(sfxlist, "{finalDir}/{group}-sfx.mp3".format(finalDir=self.finalDir, group=group))
 
@@ -159,6 +159,12 @@ def previewTts():
         print("Only support Linux and Mac for now!")
     call(cmd, shell=True)
 
+
+####################################
+# Fixme:
+# Use command-line tool as few as possible
+# Remove all redundant use of the tools and put them in a single line.
+####################################
 def resampling(original, fskhz, output):
     cmd = "sox %s -r %d %s" % (original, fskhz, output)
     call(cmd, shell=True)

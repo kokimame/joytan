@@ -179,14 +179,14 @@ def reduceVolume(original, vol, output):
 
 
 def createLoopMp3(dir, loop, length, output):
-    tmpMp3 = "{dir}/temp-bgm-removed.mp3".format(dir=dir)
+    tmpMp3 = "{dir}/tmp-bgm-to-remove.mp3".format(dir=dir)
     cmd = "cat "
     bgmlen = 0
     done = False
     while not done:
-        for loopDir in loop:
-            bgmlen += loopDir['duration']
-            cmd += "%s " % loopDir['path']
+        for loopInfo in loop:
+            bgmlen += loopInfo['duration']
+            cmd += "%s " % loopInfo['path']
             if bgmlen > length:
                 done = True
                 break

@@ -101,11 +101,12 @@ class EmotanMW(QMainWindow):
 
 
     def onDownload(self):
+        self.framelist.saveEditing()
         import gui.download
         gui.download.onDownload(self)
 
     def onCreateMp3(self):
-        self.framelist.saveEditingResult()
+        self.framelist.saveEditing()
         import gui.mp3dialog
         gui.mp3dialog.onMp3Dialog(self)
 

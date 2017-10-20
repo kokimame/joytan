@@ -33,12 +33,18 @@ class Mp3Cmder:
         fs = self.setting['sampling']
         bps = self.setting['bitrate']
 
-        for i, loopDir in enumerate(self.setting['loop']):
-            if loopDir['sampling'] != fs:
-                output = self.finalDir + "/%s-resamp-%d.mp3" % (loopDir['filename'].split(".")[0], i+1)
-                resampling(loopDir['path'], fs, output)
-                loopDir['path'] = output
-                print("%s resampled!" % loopDir['filename'])
+        for i, loop in enumerate(self.setting['loop']):
+            if loop['sampling'] != fs:
+                output = self.finalDir + "/%s-resamp-%d.mp3" % (loop['filename'].split(".")[0], i+1)
+                resampling(loop['path'], fs, output)
+                loop['path'] = output
+                print("%s resampled!" % loop['filename'])
+            if loop['volume'] != 100:
+                output = self.finalDir + "/%s-revol-%d.mp3" % (loop['filename'].split(".")[0], i+1)
+                reduceVolume(loop['path'], loop['volume'], output)
+                loop['path'] = output
+                print("%s volume reduced!" % loop['filename'])
+
 
         sfxGroup = self.setting['sfx']
         """ {
@@ -49,6 +55,7 @@ class Mp3Cmder:
         for group, sfxs in sfxGroup.items():
             sfxlist = []
             for i, sfxInfo in enumerate(sfxs):
+                # Unifying sampling rate
                 if sfxInfo['sampling'] != fs:
                     output = self.finalDir + "/%s-resamp-%d.mp3" % (sfxInfo['filename'].split(".")[0], i+1)
                     resampling(sfxInfo['path'], fs, output)
@@ -56,6 +63,7 @@ class Mp3Cmder:
                     sfxInfo['filename'] = getFileNameFromPath(output)
                     print("%s resampled!" % sfxInfo['filename'])
 
+                # Unifying bitrate
                 if sfxInfo['bitrate'] != bps:
                     output = self.finalDir + "/%s-bps-%d.mp3" % (sfxInfo['filename'].split(".")[0], i+1)
                     convertBps(sfxInfo['path'], bps, output)
@@ -63,6 +71,13 @@ class Mp3Cmder:
                     sfxInfo['filename'] = getFileNameFromPath(output)
                     print("%s bitrate modified!" % sfxInfo['filename'])
                 sfxlist.append(sfxInfo['path'])
+
+                # Adjusting volume by reducing it
+                if sfxInfo['volume'] != 100:
+                    output = self.finalDir + "/%s-revol-%d.mp3" % (sfxInfo['filename'].split(".")[0], i+1)
+                    reduceVolume(sfxInfo['path'], sfxInfo['volume'], output)
+                    sfxInfo['path'] = output
+                    print("%s volume reduced!" % sfxInfo['filename'])
             catListMp3(sfxlist, "{finalDir}/{group}-sfx.mp3".format(finalDir=self.finalDir, group=group))
 
 
@@ -141,6 +156,17 @@ def resampling(original, fskhz, output):
 def convertBps(original, bitkps, output):
     cmd = "sox %s -C %d %s" % (original, bitkps, output)
     call(cmd, shell=True)
+
+def reduceVolume(original, vol, output):
+    # 10/21/17
+    # Vol is integer over 0 and 100,
+    # Because of the lack of the method to play sound louder in QMediaPlayer,
+    # We can only adjust audio files by reducing its volume.
+    rate = vol / 100
+    cmd = 'ffmpeg -loglevel panic -i {original} -filter:a "volume={rate}" {output}'.format(
+                original=original, rate=rate, output=output)
+    call(cmd, shell=True)
+
 
 def createLoopMp3(dir, loop, length, output):
     tmpMp3 = "{dir}/temp-bgm-removed.mp3".format(dir=dir)

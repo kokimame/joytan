@@ -145,7 +145,6 @@ class Mp3Dialog(QDialog):
         setting['repeat'] = self.form.wordSpin.value()
 
         sfxdir = {}
-
         group = None
         for i in range(sfxList.count()):
             iw = sfxList.itemWidget(sfxList.item(i))
@@ -159,7 +158,7 @@ class Mp3Dialog(QDialog):
                                   "duration": iw.duration,
                                   "sampling": iw.fskhz,
                                   "bitrate": iw.bitkbs,
-                                  "volume": 100})
+                                  "volume": iw.mp.volume()})
         setting['sfx'] = sfxdir
 
         bgmloop = []
@@ -170,7 +169,7 @@ class Mp3Dialog(QDialog):
                             "duration": iw.duration,
                             "sampling": iw.fskhz,
                             "bitrate": iw.bitkbs,
-                            "volume": 100})
+                            "volume": iw.mp.volume()})
         setting['loop'] = bgmloop
 
 

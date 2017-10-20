@@ -138,35 +138,39 @@ class Mp3Dialog(QDialog):
             form.ttsCombo.setCurrentIndex(1)
 
     def onCreate(self):
-        form = self.form
-        isGstatic = form.gstaticCheck.isChecked()
+        sfxList = self.form.sfxList
+        bgmList = self.form.bgmList
+        isGstatic = self.form.gstaticCheck.isChecked()
         setting = {}
-        setting['repeat'] = form.wordSpin.value()
+        setting['repeat'] = self.form.wordSpin.value()
 
         sfxdir = {}
-        for item in self.sfxGroup:
-            # SFXs for a group shown in column 0
-            group = item.text(0)
-            sfxdir[group] = []
-            for i in range(item.childCount()):
-                child = item.child(i)
-                sfxdir[group].append({
-                    "path": child.mp3path,
-                    "filename": child.filename,
-                    "duration": child.duration,
-                    "sampling": child.fskhz,
-                    "bitrate": child.bitkbs
-                })
+
+        group = None
+        for i in range(sfxList.count()):
+            iw = sfxList.itemWidget(sfxList.item(i))
+            if isinstance(iw, GroupButton):
+                group = iw.group
+                sfxdir[group] = []
+                continue
+
+            sfxdir[group].append({"path": iw.mp3path,
+                                  "filename": iw.filename,
+                                  "duration": iw.duration,
+                                  "sampling": iw.fskhz,
+                                  "bitrate": iw.bitkbs,
+                                  "volume": 100})
         setting['sfx'] = sfxdir
 
         bgmloop = []
-        for i in range(form.bgmList.count()):
-            item = form.bgmList.item(i)
-            bgmloop.append({"path": item.mp3path,
-                            "filename": item.filename,
-                            "duration": item.duration,
-                            "sampling": item.fskhz,
-                            "bitrate": item.bitkbs,})
+        for i in range(1, bgmList.count()):
+            iw = bgmList.itemWidget(bgmList.item(i))
+            bgmloop.append({"path": iw.mp3path,
+                            "filename": iw.filename,
+                            "duration": iw.duration,
+                            "sampling": iw.fskhz,
+                            "bitrate": iw.bitkbs,
+                            "volume": 100})
         setting['loop'] = bgmloop
 
 

@@ -42,8 +42,8 @@ class Mp3Cmder:
 
         sfxGroup = self.setting['sfx']
         """ {
-                'Word': [{ ... items ... }, {...},
-                'Definition' : ...
+                'word': [{ ... items ... }, {...},
+                'definition' : ...
             }
         """
         for group, sfxs in sfxGroup.items():
@@ -83,18 +83,18 @@ class Mp3Cmder:
         wordhead = repeatMp3('{curdir}/pronounce.mp3'.format(curdir=curdir), self.setting['repeat'])
 
         sfxdir = self.setting['sfx']
-        assert len(sfxdir['Word']) != 0, print("Choose at least one sfx accompanying with a word")
+        assert len(sfxdir['word']) != 0, print("Choose at least one sfx accompanying with a word")
         wordheader = '{curdir}/wordheader.mp3'.format(curdir=curdir)
-        catMp3("{finalDir}/Word-sfx.mp3".format(finalDir=self.finalDir), wordhead, wordheader)
+        catMp3("{finalDir}/word-sfx.mp3".format(finalDir=self.finalDir), wordhead, wordheader)
 
         inputs = "%s " % wordheader
         for cont in self.seq[bw.bundle.name]:
             try:
                 cont = cont['def'] + ".mp3"
-                inputs += "%s %s " % ("{finalDir}/Definition-sfx.mp3".format(finalDir=self.finalDir), cont)
+                inputs += "%s %s " % ("{finalDir}/definition-sfx.mp3".format(finalDir=self.finalDir), cont)
             except KeyError:
                 cont = cont['ex'] + ".mp3"
-                inputs += "%s %s " % ("{finalDir}/Example-sfx.mp3".format(finalDir=self.finalDir), cont)
+                inputs += "%s %s " % ("{finalDir}/example-sfx.mp3".format(finalDir=self.finalDir), cont)
         catMp3(inputs, "", "{root}/{dirname}.mp3".format(root=self.root, dirname=bw.getDirname()))
 
     def ttsBundleWidget(self, bw):

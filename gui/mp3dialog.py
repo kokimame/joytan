@@ -141,6 +141,9 @@ class Mp3Dialog(QDialog):
             form.ttsCombo.setCurrentIndex(1)
 
     def onCreate(self):
+        from gui.utils import rmdir
+        rmdir(self.mw.getRootPath())
+
         sfxList = self.form.sfxList
         bgmList = self.form.bgmList
         isGstatic = self.form.gstaticCheck.isChecked()

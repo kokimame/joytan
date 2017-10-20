@@ -62,8 +62,8 @@ class BundleWidget(QWidget):
     def getDirname(self):
         # Make string number from the index of the bundle from 00000 to 99999
         snum = (5 - len(str(self.index))) * '0' + str(self.index)
-        # Return directory name
-        return "{snum}-{name}".format(snum=snum, name=self.bundle.name)
+        # Return directory name replacing whitespace with underscore
+        return "{snum}-{name}".format(snum=snum, name=self.bundle.name.replace(" ", "_"))
 
     def updateMode(self, newMode):
         if newMode == self.mode: return

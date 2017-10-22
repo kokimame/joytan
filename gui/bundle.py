@@ -6,10 +6,11 @@ class BundleFactory:
         # Bundle for a word containing a number of meaning and example usage of its word
         def __init__(self, name, index):
             self.name = name
-            self.items = None
+            self.sources = []
+            self.items = []
 
         def updateItems(self, items):
-            self.items = items
+            self.items.extend(items)
 
     def __init__(self):
         # TODO: More should be coming

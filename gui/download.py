@@ -29,12 +29,14 @@ def ignorantDownload(mw, parser, gstat=False):
         processCoreEvents()
 
         bw = mw.framelist.getBundleWidget(i)
-
+        if parser.source in bw.bundle.sources:
+            continue
         r = requests.get(parser.source + bw.bundle.name)
         data = r.text
         items = parser.run(data)
 
         mw.framelist.updateBundle(bw.bundle.name, items)
+        bw.bundle.sources.append(parser.source)
 
 def downloadGstaticSound(word, filename):
     url = "http://ssl.gstatic.com/dictionary/static/sounds/oxford/"

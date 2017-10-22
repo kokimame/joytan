@@ -8,13 +8,13 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
-class Ui_preferences(object):
-    def setupUi(self, preferences):
-        preferences.setObjectName("preferences")
-        preferences.resize(461, 405)
-        self.verticalLayout_2 = QtWidgets.QVBoxLayout(preferences)
+class Ui_Preferences(object):
+    def setupUi(self, Preferences):
+        Preferences.setObjectName("Preferences")
+        Preferences.resize(461, 405)
+        self.verticalLayout_2 = QtWidgets.QVBoxLayout(Preferences)
         self.verticalLayout_2.setObjectName("verticalLayout_2")
-        self.tabWidget = QtWidgets.QTabWidget(preferences)
+        self.tabWidget = QtWidgets.QTabWidget(Preferences)
         self.tabWidget.setFocusPolicy(QtCore.Qt.StrongFocus)
         self.tabWidget.setToolTip("")
         self.tabWidget.setObjectName("tabWidget")
@@ -116,31 +116,31 @@ class Ui_preferences(object):
         self.tabPDF.setObjectName("tabPDF")
         self.tabWidget.addTab(self.tabPDF, "")
         self.verticalLayout_2.addWidget(self.tabWidget)
-        self.buttonBox = QtWidgets.QDialogButtonBox(preferences)
+        self.buttonBox = QtWidgets.QDialogButtonBox(Preferences)
         self.buttonBox.setStandardButtons(QtWidgets.QDialogButtonBox.Cancel|QtWidgets.QDialogButtonBox.Ok)
         self.buttonBox.setObjectName("buttonBox")
         self.verticalLayout_2.addWidget(self.buttonBox)
 
-        self.retranslateUi(preferences)
+        self.retranslateUi(Preferences)
         self.tabWidget.setCurrentIndex(0)
-        QtCore.QMetaObject.connectSlotsByName(preferences)
+        QtCore.QMetaObject.connectSlotsByName(Preferences)
 
-    def retranslateUi(self, preferences):
+    def retranslateUi(self, Preferences):
         _translate = QtCore.QCoreApplication.translate
-        preferences.setWindowTitle(_translate("preferences", "Preferences"))
-        self.label_4.setText(_translate("preferences", "Title"))
-        self.label_8.setText(_translate("preferences", "Online Dictionary"))
-        self.dictCombo.setItemText(0, _translate("preferences", "Dictionary.com"))
-        self.dictCombo.setItemText(1, _translate("preferences", "Wiktionary"))
-        self.dictCombo.setItemText(2, _translate("preferences", "Cambridge Dictionary"))
-        self.dictCombo.setItemText(3, _translate("preferences", "Oxford English Dictionary"))
-        self.label.setText(_translate("preferences", "Definitions per Word"))
-        self.label_2.setText(_translate("preferences", "Examples per Definition"))
-        self.label_6.setText(_translate("preferences", "BGM Directory"))
-        self.label_5.setText(_translate("preferences", "SFX Directory"))
-        self.label_3.setText(_translate("preferences", "Working Directory"))
-        self.label_7.setText(_translate("preferences", "Wordlist Directory"))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tabGeneral), _translate("preferences", "General"))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tabMP3), _translate("preferences", "MP3"))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tabPDF), _translate("preferences", "PDF"))
+        Preferences.setWindowTitle(_translate("Preferences", "Preferences"))
+        self.label_4.setText(_translate("Preferences", "Title"))
+        self.label_8.setText(_translate("Preferences", "Online Dictionary"))
+        self.dictCombo.setItemText(0, _translate("Preferences", "Dictionary.com"))
+        self.dictCombo.setItemText(1, _translate("Preferences", "Wiktionary"))
+        self.dictCombo.setItemText(2, _translate("Preferences", "Cambridge Dictionary"))
+        self.dictCombo.setItemText(3, _translate("Preferences", "Oxford English Dictionary"))
+        self.label.setText(_translate("Preferences", "Definitions per Word"))
+        self.label_2.setText(_translate("Preferences", "Examples per Definition"))
+        self.label_6.setText(_translate("Preferences", "BGM Directory"))
+        self.label_5.setText(_translate("Preferences", "SFX Directory"))
+        self.label_3.setText(_translate("Preferences", "Working Directory"))
+        self.label_7.setText(_translate("Preferences", "Wordlist Directory"))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tabGeneral), _translate("Preferences", "General"))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tabMP3), _translate("Preferences", "MP3"))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tabPDF), _translate("Preferences", "PDF"))
 

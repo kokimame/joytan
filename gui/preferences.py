@@ -6,7 +6,7 @@ class Preferences(QDialog):
     def __init__(self, mw):
         QDialog.__init__(self, mw, Qt.Window)
         self.mw = mw
-        self.form = gui.forms.preferences.Ui_preferences()
+        self.form = gui.forms.preferences.Ui_Preferences()
         self.form.setupUi(self)
         self.initUi()
         self.show()

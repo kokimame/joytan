@@ -48,6 +48,13 @@
           </widget>
          </item>
          <item>
+          <widget class="QPushButton" name="transButton">
+           <property name="text">
+            <string/>
+           </property>
+          </widget>
+         </item>
+         <item>
           <widget class="QPushButton" name="configButton">
            <property name="text">
             <string/>

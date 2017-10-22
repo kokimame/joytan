@@ -3,7 +3,9 @@ __all__ = [
  "main",
  "mp3dialog",
  "preferences",
+ "translate",
 ]
 from . import main
 from . import mp3dialog
 from . import preferences
+from . import translate

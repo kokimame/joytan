@@ -23,12 +23,13 @@ except ImportError as e:
     raise
 
 
-from gui import preferences, mp3dialog
+from gui import preferences, mp3dialog, translate
 
 class DialogManager:
     _dialogs = {
         "Preferences": [preferences.Preferences, None],
-        "Mp3Dialog": [mp3dialog.Mp3Dialog, None]
+        "Mp3Dialog": [mp3dialog.Mp3Dialog, None],
+        "TranslateDialog": [translate.TranslateDialog, None]
     }
 
     def open(self, name, *args):

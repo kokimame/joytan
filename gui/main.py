@@ -78,7 +78,7 @@ class EmotanMW(QMainWindow):
         form.delButton.clicked.connect(self.framelist.deleteBundle)
         form.dlButton.clicked.connect(self.onDownload)
         form.editButton.clicked.connect(self.onUpdateFrameMode)
-        form.transButton.clicked.connect(lambda: print("-- Under construction --"))
+        form.transButton.clicked.connect(self.onTranslate)
         form.configButton.clicked.connect(lambda: print("-- Under construction --"))
         form.mp3Button.clicked.connect(self.onCreateMp3)
         form.pdfButton.clicked.connect(lambda: print("-- Under construction --"))
@@ -111,6 +111,15 @@ class EmotanMW(QMainWindow):
         self.framelist.saveEditing()
         import gui.download
         gui.download.onDownload(self)
+
+    def onTranslate(self):
+        if self.framelist.count() == 0:
+            print("Nothing to translate")
+            return
+
+        self.framelist.saveEditing()
+        import gui.translate
+        gui.translate.onTranslate(self)
 
     def onCreateMp3(self):
         if self.framelist.count() == 0:

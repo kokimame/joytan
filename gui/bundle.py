@@ -183,7 +183,9 @@ class BundleWidget(QWidget):
 
     def updateEditors(self):
         for key, editor in self.editors.items():
-            if key == "name": continue
+            if key == "name":
+                editor.setText(self.bundle.name)
+                continue
             keys = list(key.split("-"))
             if keys[0] == "def":
                 num = int(keys[1]) - 1
@@ -200,7 +202,7 @@ class BundleWidget(QWidget):
                 except (KeyError, IndexError):
                     print("Error : Editor cannot update", key)
             else:
-                print("Error: Unknown editor type found")
+                print("Error: Unknown editor type '%s' found" % key)
                 sys.exit(1)
 
 

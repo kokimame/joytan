@@ -72,6 +72,8 @@ class FrameList(QListWidget):
     def getCurrentBundles(self):
         return [self.getBundleWidget(i).bundle for i in range(self.count())]
 
+    def getCurrentBundleWidgets(self):
+        return [self.getBundleWidget(i) for i in range(self.count())]
 
     def getBundleWidget(self, num):
         return self.itemWidget(self.item(num))

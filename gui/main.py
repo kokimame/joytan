@@ -71,7 +71,7 @@ class EmotanMW(QMainWindow):
         form.addButton.setIcon(QIcon('design/icons/plus_button_green.png'))
         form.delButton.setIcon(QIcon('design/icons/minus_button_red.png'))
         form.editButton.setIcon(QIcon('design/icons/edit_button.png'))
-        form.transButton.setIcon(QIcon('design/icons/translate_button.png'))
+        form.transButton.setIcon(QIcon('design/icons/translate_button2.png'))
         form.configButton.setIcon(QIcon('design/icons/config_button.png'))
         form.addButton.clicked.connect(lambda: self.framelist.addBundle('', self.frameMode))
         form.delButton.clicked.connect(self.framelist.deleteBundle)

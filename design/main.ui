@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>522</width>
+    <width>536</width>
     <height>636</height>
    </rect>
   </property>
@@ -84,14 +84,14 @@
          <item>
           <widget class="QPushButton" name="mp3Button">
            <property name="text">
-            <string>→ Audio</string>
+            <string>→Audio</string>
            </property>
           </widget>
          </item>
          <item>
           <widget class="QPushButton" name="pdfButton">
            <property name="text">
-            <string>→ Text</string>
+            <string>→Text</string>
            </property>
           </widget>
          </item>
@@ -107,7 +107,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>522</width>
+     <width>536</width>
      <height>25</height>
     </rect>
    </property>

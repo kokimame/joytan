@@ -11,7 +11,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(522, 636)
+        MainWindow.resize(536, 636)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.centralwidget)
@@ -61,7 +61,7 @@ class Ui_MainWindow(object):
         self.verticalLayout_2.addLayout(self.verticalLayout)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 522, 25))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 536, 25))
         self.menubar.setNativeMenuBar(False)
         self.menubar.setObjectName("menubar")
         self.menuFile = QtWidgets.QMenu(self.menubar)
@@ -116,8 +116,8 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "Emotan えも単"))
-        self.mp3Button.setText(_translate("MainWindow", "→ Audio"))
-        self.pdfButton.setText(_translate("MainWindow", "→ Text"))
+        self.mp3Button.setText(_translate("MainWindow", "→Audio"))
+        self.pdfButton.setText(_translate("MainWindow", "→Text"))
         self.menuFile.setTitle(_translate("MainWindow", "&File"))
         self.menuEdit.setTitle(_translate("MainWindow", "&Edit"))
         self.menuTools.setTitle(_translate("MainWindow", "&Tools"))

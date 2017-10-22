@@ -28,7 +28,7 @@ def ignorantDownload(mw, parser, gstat=False):
     pd = ProgressDialog(mw.framelist.count(), msg="Downloading...")
     pd.show()
 
-    # Fixme: Download contents of everything in the list even if it's already downloaded.
+    # Fixme: Download anyway even if it's already downloaded from the same source.
     # This is why the method called ignorant.
     for i in range(mw.framelist.count()):
         # This tip probably makes pd faster to display.

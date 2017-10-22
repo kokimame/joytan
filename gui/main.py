@@ -70,17 +70,18 @@ class EmotanMW(QMainWindow):
         form = self.form
         form.addButton.setIcon(QIcon('design/icons/plus_button_green.png'))
         form.delButton.setIcon(QIcon('design/icons/minus_button_red.png'))
+        form.dlButton.setIcon(QIcon('design/icons/dl_button.png'))
         form.editButton.setIcon(QIcon('design/icons/edit_button.png'))
         form.transButton.setIcon(QIcon('design/icons/translate_button2.png'))
         form.configButton.setIcon(QIcon('design/icons/config_button.png'))
         form.addButton.clicked.connect(lambda: self.framelist.addBundle('', self.frameMode))
         form.delButton.clicked.connect(self.framelist.deleteBundle)
+        form.dlButton.clicked.connect(self.onDownload)
         form.editButton.clicked.connect(self.onUpdateFrameMode)
         form.transButton.clicked.connect(lambda: print("-- Under construction --"))
         form.configButton.clicked.connect(lambda: print("-- Under construction --"))
         form.mp3Button.clicked.connect(self.onCreateMp3)
         form.pdfButton.clicked.connect(lambda: print("-- Under construction --"))
-        form.dlcButton.clicked.connect(self.onDownload)
 
     def onPreferences(self):
         import gui.preferences

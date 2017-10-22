@@ -37,6 +37,10 @@ class Ui_MainWindow(object):
         self.editButton.setText("")
         self.editButton.setObjectName("editButton")
         self.horizontalLayout.addWidget(self.editButton)
+        self.dlButton = QtWidgets.QPushButton(self.buttonBox)
+        self.dlButton.setText("")
+        self.dlButton.setObjectName("dlButton")
+        self.horizontalLayout.addWidget(self.dlButton)
         self.transButton = QtWidgets.QPushButton(self.buttonBox)
         self.transButton.setText("")
         self.transButton.setObjectName("transButton")
@@ -51,9 +55,6 @@ class Ui_MainWindow(object):
         self.verticalLayout_2.addLayout(self.verticalLayout)
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
-        self.dlcButton = QtWidgets.QCommandLinkButton(self.centralwidget)
-        self.dlcButton.setObjectName("dlcButton")
-        self.horizontalLayout_2.addWidget(self.dlcButton)
         spacerItem1 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout_2.addItem(spacerItem1)
         self.mp3Button = QtWidgets.QPushButton(self.centralwidget)
@@ -120,7 +121,6 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "Emotan えも単"))
-        self.dlcButton.setText(_translate("MainWindow", "Get DLC via Online Dictionary"))
         self.mp3Button.setText(_translate("MainWindow", "Get MP3"))
         self.pdfButton.setText(_translate("MainWindow", "Get PDF"))
         self.menuFile.setTitle(_translate("MainWindow", "&File"))

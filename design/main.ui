@@ -48,6 +48,13 @@
           </widget>
          </item>
          <item>
+          <widget class="QPushButton" name="dlButton">
+           <property name="text">
+            <string/>
+           </property>
+          </widget>
+         </item>
+         <item>
           <widget class="QPushButton" name="transButton">
            <property name="text">
             <string/>
@@ -81,13 +88,6 @@
     </item>
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout_2">
-      <item>
-       <widget class="QCommandLinkButton" name="dlcButton">
-        <property name="text">
-         <string>Get DLC via Online Dictionary</string>
-        </property>
-       </widget>
-      </item>
       <item>
        <spacer name="horizontalSpacer_2">
         <property name="orientation">

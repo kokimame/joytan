@@ -24,7 +24,7 @@ def defaultPref():
         "worddir": cwd + "/templates/wordlist",
         "bgmdir": cwd + "/templates/song",
         "title": "emotan-sample",
-        "onlineRef": "Dictionary.com"
+        "onlineRef": "Wiktionary"
     }
 
 class EmotanMW(QMainWindow):

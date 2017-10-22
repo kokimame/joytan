@@ -3,7 +3,9 @@ class BaseParser:
         # Each Parser class prefers to be instantiated only one time
         # in a downloading session. This leads to make Parser to be initialized
         # without HTML data to parse. Every HTML will be passed in run method.
-        pass
+
+        # Every parser has its own source. e.g, Online dictionaries
+        self.source = None
 
     def run(self, data):
         """

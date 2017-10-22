@@ -4,13 +4,6 @@ from tools.parser import Parsers
 from gui.progress import ProgressDialog
 from gui.utils import processCoreEvents
 
-# These url will be set through Preferences
-dictUrls = {
-    "Dictionary.com": "http://dictionary.com/browse/",
-    "Cambridge Dictionary": "http://dictionary.cambridge.org/dictionary/english/",
-    "Oxford English Dictionary": "https://en.oxforddictionaries.com/definition/",
-    "Wiktionary": "https://en.wiktionary.org/wiki/"
-}
 
 def onDownload(mw):
     # Look up Frame Manager of the MainWindow for the state of contents in bundles
@@ -37,7 +30,7 @@ def ignorantDownload(mw, parser, gstat=False):
 
         bw = mw.framelist.getBundleWidget(i)
 
-        r = requests.get(dictUrls[mw.pref['onlineRef']] + bw.bundle.name)
+        r = requests.get(parser.source + bw.bundle.name)
         data = r.text
         items = parser.run(data)
 

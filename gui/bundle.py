@@ -195,7 +195,6 @@ class BundleWidget(QWidget):
             elif keys[0] == "ex":
                 num1, num2 = int(keys[1]) - 1, int(keys[2]) - 1
                 try:
-                    print(self.bundle, self.bundle.items)
                     editor.setText(self.bundle.items[num1]['examples'][num2])
                     editor.setCursorPosition(0)
                 except (KeyError, IndexError):

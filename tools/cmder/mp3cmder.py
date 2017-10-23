@@ -220,12 +220,28 @@ def sayMp3(script, output):
     os.makedirs(os.path.dirname(output), exist_ok=True)
 
     detect = lambda text: Translator().detect(text).lang
-    langVersion = {'ja': '-v Kyoko '}
+    langVersion = {'ja': 'Kyoko ',
+                   'ko': 'Yuna',
+                   'it': 'Alice',
+                   'sv': 'Alva',
+                   'fr': 'Thomas',
+                   'de': 'Anna',
+                   'zh': 'Sin-ji',
+                   'hi': 'Lekha',
+                   'ru': 'Milena',
+                   'ar': 'Maged',
+                   'th': 'Kanya',
+                   'id': 'Damayanti',
+                   'he': 'Carmit',
+                   'sk': 'Laura',}
+
+    lver = ''
+    langCode = ''
     try:
-        lver = langVersion[detect(script)]
+        langCode = detect(script)
+        lver = '-v ' + langVersion[langCode]
     except KeyError:
-        lver = ''
-        print("Unsupported language detected")
+        print("Unsupported language detected: %s" % langCode)
 
     cmd = 'say %s "%s" -o %s.aiff;' \
           'ffmpeg -loglevel panic -i %s.aiff -ac 2 -acodec libmp3lame -ar 44100 -ab 64k -f mp3 %s.mp3' \

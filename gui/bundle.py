@@ -2,16 +2,6 @@ from gui.qt import *
 
 
 class BundleFactory:
-    class Bundle():
-        # Bundle for a word containing a number of meaning and example usage of its word
-        def __init__(self, name, index):
-            self.name = name
-            self.sources = []
-            self.items = []
-
-        def updateItems(self, items):
-            self.items.extend(items)
-
     def __init__(self):
         # TODO: More should be coming
         self.pref = {
@@ -19,28 +9,24 @@ class BundleFactory:
             "epd": 1        # Examples per Definition
         }
 
-    def makeBundle(self, name, index):
-        return BundleFactory.Bundle(name, index)
-
-    def createUi(self, index, bundle, mode, parent=None):
-        bui, bw = BundleUi(), BundleWidget(index, bundle, mode, self.pref, parent=parent)
+    def createUi(self, index, name, mode, parent=None):
+        bui, bw = QListWidgetItem(), BundleWidget(index, name, mode, self.pref, parent=parent)
         bui.setSizeHint(bw.sizeHint())
         return bui, bw
 
-class BundleUi(QListWidgetItem):
-    def __init__(self):
-        QListWidgetItem.__init__(self)
 
 class BundleWidget(QWidget):
-    def __init__(self, index, bundle, mode, pref, parent=None):
+    def __init__(self, index, name, mode, pref, parent=None):
         super(BundleWidget, self).__init__(parent)
         self.initFont()
         self.parent = parent
         self.index = index
-        self.bundle = bundle
+        self.name = name
         self.mode = mode
         self.dpw = pref['dpw']
         self.epd = pref['epd']
+        # External sources that the bundle used
+        self.sources = []
 
         self.html = '<html><head/><body>{content}</body></html>'
         self.nameFormat = '<p><span style=" font-size:16pt; font-weight:600;">{num}. {name}</span></p>'
@@ -49,7 +35,7 @@ class BundleWidget(QWidget):
         self.editors = {}
         self.stackedLayout = QStackedLayout()
 
-        self.setupUi(bundle.name)
+        self.setupUi(name)
 
     def setupUi(self, name):
         self.setupDisplay()
@@ -64,14 +50,12 @@ class BundleWidget(QWidget):
         # Make string number from the index of the bundle from 00000 to 99999
         snum = (5 - len(str(self.index))) * '0' + str(self.index)
         # Return directory name replacing whitespace with underscore
-        return "{snum}-{name}".format(snum=snum, name=self.bundle.name.replace(" ", "_"))
+        return "{snum}-{name}".format(snum=snum, name=self.name.replace(" ", "_"))
 
     def updateMode(self, newMode):
         if newMode == self.mode: return
 
         if newMode == "Disp":
-            # Save editing result before changing to Display mode
-            self.saveEditors()
             self.stackedLayout.setCurrentIndex(0)
             self.mode = newMode
         if newMode == "Edit":
@@ -87,10 +71,10 @@ class BundleWidget(QWidget):
 
         self.dispLabel = QLabel()
 
-        if self.bundle.name == '':
+        if self.name == '':
             name = "Anonymous bundle"
         else:
-            name = self.bundle.name
+            name = self.name
         self.dispLabel.setText(self.html.format
                            (content=self.nameFormat.format(num=self.index, name=name)))
         dispLayout.addWidget(self.dispLabel)
@@ -111,8 +95,7 @@ class BundleWidget(QWidget):
         self.editors["name"] = nameedit
 
         row = 1
-        dpw, epd = self.dpw, self.epd
-        for i in range(1, dpw+1):
+        for i in range(1, self.dpw+1):
             deflabel = QLabel("Def%d" % i)
             deflabel.setFont(self.italFont)
             deflabel.setStyleSheet("QLabel { background-color : rgb(255, 180, 230); }")
@@ -120,7 +103,7 @@ class BundleWidget(QWidget):
             editLayout.addWidget(deflabel, row, 0)
             editLayout.addWidget(defedit, row, 1)
             self.editors["def-%d" % i] = defedit
-            for j in range(1, epd+1):
+            for j in range(1, self.epd+1):
                 exlabel = QLabel("Ex%d-%d" % (i, j))
                 exlabel.setFont(self.italFont)
                 exlabel.setStyleSheet("QLabel { background-color : rgb(180, 230, 255); }")
@@ -135,74 +118,33 @@ class BundleWidget(QWidget):
 
         self.stackedLayout.addWidget(editWidget)
 
-
     def initFont(self):
         self.boldFont = QFont()
         self.boldFont.setBold(True)
         self.italFont = QFont()
         self.italFont.setItalic(True)
 
-    def updateUi(self):
-        self.updateDisplay()
-        self.updateEditors()
-
     def updateDisplay(self):
-        if self.bundle.name == '':
+        self.name = self.editors['name'].text()
+        if self.name == '':
             name = "Anonymous bundle"
         else:
-            name = self.bundle.name
-        content = self.nameFormat.format(num=self.index, name=name)
-        for i, item in enumerate(self.bundle.items):
-            if i + 1 > self.dpw: break
-            content += self.defFormat.format(num=(i+1), define=item['define'])
-            for j, ex in enumerate(item['examples']):
-                if j + 1 > self.epd: break
-                if ex == '': continue
-                content += self.exFormat.format(example=ex)
-
-        self.dispLabel.setText(self.html.format(content=content))
-
-    def saveEditors(self):
-        self.bundle.name = self.editors['name'].text()
-        if self.bundle.name == '':
-            name = "Anonymous bundle"
-        else:
-            name = self.bundle.name
+            name = self.name
         content = self.nameFormat.format(num=self.index, name=name)
 
         for i in range(1, self.dpw+1):
-            define = self.editors['def-%d' % i].text()
-            if define != '':
-                content += self.defFormat.format(num=i, define=define)
+            if self.editors['def-%d' % i].text() != '':
+                content += self.defFormat.format(num=i, define=self.editors['def-%d' % i].text())
             for j in range(1, self.epd+1):
-                examp = self.editors['ex-%d-%d' % (i, j)].text()
-                if examp != '':
-                    content += self.exFormat.format(example=examp)
+                if self.editors['ex-%d-%d' % (i, j)].text() != '':
+                    content += self.exFormat.format(example=self.editors['ex-%d-%d' % (i, j)].text())
+
         self.dispLabel.setText(self.html.format(content=content))
 
-
-    def updateEditors(self):
-        for key, editor in self.editors.items():
-            if key == "name":
-                editor.setText(self.bundle.name)
-                continue
-            keys = list(key.split("-"))
-            if keys[0] == "def":
-                num = int(keys[1]) - 1
-                try:
-                    editor.setText(self.bundle.items[num]['define'])
-                    editor.setCursorPosition(0)
-                except (KeyError, IndexError):
-                    print("Error : Editor cannot update", key)
-            elif keys[0] == "ex":
-                num1, num2 = int(keys[1]) - 1, int(keys[2]) - 1
-                try:
-                    editor.setText(self.bundle.items[num1]['examples'][num2])
-                    editor.setCursorPosition(0)
-                except (KeyError, IndexError):
-                    print("Error : Editor cannot update", key)
-            else:
-                print("Error: Unknown editor type '%s' found" % key)
-                sys.exit(1)
-
+    # Set the text of downloaded contents to each of matched editors
+    def updateEditors(self, items):
+        for i in range(1, min(self.dpw+1, len(items)+1)):
+            self.editors['def-%d' % i].setText(items[i-1]['define'])
+            for j in range(1, min(self.epd+1, len(items[i-1]['examples']))):
+                self.editors['ex-%d-%d' % (i, j)].setText(items[i-1]['examples'][j-1])
 

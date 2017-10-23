@@ -100,6 +100,7 @@ class EmotanMW(QMainWindow):
         elif self.frameMode == "Edit":
             self.form.editButton.setIcon(QIcon("design/icons/edit_button.png"))
             self.framelist.updateMode("Disp")
+            self.framelist._update()
             self.frameMode = "Disp"
 
 
@@ -108,7 +109,6 @@ class EmotanMW(QMainWindow):
             print("Nothing to download")
             return
 
-        self.framelist.saveEditing()
         import gui.download
         gui.download.onDownload(self)
 
@@ -117,7 +117,6 @@ class EmotanMW(QMainWindow):
             print("Nothing to translate")
             return
 
-        self.framelist.saveEditing()
         import gui.translate
         gui.translate.onTranslate(self)
 
@@ -126,7 +125,6 @@ class EmotanMW(QMainWindow):
             print("Nothing to create")
             return
 
-        self.framelist.saveEditing()
         import gui.mp3dialog
         gui.mp3dialog.onMp3Dialog(self)
 

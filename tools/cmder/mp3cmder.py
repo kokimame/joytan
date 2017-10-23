@@ -16,8 +16,8 @@ class Mp3Cmder:
         self.bitkbs = None  # bit rate (Kbit/s)
         self.fskhz = None      # Sampling rate (kHz)
         self.setupAudio()
-        # Fixme: Name 'seq' somothing more obvious and descriptive
-        self.seq = {}
+        # Dictionary to store the sequence of concatenating mp3 files for each word.
+        self.catSequence = {}
 
         if isLin:
             self.ttscmd = espeakMp3
@@ -88,12 +88,12 @@ class Mp3Cmder:
         if isGstatic:
             from gui.download import downloadGstaticSound
             try:
-                downloadGstaticSound(bw.bundle.name, "{curdir}/pronounce.mp3".format(curdir=curdir))
+                downloadGstaticSound(bw.name, "{curdir}/pronounce.mp3".format(curdir=curdir))
             except:
                 # If gstatic pronunciation file is not found, use TTS.
-                self.ttscmd(bw.bundle.name, "{curdir}/pronounce".format(curdir=curdir))
+                self.ttscmd(bw.name, "{curdir}/pronounce".format(curdir=curdir))
         else:
-            self.ttscmd(bw.bundle.name, "{curdir}/pronounce".format(curdir=curdir))
+            self.ttscmd(bw.name, "{curdir}/pronounce".format(curdir=curdir))
 
         wordhead = repeatMp3('{curdir}/pronounce.mp3'.format(curdir=curdir), self.setting['repeat'])
 
@@ -103,7 +103,7 @@ class Mp3Cmder:
         catMp3("{finalDir}/word-sfx.mp3".format(finalDir=self.finalDir), wordhead, wordheader)
 
         inputs = "%s " % wordheader
-        for cont in self.seq[bw.bundle.name]:
+        for cont in self.catSequence[bw.name]:
             try:
                 cont = cont['def'] + ".mp3"
                 inputs += "%s %s " % ("{finalDir}/definition-sfx.mp3".format(finalDir=self.finalDir), cont)
@@ -118,24 +118,24 @@ class Mp3Cmder:
 
         dpw, epd = bw.dpw, bw.epd
 
-        self.seq[bw.bundle.name] = []
+        self.catSequence[bw.name] = []
 
         for i in range(1, dpw+1):
             define = bw.editors['def-%d' % i].text()
             if define == '': continue
 
-            filename = "{dir}/{name}-def-{i}".format(dir=curdir, name=bw.bundle.name, i=i)
+            filename = "{dir}/{name}-def-{i}".format(dir=curdir, name=bw.name, i=i)
             self.ttscmd(define, filename)
-            self.seq[bw.bundle.name].append({"def": filename})
+            self.catSequence[bw.name].append({"def": filename})
 
             for j in range(1, epd+1):
                 examp = bw.editors['ex-%d-%d' % (i, j)].text()
                 if examp == '': continue
 
                 filename = "{dir}/{name}-ex-{i}-{j}".format\
-                    (dir=curdir, name=bw.bundle.name, i=i, j=j)
+                    (dir=curdir, name=bw.name, i=i, j=j)
                 self.ttscmd(examp, filename)
-                self.seq[bw.bundle.name].append({"ex": filename})
+                self.catSequence[bw.name].append({"ex": filename})
 
 
     def mergeDirMp3(self):

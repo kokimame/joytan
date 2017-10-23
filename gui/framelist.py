@@ -14,21 +14,20 @@ class FrameList(QListWidget):
                            """)
 
     def updateBundle(self, name, items):
-        for bundle in self.getCurrentBundles():
-            if bundle.name == name:
-                bundle.updateItems(items)
+        for bw in self.getCurrentBundleWidgets():
+            if bw.name == name:
+                bw.updateEditors(items)
                 return
         raise Exception("Error: Bundle with name '%s' is not found in the Frame" % name)
 
 
     def addBundle(self, name, mode):
         if name == '': pass
-        elif name in self.getCurrentNames():
+        elif name in [bw.name for bw in self.getCurrentBundleWidgets()]:
             print("Bundle with name %s already exists." % name)
             return
 
-        bundle = self.bf.makeBundle(name, self.count() + 1)
-        bui, bw = self.bf.createUi(self.count() + 1, bundle, mode, parent=self)
+        bui, bw = self.bf.createUi(self.count() + 1, name, mode, parent=self)
         self.addItem(bui)
         self.setItemWidget(bui, bw)
 
@@ -43,7 +42,6 @@ class FrameList(QListWidget):
         for i in range(n, self.count()):
             bw = self.getBundleWidget(i)
             bw.index -= 1
-            bw.saveEditors()
 
     def _update(self):
         # Update the inside of the bundles in the list
@@ -51,29 +49,18 @@ class FrameList(QListWidget):
         for i in range(self.count()):
             bui = self.item(i)
             bw = self.itemWidget(bui)
-            bw.updateUi()
+            bw.updateDisplay()
             bui.setSizeHint(bw.sizeHint())
 
         self.repaint()
 
     def updateMode(self, newMode):
-        for i in range(self.count()):
-            bw = self.getBundleWidget(i)
+        for bw in self.getCurrentBundleWidgets():
             bw.updateMode(newMode)
 
-    def saveEditing(self):
-        for i in range(self.count()):
-            bw = self.getBundleWidget(i)
-            bw.saveEditors()
-
-    def getCurrentNames(self):
-        return [self.getBundleWidget(i).bundle.name for i in range(self.count())]
-
-    def getCurrentBundles(self):
-        return [self.getBundleWidget(i).bundle for i in range(self.count())]
 
     def getCurrentBundleWidgets(self):
         return [self.getBundleWidget(i) for i in range(self.count())]
 
-    def getBundleWidget(self, num):
-        return self.itemWidget(self.item(num))
+    def getBundleWidget(self, index):
+        return self.itemWidget(self.item(index))

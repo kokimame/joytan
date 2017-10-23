@@ -24,14 +24,14 @@ def simpleDownload(mw, parser, gstat=False):
         bw = mw.framelist.getBundleWidget(i)
 
         # Don't download contents from the source you already had.
-        if parser.source in bw.bundle.sources:
+        if parser.source in bw.sources:
             continue
-        r = requests.get(parser.source + bw.bundle.name)
+        r = requests.get(parser.source + bw.name)
         data = r.text
         items = parser.run(data)
 
-        mw.framelist.updateBundle(bw.bundle.name, items)
-        bw.bundle.sources.append(parser.source)
+        mw.framelist.updateBundle(bw.name, items)
+        bw.sources.append(parser.source)
 
 def downloadGstaticSound(word, filename):
     url = "http://ssl.gstatic.com/dictionary/static/sounds/oxford/"

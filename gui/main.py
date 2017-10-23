@@ -109,6 +109,8 @@ class EmotanMW(QMainWindow):
             print("Nothing to download")
             return
 
+        # To update 'Anonymous bundle' if a name is added to it
+        self.framelist._update()
         import gui.download
         gui.download.onDownload(self)
 
@@ -117,6 +119,8 @@ class EmotanMW(QMainWindow):
             print("Nothing to translate")
             return
 
+        # To update 'Anonymous bundle' if a name is added to it
+        self.framelist._update()
         import gui.translate
         gui.translate.onTranslate(self)
 
@@ -125,6 +129,8 @@ class EmotanMW(QMainWindow):
             print("Nothing to create")
             return
 
+        # To update 'Anonymous bundle' if a name is added to it
+        self.framelist._update()
         import gui.mp3dialog
         gui.mp3dialog.onMp3Dialog(self)
 

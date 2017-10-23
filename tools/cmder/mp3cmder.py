@@ -1,6 +1,6 @@
 import os, re
 from subprocess import call, check_output
-
+from googletrans import Translator
 from gui.utils import getFileNameFromPath, mkdir, isLin, isMac
 
 class Mp3Cmder:
@@ -218,10 +218,20 @@ def espeakMp3(script, output):
 
 def sayMp3(script, output):
     os.makedirs(os.path.dirname(output), exist_ok=True)
-    cmd = 'say "%s" -o %s.aiff;' \
+
+    detect = lambda text: Translator().detect(text).lang
+    langVersion = {'ja': '-v Kyoko '}
+    try:
+        lver = langVersion[detect(script)]
+    except KeyError:
+        lver = ''
+        print("Unsupported language detected")
+
+    cmd = 'say %s "%s" -o %s.aiff;' \
           'ffmpeg -loglevel panic -i %s.aiff -ac 2 -acodec libmp3lame -ar 44100 -ab 64k -f mp3 %s.mp3' \
-          % (script, output, output, output)
+          % (lver, script, output, output, output)
     call(cmd, shell=True)
+
 
 
 def repeatMp3(file, repeat):

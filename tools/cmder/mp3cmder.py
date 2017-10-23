@@ -124,7 +124,7 @@ class Mp3Cmder:
             define = bw.editors['def-%d' % i].text()
             if define == '': continue
 
-            filename = "{dir}/{name}-def-{i}".format(dir=curdir, name=bw.name, i=i)
+            filename = "{dir}/def-{i}".format(dir=curdir, i=i)
             self.ttscmd(define, filename)
             self.catSequence[bw.name].append({"def": filename})
 
@@ -132,8 +132,8 @@ class Mp3Cmder:
                 examp = bw.editors['ex-%d-%d' % (i, j)].text()
                 if examp == '': continue
 
-                filename = "{dir}/{name}-ex-{i}-{j}".format\
-                    (dir=curdir, name=bw.name, i=i, j=j)
+                filename = "{dir}/ex-{i}-{j}".format\
+                    (dir=curdir, i=i, j=j)
                 self.ttscmd(examp, filename)
                 self.catSequence[bw.name].append({"ex": filename})
 

@@ -50,7 +50,7 @@ class BundleWidget(QWidget):
         # Make string number from the index of the bundle from 00000 to 99999
         snum = (5 - len(str(self.index))) * '0' + str(self.index)
         # Return directory name replacing whitespace with underscore
-        return "{snum}-{name}".format(snum=snum, name=self.name.replace(" ", "_"))
+        return "{snum}".format(snum=snum)
 
     def updateMode(self, newMode):
         if newMode == self.mode: return
@@ -145,6 +145,6 @@ class BundleWidget(QWidget):
     def updateEditors(self, items):
         for i in range(1, min(self.dpw+1, len(items)+1)):
             self.editors['def-%d' % i].setText(items[i-1]['define'])
-            for j in range(1, min(self.epd+1, len(items[i-1]['examples']))):
+            for j in range(1, min(self.epd+1, len(items[i-1]['examples'])+1)):
                 self.editors['ex-%d-%d' % (i, j)].setText(items[i-1]['examples'][j-1])
 

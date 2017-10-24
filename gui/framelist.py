@@ -35,13 +35,14 @@ class FrameList(QListWidget):
         for bui in self.selectedItems():
             bw = self.itemWidget(bui)
             self.takeItem(bw.index - 1)
-            self.updateIndex(bw.index - 1)
+            self.updateIndex()
+        self._update()
 
-    def updateIndex(self, n):
+    def updateIndex(self):
         # Update index of bundles after Nth bundle
-        for i in range(n, self.count()):
+        for i in range(self.count()):
             bw = self.getBundleWidget(i)
-            bw.index -= 1
+            bw.index = i + 1
 
     def _update(self):
         # Update the inside of the bundles in the list
@@ -49,6 +50,7 @@ class FrameList(QListWidget):
         for i in range(self.count()):
             bui = self.item(i)
             bw = self.itemWidget(bui)
+            bw.index = i + 1
             bw.updateDisplay()
             bui.setSizeHint(bw.sizeHint())
 
@@ -57,6 +59,10 @@ class FrameList(QListWidget):
     def updateMode(self, newMode):
         for bw in self.getCurrentBundleWidgets():
             bw.updateMode(newMode)
+
+    def copyContents(self):
+        for bw in self.getCurrentBundleWidgets():
+            bw.editors['def-1'].setText(bw.editors['name'].text())
 
 
     def getCurrentBundleWidgets(self):

@@ -65,6 +65,7 @@ class EmotanMW(QMainWindow):
         form = self.form
         form.actionExtract.triggered.connect(self.onExtract)
         form.actionPreferences.triggered.connect(self.onPreferences)
+        form.actionCopy.triggered.connect(self.onCopyContents)
 
     def setupButtons(self):
         form = self.form
@@ -133,6 +134,15 @@ class EmotanMW(QMainWindow):
         self.framelist._update()
         import gui.mp3dialog
         gui.mp3dialog.onMp3Dialog(self)
+
+
+    def onCopyContents(self):
+        if self.framelist.count() == 0:
+            print("Nothing to copy")
+            return
+        self.framelist.copyContents()
+        self.framelist._update()
+
 
     def center(self):
         qr = self.frameGeometry()

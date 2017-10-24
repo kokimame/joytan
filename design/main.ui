@@ -127,6 +127,7 @@
      <string>&amp;Edit</string>
     </property>
     <addaction name="actionUndo"/>
+    <addaction name="actionCopy"/>
     <addaction name="separator"/>
     <addaction name="actionPreferences"/>
    </widget>
@@ -203,6 +204,11 @@
    </property>
    <property name="text">
     <string>Voice recoder</string>
+   </property>
+  </action>
+  <action name="actionCopy">
+   <property name="text">
+    <string>&amp;Copy contents...</string>
    </property>
   </action>
  </widget>

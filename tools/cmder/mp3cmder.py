@@ -1,4 +1,5 @@
 import os, re
+import requests
 from subprocess import call, check_output
 from googletrans import Translator
 from gui.utils import getFileNameFromPath, mkdir, isLin, isMac
@@ -219,7 +220,6 @@ def espeakMp3(script, output):
 def sayMp3(script, output):
     os.makedirs(os.path.dirname(output), exist_ok=True)
 
-    detect = lambda text: Translator().detect(text).lang
     langVersion = {'ja': 'Kyoko ',
                    'ko': 'Yuna',
                    'it': 'Alice',
@@ -238,9 +238,10 @@ def sayMp3(script, output):
     lver = ''
     langCode = ''
     try:
+        detect = lambda text: Translator().detect(text).lang
         langCode = detect(script)
         lver = '-v ' + langVersion[langCode]
-    except KeyError:
+    except (KeyError, requests.ConnectionError):
         print("Unsupported language detected: %s" % langCode)
 
     cmd = 'say %s "%s" -o %s.aiff;' \

@@ -226,14 +226,14 @@ def sayMp3(script, langCode, output):
     # Temporally, inappropriate generalization for Chinese.
     os.makedirs(os.path.dirname(output), exist_ok=True)
 
-    langVersion = {'en': 'Agnes',
+    langVersion = {'en': 'Alex',
                    'ja': 'Kyoko ',
                    'ko': 'Yuna',
                    'it': 'Alice',
                    'sv': 'Alva',
                    'fr': 'Thomas',
                    'de': 'Anna',
-                   'zh': 'Sin-ji',
+                   'zh-cn': 'Sin-ji',
                    'hi': 'Lekha',
                    'ru': 'Milena',
                    'ar': 'Maged',

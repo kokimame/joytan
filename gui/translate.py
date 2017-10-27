@@ -41,17 +41,17 @@ class TranslateDialog(QDialog):
 
         for bw in self.framelist.getCurrentBundleWidgets():
             if 'name' in transGroup:
-                bw.editors['name'].setText(translate(bw.name))
+                bw.editors['name'].setForeignText(translate(bw.name), destCode)
 
             for i in range(1, bw.dpw+1):
                 define = bw.editors['def-%d' % i].text()
                 if 'definition' in transGroup and define != '':
-                    bw.editors['def-%d' % i].setText(translate(define))
+                    bw.editors['def-%d' % i].setForeignText(translate(define), destCode)
 
                 for j in range(1, bw.epd+1):
                     examp = bw.editors['ex-%d-%d' % (i, j)].text()
                     if 'example' in transGroup and examp != '':
-                        bw.editors['ex-%d-%d' % (i, j)].setText(translate(examp))
+                        bw.editors['ex-%d-%d' % (i, j)].setForeignText(translate(examp), destCode)
         
         self.framelist._update()
         self.reject()

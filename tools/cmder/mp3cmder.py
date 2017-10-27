@@ -92,9 +92,9 @@ class Mp3Cmder:
                 downloadGstaticSound(bw.name, "{curdir}/pronounce.mp3".format(curdir=curdir))
             except:
                 # If gstatic pronunciation file is not found, use TTS.
-                self.ttscmd(bw.name, "{curdir}/pronounce".format(curdir=curdir))
+                self.ttscmd(bw.name, bw.editors['name'].langCode, "{curdir}/pronounce".format(curdir=curdir))
         else:
-            self.ttscmd(bw.name, "{curdir}/pronounce".format(curdir=curdir))
+            self.ttscmd(bw.name, bw.editors['name'].langCode, "{curdir}/pronounce".format(curdir=curdir))
 
         wordhead = repeatMp3('{curdir}/pronounce.mp3'.format(curdir=curdir), self.setting['repeat'])
 
@@ -121,21 +121,23 @@ class Mp3Cmder:
 
         self.catSequence[bw.name] = []
 
-        for i in range(1, dpw+1):
-            define = bw.editors['def-%d' % i].text()
+        for i in range(0, dpw):
+            define = bw.editors['def-%d' % (i+1)].text()
+            defCode = bw.editors['def-%d' % (i+1)].langCode
             if define == '': continue
 
-            filename = "{dir}/def-{i}".format(dir=curdir, i=i)
-            self.ttscmd(define, filename)
+            filename = "{dir}/def-{num}".format(dir=curdir, num=(i+1))
+            self.ttscmd(define, defCode, filename)
             self.catSequence[bw.name].append({"def": filename})
 
-            for j in range(1, epd+1):
-                examp = bw.editors['ex-%d-%d' % (i, j)].text()
+            for j in range(0, epd):
+                examp = bw.editors['ex-%d-%d' % (i+1, j+1)].text()
+                exCode = bw.editors['ex-%d-%d' % (i+1, j+1)].langCode
                 if examp == '': continue
 
-                filename = "{dir}/ex-{i}-{j}".format\
-                    (dir=curdir, i=i, j=j)
-                self.ttscmd(examp, filename)
+                filename = "{dir}/ex-{num1}-{num2}".format\
+                    (dir=curdir, num1=(i+1), num2=(j+1))
+                self.ttscmd(examp, exCode, filename)
                 self.catSequence[bw.name].append({"ex": filename})
 
 
@@ -209,18 +211,23 @@ def mergeDirMp3(root, output):
     cmd = "cat %s/*.mp3 > %s" % (root, output)
     call(cmd, shell=True)
 
-def espeakMp3(script, output):
+def espeakMp3(script, langCode, output):
+    print("Script: %s (%s)", script, langCode)
+
     call(["rm", "-f", output])
     os.makedirs(os.path.dirname(output), exist_ok=True)
-    cmd = 'espeak "%s" --stdout | ' \
-          'ffmpeg -loglevel panic -i - -ac 2 -ar 44100 -ab 64k -f mp3 %s.mp3' % (script, output)
+    cmd = 'espeak -v {lang} "{script}" --stdout | '.format(lang=langCode, script=script) +\
+          'ffmpeg -loglevel panic -i - -ac 2 -ar 44100 -ab 64k -f mp3 %s.mp3' % (output)
     call(cmd, shell=True)
 
 
-def sayMp3(script, output):
+def sayMp3(script, langCode, output):
+    print("Script: %s (%s)", script, langCode)
+    # Temporally, inappropriate generalization for Chinese.
     os.makedirs(os.path.dirname(output), exist_ok=True)
 
-    langVersion = {'ja': 'Kyoko ',
+    langVersion = {'en': 'Agnes',
+                   'ja': 'Kyoko ',
                    'ko': 'Yuna',
                    'it': 'Alice',
                    'sv': 'Alva',
@@ -235,13 +242,10 @@ def sayMp3(script, output):
                    'he': 'Carmit',
                    'sk': 'Laura',}
 
-    lver = ''
-    langCode = ''
     try:
-        detect = lambda text: Translator().detect(text).lang
-        langCode = detect(script)
         lver = '-v ' + langVersion[langCode]
     except (KeyError, requests.ConnectionError):
+        lver = ''
         print("Unsupported language detected: %s" % langCode)
 
     cmd = 'say %s "%s" -o %s.aiff;' \

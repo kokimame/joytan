@@ -12,6 +12,14 @@ isLin = not isMac and not isWin
 class CustomLineEdit(QLineEdit):
     def __init__(self, text=''):
         super(CustomLineEdit, self).__init__(text)
+        # TODO: Set the default language from Preferences
+        self.langCode = 'en'
+
+    def setForeignText(self, text, langCode):
+        super().setText(text)
+        self.langCode = langCode
+
+
 
 
 def getFiles(parent, title, filter="*.*", dir=None):

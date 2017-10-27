@@ -95,22 +95,22 @@ class BundleWidget(QWidget):
         self.editors["name"] = nameedit
 
         row = 1
-        for i in range(1, self.dpw+1):
-            deflabel = QLabel("Def%d" % i)
+        for i in range(0, self.dpw):
+            deflabel = QLabel("Def%d" % (i+1))
             deflabel.setFont(self.italFont)
             deflabel.setStyleSheet("QLabel { background-color : rgb(255, 180, 230); }")
             defedit = QLineEdit()
             editLayout.addWidget(deflabel, row, 0)
             editLayout.addWidget(defedit, row, 1)
-            self.editors["def-%d" % i] = defedit
-            for j in range(1, self.epd+1):
-                exlabel = QLabel("Ex%d-%d" % (i, j))
+            self.editors["def-%d" % (i+1)] = defedit
+            for j in range(0, self.epd):
+                exlabel = QLabel("Ex%d-%d" % (i+1, j+1))
                 exlabel.setFont(self.italFont)
                 exlabel.setStyleSheet("QLabel { background-color : rgb(180, 230, 255); }")
                 exedit = QLineEdit()
                 editLayout.addWidget(exlabel, row+1, 0)
                 editLayout.addWidget(exedit, row+1, 1)
-                self.editors["ex-%d-%d" % (i, j)] = exedit
+                self.editors["ex-%d-%d" % (i+1, j+1)] = exedit
                 row += 1
             row += 1
 
@@ -132,19 +132,19 @@ class BundleWidget(QWidget):
             name = self.name
         content = self.nameFormat.format(num=self.index, name=name)
 
-        for i in range(1, self.dpw+1):
-            if self.editors['def-%d' % i].text() != '':
-                content += self.defFormat.format(num=i, define=self.editors['def-%d' % i].text())
-            for j in range(1, self.epd+1):
-                if self.editors['ex-%d-%d' % (i, j)].text() != '':
-                    content += self.exFormat.format(example=self.editors['ex-%d-%d' % (i, j)].text())
+        for i in range(0, self.dpw):
+            if self.editors['def-%d' % (i+1)].text() != '':
+                content += self.defFormat.format(num=i+1, define=self.editors['def-%d' % (i+1)].text())
+            for j in range(0, self.epd):
+                if self.editors['ex-%d-%d' % (i+1, j+1)].text() != '':
+                    content += self.exFormat.format(example=self.editors['ex-%d-%d' % (i+1, j+1)].text())
 
         self.dispLabel.setText(self.html.format(content=content))
 
     # Set the text of downloaded contents to each of matched editors
     def updateEditors(self, items):
-        for i in range(1, min(self.dpw+1, len(items)+1)):
-            self.editors['def-%d' % i].setText(items[i-1]['define'])
-            for j in range(1, min(self.epd+1, len(items[i-1]['examples'])+1)):
-                self.editors['ex-%d-%d' % (i, j)].setText(items[i-1]['examples'][j-1])
+        for i in range(0, min(self.dpw, len(items))):
+            self.editors['def-%d' % (i+1)].setText(items[i]['define'])
+            for j in range(0, min(self.epd, len(items[i]['examples']))):
+                self.editors['ex-%d-%d' % (i+1, j+1)].setText(items[i]['examples'][j])
 

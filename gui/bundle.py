@@ -1,4 +1,5 @@
 from gui.qt import *
+from gui.utils import CustomLineEdit
 
 
 class BundleFactory:
@@ -89,7 +90,7 @@ class BundleWidget(QWidget):
         namelabel = QLabel("Name")
         namelabel.setFont(self.italFont)
         namelabel.setStyleSheet("QLabel { background-color : rgb(255, 255, 180); }")
-        nameedit = QLineEdit(name)
+        nameedit = CustomLineEdit(text=name)
         editLayout.addWidget(namelabel, 0, 0)
         editLayout.addWidget(nameedit, 0, 1)
         self.editors["name"] = nameedit
@@ -99,7 +100,7 @@ class BundleWidget(QWidget):
             deflabel = QLabel("Def%d" % (i+1))
             deflabel.setFont(self.italFont)
             deflabel.setStyleSheet("QLabel { background-color : rgb(255, 180, 230); }")
-            defedit = QLineEdit()
+            defedit = CustomLineEdit()
             editLayout.addWidget(deflabel, row, 0)
             editLayout.addWidget(defedit, row, 1)
             self.editors["def-%d" % (i+1)] = defedit
@@ -107,7 +108,7 @@ class BundleWidget(QWidget):
                 exlabel = QLabel("Ex%d-%d" % (i+1, j+1))
                 exlabel.setFont(self.italFont)
                 exlabel.setStyleSheet("QLabel { background-color : rgb(180, 230, 255); }")
-                exedit = QLineEdit()
+                exedit = CustomLineEdit()
                 editLayout.addWidget(exlabel, row+1, 0)
                 editLayout.addWidget(exedit, row+1, 1)
                 self.editors["ex-%d-%d" % (i+1, j+1)] = exedit

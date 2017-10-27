@@ -9,6 +9,11 @@ isMac = sys.platform.startswith("darwin")
 isWin = sys.platform.startswith("win32")
 isLin = not isMac and not isWin
 
+class CustomLineEdit(QLineEdit):
+    def __init__(self, text=''):
+        super(CustomLineEdit, self).__init__(text)
+
+
 def getFiles(parent, title, filter="*.*", dir=None):
     opts = QFileDialog.Options()
     opts |= QFileDialog.DontUseNativeDialog

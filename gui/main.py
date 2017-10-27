@@ -81,8 +81,8 @@ class EmotanMW(QMainWindow):
         form.editButton.clicked.connect(self.onUpdateFrameMode)
         form.transButton.clicked.connect(self.onTranslate)
         form.configButton.clicked.connect(lambda: print("-- Under construction --"))
-        form.mp3Button.clicked.connect(self.onCreateMp3)
-        form.pdfButton.clicked.connect(lambda: print("-- Under construction --"))
+        form.audioButton.clicked.connect(self.onCreateMp3)
+        form.textButton.clicked.connect(self.onCreateText)
 
     def onPreferences(self):
         import gui.preferences
@@ -134,6 +134,14 @@ class EmotanMW(QMainWindow):
         self.framelist._update()
         import gui.mp3dialog
         gui.mp3dialog.onMp3Dialog(self)
+
+    def onCreateText(self):
+        if self.framelist.count() == 0:
+            print("Nothing to get text")
+            return
+        self.framelist._update()
+        import gui.textdialog
+        gui.textdialog.onTextDialog(self)
 
 
     def onCopyContents(self):

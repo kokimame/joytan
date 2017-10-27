@@ -82,14 +82,14 @@
           </spacer>
          </item>
          <item>
-          <widget class="QPushButton" name="mp3Button">
+          <widget class="QPushButton" name="audioButton">
            <property name="text">
             <string>→Audio</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="pdfButton">
+          <widget class="QPushButton" name="textButton">
            <property name="text">
             <string>→Text</string>
            </property>

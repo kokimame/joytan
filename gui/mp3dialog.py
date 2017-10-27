@@ -146,8 +146,13 @@ class Mp3Dialog(QDialog):
 
         sfxList = self.form.sfxList
         bgmList = self.form.bgmList
+        # Check if nice pronunciation is needs to be downloaded
         isGstatic = self.form.gstaticCheck.isChecked()
+        # Check if LRC file needs to be created
+        isLrc = self.form.lrcCheck.isChecked()
+
         setting = {}
+        setting['lrc'] = isLrc
         setting['repeat'] = self.form.wordSpin.value()
 
         sfxdir = {}

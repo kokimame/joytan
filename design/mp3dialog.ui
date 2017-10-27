@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>507</width>
-    <height>618</height>
+    <height>653</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -94,9 +94,19 @@
       </layout>
      </item>
      <item>
+      <widget class="QCheckBox" name="lrcCheck">
+       <property name="text">
+        <string>Create Lyrics file</string>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
       <widget class="QCheckBox" name="gstaticCheck">
        <property name="text">
-        <string>Download nice pronunciation</string>
+        <string>Download nice pronunciation for English words if possible</string>
        </property>
        <property name="checked">
         <bool>true</bool>

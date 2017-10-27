@@ -142,7 +142,8 @@ class Mp3Dialog(QDialog):
 
     def onCreate(self):
         from gui.utils import rmdir
-        rmdir(self.mw.getRootPath())
+        audRoot = "{root}/audio".format(root=self.mw.getRootPath())
+        rmdir(audRoot)
 
         sfxList = self.form.sfxList
         bgmList = self.form.bgmList
@@ -193,12 +194,12 @@ class Mp3Dialog(QDialog):
         pd.show()
 
         # Setting up the properties of audio files such as bitrate and sampling rate
-        cmder = Mp3Cmder(self.mw.getRootPath(), setting)
+        cmder = Mp3Cmder(audRoot, setting)
 
         for i in range(self.framelist.count()):
             bw = self.framelist.getBundleWidget(i)
             os.makedirs("{root}/{dirname}".format(
-                        root=self.mw.getRootPath(), dirname=bw.getDirname()), exist_ok=True)
+                        root=audRoot, dirname=bw.getDirname()), exist_ok=True)
 
             cmder.ttsBundleWidget(bw)
             pdcnt += 1

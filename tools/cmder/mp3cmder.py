@@ -212,7 +212,7 @@ def mergeDirMp3(root, output):
     call(cmd, shell=True)
 
 def espeakMp3(script, langCode, output):
-    print("Script: %s (%s)", script, langCode)
+    print("Script: %s (%s)" % (script, langCode))
 
     call(["rm", "-f", output])
     os.makedirs(os.path.dirname(output), exist_ok=True)
@@ -222,7 +222,7 @@ def espeakMp3(script, langCode, output):
 
 
 def sayMp3(script, langCode, output):
-    print("Script: %s (%s)", script, langCode)
+    print("Script: %s (%s)" % (script, langCode))
     # Temporally, inappropriate generalization for Chinese.
     os.makedirs(os.path.dirname(output), exist_ok=True)
 

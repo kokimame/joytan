@@ -52,9 +52,7 @@ class TranslateDialog(QDialog):
                     examp = bw.editors['ex-%d-%d' % (i, j)].text()
                     if 'example' in transGroup and examp != '':
                         bw.editors['ex-%d-%d' % (i, j)].setText(translate(examp))
-        # framelist._update is to update UIs to the inner data of Bundle.
-        # In this case, translation is directory stored in editors and only needs to save them.
-        # BYW, In terms of WYSIWYG, we may no longer need to have the inner data of Bundles.
+        
         self.framelist._update()
         self.reject()
 

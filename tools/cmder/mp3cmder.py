@@ -240,7 +240,8 @@ def sayMp3(script, langCode, output):
                    'th': 'Kanya',
                    'id': 'Damayanti',
                    'he': 'Carmit',
-                   'sk': 'Laura',}
+                   'sk': 'Laura',
+                   'eo': 'Monica'}
 
     try:
         lver = '-v ' + langVersion[langCode]

@@ -5,6 +5,8 @@ from googletrans import Translator
 from gui.utils import getFileNameFromPath, mkdir, isLin, isMac
 
 class Mp3Cmder:
+    # Do NOT use OS dependent commands in this class method.
+    # Those methods with the commands needs to be abstracted.
     def __init__(self, root, setting):
         self.setting = setting
         self.setting['sampling'] = 44100
@@ -147,12 +149,18 @@ class Mp3Cmder:
     def createBgmLoop(self):
         createLoopMp3(self.root, self.setting['loop'], mp3lenSec(self.compMp3), self.bgmMp3)
 
-
     def mixWithBgm(self):
-        cmd = "sox -m %s %s %s" % (self.bgmMp3, self.compMp3, self.finalMp3)
-        call(cmd, shell=True)
+        mixWithBgm(self.bgmMp3, self.compMp3, self.finalMp3)
+
+
+def mixWithBgm(bgm, acap, output):
+    cmd = "sox -m {bgm} {acapella} {output}".format\
+            (bgm=bgm, acapella=acap, output=output)
+    call(cmd, shell=True)
 
 def previewTts():
+    # FIXME: This is temporal.
+    # To be modified to allow users to use various TTS service.
     script = "This is the preview of Text-To-Speech."
     if isLin:
         cmd = 'espeak "%s"' % script

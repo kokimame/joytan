@@ -63,4 +63,7 @@ def mkdir(path):
     os.makedirs(path)
 
 def rmdir(path):
-    call("rm -rf {path}".format(path=path), shell=True)
+    if isWin:
+        call("rmdir {path} /s /q".format(path=path), shell=True)
+    else:
+        call("rm -rf {path}".format(path=path), shell=True)

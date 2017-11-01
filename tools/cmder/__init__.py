@@ -5,6 +5,7 @@ import shutil
 
 if isMac or isLin:
     assert shutil.which("cat") != None, "cat command not found."
+    assert shutil.which("awk") != None, "awk command not found"
     assert shutil.which("grep") != None, "grep command not found"
     assert shutil.which("ffmpeg") != None, "ffmpeg command not found."
     assert shutil.which("sox") != None, "sox command not found."
@@ -22,4 +23,4 @@ if isLin:
 if isMac:
     assert shutil.which("say") != None, "Use say as default on Mac"
 if isWin:
-    "This is test without TTS"
+    print("This is test without TTS!!")

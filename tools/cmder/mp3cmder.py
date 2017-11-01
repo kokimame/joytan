@@ -1,8 +1,9 @@
 import os, re
 import requests
+import subprocess
 from subprocess import call, check_output
 from googletrans import Translator
-from gui.utils import getFileNameFromPath, mkdir, isLin, isMac
+from gui.utils import getFileNameFromPath, mkdir, isLin, isMac, isWin
 
 class Mp3Cmder:
     # Do NOT use OS dependent commands in this class method.
@@ -285,8 +286,13 @@ def catListMp3(filelist, output):
     call(cmd, shell=True)
 
 def getMp3Info(mp3file):
-    duration = hhmmss2secCmd(mp3Duration(mp3file))
-    info = str(check_output("ffmpeg -i %s 2>&1 | awk '/Stream/' | awk '{print $5, $9}'"
+    duration = hhmmss2sec(mp3Duration(mp3file))
+
+    # Fixme: This is temporal. Need Python coding equivalent to what awk does below.
+    if isWin:
+        info = [44100, 192]
+    else:
+        info = str(check_output("ffmpeg -i %s 2>&1 | awk '/Stream/' | awk '{print $5, $9}'"
                             % mp3file, shell=True).strip(), 'utf-8').split(" ")
     assert len(info) == 2, 'On %s of %s' % (info, mp3file)
     fskhz, bitkbs = info
@@ -295,7 +301,8 @@ def getMp3Info(mp3file):
 
 def hhmmss2sec(hhmmss):
     # Pythonic implementation of hhmmss2secCmd without OS-based commands
-    pass
+    hr, mi, se, ms = hhmmss.replace(".", ":").split(":")
+    return int(hr) * 3600 + int(mi) * 60 + int(se)
 
 
 def hhmmss2secCmd(hhmmss):
@@ -323,9 +330,14 @@ def mp3Duration(mp3file):
     # Difference of bitrate caused the bug.
     # Apparently downloaded audio contents like songs, sfx used 64k of bitrate, then after
     # turning down the bitrate of espeak from 192k to 64k, everything works fine.
-    cmd = "ffmpeg -i %s 2>&1 | grep Duration | awk '{ print $2 }' | tr -d ," % mp3file
-    return str(check_output(cmd, shell=True).strip(), 'utf-8')
 
+    if isWin:
+        cmd = "ffmpeg -i %s 2>&1 | findstr Duration" % mp3file
+        res = str(check_output(cmd, shell=True).strip(), 'utf-8')
+        return res.split("Duration: ")[1].split(",")[0]
+    else:
+        cmd = "ffmpeg -i %s 2>&1 | grep Duration | awk '{ print $2 }' | tr -d ," % mp3file
+        return str(check_output(cmd, shell=True).strip(), 'utf-8')
 
 def mp3lenSec(mp3file):
     return hhmmss2secCmd(mp3Duration(mp3file))

@@ -14,6 +14,7 @@ if isWin:
     # Fixme: How to know whether users have type command on Windows
     #assert shutil.which("type") != None, "type command not found"
     assert shutil.which("ffmpeg") != None, "ffmpeg command not found."
+    assert shutil.which("findstr") != None, "findstr command not found"
     pass
 
 

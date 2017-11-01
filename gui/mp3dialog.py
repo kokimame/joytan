@@ -1,6 +1,6 @@
 from gui.qt import *
 import gui
-from gui.utils import getFile, getFileNameFromPath, isLin, isMac, processCoreEvents
+from gui.utils import getFile, getFileNameFromPath, isLin, isMac, isWin, processCoreEvents
 from tools.cmder.mp3cmder import mp3Duration, hhmmss2secCmd, getMp3Info
 
 def onMp3Dialog(mw):
@@ -137,7 +137,7 @@ class Mp3Dialog(QDialog):
         form = self.form
         if isMac:
             form.ttsCombo.setCurrentIndex(0)
-        if isLin:
+        if isLin or isWin:
             form.ttsCombo.setCurrentIndex(1)
 
     def onCreate(self):

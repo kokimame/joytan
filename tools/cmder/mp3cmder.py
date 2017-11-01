@@ -23,12 +23,12 @@ class Mp3Cmder:
         # Dictionary to store the sequence of concatenating mp3 files for each word.
         self.catSequence = {}
 
-        if isLin:
+        if isLin or isWin:
             self.ttscmd = espeakMp3
         elif isMac:
             self.ttscmd = sayMp3
         else:
-            raise Exception("Windows is not supported!")
+            raise Exception("Unsurported OS found!")
 
         print(self.setting)
 
@@ -163,12 +163,12 @@ def previewTts():
     # FIXME: This is temporal.
     # To be modified to allow users to use various TTS service.
     script = "This is the preview of Text-To-Speech."
-    if isLin:
+    if isLin or isWin:
         cmd = 'espeak "%s"' % script
     elif isMac:
         cmd = 'say "%s"' % script
     else:
-        print("Only support Linux and Mac for now!")
+        print("Only support Windows, Mac and Linux!")
     call(cmd, shell=True)
 
 

@@ -19,9 +19,7 @@ if isWin:
 
 
 
-if isLin:
-    assert shutil.which("espeak") != None, "Use espeak as default on Linux"
+if isLin or isWin:
+    assert shutil.which("espeak") != None, "We use espeak command as default on Linux and Windows"
 if isMac:
-    assert shutil.which("say") != None, "Use say as default on Mac"
-if isWin:
-    print("This is test without TTS!!")
+    assert shutil.which("say") != None, "We use say command as default on Mac"

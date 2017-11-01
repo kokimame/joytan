@@ -15,8 +15,7 @@ def defaultPref():
     elif isMac:
         workdir = "/Users/Koki/Emotan/workspace"
     else:
-        print("Sorry only support Mac and Linux for now.")
-        exit(1)
+        workdir = "C:\\Users\\Koki\\Documents\\Emotan\\workspace"
 
     return {
         "workdir": workdir,

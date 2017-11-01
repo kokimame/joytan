@@ -1,15 +1,23 @@
 from gui.utils import isMac, isLin, isWin
 import shutil
 
-assert shutil.which("cat") != None, "cat not found."
-assert shutil.which("ffmpeg") != None, "ffmpeg not found."
-assert shutil.which("sox") != None, "sox not found."
+
+
+if isMac or isLin:
+    assert shutil.which("cat") != None, "cat command not found."
+    assert shutil.which("ffmpeg") != None, "ffmpeg command not found."
+    assert shutil.which("sox") != None, "sox command not found."
+
+if isWin:
+    # Fixme: How to know whether users have type command on Windows
+    #assert shutil.which("type") != None, "type command not found"
+    pass
+
+
 
 if isLin:
     assert shutil.which("espeak") != None, "Use espeak as default on Linux"
-
 if isMac:
     assert shutil.which("say") != None, "Use say as default on Mac"
-
 if isWin:
-    assert False, "Sorry, we don't support Windows for now!"
+    "This is test without TTS"

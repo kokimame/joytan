@@ -2,18 +2,17 @@ from gui.utils import isMac, isLin, isWin
 import shutil
 
 
+assert shutil.which("ffmpeg") != None, "ffmpeg command not found."
+assert shutil.which("sox") != None, "sox command not found. Download sox with libmad.dll and libmp3lame.dll"
 
 if isMac or isLin:
     assert shutil.which("cat") != None, "cat command not found."
     assert shutil.which("awk") != None, "awk command not found"
     assert shutil.which("grep") != None, "grep command not found"
-    assert shutil.which("ffmpeg") != None, "ffmpeg command not found."
-    assert shutil.which("sox") != None, "sox command not found."
 
 if isWin:
     # Fixme: How to know whether users have type command on Windows
     #assert shutil.which("type") != None, "type command not found"
-    assert shutil.which("ffmpeg") != None, "ffmpeg command not found."
     assert shutil.which("findstr") != None, "findstr command not found"
     pass
 

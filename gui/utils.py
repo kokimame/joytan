@@ -61,9 +61,11 @@ def mkdir(path):
     rmdir(path)
     assert not os.path.exists(path)
     os.makedirs(path)
+    print("mkdir %s" % path)
 
 def rmdir(path):
     if isWin:
         call("rmdir {path} /s /q".format(path=path), shell=True)
     else:
         call("rm -rf {path}".format(path=path), shell=True)
+    print("rmdir %s" % path)

@@ -58,7 +58,7 @@ def processCoreEvents():
     gui.app.processEvents()
 
 def mkdir(path):
-    call("rm -rf {path}".format(path=path), shell=True)
+    rmdir(path)
     assert not os.path.exists(path)
     os.makedirs(path)
 

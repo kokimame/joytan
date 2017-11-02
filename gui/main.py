@@ -11,11 +11,11 @@ def defaultPref():
     workdir = None
 
     if isLin:
-        workdir = os.path.join("home", "kokimame", "Emotan", "workspace")
+        workdir = os.path.join("/home", "kokimame", "Emotan", "workspace")
     elif isMac:
-        workdir = os.path.join("Users", "Koki", "Emotan", "workspace")
+        workdir = os.path.join("/Users", "Koki", "Emotan", "workspace")
     else:
-        workdir = os.path.join("C:", "Users", "Koki", "Documents", "Emotan", "workspace")
+        workdir = os.path.join("C:", "\\Users", "Koki", "Documents", "Emotan", "workspace")
 
     return {
         "workdir": workdir,

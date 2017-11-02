@@ -142,7 +142,7 @@ class Mp3Dialog(QDialog):
 
     def onCreate(self):
         from gui.utils import rmdir
-        audRoot = "{root}/audio".format(root=self.mw.getRootPath())
+        audRoot = os.path.join(self.mw.getRootPath(), "audio")
         rmdir(audRoot)
 
         sfxList = self.form.sfxList
@@ -198,8 +198,7 @@ class Mp3Dialog(QDialog):
 
         for i in range(self.framelist.count()):
             bw = self.framelist.getBundleWidget(i)
-            os.makedirs("{root}/{dirname}".format(
-                        root=audRoot, dirname=bw.getDirname()), exist_ok=True)
+            os.makedirs(os.path.join(audRoot, bw.getDirname()), exist_ok=True)
 
             cmder.ttsBundleWidget(bw)
             pdcnt += 1

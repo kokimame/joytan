@@ -13,10 +13,10 @@ class Mp3Cmder:
         self.setting['sampling'] = 44100
         self.setting['bitrate'] = 64
         self.root = root
-        self.finalDir = "{root}/FINAL".format(root=self.root)
-        self.bgmMp3 = '{audio}/bgm.mp3'.format(audio=self.finalDir)
-        self.compMp3 = '{audio}/comp.mp3'.format(audio=self.finalDir)
-        self.finalMp3 = '{audio}/FINAL.mp3'.format(audio=self.finalDir)
+        self.finalDir = os.path.join(self.root, "FINAL")
+        self.bgmMp3 = os.path.join(self.finalDir, "bgm.mp3")
+        self.compMp3 = os.path.join(self.finalDir, "comp.mp3")
+        self.finalMp3 = os.path.join(self.finalDir, "FINAL.mp3")
         self.bitkbs = None  # bit rate (Kbit/s)
         self.fskhz = None      # Sampling rate (kHz)
         self.setupAudio()
@@ -33,18 +33,18 @@ class Mp3Cmder:
         print(self.setting)
 
     def setupAudio(self):
-        mkdir("{root}/FINAL".format(root=self.root))
+        mkdir(os.path.join(self.root, "FINAL"))
         fs = self.setting['sampling']
         bps = self.setting['bitrate']
 
         for i, loop in enumerate(self.setting['loop']):
             if loop['sampling'] != fs:
-                output = self.finalDir + "/%s-resamp-%d.mp3" % (loop['filename'].split(".")[0], i+1)
+                output = os.path.join(self.finalDir, "%s-resamp-%d.mp3" % (loop['filename'].split(".")[0], i+1))
                 resampling(loop['path'], fs, output)
                 loop['path'] = output
                 print("%s resampled!" % loop['filename'])
             if loop['volume'] != 100:
-                output = self.finalDir + "/%s-revol-%d.mp3" % (loop['filename'].split(".")[0], i+1)
+                output = os.path.join(self.finalDir, "%s-revol-%d.mp3" % (loop['filename'].split(".")[0], i+1))
                 reduceVolume(loop['path'], loop['volume'], output)
                 loop['path'] = output
                 print("%s volume reduced!" % loop['filename'])
@@ -61,7 +61,7 @@ class Mp3Cmder:
             for i, sfxInfo in enumerate(sfxs):
                 # Unifying sampling rate
                 if sfxInfo['sampling'] != fs:
-                    output = self.finalDir + "/%s-resamp-%d.mp3" % (sfxInfo['filename'].split(".")[0], i+1)
+                    output = os.path.join(self.finalDir, "%s-resamp-%d.mp3" % (sfxInfo['filename'].split(".")[0], i + 1))
                     resampling(sfxInfo['path'], fs, output)
                     sfxInfo['path'] = output
                     sfxInfo['filename'] = getFileNameFromPath(output)
@@ -69,55 +69,55 @@ class Mp3Cmder:
 
                 # Adjusting volume by reducing it
                 if sfxInfo['volume'] != 100:
-                    output = self.finalDir + "/%s-revol-%d.mp3" % (sfxInfo['filename'].split(".")[0], i+1)
+                    output = os.path.join(self.finalDir, "%s-revol-%d.mp3" % (sfxInfo['filename'].split(".")[0], i + 1))
                     reduceVolume(sfxInfo['path'], sfxInfo['volume'], output)
                     sfxInfo['path'] = output
                     print("%s volume reduced!" % sfxInfo['filename'])
 
                 # Unifying bitrate. Bitrate modification is the last otherwise causes mp3 duration bug.
                 if sfxInfo['bitrate'] != bps:
-                    output = self.finalDir + "/%s-bps-%d.mp3" % (sfxInfo['filename'].split(".")[0], i+1)
+                    output = os.path.join(self.finalDir, "%s-bps-%d.mp3" % (sfxInfo['filename'].split(".")[0], i + 1))
                     convertBps(sfxInfo['path'], bps, output)
                     sfxInfo['path'] = output
                     sfxInfo['filename'] = getFileNameFromPath(output)
                     print("%s bitrate modified!" % sfxInfo['filename'])
                 sfxlist.append(sfxInfo['path'])
-            catListMp3(sfxlist, "{finalDir}/{group}-sfx.mp3".format(finalDir=self.finalDir, group=group))
+            catListMp3(sfxlist, os.path.join(self.finalDir, group + "-sfx.mp3"))
 
 
 
     def compileBundle(self, bw, isGstatic=True):
-        curdir = '{root}/{dirname}'.format(root=self.root, dirname=bw.getDirname())
+        curdir = os.path.join(self.root, bw.getDirname())
 
         if isGstatic:
             from gui.download import downloadGstaticSound
             try:
-                downloadGstaticSound(bw.name, "{curdir}/pronounce.mp3".format(curdir=curdir))
+                downloadGstaticSound(bw.name, os.path.join(curdir, "pronounce.mp3"))
             except:
                 # If gstatic pronunciation file is not found, use TTS.
-                self.ttscmd(bw.name, bw.editors['name'].langCode, "{curdir}/pronounce".format(curdir=curdir))
+                self.ttscmd(bw.name, bw.editors['name'].langCode, os.path.join(curdir, "pronounce"))
         else:
-            self.ttscmd(bw.name, bw.editors['name'].langCode, "{curdir}/pronounce".format(curdir=curdir))
+            self.ttscmd(bw.name, bw.editors['name'].langCode, os.path.join(curdir, "pronounce"))
 
-        wordhead = repeatMp3('{curdir}/pronounce.mp3'.format(curdir=curdir), self.setting['repeat'])
+        wordhead = repeatMp3(os.path.join(curdir, "pronounce.mp3"), self.setting['repeat'])
 
         sfxdir = self.setting['sfx']
         assert len(sfxdir['word']) != 0, print("Choose at least one sfx accompanying with a word")
-        wordheader = '{curdir}/wordheader.mp3'.format(curdir=curdir)
-        catMp3("{finalDir}/word-sfx.mp3".format(finalDir=self.finalDir), wordhead, wordheader)
+        wordheader = os.path.join(curdir, "wordheader.mp3")
+        catMp3(os.path.join(self.finalDir, "word-sfx.mp3"), wordhead, wordheader)
 
         inputs = "%s " % wordheader
         for cont in self.catSequence[bw.name]:
             try:
                 cont = cont['def'] + ".mp3"
-                inputs += "%s %s " % ("{finalDir}/definition-sfx.mp3".format(finalDir=self.finalDir), cont)
+                inputs += "%s %s " % (os.path.join(self.finalDir, "definition-sfx.mp3"), cont)
             except KeyError:
                 cont = cont['ex'] + ".mp3"
-                inputs += "%s %s " % ("{finalDir}/example-sfx.mp3".format(finalDir=self.finalDir), cont)
-        catMp3(inputs, "", "{root}/{dirname}.mp3".format(root=self.root, dirname=bw.getDirname()))
+                inputs += "%s %s " % (os.path.join(self.finalDir, "example-sfx.mp3"), cont)
+        catMp3(inputs, "", os.path.join(self.root, bw.getDirname() + ".mp3"))
 
     def ttsBundleWidget(self, bw):
-        curdir = "{root}/{dirname}".format(root=self.root, dirname=bw.getDirname())
+        curdir = os.path.join(self.root, bw.getDirname())
         assert os.path.exists(curdir)
 
         dpw, epd = bw.dpw, bw.epd
@@ -129,7 +129,7 @@ class Mp3Cmder:
             defCode = bw.editors['def-%d' % (i+1)].langCode
             if define == '': continue
 
-            filename = "{dir}/def-{num}".format(dir=curdir, num=(i+1))
+            filename = os.path.join(curdir, "def-%d" % (i+1))
             self.ttscmd(define, defCode, filename)
             self.catSequence[bw.name].append({"def": filename})
 
@@ -138,19 +138,21 @@ class Mp3Cmder:
                 exCode = bw.editors['ex-%d-%d' % (i+1, j+1)].langCode
                 if examp == '': continue
 
-                filename = "{dir}/ex-{num1}-{num2}".format\
-                    (dir=curdir, num1=(i+1), num2=(j+1))
+                filename = os.path.join(curdir, "ex-%d-%d" % ((i+1), (j+1)))
                 self.ttscmd(examp, exCode, filename)
                 self.catSequence[bw.name].append({"ex": filename})
 
 
     def mergeDirMp3(self):
+        print("Merge all mp3 files in %s" % self.root)
         mergeDirMp3(self.root, self.compMp3)
 
     def createBgmLoop(self):
+        print("Create BGM Loop")
         createLoopMp3(self.root, self.setting['loop'], mp3lenSec(self.compMp3), self.bgmMp3)
 
     def mixWithBgm(self):
+        print("Mix BGM and a-capella mp3")
         mixWithBgm(self.bgmMp3, self.compMp3, self.finalMp3)
 
 
@@ -197,8 +199,11 @@ def reduceVolume(original, vol, output):
 
 
 def createLoopMp3(dir, loop, length, output):
-    tmpMp3 = "{dir}/tmp-bgm-to-remove.mp3".format(dir=dir)
-    cmd = "cat "
+    tmpMp3 = os.path.join(dir, "tmp-bgm-to-remove.mp3")
+    if isWin:
+        cmd = "type "
+    else:
+        cmd = "cat "
     bgmlen = 0
     done = False
     while not done:
@@ -210,29 +215,44 @@ def createLoopMp3(dir, loop, length, output):
                 break
 
     cmd += " > %s" % tmpMp3
-    call(cmd, shell=True)
+    print("create loop by: ", cmd)
+    if isWin and bgmlen == loopInfo['duration']:
+        # If required bgm length is less than a single loop contents,
+        # don't use 'type' (on Windows).
+        tmpMp3 = loopInfo['path']
+    else:
+        call(cmd, shell=True)
 
     cmd = "ffmpeg -loglevel panic -t %d -i %s -acodec copy %s" % (length, tmpMp3, output)
     call(cmd, shell=True)
-    call("rm %s" % tmpMp3, shell=True)
+    # Fixme; Remove this file
+    # call("rm %s" % tmpMp3, shell=True)
 
 def mergeDirMp3(root, output):
-    cmd = "cat %s/*.mp3 > %s" % (root, output)
+    if isWin:
+        cmd = "type %s\\*.mp3 > %s" % (root, output)
+    else:
+        cmd = "cat %s/*.mp3 > %s" % (root, output)
     call(cmd, shell=True)
 
 def espeakMp3(script, langCode, output):
     print("Script: %s (%s)" % (script, langCode))
 
-    call(["rm", "-f", output])
     os.makedirs(os.path.dirname(output), exist_ok=True)
-    cmd = 'espeak -v {lang} "{script}" --stdout | '.format(lang=langCode, script=script) +\
+    if isWin:
+        cmd = 'espeak -v {lang} -w {out}.wav "{script}"'.format(
+            lang=langCode, out=output, script=script)
+        call(cmd, shell=True)
+        cmd = 'ffmpeg -loglevel panic -i {out}.wav -ac 2 -ar 44100 -ab 64k -f mp3 {out}.mp3'.format(out=output)
+        call(cmd, shell=True)
+    else:
+        cmd = 'espeak -v {lang} "{script}" --stdout | '.format(lang=langCode, script=script) +\
           'ffmpeg -loglevel panic -i - -ac 2 -ar 44100 -ab 64k -f mp3 %s.mp3' % (output)
-    call(cmd, shell=True)
+        call(cmd, shell=True)
 
 
 def sayMp3(script, langCode, output):
     print("Script: %s (%s)" % (script, langCode))
-    # Temporally, inappropriate generalization for Chinese.
     os.makedirs(os.path.dirname(output), exist_ok=True)
 
     langVersion = {'en': 'Alex',
@@ -267,19 +287,28 @@ def sayMp3(script, langCode, output):
 
 def repeatMp3(file, repeat):
     output = "{filename}-{repeat}.mp3".format(filename=file.split('.')[0], repeat=repeat)
-    cmd  = "cat " + "%s " % file * repeat  + "> %s" % output
+    if isWin:
+        cmd = "type " + "%s " % file * repeat + "> %s" % output
+    else:
+        cmd = "cat " + "%s " % file * repeat + "> %s" % output
     call(cmd, shell=True)
     return output
 
 
 # TODO: Merge two methods below into one
 def catMp3(file1, file2, output):
-    cmd = "cat %s %s > %s" % (file1, file2, output)
+    if isWin:
+        cmd = "type %s %s > %s" % (file1, file2, output)
+    else:
+        cmd = "cat %s %s > %s" % (file1, file2, output)
     print(cmd)
     call(cmd, shell=True)
 
 def catListMp3(filelist, output):
-    cmd = "cat "
+    if isWin:
+        cmd = "type "
+    else:
+        cmd = "cat "
     for file in filelist:
         cmd += "%s " % file
     cmd += "> %s" % output
@@ -340,4 +369,4 @@ def mp3Duration(mp3file):
         return str(check_output(cmd, shell=True).strip(), 'utf-8')
 
 def mp3lenSec(mp3file):
-    return hhmmss2secCmd(mp3Duration(mp3file))
+    return hhmmss2sec(mp3Duration(mp3file))

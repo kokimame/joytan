@@ -11,17 +11,17 @@ def defaultPref():
     workdir = None
 
     if isLin:
-        workdir = "/home/kokimame/Emotan/workspace"
+        workdir = os.path.join("home", "kokimame", "Emotan", "workspace")
     elif isMac:
-        workdir = "/Users/Koki/Emotan/workspace"
+        workdir = os.path.join("Users", "Koki", "Emotan", "workspace")
     else:
-        workdir = "C:\\Users\\Koki\\Documents\\Emotan\\workspace"
+        workdir = os.path.join("C:", "Users", "Koki", "Documents", "Emotan", "workspace")
 
     return {
         "workdir": workdir,
-        "sfxdir": cwd + "/templates/sfx",
-        "worddir": cwd + "/templates/wordlist",
-        "bgmdir": cwd + "/templates/song",
+        "sfxdir": os.path.join(cwd, "templates", "sfx"),
+        "worddir": os.path.join(cwd, "templates", "wordlist"),
+        "bgmdir": os.path.join(cwd, "templates", "song"),
         "title": "emotan-sample",
         "onlineRef": "Wiktionary"
     }
@@ -49,7 +49,7 @@ class EmotanMW(QMainWindow):
         self.setupButtons()
 
     def getRootPath(self):
-        return "{workdir}/{title}".format(workdir=self.pref['workdir'], title=self.pref['title'])
+        return os.path.join(self.pref['workdir'], self.pref['title'])
 
     def setupMainWindow(self):
         self.form = gui.forms.main.Ui_MainWindow()

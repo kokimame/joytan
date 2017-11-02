@@ -319,7 +319,8 @@ def getMp3Info(mp3file):
 
     # Fixme: This is temporal. Need Python coding equivalent to what awk does below.
     if isWin:
-        info = [44100, 192]
+        res = str(check_output("ffmpeg -i %s 2>&1 | findstr Stream" % mp3file, shell=True).strip(), 'utf-8')
+        info = [res.split(" ")[4], res.split(" ")[8]]
     else:
         info = str(check_output("ffmpeg -i %s 2>&1 | awk '/Stream/' | awk '{print $5, $9}'"
                             % mp3file, shell=True).strip(), 'utf-8').split(" ")

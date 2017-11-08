@@ -84,7 +84,6 @@ class ProgressManager:
         if self._max and self._shown:
             self._counter = value or (self._counter+1)
             self._win.setValue(self._counter)
-            print(self._win.value())
         if process and elapsed >= 0.2:
             self._updating = True
             self.app.processEvents(QEventLoop.ExcludeUserInputEvents)

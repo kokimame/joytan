@@ -39,7 +39,10 @@ class TranslateDialog(QDialog):
         print(transGroup)
         translate = lambda text: Translator().translate(text, dest=destCode).text
 
+        self.mw.progress.start(min=0, max=self.mw.framelist.count(),
+                               label="Start translating", immediate=True, cancellable=True)
         for bw in self.framelist.getCurrentBundleWidgets():
+            self.mw.progress.update(label="Translation for %s" % bw.name, maybeShow=False)
             if 'name' in transGroup:
                 bw.editors['name'].setForeignText(translate(bw.name), destCode)
 
@@ -52,7 +55,8 @@ class TranslateDialog(QDialog):
                     examp = bw.editors['ex-%d-%d' % (i, j)].text()
                     if 'example' in transGroup and examp != '':
                         bw.editors['ex-%d-%d' % (i, j)].setForeignText(translate(examp), destCode)
-        
+
+        self.mw.progress.finish()
         self.framelist._update()
         self.reject()
 

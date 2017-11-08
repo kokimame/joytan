@@ -42,7 +42,7 @@ class TranslateDialog(QDialog):
         self.mw.progress.start(min=0, max=self.mw.framelist.count(),
                                label="Start translating", immediate=True, cancellable=True)
         for bw in self.framelist.getCurrentBundleWidgets():
-            self.mw.progress.update(label="Translation for %s" % bw.name, maybeShow=False)
+            self.mw.progress.update(label="Translating %s" % bw.name, maybeShow=False)
             if 'name' in transGroup:
                 bw.editors['name'].setForeignText(translate(bw.name), destCode)
 

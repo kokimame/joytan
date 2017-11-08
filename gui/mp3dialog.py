@@ -1,6 +1,6 @@
 from gui.qt import *
 import gui
-from gui.utils import getFile, getFileNameFromPath, isLin, isMac, isWin, processCoreEvents
+from gui.utils import getFile, getFileNameFromPath, isLin, isMac, isWin
 from tools.cmder.mp3cmder import mp3Duration, hhmmss2secCmd, getMp3Info
 
 def onMp3Dialog(mw):
@@ -186,39 +186,32 @@ class Mp3Dialog(QDialog):
 
 
         from tools.cmder.mp3cmder import Mp3Cmder
-        from gui.progress import ProgressDialog
-
-        # Fixme: Here is the wrong progress length assumption!
-        pd = ProgressDialog(self.framelist.count() * 3, msg="Creating MP3...")
-        pdcnt = 0
-        pd.show()
-
         # Setting up the properties of audio files such as bitrate and sampling rate
+        self.mw.progress.start(min=0, max=1, label="Setting up for creating audio...", immediate=True)
+        self.mw.progress.update(value=0, maybeShow=False)
         cmder = Mp3Cmder(audRoot, setting)
+        self.mw.progress.finish()
 
+
+        self.mw.progress.start(min=0, max=self.mw.framelist.count(), label="Start downloading", immediate=True)
         for i in range(self.framelist.count()):
             bw = self.framelist.getBundleWidget(i)
             os.makedirs(os.path.join(audRoot, bw.getDirname()), exist_ok=True)
 
+            self.mw.progress.update(label="Creating audio for %s" % bw.name, maybeShow=False)
             cmder.ttsBundleWidget(bw)
-            pdcnt += 1
-            pd.setValue(pdcnt)
-            processCoreEvents()
-
             cmder.compileBundle(bw, isGstatic=isGstatic)
-            pdcnt += 1
-            pd.setValue(pdcnt)
-            processCoreEvents()
+        self.mw.progress.finish()
 
+        self.mw.progress.start(min=0, max=3, label="Merging generated audio files...", immediate=True)
         cmder.mergeDirMp3()
-        cmder.createBgmLoop()
+        self.mw.progress.update(label="Creating BGM loop...", maybeShow=False)
 
-        # Fixme: More preciously define the progress out of TTS session
-        pdcnt += int(self.framelist.count() / 2)
-        pd.setValue(pdcnt)
-        processCoreEvents()
+        cmder.createBgmLoop()
+        self.mw.progress.update(label="Mixing audio with BGM", maybeShow=False)
 
         cmder.mixWithBgm()
+        self.mw.progress.finish()
 
         self.reject()
 

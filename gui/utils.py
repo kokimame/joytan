@@ -54,8 +54,6 @@ def getFile(parent, title, filter="*.*", dir=None):
 def getFileNameFromPath(longpath):
     return os.path.basename(os.path.normpath(longpath))
 
-def processCoreEvents():
-    gui.app.processEvents()
 
 def mkdir(path):
     rmdir(path)

@@ -1,9 +1,6 @@
 import os, requests
 
 from tools.parser import Parsers
-from gui.progress import ProgressDialog
-from gui.utils import processCoreEvents
-
 
 def onDownload(mw):
     parser = Parsers[mw.pref['onlineRef']]()

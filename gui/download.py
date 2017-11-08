@@ -12,17 +12,12 @@ def onDownload(mw):
 
 
 
-def simpleDownload(mw, parser, gstat=False):
-    pd = ProgressDialog(mw.framelist.count(), msg="Downloading...")
-    pd.show()
-
+def simpleDownload(mw, parser):
+    mw.progress.start(min=0, max=mw.framelist.count(), label="Start downloading", immediate=True, cancellable=True)
     for i in range(mw.framelist.count()):
-        pd.setValue(i)
-        # This tip probably makes pd faster to display.
-        processCoreEvents()
-
         bw = mw.framelist.getBundleWidget(i)
-
+        # Don't forget to turn off 'maybeShow'. That breaks the sync of the bar and the actual progress
+        mw.progress.update(label="Downloading %s" % bw.name, maybeShow=False)
         # Don't download contents from the source you already had.
         if parser.source in bw.sources:
             continue
@@ -32,6 +27,7 @@ def simpleDownload(mw, parser, gstat=False):
 
         mw.framelist.updateBundle(bw.name, items)
         bw.sources.append(parser.source)
+    mw.progress.finish()
 
 def downloadGstaticSound(word, filename):
     url = "http://ssl.gstatic.com/dictionary/static/sounds/oxford/"

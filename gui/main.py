@@ -1,6 +1,5 @@
 # Copyright: Koki Mametani <kokimametani@gmail.com>
 from gui.qt import *
-from gui.framelist import FrameList
 from gui.utils import isMac, isLin, isWin, rmdir
 import gui
 
@@ -47,6 +46,7 @@ class EmotanMW(QMainWindow):
         self.setupMenus()
         self.setupFrameList()
         self.setupButtons()
+        self.setupProgress()
 
     def getRootPath(self):
         return os.path.join(self.pref['workdir'], self.pref['title'])
@@ -56,9 +56,9 @@ class EmotanMW(QMainWindow):
         self.form.setupUi(self)
 
     def setupFrameList(self):
-        framelist = FrameList()
-        self.form.verticalLayout.insertWidget(0, framelist)
-        self.framelist = framelist
+        import gui.framelist
+        self.framelist = gui.framelist.FrameList()
+        self.form.verticalLayout.insertWidget(0, self.framelist)
 
     def setupMenus(self):
         form = self.form
@@ -83,8 +83,11 @@ class EmotanMW(QMainWindow):
         form.audioButton.clicked.connect(self.onCreateMp3)
         form.textButton.clicked.connect(self.onCreateText)
 
+    def setupProgress(self):
+        import gui.progress
+        self.progress = gui.progress.ProgressManager(self)
+
     def onPreferences(self):
-        import gui.preferences
         gui.dialogs.open("Preferences", self)
 
     def onExtract(self):

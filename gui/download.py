@@ -1,12 +1,36 @@
 import os, requests
 
+import gui
+from gui.qt import *
 from tools.parser import Parsers
 
 def onDownload(mw):
-    parser = Parsers[mw.pref['onlineRef']]()
-    simpleDownload(mw, parser)
-    mw.framelist._update()
+    gui.dialogs.open("DownloadDialog", mw)
 
+class DownloadDialog(QDialog):
+    def __init__(self, mw):
+        QDialog.__init__(self, mw, Qt.Window)
+        self.mw = mw
+        self.form = gui.forms.download.Ui_DownloadDialog()
+        self.form.setupUi(self)
+        self.setupWidgets()
+        self.show()
+
+    def setupWidgets(self):
+        form = self.form
+        form.cancelBtn.clicked.connect(self.reject)
+        form.startBtn.clicked.connect(self.start)
+        form.sourceCombo.addItems(sorted([site for site in Parsers.keys()]))
+        form.sourceCombo.setCurrentText(self.mw.pref["onlineSrc"])
+
+    def start(self):
+        parser = Parsers[self.form.sourceCombo.currentText()]()
+        simpleDownload(self.mw, parser)
+        self.mw.framelist._update()
+
+    def reject(self):
+        self.done(0)
+        gui.dialogs.close("DownloadDialog")
 
 
 def simpleDownload(mw, parser):
@@ -14,16 +38,17 @@ def simpleDownload(mw, parser):
     for i in range(mw.framelist.count()):
         bw = mw.framelist.getBundleWidget(i)
         # Don't forget to turn off 'maybeShow'. That breaks the sync of the bar and the actual progress
-        mw.progress.update(label="Downloading %s" % bw.name, maybeShow=False)
+        mw.progress.update(label="Downloading %s from %s" %
+                                 (bw.name, parser.sourceName), maybeShow=False)
         # Don't download contents from the source you already had.
-        if parser.source in bw.sources:
+        if parser.sourceName in bw.sources:
             continue
-        r = requests.get(parser.source + bw.name)
+        r = requests.get(parser.sourceUrl + bw.name)
         data = r.text
         items = parser.run(data)
 
         mw.framelist.updateBundle(bw.name, items)
-        bw.sources.append(parser.source)
+        bw.sources.append(parser.sourceName)
     mw.progress.finish()
 
 def downloadGstaticSound(word, filename):

@@ -6,7 +6,8 @@ from tools.parser.base import BaseParser
 class DictionaryComParser(BaseParser):
     def __init__(self):
         BaseParser.__init__(self)
-        self.source = "http://dictionary.com/browse/"
+        self.sourceUrl = "http://dictionary.com/browse/"
+        self.sourceName = "Dicitionary.com"
 
     def run(self, data):
         defex = []

@@ -5,7 +5,8 @@ class BaseParser:
         # without HTML data to parse. Every HTML will be passed in run method.
 
         # Every parser has its own source. e.g, Online dictionaries
-        self.source = None
+        self.sourceUrl = None
+        self.sourceName = None
 
     def run(self, data):
         """

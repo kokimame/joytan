@@ -6,7 +6,8 @@ from tools.parser.base import BaseParser
 class WiktionaryParser(BaseParser):
     def __init__(self):
         BaseParser.__init__(self)
-        self.source = "https://en.wiktionary.org/wiki/"
+        self.sourceUrl = "https://en.wiktionary.org/wiki/"
+        self.sourceName = "Wiktionary"
 
     def run(self, data):
         # Dictionary which stores definition and example

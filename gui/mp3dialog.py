@@ -186,33 +186,33 @@ class Mp3Dialog(QDialog):
 
 
         from tools.cmder.mp3cmder import Mp3Cmder
-        # Setting up the properties of audio files such as bitrate and sampling rate
-        self.mw.progress.start(min=0, max=1, label="Setting up for creating audio...", immediate=True)
-        self.mw.progress.update(value=0, maybeShow=False)
+        # The extra 40 goes for setting up audio, merging, bgm loop and mixing
+        # This is merely an rough assumption.
+        self.mw.progress.start(min=0, max=self.framelist.count() + 50, immediate=True)
         cmder = Mp3Cmder(audRoot, setting)
-        self.mw.progress.finish()
+        self.mw.progress.update(value=0, label="Setting up audio files", maybeShow=False)
+        # Setting up the properties of audio files such as bitrate and sampling rate
+        cmder.setupAudio()
+        self.mw.progress.update(step=10)
 
-
-        self.mw.progress.start(min=0, max=self.mw.framelist.count(), label="Start downloading", immediate=True)
         for i in range(self.framelist.count()):
             bw = self.framelist.getBundleWidget(i)
-            os.makedirs(os.path.join(audRoot, bw.getDirname()), exist_ok=True)
-
             self.mw.progress.update(label="Creating audio for %s" % bw.name, maybeShow=False)
+            os.makedirs(os.path.join(audRoot, bw.getDirname()), exist_ok=True)
             cmder.ttsBundleWidget(bw)
             cmder.compileBundle(bw, isGstatic=isGstatic)
-        self.mw.progress.finish()
 
-        self.mw.progress.start(min=0, max=3, label="Merging generated audio files...", immediate=True)
+        self.mw.progress.update(step=10, label="Merging generated audio files...", maybeShow=False)
         cmder.mergeDirMp3()
-        self.mw.progress.update(label="Creating BGM loop...", maybeShow=False)
 
+        self.mw.progress.update(step=10, label="Creating BGM loop...", maybeShow=False)
         cmder.createBgmLoop()
-        self.mw.progress.update(label="Mixing audio with BGM", maybeShow=False)
 
+        self.mw.progress.update(step=10, label="Mixing audio with BGM", maybeShow=False)
         cmder.mixWithBgm()
-        self.mw.progress.finish()
 
+        self.mw.progress.update(step=10, maybeShow=False)
+        self.mw.progress.finish()
         self.reject()
 
     def onSfxClicked(self, idx=None):

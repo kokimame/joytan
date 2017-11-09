@@ -19,7 +19,6 @@ class Mp3Cmder:
         self.finalMp3 = os.path.join(self.finalDir, "FINAL.mp3")
         self.bitkbs = None  # bit rate (Kbit/s)
         self.fskhz = None      # Sampling rate (kHz)
-        self.setupAudio()
         # Dictionary to store the sequence of concatenating mp3 files for each word.
         self.catSequence = {}
 
@@ -30,7 +29,7 @@ class Mp3Cmder:
         else:
             raise Exception("Unsurported OS found!")
 
-        print(self.setting)
+        print("Audio Setting: ", self.setting)
 
     def setupAudio(self):
         mkdir(os.path.join(self.root, "FINAL"))

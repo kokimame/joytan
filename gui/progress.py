@@ -63,7 +63,7 @@ class ProgressManager:
         self._updating = False
         return self._win
 
-    def update(self, label=None, value=None, process=True, maybeShow=True):
+    def update(self, label=None, value=None, step=None, process=True, maybeShow=True):
         if self._updating:
             return
         if maybeShow:
@@ -72,7 +72,11 @@ class ProgressManager:
         if label:
             self._win.setLabelText(label)
         if self._max and self._shown:
-            self._counter = value or (self._counter+1)
+            assert not (value and step), "Error: Cannot use custom value and step at once."
+            if step:
+                self._counter = self._counter + step
+            else:
+                self._counter = value or (self._counter+1)
             self._win.setValue(self._counter)
         if process and elapsed >= 0.2:
             self._updating = True

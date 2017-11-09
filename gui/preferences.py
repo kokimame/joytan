@@ -1,5 +1,6 @@
 from gui.qt import *
 import gui
+from tools.parser import Parsers
 
 class Preferences(QDialog):
 
@@ -18,7 +19,8 @@ class Preferences(QDialog):
         self.setupCombo()
 
     def setupCombo(self):
-        self.form.dictCombo.setCurrentText(self.mw.pref['onlineRef'])
+        self.form.sourceCombo.addItems(sorted([site for site in Parsers.keys()]))
+        self.form.sourceCombo.setCurrentText(self.mw.pref['onlineSrc'])
 
     def setupButtons(self):
         form = self.form
@@ -60,7 +62,7 @@ class Preferences(QDialog):
         mw.pref['worddir'] = form.wordEdit.text()
         mw.pref['bgmdir'] = form.bgmEdit.text()
         mw.pref['sfxdir'] = form.sfxEdit.text()
-        mw.pref['onlineRef'] = form.dictCombo.currentText()
+        mw.pref['onlineSrc'] = form.sourceCombo.currentText()
 
 
     def reject(self):

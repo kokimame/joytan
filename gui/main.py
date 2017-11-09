@@ -22,7 +22,7 @@ def defaultPref():
         "worddir": os.path.join(cwd, "templates", "wordlist"),
         "bgmdir": os.path.join(cwd, "templates", "song"),
         "title": "emotan-sample",
-        "onlineRef": "Wiktionary"
+        "onlineSrc": "Wiktionary"
     }
 
 class EmotanMW(QMainWindow):

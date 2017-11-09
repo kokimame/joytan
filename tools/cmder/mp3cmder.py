@@ -1,9 +1,8 @@
-import os, re
-import requests
-import subprocess
+import os
 from subprocess import call, check_output
-from googletrans import Translator
+
 from gui.utils import getFileNameFromPath, mkdir, isLin, isMac, isWin
+from tools.speecher import Speechers
 
 class Mp3Cmder:
     # Do NOT use OS dependent commands in this class method.
@@ -22,12 +21,8 @@ class Mp3Cmder:
         # Dictionary to store the sequence of concatenating mp3 files for each word.
         self.catSequence = {}
 
-        if isLin or isWin:
-            self.ttscmd = espeakMp3
-        elif isMac:
-            self.ttscmd = sayMp3
-        else:
-            raise Exception("Unsurported OS found!")
+        # Setting Text-to-speech
+        self.tts = Speechers[self.setting['tts']]()
 
         print("Audio Setting: ", self.setting)
 
@@ -50,10 +45,11 @@ class Mp3Cmder:
 
 
         sfxGroup = self.setting['sfx']
-        """ {
-                'word': [{ ... items ... }, {...},
-                'definition' : ...
-            }
+        """
+        {
+            'word': [{ ... items ... }, {...},
+            'definition' : ...
+        }
         """
         for group, sfxs in sfxGroup.items():
             sfxlist = []
@@ -83,25 +79,50 @@ class Mp3Cmder:
                 sfxlist.append(sfxInfo['path'])
             catListMp3(sfxlist, os.path.join(self.finalDir, group + "-sfx.mp3"))
 
+    def dictateContents(self, bw):
+        curdir = os.path.join(self.root, bw.getDirname())
+        assert os.path.exists(curdir)
 
+        dpw, epd = bw.dpw, bw.epd
+
+        self.catSequence[bw.name] = []
+
+        for i in range(0, dpw):
+            define = bw.editors['def-%d' % (i+1)].text()
+            defLang = bw.editors['def-%d' % (i+1)].langCode
+            if define == '': continue
+
+            filename = os.path.join(curdir, "def-%d" % (i+1))
+            self.tts.dictate(define, lang=defLang, output=filename)
+            self.catSequence[bw.name].append({"def": filename})
+
+            for j in range(0, epd):
+                examp = bw.editors['ex-%d-%d' % (i+1, j+1)].text()
+                exLang = bw.editors['ex-%d-%d' % (i+1, j+1)].langCode
+                if examp == '': continue
+
+                filename = os.path.join(curdir, "ex-%d-%d" % ((i+1), (j+1)))
+                self.tts.dictate(examp, lang=exLang, output=filename)
+                self.catSequence[bw.name].append({"ex": filename})
 
     def compileBundle(self, bw, isGstatic=True):
         curdir = os.path.join(self.root, bw.getDirname())
 
-        if isGstatic:
+        langCode = bw.editors['name'].langCode
+        if isGstatic and (langCode == 'en'):
             from gui.download import downloadGstaticSound
             try:
                 downloadGstaticSound(bw.name, os.path.join(curdir, "pronounce.mp3"))
             except:
                 # If gstatic pronunciation file is not found, use TTS.
-                self.ttscmd(bw.name, bw.editors['name'].langCode, os.path.join(curdir, "pronounce"))
+                self.tts.dictate(bw.name, lang=langCode, output=os.path.join(curdir, "pronounce"))
         else:
-            self.ttscmd(bw.name, bw.editors['name'].langCode, os.path.join(curdir, "pronounce"))
+            self.tts.dictate(bw.name, lang=langCode, output=os.path.join(curdir, "pronounce"))
 
         wordhead = repeatMp3(os.path.join(curdir, "pronounce.mp3"), self.setting['repeat'])
 
         sfxdir = self.setting['sfx']
-        assert len(sfxdir['word']) != 0, print("Choose at least one sfx accompanying with a word")
+        assert len(sfxdir['word']) != 0, "Choose at least one sfx accompanying with a word"
         wordheader = os.path.join(curdir, "wordheader.mp3")
         catMp3(os.path.join(self.finalDir, "word-sfx.mp3"), wordhead, wordheader)
 
@@ -114,33 +135,6 @@ class Mp3Cmder:
                 cont = cont['ex'] + ".mp3"
                 inputs += "%s %s " % (os.path.join(self.finalDir, "example-sfx.mp3"), cont)
         catMp3(inputs, "", os.path.join(self.root, bw.getDirname() + ".mp3"))
-
-    def ttsBundleWidget(self, bw):
-        curdir = os.path.join(self.root, bw.getDirname())
-        assert os.path.exists(curdir)
-
-        dpw, epd = bw.dpw, bw.epd
-
-        self.catSequence[bw.name] = []
-
-        for i in range(0, dpw):
-            define = bw.editors['def-%d' % (i+1)].text()
-            defCode = bw.editors['def-%d' % (i+1)].langCode
-            if define == '': continue
-
-            filename = os.path.join(curdir, "def-%d" % (i+1))
-            self.ttscmd(define, defCode, filename)
-            self.catSequence[bw.name].append({"def": filename})
-
-            for j in range(0, epd):
-                examp = bw.editors['ex-%d-%d' % (i+1, j+1)].text()
-                exCode = bw.editors['ex-%d-%d' % (i+1, j+1)].langCode
-                if examp == '': continue
-
-                filename = os.path.join(curdir, "ex-%d-%d" % ((i+1), (j+1)))
-                self.ttscmd(examp, exCode, filename)
-                self.catSequence[bw.name].append({"ex": filename})
-
 
     def mergeDirMp3(self):
         print("Merge all mp3 files in %s" % self.root)
@@ -160,17 +154,9 @@ def mixWithBgm(bgm, acap, output):
             (bgm=bgm, acapella=acap, output=output)
     call(cmd, shell=True)
 
-def previewTts():
-    # FIXME: This is temporal.
-    # To be modified to allow users to use various TTS service.
+def previewTts(ttsName):
     script = "This is the preview of Text-To-Speech."
-    if isLin or isWin:
-        cmd = 'espeak "%s"' % script
-    elif isMac:
-        cmd = 'say "%s"' % script
-    else:
-        print("Only support Windows, Mac and Linux!")
-    call(cmd, shell=True)
+    Speechers[ttsName]().dictate(script, lang='en')
 
 
 ####################################
@@ -233,55 +219,6 @@ def mergeDirMp3(root, output):
     else:
         cmd = "cat %s/*.mp3 > %s" % (root, output)
     call(cmd, shell=True)
-
-def espeakMp3(script, langCode, output):
-    print("Script: %s (%s)" % (script, langCode))
-
-    os.makedirs(os.path.dirname(output), exist_ok=True)
-    if isWin:
-        cmd = 'espeak -v {lang} -w {out}.wav "{script}"'.format(
-            lang=langCode, out=output, script=script)
-        call(cmd, shell=True)
-        cmd = 'ffmpeg -loglevel panic -i {out}.wav -ac 2 -ar 44100 -ab 64k -f mp3 {out}.mp3'.format(out=output)
-        call(cmd, shell=True)
-    else:
-        cmd = 'espeak -v {lang} "{script}" --stdout | '.format(lang=langCode, script=script) +\
-          'ffmpeg -loglevel panic -i - -ac 2 -ar 44100 -ab 64k -f mp3 %s.mp3' % (output)
-        call(cmd, shell=True)
-
-
-def sayMp3(script, langCode, output):
-    print("Script: %s (%s)" % (script, langCode))
-    os.makedirs(os.path.dirname(output), exist_ok=True)
-
-    langVersion = {'en': 'Alex',
-                   'ja': 'Kyoko ',
-                   'ko': 'Yuna',
-                   'it': 'Alice',
-                   'sv': 'Alva',
-                   'fr': 'Thomas',
-                   'de': 'Anna',
-                   'zh-cn': 'Sin-ji',
-                   'hi': 'Lekha',
-                   'ru': 'Milena',
-                   'ar': 'Maged',
-                   'th': 'Kanya',
-                   'id': 'Damayanti',
-                   'he': 'Carmit',
-                   'sk': 'Laura',
-                   'eo': 'Monica'}
-
-    try:
-        lver = '-v ' + langVersion[langCode]
-    except (KeyError, requests.ConnectionError):
-        lver = ''
-        print("Unsupported language detected: %s" % langCode)
-
-    cmd = 'say %s "%s" -o %s.aiff;' \
-          'ffmpeg -loglevel panic -i %s.aiff -ac 2 -acodec libmp3lame -ar 44100 -ab 64k -f mp3 %s.mp3' \
-          % (lver, script, output, output, output)
-    call(cmd, shell=True)
-
 
 
 def repeatMp3(file, repeat):

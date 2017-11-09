@@ -131,7 +131,7 @@ class Mp3Dialog(QDialog):
         form.cancelBtn.clicked.connect(self.reject)
 
         from tools.cmder.mp3cmder import previewTts
-        form.previewBtn.clicked.connect(previewTts)
+        form.previewBtn.clicked.connect(lambda: previewTts(form.ttsCombo.currentText()))
 
     def setupComboBox(self):
         form = self.form
@@ -155,6 +155,7 @@ class Mp3Dialog(QDialog):
         setting = {}
         setting['lrc'] = isLrc
         setting['repeat'] = self.form.wordSpin.value()
+        setting['tts'] = self.form.ttsCombo.currentText()
 
         sfxdir = {}
         group = None
@@ -199,7 +200,7 @@ class Mp3Dialog(QDialog):
             bw = self.framelist.getBundleWidget(i)
             self.mw.progress.update(label="Creating audio for %s" % bw.name, maybeShow=False)
             os.makedirs(os.path.join(audRoot, bw.getDirname()), exist_ok=True)
-            cmder.ttsBundleWidget(bw)
+            cmder.dictateContents(bw)
             cmder.compileBundle(bw, isGstatic=isGstatic)
 
         self.mw.progress.update(step=10, label="Merging generated audio files...", maybeShow=False)

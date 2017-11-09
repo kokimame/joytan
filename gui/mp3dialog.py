@@ -186,7 +186,7 @@ class Mp3Dialog(QDialog):
 
 
         from tools.cmder.mp3cmder import Mp3Cmder
-        # The extra 40 goes for setting up audio, merging, bgm loop and mixing
+        # The extra 50 goes for setting up audio, merging, bgm loop and mixing
         # This is merely a rough assumption.
         self.mw.progress.start(min=0, max=self.framelist.count() + 50, immediate=True)
         cmder = Mp3Cmder(audRoot, setting)

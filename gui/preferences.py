@@ -15,27 +15,38 @@ class Preferences(QDialog):
         self.show()
 
     def initUi(self):
-        self.setupButtons()
         self.setupSpins()
         self.setupEditors()
         self.setupCombo()
+        self.setupButtons()
 
     def setTab(self, tab):
+        # Set by the absolute index of a tab based
         if tab == "General":
             self.form.tabWidget.setCurrentIndex(0)
         elif tab == "TTS":
             self.form.tabWidget.setCurrentIndex(1)
 
-
     def setupCombo(self):
-        self.form.sourceCombo.addItems(sorted([site for site in Parsers.keys()]))
-        self.form.sourceCombo.setCurrentText(self.mw.pref['onlineSrc'])
-        self.form.ttsCombo.addItems(sorted([site for site in Speechers.keys()]))
-        self.form.ttsCombo.setCurrentText(self.mw.pref['tts'])
+        sc = self.form.sourceCombo
+        tc = self.form.ttsCombo
+        sc.addItems(sorted([site for site in Parsers.keys()]))
+        sc.setCurrentText(self.mw.pref['onlineSrc'])
+        tc.addItems(sorted([site for site in Speechers.keys()]))
+        tc.setCurrentText(self.mw.pref['tts'])
+        self.setVoiceCombo(self.mw.pref['tts'])
+        tc.currentTextChanged.connect(lambda: self.setVoiceCombo(tc.currentText()))
+
+    def setVoiceCombo(self, newTts):
+        form = self.form
+        form.voiceCombo.addItems(Speechers[newTts].voiceCombo)
 
     def setupButtons(self):
         form = self.form
         form.buttonBox.button(QDialogButtonBox.Ok).clicked.connect(self.onOk)
+        # It's pre'listen' though...
+        form.previewBtn.clicked.connect(lambda: Speechers[form.ttsCombo.currentText()]().
+                                               preview(form.voiceCombo.currentText()))
 
     def setupSpins(self):
         form = self.form

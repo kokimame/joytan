@@ -2,6 +2,8 @@
 from tools.speecher import *
 
 class Espeak(BaseSpeecher):
+    voiceCombo = []
+
     def __init__(self):
         pass
 
@@ -32,3 +34,6 @@ class Espeak(BaseSpeecher):
 
     def isSupported(self):
         raise NotImplementedError
+
+    def preview(self, combo):
+        pass

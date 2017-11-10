@@ -1,6 +1,16 @@
 from tools.speecher import *
 
 
+def getVoiceInfo():
+    info = str(check_output("say -v ?", shell=True), 'utf-8').strip().split('\n')
+    info = [' '.join(row.split()) for row in info]
+    vd = {}
+    for line in info:
+        combo, example = line.split(' # ')
+        vd[combo] = example
+    return vd
+
+
 class Say(BaseSpeecher):
     langPpl = {'en': 'Alex',
                'ja': 'Kyoko ',
@@ -19,6 +29,13 @@ class Say(BaseSpeecher):
                'sk': 'Laura',
                'eo': 'Monica'}
 
+    # We want to call 'say -v ?' only once at runtime.
+    # Don't call the command every time voice type changed.
+    from gui.utils import isMac
+    if isMac:
+        # voiceCombo has voice names shown in a combobox on Preferences
+        voiceInfo = getVoiceInfo()
+        voiceCombo = voiceInfo.keys()
 
     def dictate(self, script, lang=None, output=None):
         print("Script: %s (%s)" % (script, lang))
@@ -46,6 +63,10 @@ class Say(BaseSpeecher):
             print("Unsupported language detected: %s" % lang)
         return ppl
 
-
-def getInfoTable():
-    info = str(check_output("say -v ?"), 'utf-8')
+    # Actually pre'listen' though.
+    def preview(self, combo):
+        script = self.voiceInfo[combo]
+        combo = combo.split(' ')
+        name = ' '.join(combo[0: len(combo) - 1])
+        lang = combo[-1].split('_')
+        call('say -v {name} "{script}"'.format(name=name, script=script), shell=True)

@@ -2,7 +2,7 @@
 # Copyright: Koki Mametani <kokimametani@gmail.com>
 #
 import os
-from subprocess import call
+from subprocess import call, check_output
 
 from gui.utils import isWin
 
@@ -11,7 +11,7 @@ class BaseSpeecher:
     def dictate(self, script, lang=None, output=None):
         raise NotImplementedError
 
-    def save(self, script, lang=None, output=None):
+    def save(self, script, output, lang=None):
         raise NotImplementedError
 
     def isSupported(self):

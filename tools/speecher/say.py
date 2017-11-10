@@ -25,13 +25,13 @@ class Say(BaseSpeecher):
 
         if output:
             os.makedirs(os.path.dirname(output), exist_ok=True)
-            self.save(script, lang=lang, output=output)
+            self.save(script, output, lang=lang)
 
         else:
             ppl = self.code2ppl(lang)
             call('say %s "%s"' % (ppl, script), shell=True)
 
-    def save(self, script, lang=None, output=None):
+    def save(self, script, output, lang=None):
         ppl = self.code2ppl(lang)
         cmd = 'say %s "%s" -o %s.aiff;' \
               'ffmpeg -loglevel panic -i %s.aiff -ac 2 -acodec libmp3lame -ar 44100 -ab 64k -f mp3 %s.mp3' \
@@ -45,3 +45,7 @@ class Say(BaseSpeecher):
             ppl = ''
             print("Unsupported language detected: %s" % lang)
         return ppl
+
+
+def getInfoTable():
+    info = str(check_output("say -v ?"), 'utf-8')

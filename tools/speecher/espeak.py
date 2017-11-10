@@ -10,7 +10,7 @@ class Espeak(BaseSpeecher):
 
         if output:
             os.makedirs(os.path.dirname(output), exist_ok=True)
-            self.save(script, lang=lang, output=output)
+            self.save(script, output, lang=lang)
             return
 
         else:
@@ -18,7 +18,7 @@ class Espeak(BaseSpeecher):
             call(cmd, shell=True)
 
 
-    def save(self, script, lang=None, output=None):
+    def save(self, script, output, lang=None):
         if isWin:
             cmd = 'espeak -v {lang} -w {out}.wav "{script}"'.format(lang=lang, out=output, script=script)
             call(cmd, shell=True)

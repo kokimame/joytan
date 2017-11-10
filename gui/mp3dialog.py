@@ -1,7 +1,8 @@
 from gui.qt import *
 import gui
-from gui.utils import getFile, getFileNameFromPath, isLin, isMac, isWin
-from tools.cmder.mp3cmder import mp3Duration, hhmmss2secCmd, getMp3Info
+from gui.utils import getFile, getFileNameFromPath
+from tools.cmder.mp3cmder import mp3Duration, getMp3Info
+
 
 def onMp3Dialog(mw):
     gui.dialogs.open("Mp3Dialog", mw)
@@ -94,7 +95,6 @@ class Mp3Dialog(QDialog):
         self.form = gui.forms.mp3dialog.Ui_Mp3Dialog()
         self.form.setupUi(self)
         self.setupButton()
-        self.setupComboBox()
         self.setupSfxList()
         self.setupBgmList()
         self.show()
@@ -130,15 +130,7 @@ class Mp3Dialog(QDialog):
         form.createBtn.clicked.connect(self.onCreate)
         form.cancelBtn.clicked.connect(self.reject)
 
-        from tools.cmder.mp3cmder import previewTts
-        form.previewBtn.clicked.connect(lambda: previewTts(form.ttsCombo.currentText()))
-
-    def setupComboBox(self):
-        form = self.form
-        if isMac:
-            form.ttsCombo.setCurrentIndex(0)
-        if isLin or isWin:
-            form.ttsCombo.setCurrentIndex(1)
+        form.settingBtn.clicked.connect(lambda: gui.dialogs.open("Preferences", self.mw, tab="TTS"))
 
     def onCreate(self):
         from gui.utils import rmdir
@@ -155,7 +147,7 @@ class Mp3Dialog(QDialog):
         setting = {}
         setting['lrc'] = isLrc
         setting['repeat'] = self.form.wordSpin.value()
-        setting['tts'] = self.form.ttsCombo.currentText()
+        setting['tts'] = self.mw.pref['tts']
 
         sfxdir = {}
         group = None

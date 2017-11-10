@@ -8,16 +8,21 @@ def defaultPref():
     import os
     cwd = os.getcwd()
     workdir = None
+    tts = None
 
     if isLin:
         workdir = os.path.join("/home", "kokimame", "Emotan", "workspace")
+        tts = "espeak"
     elif isMac:
         workdir = os.path.join("/Users", "Koki", "Emotan", "workspace")
+        tts = "say"
     else:
         workdir = os.path.join("C:", "\\Users", "Koki", "Documents", "Emotan", "workspace")
+        tts = "espeak"
 
     return {
         "workdir": workdir,
+        "tts": tts,
         "sfxdir": os.path.join(cwd, "templates", "sfx"),
         "worddir": os.path.join(cwd, "templates", "wordlist"),
         "bgmdir": os.path.join(cwd, "templates", "song"),

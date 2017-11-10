@@ -28,17 +28,10 @@
           </widget>
          </item>
          <item>
-          <widget class="QComboBox" name="ttsCombo">
-           <item>
-            <property name="text">
-             <string>say</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>espeak</string>
-            </property>
-           </item>
+          <widget class="QPushButton" name="settingBtn">
+           <property name="text">
+            <string>Setting</string>
+           </property>
           </widget>
          </item>
          <item>

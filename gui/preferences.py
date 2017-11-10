@@ -1,15 +1,17 @@
 from gui.qt import *
 import gui
 from tools.parser import Parsers
+from tools.speecher import Speechers
 
 class Preferences(QDialog):
 
-    def __init__(self, mw):
+    def __init__(self, mw, tab="General"):
         QDialog.__init__(self, mw, Qt.Window)
         self.mw = mw
         self.form = gui.forms.preferences.Ui_Preferences()
         self.form.setupUi(self)
         self.initUi()
+        self.setTab(tab)
         self.show()
 
     def initUi(self):
@@ -18,9 +20,18 @@ class Preferences(QDialog):
         self.setupEditors()
         self.setupCombo()
 
+    def setTab(self, tab):
+        if tab == "General":
+            self.form.tabWidget.setCurrentIndex(0)
+        elif tab == "TTS":
+            self.form.tabWidget.setCurrentIndex(1)
+
+
     def setupCombo(self):
         self.form.sourceCombo.addItems(sorted([site for site in Parsers.keys()]))
         self.form.sourceCombo.setCurrentText(self.mw.pref['onlineSrc'])
+        self.form.ttsCombo.addItems(sorted([site for site in Speechers.keys()]))
+        self.form.ttsCombo.setCurrentText(self.mw.pref['tts'])
 
     def setupButtons(self):
         form = self.form
@@ -63,6 +74,7 @@ class Preferences(QDialog):
         mw.pref['bgmdir'] = form.bgmEdit.text()
         mw.pref['sfxdir'] = form.sfxEdit.text()
         mw.pref['onlineSrc'] = form.sourceCombo.currentText()
+        mw.pref['tts'] = form.ttsCombo.currentText()
 
 
     def reject(self):

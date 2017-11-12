@@ -2,6 +2,7 @@
 __all__ = [
  "copydialog",
  "download",
+ "langdetect",
  "main",
  "mp3dialog",
  "preferences",
@@ -10,6 +11,7 @@ __all__ = [
 ]
 from . import copydialog
 from . import download
+from . import langdetect
 from . import main
 from . import mp3dialog
 from . import preferences

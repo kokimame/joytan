@@ -60,10 +60,6 @@ class TranslateDialog(QDialog):
         self.framelist._update()
         self.reject()
 
-
-
-
-
     def reject(self):
         self.done(0)
         gui.dialogs.close("TranslateDialog")

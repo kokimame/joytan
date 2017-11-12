@@ -1,6 +1,15 @@
 from gui.qt import *
-from gui.utils import CustomLineEdit
 
+# Custom line editor
+class LineEdit(QLineEdit):
+    def __init__(self, text=''):
+        super(LineEdit, self).__init__(text)
+        # TODO: Set the default language from Preferences
+        self.langCode = 'en'
+
+    def setForeignText(self, text, langCode):
+        super().setText(text)
+        self.langCode = langCode
 
 class BundleFactory:
     def __init__(self):
@@ -90,7 +99,7 @@ class BundleWidget(QWidget):
         namelabel = QLabel("Name")
         namelabel.setFont(self.italFont)
         namelabel.setStyleSheet("QLabel { background-color : rgb(255, 255, 180); }")
-        nameedit = CustomLineEdit(text=name)
+        nameedit = LineEdit(text=name)
         editLayout.addWidget(namelabel, 0, 0)
         editLayout.addWidget(nameedit, 0, 1)
         self.editors["name"] = nameedit
@@ -100,7 +109,7 @@ class BundleWidget(QWidget):
             deflabel = QLabel("Def%d" % (i+1))
             deflabel.setFont(self.italFont)
             deflabel.setStyleSheet("QLabel { background-color : rgb(255, 180, 230); }")
-            defedit = CustomLineEdit()
+            defedit = LineEdit()
             editLayout.addWidget(deflabel, row, 0)
             editLayout.addWidget(defedit, row, 1)
             self.editors["def-%d" % (i+1)] = defedit
@@ -108,7 +117,7 @@ class BundleWidget(QWidget):
                 exlabel = QLabel("Ex%d-%d" % (i+1, j+1))
                 exlabel.setFont(self.italFont)
                 exlabel.setStyleSheet("QLabel { background-color : rgb(180, 230, 255); }")
-                exedit = CustomLineEdit()
+                exedit = LineEdit()
                 editLayout.addWidget(exlabel, row+1, 0)
                 editLayout.addWidget(exedit, row+1, 1)
                 self.editors["ex-%d-%d" % (i+1, j+1)] = exedit

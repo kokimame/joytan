@@ -17,12 +17,11 @@ def onExtract(mw):
     # Extract files one by one
     for file in files:
         words = extract(file)
-
-    gui.dialogs.open("LangDetectDialog", mw, {'name': 'en'})
-
     # Add word to frame
     for word in words:
         mw.framelist.addBundle(word, mw.frameMode)
+
+    gui.dialogs.open("LangDetectDialog", mw, {'name': 'en'})
 
 
 def extract(file):

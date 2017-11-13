@@ -2,6 +2,35 @@
 from gui.qt import *
 from gui.bundle import BundleFactory
 
+class MaxBundle:
+    def __init__(self):
+        self.dpw = 0
+        self.epd = 0
+        self.langMap = {'name': None}
+
+    def expand(self, dpw=None, epd=None):
+        if dpw and (self.dpw < dpw):
+            self.dpw = dpw
+            self.expandMap()
+        if epd and (self.epd < epd):
+            self.epd = epd
+            self.expandMap()
+
+        print("MaxBundle: LangMap -> ", self.langMap)
+
+    def expandMap(self):
+        for i in range(0, self.dpw):
+            try:
+                self.langMap['def-%d' % (i+1)]
+            except KeyError:
+                self.langMap['def-%d' % (i+1)] = None
+            for j in range(0, self.epd):
+                try:
+                    self.langMap['ex-%d-%d' % (i + 1, j + 1)]
+                except KeyError:
+                    self.langMap['ex-%d-%d' % (i + 1, j + 1)] = None
+
+
 class FrameList(QListWidget):
 
     def __init__(self, parent=None):
@@ -12,6 +41,7 @@ class FrameList(QListWidget):
                             QListWidget::item { border-bottom: 1px solid black; }
                             QListWidget::item:selected { background: rgba(0,255,255,30); }
                            """)
+        self.maxBundle = MaxBundle()
 
     def updateBundle(self, name, items):
         for bw in self.getCurrentBundleWidgets():
@@ -28,6 +58,9 @@ class FrameList(QListWidget):
             return
 
         bui, bw = self.bf.createUi(self.count() + 1, name, mode, parent=self)
+
+        self.maxBundle.expand(dpw=bw.dpw, epd=bw.epd)
+
         self.addItem(bui)
         self.setItemWidget(bui, bw)
 
@@ -44,6 +77,7 @@ class FrameList(QListWidget):
             bw = self.getBundleWidget(i)
             bw.index = i + 1
 
+    # Fixme: Remove the leading underscore by rename it to 'updateAll'
     def _update(self):
         # Update the inside of the bundles in the list
         print("Bundle updates")

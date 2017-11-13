@@ -22,7 +22,7 @@ class LangWidget(QWidget):
 
 
 class LangDetectDialog(QDialog):
-    def __init__(self, mw, langMap):
+    def __init__(self, mw, langMap=None):
         QDialog.__init__(self, mw, Qt.Window)
         self.mw = mw
         self.framelist = mw.framelist
@@ -36,7 +36,10 @@ class LangDetectDialog(QDialog):
         self.comboMap = {}
         langlist = self.form.langList
         framelist = self.mw.framelist
-        newKeys = list(langMap.keys())
+        if langMap:
+            newKeys = list(langMap.keys())
+        else:
+            newKeys = []
 
         # Sort items in the order of 'name', 'def-x' and 'ex-x-x'
         for row in sorted(sorted(list(framelist.maxBundle.langMap.keys())),

@@ -84,7 +84,7 @@ class EmotanMW(QMainWindow):
         form.dlButton.clicked.connect(self.onDownload)
         form.editButton.clicked.connect(self.onUpdateFrameMode)
         form.transButton.clicked.connect(self.onTranslate)
-        form.configButton.clicked.connect(lambda: print("-- Under construction --"))
+        form.configButton.clicked.connect(self.onConfigure)
         form.audioButton.clicked.connect(self.onCreateMp3)
         form.textButton.clicked.connect(self.onCreateText)
 
@@ -131,6 +131,9 @@ class EmotanMW(QMainWindow):
         self.framelist._update()
         import gui.translate
         gui.translate.onTranslate(self)
+
+    def onConfigure(self):
+        gui.dialogs.open("LangDetectDialog", self)
 
     def onCreateMp3(self):
         if self.framelist.count() == 0:

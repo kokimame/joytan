@@ -44,17 +44,20 @@ class TranslateDialog(QDialog):
         for bw in self.framelist.getCurrentBundleWidgets():
             self.mw.progress.update(label="Translating %s" % bw.name, maybeShow=False)
             if 'name' in transGroup:
-                bw.editors['name'].setForeignText(translate(bw.name), destCode)
+                bw.editors['name'].setText(translate(bw.name))
+                self.mw.framelist.maxBundle.langMap['name'] = destCode
 
             for i in range(1, bw.dpw+1):
                 define = bw.editors['def-%d' % i].text()
                 if 'definition' in transGroup and define != '':
-                    bw.editors['def-%d' % i].setForeignText(translate(define), destCode)
+                    bw.editors['def-%d' % i].setText(translate(define))
+                    self.mw.framelist.maxBundle.langMap['def-%d' % i] = destCode
 
                 for j in range(1, bw.epd+1):
                     examp = bw.editors['ex-%d-%d' % (i, j)].text()
                     if 'example' in transGroup and examp != '':
-                        bw.editors['ex-%d-%d' % (i, j)].setForeignText(translate(examp), destCode)
+                        bw.editors['ex-%d-%d' % (i, j)].setText(translate(examp))
+                        self.mw.framelist.maxBundle.langMap['ex-%d-%d' % (i, j)] = destCode
 
         self.mw.progress.finish()
         self.framelist._update()

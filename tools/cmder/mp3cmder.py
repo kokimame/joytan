@@ -89,7 +89,7 @@ class Mp3Cmder:
 
         for i in range(0, dpw):
             define = bw.editors['def-%d' % (i+1)].text()
-            defLang = bw.editors['def-%d' % (i+1)].langCode
+            defLang = self.setting['langMap']['def-%d' % (i+1)]
             if define == '': continue
 
             filename = os.path.join(curdir, "def-%d" % (i+1))
@@ -98,7 +98,7 @@ class Mp3Cmder:
 
             for j in range(0, epd):
                 examp = bw.editors['ex-%d-%d' % (i+1, j+1)].text()
-                exLang = bw.editors['ex-%d-%d' % (i+1, j+1)].langCode
+                exLang = self.setting['langMap']['ex-%d-%d' % (i+1, j+1)]
                 if examp == '': continue
 
                 filename = os.path.join(curdir, "ex-%d-%d" % ((i+1), (j+1)))
@@ -108,7 +108,7 @@ class Mp3Cmder:
     def compileBundle(self, bw, isGstatic=True):
         curdir = os.path.join(self.root, bw.getDirname())
 
-        langCode = bw.editors['name'].langCode
+        langCode = self.setting['langMap']['name']
         if isGstatic and (langCode == 'en'):
             from gui.download import downloadGstaticSound
             try:

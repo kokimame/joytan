@@ -12,23 +12,6 @@ def getVoiceInfo():
 
 
 class Say(BaseSpeecher):
-    langPpl = {'en': 'Alex',
-               'ja': 'Kyoko ',
-               'ko': 'Yuna',
-               'it': 'Alice',
-               'sv': 'Alva',
-               'fr': 'Thomas',
-               'de': 'Anna',
-               'zh-cn': 'Sin-ji',
-               'hi': 'Lekha',
-               'ru': 'Milena',
-               'ar': 'Maged',
-               'th': 'Kanya',
-               'id': 'Damayanti',
-               'he': 'Carmit',
-               'sk': 'Laura',
-               'eo': 'Monica'}
-
     # We want to call 'say -v ?' only once at runtime.
     # Don't call the command every time voice type changed.
     from gui.utils import isMac
@@ -36,31 +19,49 @@ class Say(BaseSpeecher):
         # voiceCombo has voice names shown in a combobox on Preferences
         voiceInfo = getVoiceInfo()
         voiceCombo = voiceInfo.keys()
+        code2Names = {}
+        for vc in voiceCombo:
+            vcs = vc.split(' ')
+            if len(vcs) == 2:
+                name, langCode = vcs[0], vcs[1].replace('_', '-').split('-')[0]
+            elif len(vcs) == 3: # 2 words voice name such as 'Good News' and 'Pipe organ'.
+                name, langCode = ' '.join([vcs[0], vcs[1]]), vcs[2].replace('_', '-').split('-')[0]
+            else:
+                raise Exception("Unexpected voice name found on Mac's say: ", vcs)
 
-    def dictate(self, script, lang=None, output=None):
-        print("Script: %s (%s)" % (script, lang))
+            try:
+                code2Names[langCode].append(name)
+            except KeyError:
+                code2Names[langCode] = [name]
+        print(code2Names)
+
+
+    def dictate(self, script, langCode=None, output=None):
+        print("Script: %s (%s)" % (script, langCode))
 
         if output:
             os.makedirs(os.path.dirname(output), exist_ok=True)
-            self.save(script, output, lang=lang)
+            self.save(script, output, langCode=langCode)
 
         else:
-            ppl = self.code2ppl(lang)
+            ppl = self.selectName(langCode)
             call('say %s "%s"' % (ppl, script), shell=True)
 
-    def save(self, script, output, lang=None):
-        ppl = self.code2ppl(lang)
+    def save(self, script, output, langCode=None):
+        ppl = self.selectName(langCode)
         cmd = 'say %s "%s" -o %s.aiff;' \
               'ffmpeg -loglevel panic -i %s.aiff -ac 2 -acodec libmp3lame -ar 44100 -ab 64k -f mp3 %s.mp3' \
               % (ppl, script, output, output, output)
         call(cmd, shell=True)
 
-    def code2ppl(self, lang):
+    def selectName(self, langCode):
         try:
-            ppl = '-v ' + self.langPpl[lang]
+            # Fixme: Allow users to select their favorite voice from a language
+            # Currently we pick up the first voice from the list of them for a language
+            ppl = '-v ' + self.code2Names[langCode][0]
         except (KeyError):
             ppl = ''
-            print("Unsupported language detected: %s" % lang)
+            print("Unsupported language detected: %s" % langCode)
         return ppl
 
     # Actually pre'listen' though.

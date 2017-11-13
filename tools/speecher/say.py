@@ -23,7 +23,9 @@ class Say(BaseSpeecher):
         for vc in voiceCombo:
             vcs = vc.split(' ')
             if len(vcs) == 2:
-                name, langCode = vcs[0], vcs[1].replace('_', '-').split('-')[0]
+                name, langCode = vcs[0], vcs[1].split('_')[0]
+                if langCode == 'zh':
+                    langCode = vcs[1].lower().replace('_', '-')
             elif len(vcs) == 3: # 2 words voice name such as 'Good News' and 'Pipe organ'.
                 name, langCode = ' '.join([vcs[0], vcs[1]]), vcs[2].replace('_', '-').split('-')[0]
             else:

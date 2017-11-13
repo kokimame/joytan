@@ -1,48 +1,75 @@
 import gui
 from gui.qt import *
-from gui.utils import LANGUAGES
+from gui.utils import LANGUAGES, LANGCODES
+
+class LangWidget(QWidget):
+    def __init__(self, label, langCode):
+        super(LangWidget, self).__init__()
+        self.label = label
+        self.langCode = langCode
+        self.initUi()
+
+    def initUi(self):
+        lbl = QLabel('%s' % self.label.title())
+        self.langCombo = QComboBox()
+        self.langCombo.addItems(sorted([lang.title() for lang in LANGUAGES.values()]))
+        self.langCombo.setCurrentText(LANGUAGES[self.langCode].title())
+
+        hbox = QHBoxLayout()
+        hbox.addWidget(lbl)
+        hbox.addWidget(self.langCombo)
+        self.setLayout(hbox)
+
 
 class LangDetectDialog(QDialog):
-    def __init__(self, mw, itemLang):
+    def __init__(self, mw, langMap):
         QDialog.__init__(self, mw, Qt.Window)
         self.mw = mw
         self.framelist = mw.framelist
         self.form = gui.forms.langdetect.Ui_LangDetectDialog()
         self.form.setupUi(self)
-        self.setupList(itemLang)
+        self.setupList(langMap)
         self.setupButtons()
         self.show()
 
-    def setupList(self, itemLang):
+    def setupList(self, langMap):
+        self.comboMap = {}
         langlist = self.form.langList
-        frame = self.mw.framelist
+        framelist = self.mw.framelist
+        newKeys = list(langMap.keys())
 
         # Sort items in the order of 'name', 'def-x' and 'ex-x-x'
-        for row in sorted(sorted(list(frame.maxBundle.langMap.keys())),
+        for row in sorted(sorted(list(framelist.maxBundle.langMap.keys())),
                           key=lambda x: ['n', 'd', 'e'].index(x[0])):
-            hbox = QHBoxLayout()
-            lbl = QLabel('%s' % row.title())
-            langCombo = QComboBox()
-            langCombo.addItems(sorted([lang.title() for lang in LANGUAGES.values()]))
-            lang = frame.maxBundle.langMap[row]
-            if lang:
-                langCombo.setCurrentText(LANGUAGES[lang].title())
+
+            if row in newKeys:
+                wig = LangWidget(row, langMap[row])
             else:
-                langCombo.setCurrentText(LANGUAGES['en'].title())
-            hbox.addWidget(lbl)
-            hbox.addWidget(langCombo)
-            wig = QWidget()
-            wig.setLayout(hbox)
+                langCode = framelist.maxBundle.langMap[row]
+                if langCode:
+                    wig = LangWidget(row, langCode)
+                else:
+                    # Temporally we consider English as default
+                    wig = LangWidget(row, 'en')
+
             lwi = QListWidgetItem()
             lwi.setSizeHint(wig.sizeHint())
             langlist.addItem(lwi)
             langlist.setItemWidget(lwi, wig)
 
-
     def setupButtons(self):
         form = self.form
         form.cancelBtn.clicked.connect(self.reject)
-        form.okBtn.clicked.connect(self.reject)
+        form.okBtn.clicked.connect(self.onOk)
+
+    def onOk(self):
+        langlist = self.form.langList
+        framelist = self.mw.framelist
+        for i in range(langlist.count()):
+            wig = langlist.itemWidget(langlist.item(i))
+            framelist.maxBundle.langMap[wig.label] = LANGCODES[wig.langCombo.currentText().lower()]
+
+        self.reject()
 
     def reject(self):
         self.done(0)

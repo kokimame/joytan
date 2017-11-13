@@ -39,7 +39,7 @@ class Preferences(QDialog):
 
     def setVoiceCombo(self, newTts):
         form = self.form
-        form.voiceCombo.addItems(Speechers[newTts].voiceCombo)
+        form.voiceCombo.addItems(sorted(Speechers[newTts].voiceCombo))
 
     def setupButtons(self):
         form = self.form

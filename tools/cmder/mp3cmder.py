@@ -93,7 +93,7 @@ class Mp3Cmder:
             if define == '': continue
 
             filename = os.path.join(curdir, "def-%d" % (i+1))
-            self.tts.dictate(define, lang=defLang, output=filename)
+            self.tts.dictate(define, langCode=defLang, output=filename)
             self.catSequence[bw.name].append({"def": filename})
 
             for j in range(0, epd):
@@ -102,7 +102,7 @@ class Mp3Cmder:
                 if examp == '': continue
 
                 filename = os.path.join(curdir, "ex-%d-%d" % ((i+1), (j+1)))
-                self.tts.dictate(examp, lang=exLang, output=filename)
+                self.tts.dictate(examp, langCode=exLang, output=filename)
                 self.catSequence[bw.name].append({"ex": filename})
 
     def compileBundle(self, bw, isGstatic=True):
@@ -115,9 +115,9 @@ class Mp3Cmder:
                 downloadGstaticSound(bw.name, os.path.join(curdir, "pronounce.mp3"))
             except:
                 # If gstatic pronunciation file is not found, use TTS.
-                self.tts.dictate(bw.name, lang=langCode, output=os.path.join(curdir, "pronounce"))
+                self.tts.dictate(bw.name, langCode=langCode, output=os.path.join(curdir, "pronounce"))
         else:
-            self.tts.dictate(bw.name, lang=langCode, output=os.path.join(curdir, "pronounce"))
+            self.tts.dictate(bw.name, langCode=langCode, output=os.path.join(curdir, "pronounce"))
 
         wordhead = repeatMp3(os.path.join(curdir, "pronounce.mp3"), self.setting['repeat'])
 
@@ -156,7 +156,7 @@ def mixWithBgm(bgm, acap, output):
 
 def previewTts(ttsName):
     script = "This is the preview of Text-To-Speech."
-    Speechers[ttsName]().dictate(script, lang='en')
+    Speechers[ttsName]().dictate(script, langCode='en')
 
 
 ####################################

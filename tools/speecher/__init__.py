@@ -8,10 +8,10 @@ from gui.utils import isWin
 
 
 class BaseSpeecher:
-    def dictate(self, script, lang=None, output=None):
+    def dictate(self, script, langCode=None, output=None):
         raise NotImplementedError
 
-    def save(self, script, output, lang=None):
+    def save(self, script, output, langCode=None):
         raise NotImplementedError
 
     def isSupported(self):

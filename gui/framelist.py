@@ -11,14 +11,14 @@ class MaxBundle:
     def expand(self, dpw=None, epd=None):
         if dpw and (self.dpw < dpw):
             self.dpw = dpw
-            self.expandMap()
+            self.expandLangMap()
         if epd and (self.epd < epd):
             self.epd = epd
-            self.expandMap()
+            self.expandLangMap()
 
         print("MaxBundle: LangMap -> ", self.langMap)
 
-    def expandMap(self):
+    def expandLangMap(self):
         for i in range(0, self.dpw):
             try:
                 self.langMap['def-%d' % (i+1)]

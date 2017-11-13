@@ -135,5 +135,6 @@ class Ui_MainWindow(object):
         self.actionMp3Volume.setText(_translate("MainWindow", "Change volume of MP3 file"))
         self.actionNewSfx.setText(_translate("MainWindow", "Create new sound effect"))
         self.actionRecording.setText(_translate("MainWindow", "Voice recoder"))
-        self.actionCopy.setText(_translate("MainWindow", "&Copy contents..."))
+        self.actionCopy.setText(_translate("MainWindow", "Smart Copy"))
+        self.actionCopy.setShortcut(_translate("MainWindow", "Ctrl+Shift+C"))
 

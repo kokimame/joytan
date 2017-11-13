@@ -208,7 +208,10 @@
   </action>
   <action name="actionCopy">
    <property name="text">
-    <string>&amp;Copy contents...</string>
+    <string>Smart Copy</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+C</string>
    </property>
   </action>
  </widget>

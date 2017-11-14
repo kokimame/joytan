@@ -45,6 +45,7 @@ class Mp3Widget(QWidget):
         self.playBtn = QPushButton("Play")
         self.playBtn.clicked.connect(lambda: self.mp.playContent(self.content))
         volSld = QSlider(Qt.Horizontal)
+        volSld.setFixedWidth(90)
         volSld.setRange(0, 100)
         volSld.setValue(100)
         volSld.valueChanged.connect(self.mp.setVolume)
@@ -53,6 +54,7 @@ class Mp3Widget(QWidget):
         hbox.addWidget(delBtn)
         hbox.addWidget(label)
         hbox.addWidget(self.playBtn)
+        hbox.addItem(QSpacerItem(0, 0, QSizePolicy.Expanding, QSizePolicy.Minimum))
         hbox.addWidget(volSld)
 
         self.setLayout(hbox)

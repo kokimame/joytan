@@ -9,7 +9,7 @@ isMac = sys.platform.startswith("darwin")
 isWin = sys.platform.startswith("win32")
 isLin = not isMac and not isWin
 
-def getFileToSave(parent, title, filter="*.*", dir=None):
+def getFileToSave(parent, title, filter="*.*", dir=None, suf='emt'):
     opts = QFileDialog.Options()
     opts |= QFileDialog.DontUseNativeDialog
     fd = QFileDialog()
@@ -21,6 +21,7 @@ def getFileToSave(parent, title, filter="*.*", dir=None):
     fd.setFileMode(QFileDialog.AnyFile)
     fd.setWindowTitle(title)
     fd.setNameFilter(filter)
+    fd.setDefaultSuffix(suf)
 
     fd.exec_()
 

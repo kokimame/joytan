@@ -97,6 +97,9 @@ class Ui_MainWindow(object):
         self.actionRecording.setObjectName("actionRecording")
         self.actionCopy = QtWidgets.QAction(MainWindow)
         self.actionCopy.setObjectName("actionCopy")
+        self.actionSave = QtWidgets.QAction(MainWindow)
+        self.actionSave.setObjectName("actionSave")
+        self.menuFile.addAction(self.actionSave)
         self.menuFile.addAction(self.actionExtract)
         self.menuFile.addSeparator()
         self.menuFile.addAction(self.actionExit)
@@ -137,4 +140,6 @@ class Ui_MainWindow(object):
         self.actionRecording.setText(_translate("MainWindow", "Voice recoder"))
         self.actionCopy.setText(_translate("MainWindow", "Smart Copy"))
         self.actionCopy.setShortcut(_translate("MainWindow", "Ctrl+Shift+C"))
+        self.actionSave.setText(_translate("MainWindow", "Save..."))
+        self.actionSave.setShortcut(_translate("MainWindow", "Ctrl+S"))
 

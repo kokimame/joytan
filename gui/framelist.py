@@ -6,7 +6,10 @@ class MaxBundle:
     def __init__(self):
         self.dpw = 0
         self.epd = 0
-        self.langMap = {'name': None}
+        # Fixme: Allow users to choose default language from preference
+        # Temporally set English by default
+        self.defaultLang = 'en'
+        self.langMap = {'name': self.defaultLang}
 
     def expand(self, dpw=None, epd=None):
         if dpw and (self.dpw < dpw):
@@ -23,12 +26,12 @@ class MaxBundle:
             try:
                 self.langMap['def-%d' % (i+1)]
             except KeyError:
-                self.langMap['def-%d' % (i+1)] = None
+                self.langMap['def-%d' % (i+1)] = self.defaultLang
             for j in range(0, self.epd):
                 try:
                     self.langMap['ex-%d-%d' % (i + 1, j + 1)]
                 except KeyError:
-                    self.langMap['ex-%d-%d' % (i + 1, j + 1)] = None
+                    self.langMap['ex-%d-%d' % (i + 1, j + 1)] = self.defaultLang
 
 
 class FrameList(QListWidget):

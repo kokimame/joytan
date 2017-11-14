@@ -58,7 +58,7 @@ class Preferences(QDialog):
         form = self.form
         mw = self.mw
         form.titleEdit.setText(mw.pref['title'])
-        form.workingEdit.setText(mw.pref['workdir'])
+        form.workingEdit.setText(mw.pref['workspace'])
         form.wordEdit.setText(mw.pref['worddir'])
         form.bgmEdit.setText(mw.pref['bgmdir'])
         form.sfxEdit.setText(mw.pref['sfxdir'])
@@ -80,7 +80,7 @@ class Preferences(QDialog):
         form = self.form
         mw = self.mw
         mw.pref['title'] = form.titleEdit.text()
-        mw.pref['workdir'] = form.workingEdit.text()
+        mw.pref['workspace'] = form.workingEdit.text()
         mw.pref['worddir'] = form.wordEdit.text()
         mw.pref['bgmdir'] = form.bgmEdit.text()
         mw.pref['sfxdir'] = form.sfxEdit.text()

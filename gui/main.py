@@ -7,21 +7,21 @@ import gui
 def defaultPref():
     import os
     cwd = os.getcwd()
-    workdir = None
+    workspace = None
     tts = None
 
     if isLin:
-        workdir = os.path.join("/home", "kokimame", "Emotan", "workspace")
+        workspace = os.path.join("/home", "kokimame", "Emotan", "workspace")
         tts = "espeak"
     elif isMac:
-        workdir = os.path.join("/Users", "Koki", "Emotan", "workspace")
+        workspace = os.path.join("/Users", "Koki", "Emotan", "workspace")
         tts = "say"
     else:
-        workdir = os.path.join("C:", "\\Users", "Koki", "Documents", "Emotan", "workspace")
+        workspace = os.path.join("C:", "\\Users", "Koki", "Documents", "Emotan", "workspace")
         tts = "espeak"
 
     return {
-        "workdir": workdir,
+        "workspace": workspace,
         "tts": tts,
         "sfxdir": os.path.join(cwd, "templates", "sfx"),
         "worddir": os.path.join(cwd, "templates", "wordlist"),
@@ -54,7 +54,7 @@ class EmotanMW(QMainWindow):
         self.setupProgress()
 
     def getRootPath(self):
-        return os.path.join(self.pref['workdir'], self.pref['title'])
+        return os.path.join(self.pref['workspace'], self.pref['title'])
 
     def setupMainWindow(self):
         self.form = gui.forms.main.Ui_MainWindow()

@@ -147,3 +147,13 @@ class BundleWidget(QWidget):
             for j in range(0, min(self.epd, len(items[i]['examples']))):
                 self.editors['ex-%d-%d' % (i+1, j+1)].setText(items[i]['examples'][j])
 
+    def dataToSave(self):
+        data = {}
+        data['name'] = self.editors['name'].text()
+        for i in range(0, self.dpw):
+            data['def-%d' % (i+1)] = self.editors['def-%d' % (i+1)].text()
+            for j in range(self.epd):
+                data['ex-%d-%d' % (i+1, j+1)] = self.editors['ex-%d-%d' % (i+1, j+1)].text()
+
+        return data
+

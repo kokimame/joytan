@@ -1,18 +1,5 @@
 from gui.qt import *
 
-class BundleFactory:
-    def __init__(self):
-        # TODO: More should be coming
-        self.pref = {
-            "dpw": 1,       # Definitions per Bundle
-            "epd": 1        # Examples per Definition
-        }
-
-    def createUi(self, index, name, mode, parent=None):
-        bui, bw = QListWidgetItem(), BundleWidget(index, name, mode, self.pref, parent=parent)
-        bui.setSizeHint(bw.sizeHint())
-        return bui, bw
-
 
 class BundleWidget(QWidget):
     def __init__(self, index, name, mode, pref, parent=None):

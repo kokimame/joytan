@@ -1,17 +1,19 @@
-
 from gui.qt import *
-from gui.bundle import BundleFactory
 
 class FrameList(QListWidget):
 
     class Setting:
         def __init__(self):
-            self.dpw = 0
-            self.epd = 0
+            # Fixme: ...................
+            self.dpw = 0 # Will be expanded soon later at the 'expand()' below!
+            self.epd = 0 # Same here. The method is a bit dumb though.
             # Fixme: Allow users to choose default language from preference
             # Temporally set English by default
             self.defaultLang = 'en'
             self.langMap = {'name': self.defaultLang}
+
+            self.expand(dpw=1, epd=1)
+
 
         def expand(self, dpw=None, epd=None):
             if dpw and (self.dpw < dpw):
@@ -35,7 +37,8 @@ class FrameList(QListWidget):
                     except KeyError:
                         self.langMap['ex-%d-%d' % (i + 1, j + 1)] = self.defaultLang
 
-        def dataToSave(self):
+        # Returns the class' properties in a dictionary. Will be called on saving.
+        def data(self):
             data = {'dpw': self.dpw,
                     'epd': self.epd,
                     'langMap': None}
@@ -51,13 +54,18 @@ class FrameList(QListWidget):
 
     def __init__(self, parent=None):
         super(FrameList, self).__init__(parent)
-        self.bf = BundleFactory()
         self.setSelectionMode(QAbstractItemView.ExtendedSelection)
         self.setStyleSheet("""
                             QListWidget::item { border-bottom: 1px solid black; }
                             QListWidget::item:selected { background: rgba(0,255,255,30); }
                            """)
         self.setting = self.Setting()
+
+    def createUi(self, index, name, mode, parent=None):
+        from gui.bundle import BundleWidget
+        bui, bw = QListWidgetItem(), BundleWidget(index, name, mode, self.setting.data(), parent=parent)
+        bui.setSizeHint(bw.sizeHint())
+        return bui, bw
 
     def updateBundle(self, name, items):
         for bw in self.getCurrentBundleWidgets():
@@ -73,7 +81,7 @@ class FrameList(QListWidget):
             print("Bundle with name %s already exists." % name)
             return
 
-        bui, bw = self.bf.createUi(self.count() + 1, name, mode, parent=self)
+        bui, bw = self.createUi(self.count() + 1, name, mode, parent=self)
 
         self.setting.expand(dpw=bw.dpw, epd=bw.epd)
 

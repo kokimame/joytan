@@ -134,7 +134,8 @@ class BundleWidget(QWidget):
             for j in range(0, min(self.epd, len(items[i]['examples']))):
                 self.editors['ex-%d-%d' % (i+1, j+1)].setText(items[i]['examples'][j])
 
-    def dataToSave(self):
+    # Returns the class' properties in a dictionary. Will be called on saving.
+    def data(self):
         data = {}
         data['name'] = self.editors['name'].text()
         data['dpw'] = self.dpw

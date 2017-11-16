@@ -16,7 +16,7 @@ def onSave(mw):
 
     dataToSave = []
     with open(newfile, "w") as f:
-        dataToSave.append(mw.framelist.setting.dataToSave())
+        dataToSave.append(mw.framelist.setting.data())
 
         for bw in mw.framelist.getCurrentBundleWidgets():
             dataToSave.append(bw.dataToSave())

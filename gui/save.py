@@ -25,7 +25,7 @@ def onSave(mw):
             for j in range(0, maxb.epd):
                 f.write("[ex-%d-%d]%s\n" % (i+1, j+1, maxb.langMap['ex-%d-%d' % (i+1, j+1)]))
 
-        f.write("\n[contents]\n")
+        f.write("[contents]\n")
 
         for bw in mw.framelist.getCurrentBundleWidgets():
             json.dump(bw.dataToSave(), f, indent=4)

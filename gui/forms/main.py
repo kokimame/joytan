@@ -146,4 +146,5 @@ class Ui_MainWindow(object):
         self.actionSave.setText(_translate("MainWindow", "Save..."))
         self.actionSave.setShortcut(_translate("MainWindow", "Ctrl+S"))
         self.actionOpen.setText(_translate("MainWindow", "Open..."))
+        self.actionOpen.setShortcut(_translate("MainWindow", "Ctrl+O"))
 

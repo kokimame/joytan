@@ -25,7 +25,11 @@ def getFileToSave(parent, title, filter="*.*", dir=None, suf='ewl'):
 
     fd.exec_()
 
-    return fd.selectedFiles()[0]
+    try:
+        return fd.selectedFiles()[0]
+    except IndexError:
+        print("Invalid file selected")
+        return
 
 
 def getFiles(parent, title, filter="*.*", dir=None):
@@ -55,7 +59,11 @@ def getFile(parent, title, filter="*.*", dir=None):
     fd.setNameFilter(filter)
     fd.exec_()
 
-    return fd.selectedFiles()[0]
+    try:
+        return fd.selectedFiles()[0]
+    except IndexError:
+        print("Invalid file selected")
+        return
 
 def getFileNameFromPath(longpath):
     return os.path.basename(os.path.normpath(longpath))

@@ -67,7 +67,7 @@ class EmotanMW(QMainWindow):
 
     def setupMenus(self):
         form = self.form
-        form.actionExtract.triggered.connect(self.onExtract)
+        form.actionExtract_2.triggered.connect(self.onExtract)
         form.actionPreferences.triggered.connect(self.onPreferences)
         form.actionCopy.triggered.connect(self.onCopyContents)
         form.actionSave.triggered.connect(self.onSave)

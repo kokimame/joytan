@@ -120,7 +120,6 @@
     </property>
     <addaction name="actionOpen"/>
     <addaction name="actionSave"/>
-    <addaction name="actionExtract"/>
     <addaction name="separator"/>
     <addaction name="actionExit"/>
    </widget>
@@ -137,6 +136,7 @@
     <property name="title">
      <string>&amp;Tools</string>
     </property>
+    <addaction name="actionExtract_2"/>
     <addaction name="actionWav2Mp3"/>
     <addaction name="actionMp3Volume"/>
     <addaction name="actionNewSfx"/>
@@ -230,6 +230,11 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+O</string>
+   </property>
+  </action>
+  <action name="actionExtract_2">
+   <property name="text">
+    <string>Extract words from file</string>
    </property>
   </action>
  </widget>

@@ -2,39 +2,49 @@
 from gui.qt import *
 from gui.bundle import BundleFactory
 
-class MaxBundle:
-    def __init__(self):
-        self.dpw = 0
-        self.epd = 0
-        # Fixme: Allow users to choose default language from preference
-        # Temporally set English by default
-        self.defaultLang = 'en'
-        self.langMap = {'name': self.defaultLang}
-
-    def expand(self, dpw=None, epd=None):
-        if dpw and (self.dpw < dpw):
-            self.dpw = dpw
-            self.expandLangMap()
-        if epd and (self.epd < epd):
-            self.epd = epd
-            self.expandLangMap()
-
-        print("MaxBundle: LangMap -> ", self.langMap)
-
-    def expandLangMap(self):
-        for i in range(0, self.dpw):
-            try:
-                self.langMap['def-%d' % (i+1)]
-            except KeyError:
-                self.langMap['def-%d' % (i+1)] = self.defaultLang
-            for j in range(0, self.epd):
-                try:
-                    self.langMap['ex-%d-%d' % (i + 1, j + 1)]
-                except KeyError:
-                    self.langMap['ex-%d-%d' % (i + 1, j + 1)] = self.defaultLang
-
-
 class FrameList(QListWidget):
+
+    class Setting:
+        def __init__(self):
+            self.dpw = 0
+            self.epd = 0
+            # Fixme: Allow users to choose default language from preference
+            # Temporally set English by default
+            self.defaultLang = 'en'
+            self.langMap = {'name': self.defaultLang}
+
+        def expand(self, dpw=None, epd=None):
+            if dpw and (self.dpw < dpw):
+                self.dpw = dpw
+                self.expandLangMap()
+            if epd and (self.epd < epd):
+                self.epd = epd
+                self.expandLangMap()
+
+            print("FrameSetting: LangMap -> ", self.langMap)
+
+        def expandLangMap(self):
+            for i in range(0, self.dpw):
+                try:
+                    self.langMap['def-%d' % (i + 1)]
+                except KeyError:
+                    self.langMap['def-%d' % (i + 1)] = self.defaultLang
+                for j in range(0, self.epd):
+                    try:
+                        self.langMap['ex-%d-%d' % (i + 1, j + 1)]
+                    except KeyError:
+                        self.langMap['ex-%d-%d' % (i + 1, j + 1)] = self.defaultLang
+
+        def dataToSave(self):
+            data = {'dpw': self.dpw,
+                    'epd': self.epd,
+                    'name': self.langMap['name']}
+
+            for i in range(0, self.dpw):
+                data['def-%d' % (i + 1)] = self.langMap['def-%d' % (i + 1)]
+                for j in range(0, self.epd):
+                    data['ex-%d-%d' % (i + 1, j + 1)] = self.langMap['ex-%d-%d' % (i + 1, j + 1)]
+            return data
 
     def __init__(self, parent=None):
         super(FrameList, self).__init__(parent)
@@ -44,7 +54,7 @@ class FrameList(QListWidget):
                             QListWidget::item { border-bottom: 1px solid black; }
                             QListWidget::item:selected { background: rgba(0,255,255,30); }
                            """)
-        self.maxBundle = MaxBundle()
+        self.setting = self.Setting()
 
     def updateBundle(self, name, items):
         for bw in self.getCurrentBundleWidgets():
@@ -62,7 +72,7 @@ class FrameList(QListWidget):
 
         bui, bw = self.bf.createUi(self.count() + 1, name, mode, parent=self)
 
-        self.maxBundle.expand(dpw=bw.dpw, epd=bw.epd)
+        self.setting.expand(dpw=bw.dpw, epd=bw.epd)
 
         self.addItem(bui)
         self.setItemWidget(bui, bw)

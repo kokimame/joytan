@@ -150,7 +150,7 @@ class Mp3Dialog(QDialog):
         setting['lrc'] = isLrc
         setting['repeat'] = self.form.wordSpin.value()
         setting['tts'] = self.mw.pref['tts']
-        setting['langMap'] = self.mw.framelist.maxBundle.langMap
+        setting['langMap'] = self.mw.framelist.setting.langMap
 
         sfxdir = {}
         group = None

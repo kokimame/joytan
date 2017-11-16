@@ -42,13 +42,13 @@ class LangDetectDialog(QDialog):
             newKeys = []
 
         # Sort items in the order of 'name', 'def-x' and 'ex-x-x'
-        for row in sorted(sorted(list(framelist.maxBundle.langMap.keys())),
+        for row in sorted(sorted(list(framelist.setting.langMap.keys())),
                           key=lambda x: ['n', 'd', 'e'].index(x[0])):
 
             if row in newKeys:
                 wig = LangWidget(row, langMap[row])
             else:
-                langCode = framelist.maxBundle.langMap[row]
+                langCode = framelist.setting.langMap[row]
                 if langCode:
                     wig = LangWidget(row, langCode)
                 else:
@@ -70,7 +70,7 @@ class LangDetectDialog(QDialog):
         framelist = self.mw.framelist
         for i in range(langlist.count()):
             wig = langlist.itemWidget(langlist.item(i))
-            framelist.maxBundle.langMap[wig.label] = LANGCODES[wig.langCombo.currentText().lower()]
+            framelist.setting.langMap[wig.label] = LANGCODES[wig.langCombo.currentText().lower()]
 
         self.reject()
 

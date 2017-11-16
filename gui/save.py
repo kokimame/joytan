@@ -14,18 +14,8 @@ def onSave(mw):
     if os.path.isdir(newfile):
         return
 
-    maxb = mw.framelist.maxBundle
     with open(newfile, "w") as f:
-        f.write("[dpw]%d\n" % maxb.dpw)
-        f.write("[epd]%d\n" % maxb.epd)
-
-        f.write("[name]%s\n" % maxb.langMap['name'])
-        for i in range(0, maxb.dpw):
-            f.write("[def-%d]%s\n" % (i+1, maxb.langMap['def-%d' % (i+1)]))
-            for j in range(0, maxb.epd):
-                f.write("[ex-%d-%d]%s\n" % (i+1, j+1, maxb.langMap['ex-%d-%d' % (i+1, j+1)]))
-
-        f.write("[contents]\n")
+        json.dump(mw.framelist.setting.dataToSave(), f, indent=4)
 
         for bw in mw.framelist.getCurrentBundleWidgets():
             json.dump(bw.dataToSave(), f, indent=4)

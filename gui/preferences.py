@@ -50,9 +50,9 @@ class Preferences(QDialog):
 
     def setupSpins(self):
         form = self.form
-        factory = self.mw.framelist.bf
-        form.dpwSpin.setValue(factory.pref['dpw'])
-        form.epdSpin.setValue(factory.pref['epd'])
+        fs = self.mw.framelist.setting
+        form.dpwSpin.setValue(fs.dpw)
+        form.epdSpin.setValue(fs.epd)
 
     def setupEditors(self):
         form = self.form
@@ -72,9 +72,9 @@ class Preferences(QDialog):
 
     def updateBundlePref(self):
         form = self.form
-        factory = self.mw.framelist.bf
-        factory.pref['dpw'] = form.dpwSpin.value()
-        factory.pref['epd'] = form.epdSpin.value()
+        fs = self.mw.framelist.setting
+        fs.expand(dpw=form.dpwSpin.value())
+        fs.expand(epd=form.epdSpin.value())
 
     def updateMainPref(self):
         form = self.form

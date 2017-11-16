@@ -99,6 +99,9 @@ class Ui_MainWindow(object):
         self.actionCopy.setObjectName("actionCopy")
         self.actionSave = QtWidgets.QAction(MainWindow)
         self.actionSave.setObjectName("actionSave")
+        self.actionOpen = QtWidgets.QAction(MainWindow)
+        self.actionOpen.setObjectName("actionOpen")
+        self.menuFile.addAction(self.actionOpen)
         self.menuFile.addAction(self.actionSave)
         self.menuFile.addAction(self.actionExtract)
         self.menuFile.addSeparator()
@@ -142,4 +145,5 @@ class Ui_MainWindow(object):
         self.actionCopy.setShortcut(_translate("MainWindow", "Ctrl+Shift+C"))
         self.actionSave.setText(_translate("MainWindow", "Save..."))
         self.actionSave.setShortcut(_translate("MainWindow", "Ctrl+S"))
+        self.actionOpen.setText(_translate("MainWindow", "Open..."))
 

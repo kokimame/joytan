@@ -7,7 +7,7 @@ from gui.utils import getFileToSave
 
 def onSave(mw):
     # Save contents of framelist as a file, temporally whose extension is original '.emt'.
-    filter = "Emotan Wordlist format (*.emt)"
+    filter = "Emotan Wordlist format (*.ewl)"
     newfile = getFileToSave(mw, "Save Wordlist", dir=mw.pref['workspace'], filter=filter)
 
     # Ignore if selected file is a directory by accident

@@ -67,6 +67,7 @@ class EmotanMW(QMainWindow):
 
     def setupMenus(self):
         form = self.form
+        # Fixme: Failed to use the original name 'actionExtract' on Qt Designer
         form.actionExtract_2.triggered.connect(self.onExtract)
         form.actionPreferences.triggered.connect(self.onPreferences)
         form.actionCopy.triggered.connect(self.onCopyContents)

@@ -71,6 +71,7 @@ class EmotanMW(QMainWindow):
         form.actionPreferences.triggered.connect(self.onPreferences)
         form.actionCopy.triggered.connect(self.onCopyContents)
         form.actionSave.triggered.connect(self.onSave)
+        form.actionOpen.triggered.connect(self.onOpen)
 
     def setupButtons(self):
         form = self.form
@@ -95,6 +96,10 @@ class EmotanMW(QMainWindow):
 
     def onPreferences(self):
         gui.dialogs.open("Preferences", self)
+
+    def onOpen(self):
+        import gui.open
+        gui.open.onOpen(self)
 
     def onSave(self):
         import gui.save

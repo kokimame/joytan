@@ -38,12 +38,15 @@ class FrameList(QListWidget):
         def dataToSave(self):
             data = {'dpw': self.dpw,
                     'epd': self.epd,
-                    'name': self.langMap['name']}
+                    'langMap': None}
+            langMap = {'name': self.langMap['name']}
 
             for i in range(0, self.dpw):
-                data['def-%d' % (i + 1)] = self.langMap['def-%d' % (i + 1)]
+                langMap['def-%d' % (i + 1)] = self.langMap['def-%d' % (i + 1)]
                 for j in range(0, self.epd):
-                    data['ex-%d-%d' % (i + 1, j + 1)] = self.langMap['ex-%d-%d' % (i + 1, j + 1)]
+                    langMap['ex-%d-%d' % (i + 1, j + 1)] = self.langMap['ex-%d-%d' % (i + 1, j + 1)]
+
+            data['langMap'] = langMap
             return data
 
     def __init__(self, parent=None):

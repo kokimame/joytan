@@ -61,9 +61,9 @@ class FrameList(QListWidget):
                            """)
         self.setting = self.Setting()
 
-    def createUi(self, index, name, mode, parent=None):
+    def createUi(self, index, name, mode, setting, parent=None):
         from gui.bundle import BundleWidget
-        bui, bw = QListWidgetItem(), BundleWidget(index, name, mode, self.setting.data(), parent=parent)
+        bui, bw = QListWidgetItem(), BundleWidget(index, name, mode, setting, parent=parent)
         bui.setSizeHint(bw.sizeHint())
         return bui, bw
 
@@ -74,14 +74,15 @@ class FrameList(QListWidget):
                 return
         raise Exception("Error: Bundle with name '%s' is not found in the Frame" % name)
 
-
-    def addBundle(self, name, mode):
+    def addBundle(self, name, mode, setting=None):
+        if not setting:
+            setting = self.setting.data()
         if name == '': pass
         elif name in [bw.name for bw in self.getCurrentBundleWidgets()]:
             print("Bundle with name %s already exists." % name)
             return
 
-        bui, bw = self.createUi(self.count() + 1, name, mode, parent=self)
+        bui, bw = self.createUi(self.count() + 1, name, mode, setting, parent=self)
 
         self.setting.expand(dpw=bw.dpw, epd=bw.epd)
 
@@ -126,6 +127,11 @@ class FrameList(QListWidget):
         for bw in self.getCurrentBundleWidgets():
             bw.editors['def-1'].setText(bw.editors['name'].text())
 
+    def getBundle(self, name):
+        for bw in self.getCurrentBundleWidgets():
+            if bw.name == name:
+                return bw
+        raise Exception("Error: Bundle with name '%s' is not found in the Frame" % name)
 
     def getCurrentBundleWidgets(self):
         return [self.getBundleWidget(i) for i in range(self.count())]

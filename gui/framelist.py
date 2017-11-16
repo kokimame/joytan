@@ -95,6 +95,10 @@ class FrameList(QListWidget):
             self.updateIndex()
         self._update()
 
+    def deleteAll(self):
+        for _ in range(self.count()):
+            self.takeItem(0)
+
     def updateIndex(self):
         # Update index of bundles after Nth bundle
         for i in range(self.count()):

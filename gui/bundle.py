@@ -150,6 +150,8 @@ class BundleWidget(QWidget):
     def dataToSave(self):
         data = {}
         data['name'] = self.editors['name'].text()
+        data['dpw'] = self.dpw
+        data['epd'] = self.epd
         for i in range(0, self.dpw):
             data['def-%d' % (i+1)] = self.editors['def-%d' % (i+1)].text()
             for j in range(self.epd):

@@ -76,7 +76,10 @@ class Mp3Cmder:
 
             if not len(sfxlist) == 0:
                 self.sfxMap[group] = os.path.join(self.finalDir, group + "-sfx.mp3")
-                catListMp3(sfxlist, self.sfxMap[group])
+                inputs = ''
+                for file in sfxlist:
+                    inputs += '%s ' % file
+                catMp3(inputs, '', self.sfxMap[group])
             else:
                 # If no sfx for a group, store empty string, which will be ignored on concat
                 self.sfxMap[group] = ''
@@ -144,7 +147,6 @@ class Mp3Cmder:
                 except KeyError:
                     pass
 
-        # TODO: Replace 'catListMp3' with 'catMp3' by using it like below.
         catMp3(inputs, "", os.path.join(self.root, bw.getDirname() + ".mp3"))
 
     def mergeMp3s(self):
@@ -248,23 +250,12 @@ def repeatMp3(file, repeat):
     return output
 
 
-# TODO: Merge two methods below into one
 def catMp3(file1, file2, output):
     if isWin:
         cmd = "type %s %s > %s" % (file1, file2, output)
     else:
         cmd = "cat %s %s > %s" % (file1, file2, output)
     print(cmd)
-    call(cmd, shell=True)
-
-def catListMp3(filelist, output):
-    if isWin:
-        cmd = "type "
-    else:
-        cmd = "cat "
-    for file in filelist:
-        cmd += "%s " % file
-    cmd += "> %s" % output
     call(cmd, shell=True)
 
 def getMp3Info(mp3file):

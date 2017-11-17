@@ -199,7 +199,7 @@ class Mp3Dialog(QDialog):
             cmder.compileBundle(bw, isGstatic=isGstatic)
 
         self.mw.progress.update(step=10, label="Merging generated audio files...", maybeShow=False)
-        cmder.mergeDirMp3()
+        cmder.mergeMp3s()
 
         self.mw.progress.update(step=10, label="Creating BGM loop...", maybeShow=False)
         cmder.createBgmLoop()

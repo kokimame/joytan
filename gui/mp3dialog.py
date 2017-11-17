@@ -227,8 +227,8 @@ class Mp3Dialog(QDialog):
 
             sfxList.insertItem(row, lwi)
             sfxList.setItemWidget(lwi, w)
-        except (IndexError, AssertionError):
-            print("Invalid file is selected.")
+        except (IndexError, AssertionError, TypeError):
+            print("Error: Invalid file is selected.")
             pass
 
     def onBgmClicked(self, idx=None):
@@ -244,8 +244,8 @@ class Mp3Dialog(QDialog):
             lwi.setSizeHint(w.sizeHint())
             bgmList.addItem(lwi)
             bgmList.setItemWidget(lwi, w)
-        except (IndexError, AssertionError):
-            print("Invalid file is selected.")
+        except (IndexError, AssertionError, TypeError):
+            print("Error: Invalid file is selected.")
             pass
 
     def onDeleteSfx(self, lwi):

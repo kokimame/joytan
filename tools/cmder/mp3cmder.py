@@ -19,8 +19,9 @@ class Mp3Cmder:
         self.finalMp3 = os.path.join(self.finalDir, "FINAL.mp3")
         self.bitkbs = None  # bit rate (Kbit/s)
         self.fskhz = None      # Sampling rate (kHz)
-        # Dictionary to store the sequence of concatenating mp3 files for each word.
-        self.catSequence = {}
+        # Dictionary that maps editor-contents to TTS-generated mp3 file for each Bundle widget
+        self.bwFileMap = {}
+        self.sfxMap = {}
 
         # Setting Text-to-speech
         self.tts = Speechers[self.setting['tts']]()
@@ -74,34 +75,36 @@ class Mp3Cmder:
                 sfxlist.append(sfxInfo['path'])
 
             if not len(sfxlist) == 0:
-                catListMp3(sfxlist, os.path.join(self.finalDir, group + "-sfx.mp3"))
+                self.sfxMap[group] = os.path.join(self.finalDir, group + "-sfx.mp3")
+                catListMp3(sfxlist, self.sfxMap[group])
+            else:
+                # If no sfx for a group, store empty string, which will be ignored on concat
+                self.sfxMap[group] = ''
 
 
     def dictateContents(self, bw):
         curdir = os.path.join(self.root, bw.getDirname())
         assert os.path.exists(curdir)
 
-        dpw, epd = bw.dpw, bw.epd
+        self.bwFileMap[bw.name] = {}
 
-        self.catSequence[bw.name] = []
-
-        for i in range(0, dpw):
+        for i in range(0, bw.dpw):
             define = bw.editors['def-%d' % (i+1)].text()
+            if define == '':
+                continue
             defLang = self.setting['langMap']['def-%d' % (i+1)]
-            if define == '': continue
-
             filename = os.path.join(curdir, "def-%d" % (i+1))
             self.tts.dictate(define, langCode=defLang, output=filename)
-            self.catSequence[bw.name].append({"def": filename})
+            self.bwFileMap[bw.name]['def-%d' % (i + 1)] = filename
 
-            for j in range(0, epd):
+            for j in range(0, bw.epd):
                 examp = bw.editors['ex-%d-%d' % (i+1, j+1)].text()
+                if examp == '':
+                    continue
                 exLang = self.setting['langMap']['ex-%d-%d' % (i+1, j+1)]
-                if examp == '': continue
-
                 filename = os.path.join(curdir, "ex-%d-%d" % ((i+1), (j+1)))
                 self.tts.dictate(examp, langCode=exLang, output=filename)
-                self.catSequence[bw.name].append({"ex": filename})
+                self.bwFileMap[bw.name]['ex-%d-%d' % (i + 1, j + 1)] = filename
 
     def compileBundle(self, bw, isGstatic=True):
         curdir = os.path.join(self.root, bw.getDirname())
@@ -121,20 +124,26 @@ class Mp3Cmder:
 
         sfxGroup = self.setting['sfx']
         wordMp3 = os.path.join(curdir, "wordheader.mp3")
-        if len(sfxGroup['word']) != 0:
-            catMp3(os.path.join(self.finalDir, "word-sfx.mp3"), pronMp3, wordMp3)
+        if self.sfxMap['word'] != '':
+            catMp3(self.sfxMap['word'], pronMp3, wordMp3)
         else:
             os.rename(pronMp3, wordMp3)
 
         inputs = "%s " % wordMp3
-        # Fixme: The compiling method below cannot be applied to multiple 'def' and 'ex'.
-        for cont in self.catSequence[bw.name]:
+        fileMap = self.bwFileMap[bw.name]
+        for i in range(0, bw.dpw):
             try:
-                cont = cont['def'] + ".mp3"
-                inputs += "%s %s " % (os.path.join(self.finalDir, "definition-sfx.mp3"), cont)
+                file = fileMap['def-%d' % (i + 1)] + ".mp3"
+                inputs += "%s %s " % (self.sfxMap['definition'], file)
             except KeyError:
-                cont = cont['ex'] + ".mp3"
-                inputs += "%s %s " % (os.path.join(self.finalDir, "example-sfx.mp3"), cont)
+                pass
+            for j in range(0, bw.epd):
+                try:
+                    file = fileMap['ex-%d-%d' % (i + 1, j + 1)] + ".mp3"
+                    inputs += "%s %s " % (self.sfxMap['example'], file)
+                except KeyError:
+                    pass
+
         # TODO: Replace 'catListMp3' with 'catMp3' by using it like below.
         catMp3(inputs, "", os.path.join(self.root, bw.getDirname() + ".mp3"))
 

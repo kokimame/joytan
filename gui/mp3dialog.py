@@ -1,6 +1,6 @@
 from gui.qt import *
 import gui
-from gui.utils import getFile, getFileNameFromPath
+import gui.utils as utils
 from tools.cmder.mp3cmder import mp3Duration, getMp3Info
 
 
@@ -29,7 +29,7 @@ class Mp3Widget(QWidget):
         self.gidx = groupIdx
         self.delTrigger = delTrigger
         self.lwi = lwi      # ListWidgetItem that contains this widget
-        self.filename = getFileNameFromPath(mp3path)
+        self.filename = utils.getFileNameFromPath(mp3path)
         self.hhmmss = mp3Duration(mp3path)
         self.duration, self.fskhz, self.bitkbs = getMp3Info(mp3path)
         self.content = QMediaContent(QUrl.fromLocalFile(mp3path))
@@ -209,12 +209,18 @@ class Mp3Dialog(QDialog):
 
         self.mw.progress.update(step=10, maybeShow=False)
         self.mw.progress.finish()
+
+        self.save(cmder.finalMp3)
+
         self.reject()
+
+    def save(self, file):
+        pass
 
     def onSfxClicked(self, idx=None):
         sfxList = self.form.sfxList
         try:
-            file = getFile(self.mw, "Add song to BGM Loop",
+            file = utils.getFile(self.mw, "Add song to BGM Loop",
                         dir=self.mw.pref['sfxdir'], filter="*.mp3")
             assert os.path.isdir(file) != True
             lwi = QListWidgetItem()
@@ -236,7 +242,7 @@ class Mp3Dialog(QDialog):
         # but it cannot be removed in order to have the same interface with SFX.
         bgmList = self.form.bgmList
         try:
-            file = getFile(self.mw, "Add song to BGM Loop",
+            file = utils.getFile(self.mw, "Add song to BGM Loop",
                         dir=self.mw.pref['bgmdir'], filter="*.mp3")
             assert os.path.isdir(file) != True
             lwi = QListWidgetItem()
@@ -279,8 +285,6 @@ class Mp3Dialog(QDialog):
         for i in range(1, bgmList.count()):
             w = bgmList.itemWidget(bgmList.item(i))
             w.forceStop()
-
-
 
     def reject(self):
         self.stopAllAudio()

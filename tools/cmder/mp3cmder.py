@@ -179,7 +179,7 @@ def previewTts(ttsName):
 
 
 ####################################
-# Fixme:
+# TODO:
 # Use command-line tool as few as possible
 # Remove all redundant use of the tools and put them in a single line.
 ####################################
@@ -229,8 +229,7 @@ def createLoopMp3(dir, loop, length, output):
 
     cmd = "ffmpeg -loglevel panic -t %d -i %s -acodec copy %s" % (length, tmpMp3, output)
     call(cmd, shell=True)
-    # Fixme; Remove this file
-    # call("rm %s" % tmpMp3, shell=True)
+
 
 def mergeDirMp3(root, output):
     if isWin:
@@ -291,15 +290,8 @@ def soxMp3Duration(mp3file):
 
 
 def mp3Duration(mp3file):
-    # SOLVED!
+    # (SOLVED! remained here as a note)
     # Fixme: Why ffmpeg show duration too long (maybe twice longer)
-    # This is a bug from ffmpeg and they say users can do nothing.
-    # So carefully choose alternative tools such as mutagen.
-    # This divided-by-two method is less evident.
-    # -- PART 2 --
-    # Concatenating mp3 files with the simplest command "cat" causes this problem.
-    # And it turned out the duration method has nothing to do with this problem.
-    # A solution is to count up the duration of the original mp3 at each time using "cat"
     # -- ANSWER --
     # Difference of bitrate caused the bug.
     # Apparently downloaded audio contents like songs, sfx used 64k of bitrate, then after

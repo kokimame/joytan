@@ -70,7 +70,7 @@ class EmotanMW(QMainWindow):
         # Fixme: Failed to use the original name 'actionExtract' on Qt Designer
         form.actionExtract_2.triggered.connect(self.onExtract)
         form.actionPreferences.triggered.connect(self.onPreferences)
-        form.actionCopy.triggered.connect(self.onCopyContents)
+        form.actionCopy.triggered.connect(self.onCopy)
         form.actionSave.triggered.connect(self.onSave)
         form.actionOpen.triggered.connect(self.onOpen)
 
@@ -165,12 +165,12 @@ class EmotanMW(QMainWindow):
         gui.textdialog.onTextDialog(self)
 
 
-    def onCopyContents(self):
+    def onCopy(self):
         if self.framelist.count() == 0:
             print("Nothing to copy")
             return
-        self.framelist.copyContents()
-        self.framelist._update()
+        import gui.smartcopy
+        gui.smartcopy.onCopy(self)
 
 
     def center(self):

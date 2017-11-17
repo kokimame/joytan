@@ -23,7 +23,7 @@ except ImportError as e:
     raise
 
 
-from gui import preferences, mp3dialog, textdialog, download, translate, langdetect
+from gui import preferences, mp3dialog, textdialog, download, translate, langdetect, smartcopy
 
 class DialogManager:
     _dialogs = {
@@ -32,7 +32,8 @@ class DialogManager:
         "TextDialog": [textdialog.TextDialog, None],
         "DownloadDialog": [download.DownloadDialog, None],
         "TranslateDialog": [translate.TranslateDialog, None],
-        "LangDetectDialog": [langdetect.LangDetectDialog, None]
+        "LangDetectDialog": [langdetect.LangDetectDialog, None],
+        "CopyDialog": [smartcopy.CopyDialog, None]
     }
 
     def open(self, name, *args, **kargs):

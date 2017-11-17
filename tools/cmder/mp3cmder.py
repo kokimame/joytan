@@ -14,7 +14,8 @@ class Mp3Cmder:
         self.root = root
         self.finalDir = os.path.join(self.root, "FINAL")
         self.bgmMp3 = os.path.join(self.finalDir, "bgm.mp3")
-        self.compMp3 = os.path.join(self.finalDir, "comp.mp3")
+        # A-capella mp3: TTS voice + SFX without BGM
+        self.acapMp3 = os.path.join(self.finalDir, "acap.mp3")
         self.finalMp3 = os.path.join(self.finalDir, "FINAL.mp3")
         self.bitkbs = None  # bit rate (Kbit/s)
         self.fskhz = None      # Sampling rate (kHz)
@@ -116,14 +117,17 @@ class Mp3Cmder:
         else:
             self.tts.dictate(bw.name, langCode=langCode, output=os.path.join(curdir, "pronounce"))
 
-        wordhead = repeatMp3(os.path.join(curdir, "pronounce.mp3"), self.setting['repeat'])
+        pronMp3 = repeatMp3(os.path.join(curdir, "pronounce.mp3"), self.setting['repeat'])
 
-        sfxdir = self.setting['sfx']
-        assert len(sfxdir['word']) != 0, "Choose at least one sfx accompanying with a word"
-        wordheader = os.path.join(curdir, "wordheader.mp3")
-        catMp3(os.path.join(self.finalDir, "word-sfx.mp3"), wordhead, wordheader)
+        sfxGroup = self.setting['sfx']
+        wordMp3 = os.path.join(curdir, "wordheader.mp3")
+        if len(sfxGroup['word']) != 0:
+            catMp3(os.path.join(self.finalDir, "word-sfx.mp3"), pronMp3, wordMp3)
+        else:
+            os.rename(pronMp3, wordMp3)
 
-        inputs = "%s " % wordheader
+        inputs = "%s " % wordMp3
+        # Fixme: The compiling method below cannot be applied to multiple 'def' and 'ex'.
         for cont in self.catSequence[bw.name]:
             try:
                 cont = cont['def'] + ".mp3"
@@ -131,24 +135,25 @@ class Mp3Cmder:
             except KeyError:
                 cont = cont['ex'] + ".mp3"
                 inputs += "%s %s " % (os.path.join(self.finalDir, "example-sfx.mp3"), cont)
+        # TODO: Replace 'catListMp3' with 'catMp3' by using it like below.
         catMp3(inputs, "", os.path.join(self.root, bw.getDirname() + ".mp3"))
 
-    def mergeDirMp3(self):
+    def mergeMp3s(self):
         print("Merge all mp3 files in %s" % self.root)
-        mergeDirMp3(self.root, self.compMp3)
+        mergeDirMp3(self.root, self.acapMp3)
 
     def createBgmLoop(self):
         if len(self.setting['loop']) != 0:
             print("Create BGM Loop")
-            createLoopMp3(self.root, self.setting['loop'], mp3lenSec(self.compMp3), self.bgmMp3)
+            createLoopMp3(self.root, self.setting['loop'], mp3lenSec(self.acapMp3), self.bgmMp3)
 
     def mixWithBgm(self):
         if len(self.setting['loop']) != 0:
             print("Mix BGM and a-capella mp3")
-            mixWithBgm(self.bgmMp3, self.compMp3, self.finalMp3)
+            mixWithBgm(self.bgmMp3, self.acapMp3, self.finalMp3)
         else:
             # If there is no song for BGM
-            os.rename(self.compMp3, self.finalMp3)
+            os.rename(self.acapMp3, self.finalMp3)
 
 
 

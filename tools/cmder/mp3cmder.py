@@ -45,12 +45,6 @@ class Mp3Cmder:
 
 
         sfxGroup = self.setting['sfx']
-        """
-        {
-            'word': [{ ... items ... }, {...},
-            'definition' : ...
-        }
-        """
         for group, sfxs in sfxGroup.items():
             sfxlist = []
             for i, sfxInfo in enumerate(sfxs):
@@ -77,7 +71,10 @@ class Mp3Cmder:
                     sfxInfo['filename'] = getFileNameFromPath(output)
                     print("%s bitrate modified!" % sfxInfo['filename'])
                 sfxlist.append(sfxInfo['path'])
-            catListMp3(sfxlist, os.path.join(self.finalDir, group + "-sfx.mp3"))
+
+            if not len(sfxlist) == 0:
+                catListMp3(sfxlist, os.path.join(self.finalDir, group + "-sfx.mp3"))
+
 
     def dictateContents(self, bw):
         curdir = os.path.join(self.root, bw.getDirname())
@@ -141,12 +138,18 @@ class Mp3Cmder:
         mergeDirMp3(self.root, self.compMp3)
 
     def createBgmLoop(self):
-        print("Create BGM Loop")
-        createLoopMp3(self.root, self.setting['loop'], mp3lenSec(self.compMp3), self.bgmMp3)
+        if len(self.setting['loop']) != 0:
+            print("Create BGM Loop")
+            createLoopMp3(self.root, self.setting['loop'], mp3lenSec(self.compMp3), self.bgmMp3)
 
     def mixWithBgm(self):
-        print("Mix BGM and a-capella mp3")
-        mixWithBgm(self.bgmMp3, self.compMp3, self.finalMp3)
+        if len(self.setting['loop']) != 0:
+            print("Mix BGM and a-capella mp3")
+            mixWithBgm(self.bgmMp3, self.compMp3, self.finalMp3)
+        else:
+            # If there is no song for BGM
+            os.rename(self.compMp3, self.finalMp3)
+
 
 
 def mixWithBgm(bgm, acap, output):

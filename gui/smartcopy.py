@@ -15,7 +15,25 @@ class CopyDialog(QDialog):
         self.show()
 
     def start(self):
-        pass
+        form = self.form
+        fbox, tbox = form.fromBox, form.toBox
+        if fbox.currentText() == tbox.currentText():
+            print("Choose different contents for copying")
+            return
+
+        # Copying from and to the contents in Bundle Widget
+        for bw in self.mw.framelist.getCurrentBundleWidgets():
+            try:
+                bw.editors[tbox.currentText().lower()].setText(bw.editors[fbox.currentText().lower()].text())
+            except KeyError:
+                pass
+
+        # Change language mapping of the framelist based on the copy
+        fset = self.mw.framelist.setting
+        fset.langMap[tbox.currentText().lower()] = fset.langMap[fbox.currentText().lower()]
+
+
+        self.mw.framelist._update()
 
     def setupCombo(self):
         form = self.form
@@ -26,7 +44,7 @@ class CopyDialog(QDialog):
 
     def setupButtons(self):
         form = self.form
-        form.okBtn.clicked.connect(self.start)
+        form.copyBtn.clicked.connect(self.start)
         form.cancelBtn.clicked.connect(self.reject)
 
     def reject(self):

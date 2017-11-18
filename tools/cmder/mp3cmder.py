@@ -125,7 +125,6 @@ class Mp3Cmder:
 
         pronMp3 = repeatMp3(os.path.join(curdir, "pronounce.mp3"), self.setting['repeat'])
 
-        sfxGroup = self.setting['sfx']
         wordMp3 = os.path.join(curdir, "wordheader.mp3")
         if self.sfxMap['word'] != '':
             catMp3(self.sfxMap['word'], pronMp3, wordMp3)

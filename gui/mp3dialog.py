@@ -135,22 +135,22 @@ class Mp3Dialog(QDialog):
         form.settingBtn.clicked.connect(lambda: gui.dialogs.open("Preferences", self.mw, tab="TTS"))
 
     def onCreate(self):
+        setting = {}
+        setting['repeat'] = self.form.wordSpin.value()
+        setting['tts'] = self.mw.pref['tts']
+        setting['langMap'] = self.mw.framelist.setting.langMap
+
         from gui.utils import rmdir
         audRoot = os.path.join(self.mw.getRootPath(), "audio")
         rmdir(audRoot)
+        setting['root'] = audRoot
 
         sfxList = self.form.sfxList
         bgmList = self.form.bgmList
         # Check if nice pronunciation is needs to be downloaded
         isGstatic = self.form.gstaticCheck.isChecked()
         # Check if LRC file needs to be created
-        isLrc = self.form.lrcCheck.isChecked()
-
-        setting = {}
-        setting['lrc'] = isLrc
-        setting['repeat'] = self.form.wordSpin.value()
-        setting['tts'] = self.mw.pref['tts']
-        setting['langMap'] = self.mw.framelist.setting.langMap
+        setting['lrc'] = self.form.lrcCheck.isChecked()
 
         sfxdir = {}
         group = None
@@ -185,7 +185,7 @@ class Mp3Dialog(QDialog):
         # The extra 50 goes for setting up audio, merging, bgm loop and mixing
         # This is merely a rough assumption.
         self.mw.progress.start(min=0, max=self.framelist.count() + 50, immediate=True)
-        cmder = Mp3Cmder(audRoot, setting)
+        cmder = Mp3Cmder(setting)
         self.mw.progress.update(value=0, label="Setting up audio files", maybeShow=False)
         # Setting up the properties of audio files such as bitrate and sampling rate
         cmder.setupAudio()
@@ -215,7 +215,10 @@ class Mp3Dialog(QDialog):
         self.reject()
 
     def save(self, file):
-        pass
+        pref = self.mw.pref
+        output = os.path.join(pref['workspace'], pref['title'] + '-audio.mp3')
+        from shutil import copyfile
+        copyfile(file, output)
 
     def onSfxClicked(self, idx=None):
         sfxList = self.form.sfxList

@@ -123,9 +123,6 @@ class FrameList(QListWidget):
         for bw in self.getCurrentBundleWidgets():
             bw.updateMode(newMode)
 
-    def copyContents(self):
-        for bw in self.getCurrentBundleWidgets():
-            bw.editors['def-1'].setText(bw.editors['name'].text())
 
     def getBundle(self, name):
         for bw in self.getCurrentBundleWidgets():

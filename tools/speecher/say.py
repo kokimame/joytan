@@ -29,6 +29,15 @@ def getTtsHelp():
 class Say(BaseSpeecher):
     # We want to call 'say -v ?' only once at runtime.
     # Don't call the command every time voice type changed.
+
+    # FIXME: !!!!!!!!!!!!!WARNING!!!!!!!!!!!!!!!!
+    # 11/19/17: Creating audio file without BGM on Mac with say command
+    #           causes a serious bug which makes impossible to concatenate mp3 files.
+    #           The bug seems to come from the difference of bitrate among the mp3 files,
+    #           although we surely try to define the same bitrate for all of mp3 files.
+    #           Exceptionally, if we do not use gstatic pronunciation, we can cat the files,
+    #           but still these output file doesn't stop well at the end.
+    #           A temporal solution will be to mix acap mp3 with empty or muted bgm file.
     from gui.utils import isMac
     if isMac:
         # voiceCombo has voice names shown in a combobox on Preferences
@@ -42,32 +51,21 @@ class Say(BaseSpeecher):
                     del code2Names[info[0]]['Not Available']
 
 
-    def dictate(self, script, langCode=None, output=None):
-        print("Script: %s (%s)" % (script, langCode))
+    def dictate(self, script, voiceId, output=None):
+        print("Script: %s (%s)" % (script, voiceId))
 
         if output:
             os.makedirs(os.path.dirname(output), exist_ok=True)
-            self.save(script, output, langCode=langCode)
+            self.save(script, output, voiceId=voiceId)
         else:
-            call('say -v {name} "{script}"'.format(name=langCode, script=script), shell=True)
+            call('say -v {vid} "{script}"'.format(vid=voiceId, script=script), shell=True)
 
-    def save(self, script, output, langCode=None):
-        ppl = self.selectName(langCode)
-        cmd = 'say %s "%s" -o %s.aiff;' \
+    def save(self, script, output, voiceId=None):
+        cmd = 'say -v %s "%s" -o %s.aiff;' \
               'ffmpeg -loglevel panic -i %s.aiff -ac 2 -acodec libmp3lame -ar 44100 -ab 64k -f mp3 %s.mp3' \
-              % (ppl, script, output, output, output)
+              % (voiceId, script, output, output, output)
         call(cmd, shell=True)
 
-    def selectName(self, langCode):
-        try:
-            # Fixme: Allow users to select their favorite voice from a language
-            # Currently we pick up the first voice from the list of them for a language
-            ppl = '-v ' + self.code2Names[langCode][0]
-        except (KeyError):
-            ppl = ''
-            print("Unsupported language detected: %s" % langCode)
-        return ppl
-
     # Actually pre'listen' though.
-    def preview(self, langCode, script='If any proper sample sentence is not found, I read this.'):
-        self.dictate(script, langCode=langCode)
+    def preview(self, voiceId, script='If any proper sample sentence is not found, I read this.'):
+        self.dictate(script, voiceId)

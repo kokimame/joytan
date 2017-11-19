@@ -95,7 +95,7 @@ class Mp3Cmder:
             if define == '':
                 continue
             defLang = self.setting['langMap']['def-%d' % (i+1)]
-            defVid = list(self.tts.code2Names[defLang].values())[0]
+            defVid = list(self.tts.code2Vids[defLang].values())[0]
             filename = os.path.join(curdir, "def-%d" % (i+1))
             self.tts.dictate(define, defVid, output=filename)
             self.bwFileMap[bw.name]['def-%d' % (i + 1)] = filename
@@ -105,7 +105,7 @@ class Mp3Cmder:
                 if examp == '':
                     continue
                 exLang = self.setting['langMap']['ex-%d-%d' % (i+1, j+1)]
-                exVid = list(self.tts.code2Names[exLang].values())[0]
+                exVid = list(self.tts.code2Vids[exLang].values())[0]
                 filename = os.path.join(curdir, "ex-%d-%d" % ((i+1), (j+1)))
                 self.tts.dictate(examp, exVid, output=filename)
                 self.bwFileMap[bw.name]['ex-%d-%d' % (i + 1, j + 1)] = filename
@@ -115,7 +115,7 @@ class Mp3Cmder:
 
         langCode = self.setting['langMap']['name']
         # Fixme: Use voice id selected by user on preferences
-        voiceId = list(self.tts.code2Names[langCode].values())[0]
+        voiceId = list(self.tts.code2Vids[langCode].values())[0]
         if isGstatic and (langCode == 'en'):
             from gui.download import downloadGstaticSound
             try:

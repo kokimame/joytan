@@ -42,13 +42,15 @@ class Say(BaseSpeecher):
     if isMac:
         # voiceCombo has voice names shown in a combobox on Preferences
         infos = getTtsHelp()
-        code2Names = {key: {'Not Available': None} for key in LANGUAGES}
+        code2Vids = {key: {'Not Available': None} for key in LANGUAGES}
+        vid2examp = {}
 
         for info in infos:
-            if info[0] in code2Names:
-                code2Names[info[0]][info[2]] = info[1]
-                if 'Not Available' in code2Names[info[0]]:
-                    del code2Names[info[0]]['Not Available']
+            if info[0] in code2Vids:
+                code2Vids[info[0]][info[2]] = info[1]
+                vid2examp[info[1]] = info[3]
+                if 'Not Available' in code2Vids[info[0]]:
+                    del code2Vids[info[0]]['Not Available']
 
 
     def dictate(self, script, voiceId, output=None):
@@ -67,5 +69,8 @@ class Say(BaseSpeecher):
         call(cmd, shell=True)
 
     # Actually pre'listen' though.
-    def preview(self, voiceId, script='If any proper sample sentence is not found, I read this.'):
+    def preview(self, voiceId, script=None):
+        if not script:
+            script = self.vid2examp[voiceId]
+
         self.dictate(script, voiceId)

@@ -21,7 +21,7 @@ class VlMapWidget(QWidget):
         self.langCombo.currentTextChanged.connect(self.updateVoiceCombo)
         lbl2 = QLabel('---> TTS:')
         self.voiceCombo = QComboBox()
-        self.voiceCombo.addItems([name for name in self.tts.code2Names[self.langCode]])
+        self.voiceCombo.addItems([name for name in self.tts.code2Vids[self.langCode]])
         self.testBtn = QPushButton('Test')
         self.testBtn.clicked.connect(self.testVoice)
 
@@ -36,11 +36,11 @@ class VlMapWidget(QWidget):
     def updateVoiceCombo(self):
         self.langCode = LANGCODES[self.langCombo.currentText().lower()]
         self.voiceCombo.clear()
-        self.voiceCombo.addItems([name for name in self.tts.code2Names[self.langCode]])
+        self.voiceCombo.addItems([name for name in self.tts.code2Vids[self.langCode]])
         self.voiceCombo.repaint()
 
     def testVoice(self):
-        self.tts().preview(self.tts.code2Names[self.langCode][self.voiceCombo.currentText()])
+        self.tts().preview(self.tts.code2Vids[self.langCode][self.voiceCombo.currentText()])
 
 
 class Preferences(QDialog):

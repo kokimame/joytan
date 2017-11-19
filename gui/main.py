@@ -147,10 +147,6 @@ class EmotanMW(QMainWindow):
         gui.dialogs.open("LangDetectDialog", self)
 
     def onCreateMp3(self):
-        if self.framelist.count() == 0:
-            print("Nothing to create")
-            return
-
         # To update 'Anonymous bundle' if a name is added to it
         self.framelist._update()
         import gui.mp3dialog

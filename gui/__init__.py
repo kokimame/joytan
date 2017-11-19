@@ -39,6 +39,8 @@ class DialogManager:
     def open(self, name, *args, **kargs):
         (creator, instance) = self._dialogs[name]
         if instance:
+            if not instance.isVisible():
+                instance.setVisible(True)
             instance.setWindowState(Qt.WindowNoState)
             instance.activateWindow()
             instance.raise_()
@@ -49,8 +51,9 @@ class DialogManager:
             self._dialogs[name][1] = instance
             return instance
 
-    def close(self, name):
-        self._dialogs[name] = [self._dialogs[name][0], None]
+    def close(self, name, save=False):
+        if not save:
+            self._dialogs[name] = [self._dialogs[name][0], None]
 
 dialogs = DialogManager()
 

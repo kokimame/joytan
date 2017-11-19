@@ -1,8 +1,36 @@
 
 from tools.speecher import *
+from gui.utils import LANGUAGES, LANGCODES
+
+def getTtsHelp():
+    i1 = str(check_output("espeak --voices", shell=True), 'utf-8').strip().split('\n')
+    i2 = [' '.join(row.split()) for row in i1]
+    i3 = [i.split(' ')[1:4] for i in i2[1:]]
+    for info in i3:
+        # Remove sex
+        info.remove(info[1])
+        info.insert(0, info[0].split('-')[0])
+    return i3
+
+
+
 
 class Espeak(BaseSpeecher):
-    voiceCombo = []
+    # We want to call TTS help command only once at runtime.
+    # Don't call the command every time voice type changed.
+    from gui.utils import isWin, isLin
+    if isWin or isLin:
+        infos = getTtsHelp()
+
+        for info in infos:
+            print(info)
+        code2Name = {key: {'Not Available': None} for key in LANGUAGES}
+
+        for info in infos:
+            if info[0] in code2Name:
+                code2Name[info[0]][info[2]] = info[1]
+                if 'Not Available' in code2Name[info[0]]:
+                    del code2Name[info[0]]['Not Available']
 
     def __init__(self):
         pass
@@ -35,5 +63,5 @@ class Espeak(BaseSpeecher):
     def isSupported(self):
         raise NotImplementedError
 
-    def preview(self, combo):
-        pass
+    def preview(self, langCode, script='If any proper sample sentence is not found, I read this.'):
+        self.dictate(script, langCode=langCode)

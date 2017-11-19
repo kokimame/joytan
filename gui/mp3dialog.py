@@ -135,6 +135,9 @@ class Mp3Dialog(QDialog):
         form.settingBtn.clicked.connect(lambda: gui.dialogs.open("Preferences", self.mw, tab="TTS"))
 
     def onCreate(self):
+        if self.framelist.count() == 0:
+            print("Nothing to create")
+            return
         setting = {}
         setting['repeat'] = self.form.wordSpin.value()
         setting['tts'] = self.mw.pref['tts']
@@ -292,4 +295,4 @@ class Mp3Dialog(QDialog):
     def reject(self):
         self.stopAllAudio()
         self.done(0)
-        gui.dialogs.close("Mp3Dialog")
+        gui.dialogs.close("Mp3Dialog", save=True)

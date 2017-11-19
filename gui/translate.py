@@ -4,16 +4,46 @@ import gui
 from googletrans import Translator
 from googletrans.constants import LANGCODES
 
-
 def onTranslate(mw):
     gui.dialogs.open("TranslateDialog", mw)
+
+class TranslateThread(QThread):
+    def __init__(self, mw, group, destCode):
+        QThread.__init__(self)
+        self.mw = mw
+        self.group = group
+        self.destCode = destCode
+
+    def run(self):
+        translate = lambda text: Translator().translate(text, dest=self.destCode).text
+        self.mw.progress.start(min=0, max=self.mw.framelist.count(),
+                               label="Start translating", immediate=True, cancellable=True)
+        for bw in self.mw.framelist.getCurrentBundleWidgets():
+            self.mw.progress.update(label="Translating %s" % bw.name, maybeShow=False)
+            if 'name' in self.group:
+                bw.editors['name'].setText(translate(bw.name))
+                self.mw.framelist.setting.langMap['name'] = self.destCode
+
+            for i in range(1, bw.dpw+1):
+                define = bw.editors['def-%d' % i].text()
+                if 'definition' in self.group and define != '':
+                    bw.editors['def-%d' % i].setText(translate(define))
+                    self.mw.framelist.setting.langMap['def-%d' % i] = self.destCode
+
+                for j in range(1, bw.epd+1):
+                    examp = bw.editors['ex-%d-%d' % (i, j)].text()
+                    if 'example' in self.group and examp != '':
+                        bw.editors['ex-%d-%d' % (i, j)].setText(translate(examp))
+                        self.mw.framelist.setting.langMap['ex-%d-%d' % (i, j)] = self.destCode
+
+        self.mw.progress.finish()
+
 
 
 class TranslateDialog(QDialog):
     def __init__(self, mw):
         QDialog.__init__(self, mw, Qt.Window)
         self.mw = mw
-        self.framelist = mw.framelist
         self.form = gui.forms.translate.Ui_TranslateDialog()
         self.form.setupUi(self)
         self.setupWidgets()
@@ -37,30 +67,10 @@ class TranslateDialog(QDialog):
         if form.exCheck.isChecked(): transGroup.append('example')
 
         print(transGroup)
-        translate = lambda text: Translator().translate(text, dest=destCode).text
+        transThread = TranslateThread(self.mw, transGroup, destCode)
+        transThread.run()
 
-        self.mw.progress.start(min=0, max=self.mw.framelist.count(),
-                               label="Start translating", immediate=True, cancellable=True)
-        for bw in self.framelist.getCurrentBundleWidgets():
-            self.mw.progress.update(label="Translating %s" % bw.name, maybeShow=False)
-            if 'name' in transGroup:
-                bw.editors['name'].setText(translate(bw.name))
-                self.mw.framelist.setting.langMap['name'] = destCode
-
-            for i in range(1, bw.dpw+1):
-                define = bw.editors['def-%d' % i].text()
-                if 'definition' in transGroup and define != '':
-                    bw.editors['def-%d' % i].setText(translate(define))
-                    self.mw.framelist.setting.langMap['def-%d' % i] = destCode
-
-                for j in range(1, bw.epd+1):
-                    examp = bw.editors['ex-%d-%d' % (i, j)].text()
-                    if 'example' in transGroup and examp != '':
-                        bw.editors['ex-%d-%d' % (i, j)].setText(translate(examp))
-                        self.mw.framelist.setting.langMap['ex-%d-%d' % (i, j)] = destCode
-
-        self.mw.progress.finish()
-        self.framelist._update()
+        self.mw.framelist._update()
         self.reject()
 
     def reject(self):

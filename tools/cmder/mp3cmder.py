@@ -95,8 +95,9 @@ class Mp3Cmder:
             if define == '':
                 continue
             defLang = self.setting['langMap']['def-%d' % (i+1)]
+            defVid = list(self.tts.code2Names[defLang].values())[0]
             filename = os.path.join(curdir, "def-%d" % (i+1))
-            self.tts.dictate(define, langCode=defLang, output=filename)
+            self.tts.dictate(define, defVid, output=filename)
             self.bwFileMap[bw.name]['def-%d' % (i + 1)] = filename
 
             for j in range(0, bw.epd):
@@ -104,23 +105,26 @@ class Mp3Cmder:
                 if examp == '':
                     continue
                 exLang = self.setting['langMap']['ex-%d-%d' % (i+1, j+1)]
+                exVid = list(self.tts.code2Names[exLang].values())[0]
                 filename = os.path.join(curdir, "ex-%d-%d" % ((i+1), (j+1)))
-                self.tts.dictate(examp, langCode=exLang, output=filename)
+                self.tts.dictate(examp, exVid, output=filename)
                 self.bwFileMap[bw.name]['ex-%d-%d' % (i + 1, j + 1)] = filename
 
     def compileBundle(self, bw, isGstatic=True):
         curdir = os.path.join(self.setting['root'], bw.getDirname())
 
         langCode = self.setting['langMap']['name']
+        # Fixme: Use voice id selected by user on preferences
+        voiceId = list(self.tts.code2Names[langCode].values())[0]
         if isGstatic and (langCode == 'en'):
             from gui.download import downloadGstaticSound
             try:
                 downloadGstaticSound(bw.name, os.path.join(curdir, "pronounce.mp3"))
             except:
                 # If gstatic pronunciation file is not found, use TTS.
-                self.tts.dictate(bw.name, langCode=langCode, output=os.path.join(curdir, "pronounce"))
+                self.tts.dictate(bw.name, voiceId, output=os.path.join(curdir, "pronounce"))
         else:
-            self.tts.dictate(bw.name, langCode=langCode, output=os.path.join(curdir, "pronounce"))
+            self.tts.dictate(bw.name, voiceId, output=os.path.join(curdir, "pronounce"))
 
         pronMp3 = repeatMp3(os.path.join(curdir, "pronounce.mp3"), self.setting['repeat'])
 
@@ -170,11 +174,6 @@ def mixWithBgm(bgm, acap, output):
     cmd = "sox -m {bgm} {acapella} {output}".format\
             (bgm=bgm, acapella=acap, output=output)
     call(cmd, shell=True)
-
-def previewTts(ttsName):
-    script = "This is the preview of Text-To-Speech."
-    Speechers[ttsName]().dictate(script, langCode='en')
-
 
 ####################################
 # TODO:

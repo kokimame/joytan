@@ -8,10 +8,11 @@ from gui.utils import isWin
 
 
 class BaseSpeecher:
-    def dictate(self, script, langCode=None, output=None):
+    # voiceId: A unique name, pre-defined by a given TTS, that specifies a voice in the service.
+    def dictate(self, script, voiceId, output=None):
         raise NotImplementedError
 
-    def save(self, script, output, langCode=None):
+    def save(self, script, output, voiceId=None):
         raise NotImplementedError
 
     def isSupported(self):

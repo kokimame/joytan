@@ -22,8 +22,6 @@ class Espeak(BaseSpeecher):
     if isWin or isLin:
         infos = getTtsHelp()
 
-        for info in infos:
-            print(info)
         code2Name = {key: {'Not Available': None} for key in LANGUAGES}
 
         for info in infos:

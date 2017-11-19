@@ -39,8 +39,6 @@ class Espeak(BaseSpeecher):
         if output:
             os.makedirs(os.path.dirname(output), exist_ok=True)
             self.save(script, output, langCode=langCode)
-            return
-
         else:
             cmd = 'espeak -v {lang} "{script}"'.format(lang=langCode, script=script)
             call(cmd, shell=True)

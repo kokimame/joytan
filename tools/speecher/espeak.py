@@ -22,13 +22,13 @@ class Espeak(BaseSpeecher):
     if isWin or isLin:
         infos = getTtsHelp()
 
-        code2Name = {key: {'Not Available': None} for key in LANGUAGES}
+        code2Names = {key: {'Not Available': None} for key in LANGUAGES}
 
         for info in infos:
-            if info[0] in code2Name:
-                code2Name[info[0]][info[2]] = info[1]
-                if 'Not Available' in code2Name[info[0]]:
-                    del code2Name[info[0]]['Not Available']
+            if info[0] in code2Names:
+                code2Names[info[0]][info[2]] = info[1]
+                if 'Not Available' in code2Names[info[0]]:
+                    del code2Names[info[0]]['Not Available']
 
     def __init__(self):
         pass

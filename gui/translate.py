@@ -22,19 +22,19 @@ class TranslateThread(QThread):
             self.mw.progress.update(label="Translating %s" % bw.name, maybeShow=False)
             if 'name' in self.group:
                 bw.editors['name'].setText(translate(bw.name))
-                self.mw.framelist.setting.langMap['name'] = self.destCode
+                self.mw.framelist.setting.langMap['name'][0] = self.destCode
 
             for i in range(1, bw.dpw+1):
                 define = bw.editors['def-%d' % i].text()
                 if 'definition' in self.group and define != '':
                     bw.editors['def-%d' % i].setText(translate(define))
-                    self.mw.framelist.setting.langMap['def-%d' % i] = self.destCode
+                    self.mw.framelist.setting.langMap['def-%d' % i][0] = self.destCode
 
                 for j in range(1, bw.epd+1):
                     examp = bw.editors['ex-%d-%d' % (i, j)].text()
                     if 'example' in self.group and examp != '':
                         bw.editors['ex-%d-%d' % (i, j)].setText(translate(examp))
-                        self.mw.framelist.setting.langMap['ex-%d-%d' % (i, j)] = self.destCode
+                        self.mw.framelist.setting.langMap['ex-%d-%d' % (i, j)][0] = self.destCode
 
         self.mw.progress.finish()
 

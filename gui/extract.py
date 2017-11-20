@@ -21,7 +21,7 @@ def onExtract(mw):
     for word in words:
         mw.framelist.addBundle(word, mw.frameMode)
 
-    gui.dialogs.open("LangDetectDialog", mw)
+    gui.dialogs.open("Preferences", mw, tab="TTS")
 
 
 def extract(file):

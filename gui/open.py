@@ -35,4 +35,4 @@ def onOpen(mw):
 
     mw.framelist._update()
 
-    gui.dialogs.open("LangDetectDialog", mw)
+    gui.dialogs.open("Preferences", mw, tab="TTS")

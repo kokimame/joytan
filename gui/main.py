@@ -144,7 +144,7 @@ class EmotanMW(QMainWindow):
         gui.translate.onTranslate(self)
 
     def onConfigure(self):
-        gui.dialogs.open("LangDetectDialog", self)
+        gui.dialogs.open("Preferences", self, tab="TTS")
 
     def onCreateMp3(self):
         # To update 'Anonymous bundle' if a name is added to it

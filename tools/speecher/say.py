@@ -43,6 +43,7 @@ class Say(BaseSpeecher):
         # voiceCombo has voice names shown in a combobox on Preferences
         infos = getTtsHelp()
         code2Vids = {key: {'Not Available': None} for key in LANGUAGES}
+        vid2Combo = {}
         vid2examp = {}
 
         for info in infos:

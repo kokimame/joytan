@@ -94,7 +94,10 @@ class Mp3Cmder:
             define = bw.editors['def-%d' % (i+1)].text()
             if define == '':
                 continue
-            defLang = self.setting['langMap']['def-%d' % (i+1)][0]
+
+            # Fixme: Too complex isn't is? Maybe need a class for storing
+            # the relation among content type, language code, label for combobox and
+            # voice ID.
             defVid = self.setting['langMap']['def-%d' % (i+1)][1]
             filename = os.path.join(curdir, "def-%d" % (i+1))
             self.tts.dictate(define, defVid, output=filename)
@@ -104,7 +107,6 @@ class Mp3Cmder:
                 examp = bw.editors['ex-%d-%d' % (i+1, j+1)].text()
                 if examp == '':
                     continue
-                exLang = self.setting['langMap']['ex-%d-%d' % (i+1, j+1)][0]
                 exVid = self.setting['langMap']['ex-%d-%d' % (i+1, j+1)][1]
                 filename = os.path.join(curdir, "ex-%d-%d" % ((i+1), (j+1)))
                 self.tts.dictate(examp, exVid, output=filename)
@@ -113,18 +115,17 @@ class Mp3Cmder:
     def compileBundle(self, bw, isGstatic=True):
         curdir = os.path.join(self.setting['root'], bw.getDirname())
 
-        langCode = self.setting['langMap']['name'][0]
-        # Fixme: Use voice id selected by user on preferences
-        voiceId = self.setting['langMap']['name'][1]
-        if isGstatic and (langCode == 'en'):
+        nameLang = self.setting['langMap']['name'][0]
+        nameVid = self.setting['langMap']['name'][1]
+        if isGstatic and (nameLang == 'en'):
             from gui.download import downloadGstaticSound
             try:
                 downloadGstaticSound(bw.name, os.path.join(curdir, "pronounce.mp3"))
             except:
                 # If gstatic pronunciation file is not found, use TTS.
-                self.tts.dictate(bw.name, voiceId, output=os.path.join(curdir, "pronounce"))
+                self.tts.dictate(bw.name, nameVid, output=os.path.join(curdir, "pronounce"))
         else:
-            self.tts.dictate(bw.name, voiceId, output=os.path.join(curdir, "pronounce"))
+            self.tts.dictate(bw.name, nameVid, output=os.path.join(curdir, "pronounce"))
 
         pronMp3 = repeatMp3(os.path.join(curdir, "pronounce.mp3"), self.setting['repeat'])
 

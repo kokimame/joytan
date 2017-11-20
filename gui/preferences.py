@@ -9,6 +9,7 @@ class LvMapWidget(QWidget):
     def __init__(self, tts, label, lv):
         super(LvMapWidget, self).__init__()
         self.tts = Speechers[tts]
+        # Label for content section such as 'name' and 'def-x'
         self.label = label
         # Language and Voice ID for the label (e.g, 'name' or 'def-x' etc)
         self.lv = lv
@@ -23,8 +24,13 @@ class LvMapWidget(QWidget):
         lbl2 = QLabel('---> TTS:')
         self.voiceCombo = QComboBox()
         self.voiceCombo.addItems([name for name in self.tts.code2Vids[self.lv[0]]])
+
+        # If a voice id is already specified for a given content section,
+        # search and set the according combobox label from the given TTS's code2Vids dictionary
         if self.lv[1]:
-            self.voiceCombo.setCurrentText(self.lv[1])
+            for combo in self.tts.code2Vids[self.lv[0]]:
+                if self.tts.code2Vids[self.lv[0]][combo] == self.lv[1]:
+                    self.voiceCombo.setCurrentText(combo)
         self.testBtn = QPushButton('Test')
         self.testBtn.clicked.connect(self.testVoice)
 
@@ -87,12 +93,12 @@ class Preferences(QDialog):
     def setupList(self):
         testList = self.form.testList
         # Sort items in the order of 'name', 'def-x' and 'ex-x-x'
-        for row in sorted(sorted(list(self.mw.framelist.setting.langMap.keys())),
+        for item in sorted(sorted(list(self.mw.framelist.setting.langMap.keys())),
                           key=lambda x: ['n', 'd', 'e'].index(x[0])):
             # language and Voice ID
-            lv = self.mw.framelist.setting.langMap[row]
+            lv = self.mw.framelist.setting.langMap[item]
 
-            wig = LvMapWidget(self.mw.pref['tts'], row, lv)
+            wig = LvMapWidget(self.mw.pref['tts'], item, lv)
 
             lwi = QListWidgetItem()
             lwi.setSizeHint(wig.sizeHint())
@@ -127,8 +133,10 @@ class Preferences(QDialog):
         for i in range(testList.count()):
             wig = testList.itemWidget(testList.item(i))
             if wig.label in fset.langMap:
-                fset.langMap[wig.label][0] = LANGCODES[wig.langCombo.currentText().lower()]
-                fset.langMap[wig.label][1] = wig.voiceCombo.currentText()
+                newLang = LANGCODES[wig.langCombo.currentText().lower()]
+                newVid = wig.tts.code2Vids[newLang][wig.voiceCombo.currentText()]
+                fset.langMap[wig.label][0] = newLang
+                fset.langMap[wig.label][1] = newVid
 
         fs = self.mw.framelist.setting
         fs.expand(dpw=self.form.dpwSpin.value())

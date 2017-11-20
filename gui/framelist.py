@@ -10,7 +10,8 @@ class FrameList(QListWidget):
             # Fixme: Allow users to choose default language from preference
             # Temporally set English by default
             self.defaultLang = 'en'
-            self.langMap = {'name': self.defaultLang}
+            # This maps from content type in a bundle to language code and Voice ID
+            self.langMap = {'name': [self.defaultLang, None]}
 
             self.expand(dpw=1, epd=1)
 
@@ -30,12 +31,12 @@ class FrameList(QListWidget):
                 try:
                     self.langMap['def-%d' % (i + 1)]
                 except KeyError:
-                    self.langMap['def-%d' % (i + 1)] = self.defaultLang
+                    self.langMap['def-%d' % (i + 1)] = [self.defaultLang, None]
                 for j in range(0, self.epd):
                     try:
                         self.langMap['ex-%d-%d' % (i + 1, j + 1)]
                     except KeyError:
-                        self.langMap['ex-%d-%d' % (i + 1, j + 1)] = self.defaultLang
+                        self.langMap['ex-%d-%d' % (i + 1, j + 1)] = [self.defaultLang, None]
 
         # Returns the class' properties in a dictionary. Will be called on saving.
         def data(self):

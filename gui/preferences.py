@@ -4,24 +4,27 @@ from tools.parser import Parsers
 from tools.speecher import Speechers
 from gui.utils import LANGUAGES, LANGCODES
 
-class VlMapWidget(QWidget):
-    # Maps between Voice and Language and play sample text-to-speech
-    def __init__(self, tts, label, langCode):
-        super(VlMapWidget, self).__init__()
+class LvMapWidget(QWidget):
+    # Maps from content type and language code and Voice ID, and test sample text-to-speech
+    def __init__(self, tts, label, lv):
+        super(LvMapWidget, self).__init__()
         self.tts = Speechers[tts]
         self.label = label
-        self.langCode = langCode
+        # Language and Voice ID for the label (e.g, 'name' or 'def-x' etc)
+        self.lv = lv
         self.initUi()
 
     def initUi(self):
         lbl = QLabel('%s:' % self.label.title())
         self.langCombo = QComboBox()
         self.langCombo.addItems(sorted([lang.title() for lang in LANGUAGES.values()]))
-        self.langCombo.setCurrentText(LANGUAGES[self.langCode].title())
+        self.langCombo.setCurrentText(LANGUAGES[self.lv[0]].title())
         self.langCombo.currentTextChanged.connect(self.updateVoiceCombo)
         lbl2 = QLabel('---> TTS:')
         self.voiceCombo = QComboBox()
-        self.voiceCombo.addItems([name for name in self.tts.code2Vids[self.langCode]])
+        self.voiceCombo.addItems([name for name in self.tts.code2Vids[self.lv[0]]])
+        if self.lv[1]:
+            self.voiceCombo.setCurrentText(self.lv[1])
         self.testBtn = QPushButton('Test')
         self.testBtn.clicked.connect(self.testVoice)
 
@@ -34,13 +37,13 @@ class VlMapWidget(QWidget):
         self.setLayout(hbox)
 
     def updateVoiceCombo(self):
-        self.langCode = LANGCODES[self.langCombo.currentText().lower()]
+        self.lv[0] = LANGCODES[self.langCombo.currentText().lower()]
         self.voiceCombo.clear()
-        self.voiceCombo.addItems([name for name in self.tts.code2Vids[self.langCode]])
+        self.voiceCombo.addItems([name for name in self.tts.code2Vids[self.lv[0]]])
         self.voiceCombo.repaint()
 
     def testVoice(self):
-        self.tts().preview(self.tts.code2Vids[self.langCode][self.voiceCombo.currentText()])
+        self.tts().preview(self.tts.code2Vids[self.lv[0]][self.voiceCombo.currentText()])
 
 
 class Preferences(QDialog):
@@ -86,12 +89,10 @@ class Preferences(QDialog):
         # Sort items in the order of 'name', 'def-x' and 'ex-x-x'
         for row in sorted(sorted(list(self.mw.framelist.setting.langMap.keys())),
                           key=lambda x: ['n', 'd', 'e'].index(x[0])):
-            langCode = self.mw.framelist.setting.langMap[row]
-            if langCode:
-                wig = VlMapWidget(self.mw.pref['tts'], row, langCode)
-            else:
-                # Temporally we consider English as default
-                wig = VlMapWidget(self.mw.pref['tts'], row, 'en')
+            # language and Voice ID
+            lv = self.mw.framelist.setting.langMap[row]
+
+            wig = LvMapWidget(self.mw.pref['tts'], row, lv)
 
             lwi = QListWidgetItem()
             lwi.setSizeHint(wig.sizeHint())
@@ -115,16 +116,25 @@ class Preferences(QDialog):
 
 
     def onOk(self):
-        self.updateBundlePref()
+        # FIXME: Switching TTS service may break LvMapping.
+        self.updateFrameSetting()
         self.updateMainPref()
         self.reject()
 
+    def updateFrameSetting(self):
+        testList = self.form.testList
+        fset = self.mw.framelist.setting
+        for i in range(testList.count()):
+            wig = testList.itemWidget(testList.item(i))
+            if wig.label in fset.langMap:
+                fset.langMap[wig.label][0] = LANGCODES[wig.langCombo.currentText().lower()]
+                fset.langMap[wig.label][1] = wig.voiceCombo.currentText()
 
-    def updateBundlePref(self):
-        form = self.form
         fs = self.mw.framelist.setting
-        fs.expand(dpw=form.dpwSpin.value())
-        fs.expand(epd=form.epdSpin.value())
+        fs.expand(dpw=self.form.dpwSpin.value())
+        fs.expand(epd=self.form.epdSpin.value())
+
+
 
     def updateMainPref(self):
         form = self.form

@@ -94,8 +94,8 @@ class Mp3Cmder:
             define = bw.editors['def-%d' % (i+1)].text()
             if define == '':
                 continue
-            defLang = self.setting['langMap']['def-%d' % (i+1)]
-            defVid = list(self.tts.code2Vids[defLang].values())[0]
+            defLang = self.setting['langMap']['def-%d' % (i+1)][0]
+            defVid = self.setting['langMap']['def-%d' % (i+1)][1]
             filename = os.path.join(curdir, "def-%d" % (i+1))
             self.tts.dictate(define, defVid, output=filename)
             self.bwFileMap[bw.name]['def-%d' % (i + 1)] = filename
@@ -104,8 +104,8 @@ class Mp3Cmder:
                 examp = bw.editors['ex-%d-%d' % (i+1, j+1)].text()
                 if examp == '':
                     continue
-                exLang = self.setting['langMap']['ex-%d-%d' % (i+1, j+1)]
-                exVid = list(self.tts.code2Vids[exLang].values())[0]
+                exLang = self.setting['langMap']['ex-%d-%d' % (i+1, j+1)][0]
+                exVid = self.setting['langMap']['ex-%d-%d' % (i+1, j+1)][1]
                 filename = os.path.join(curdir, "ex-%d-%d" % ((i+1), (j+1)))
                 self.tts.dictate(examp, exVid, output=filename)
                 self.bwFileMap[bw.name]['ex-%d-%d' % (i + 1, j + 1)] = filename
@@ -113,9 +113,9 @@ class Mp3Cmder:
     def compileBundle(self, bw, isGstatic=True):
         curdir = os.path.join(self.setting['root'], bw.getDirname())
 
-        langCode = self.setting['langMap']['name']
+        langCode = self.setting['langMap']['name'][0]
         # Fixme: Use voice id selected by user on preferences
-        voiceId = list(self.tts.code2Vids[langCode].values())[0]
+        voiceId = self.setting['langMap']['name'][1]
         if isGstatic and (langCode == 'en'):
             from gui.download import downloadGstaticSound
             try:

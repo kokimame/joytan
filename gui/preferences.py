@@ -58,7 +58,10 @@ class LvMapWidget(QWidget):
                 p = self.parent
                 p.tts().preview(p.tts.code2Vids[p.lv[0]][p.voiceCombo.currentText()])
 
-        PreviewThread(self).run()
+        # The thread must be stored under the self,
+        # otherwise the thread gets destroyed while it's running, then crushes the app.
+        self.pt = PreviewThread(self)
+        self.pt.start()
 
 
 class Preferences(QDialog):

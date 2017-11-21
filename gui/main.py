@@ -125,7 +125,8 @@ class EmotanMW(QMainWindow):
 
     def onDownload(self):
         if self.framelist.count() == 0:
-            print("Nothing to download")
+            QMessageBox.critical(self, "No bundle",
+                                 "You didn't add any bundle.")
             return
 
         # To update 'Anonymous bundle' if a name is added to it
@@ -154,7 +155,8 @@ class EmotanMW(QMainWindow):
 
     def onCreateText(self):
         if self.framelist.count() == 0:
-            print("Nothing to get text")
+            QMessageBox.critical(self, "No bundle",
+                                 "You didn't add any bundle.")
             return
         self.framelist._update()
         import gui.textdialog
@@ -163,7 +165,8 @@ class EmotanMW(QMainWindow):
 
     def onCopy(self):
         if self.framelist.count() == 0:
-            print("Nothing to copy")
+            QMessageBox.critical(self, "No bundle",
+                                 "You didn't add any bundle.")
             return
         import gui.smartcopy
         gui.smartcopy.onCopy(self)

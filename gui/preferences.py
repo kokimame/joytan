@@ -49,7 +49,16 @@ class LvMapWidget(QWidget):
         self.voiceCombo.repaint()
 
     def testVoice(self):
-        self.tts().preview(self.tts.code2Vids[self.lv[0]][self.voiceCombo.currentText()])
+        class PreviewThread(QThread):
+            def __init__(self, parent):
+                QThread.__init__(self)
+                self.parent = parent
+
+            def run(self):
+                p = self.parent
+                p.tts().preview(p.tts.code2Vids[p.lv[0]][p.voiceCombo.currentText()])
+
+        PreviewThread(self).run()
 
 
 class Preferences(QDialog):

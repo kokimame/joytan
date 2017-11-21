@@ -67,8 +67,9 @@ class TranslateDialog(QDialog):
         if form.exCheck.isChecked(): transGroup.append('example')
 
         print(transGroup)
-        transThread = self.TranslateThread(self.mw, transGroup, destCode)
-        transThread.run()
+        # This causes a warning from PyQt about seting a parent on other thread.
+        self.tt = self.TranslateThread(self.mw, transGroup, destCode)
+        self.tt.start()
 
         self.mw.framelist._update()
         self.reject()

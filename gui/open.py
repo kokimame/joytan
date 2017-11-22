@@ -34,5 +34,3 @@ def onOpen(mw):
                 bw.editors['ex-%d-%d' % (i+1, j+1)].setText(data['ex-%d-%d' % (i+1, j+1)])
 
     mw.framelist._update()
-
-    gui.dialogs.open("Preferences", mw, tab="TTS")

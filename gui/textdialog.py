@@ -32,12 +32,12 @@ class HtmlThread(QThread):
         self.dest = dest
 
     def run(self):
-        words = [bw.editors['name'].text() for bw in self.mw.framelist.getCurrentBundleWidgets()]
+        datas = [bw.data() for bw in self.mw.framelist.getCurrentBundleWidgets()]
 
         from jinja2 import Environment, FileSystemLoader
         env = Environment(loader=FileSystemLoader('templates/html'))
         temp = env.get_template('words.html')
-        rendered_temp = temp.render(words=words)
+        rendered_temp = temp.render(bwDatas=datas)
 
         with open('{dest}/{title}.html'.format(dest=self.dest, title=self.mw.pref['title']), 'w') as f:
             f.write(rendered_temp)
@@ -56,9 +56,7 @@ class TextDialog(QDialog):
 
     def onCreate(self):
         from gui.utils import rmdir, mkdir
-        textDest = "{root}/text".format(root=self.mw.getRootPath())
-        rmdir(textDest)
-        mkdir(textDest)
+        textDest = "{dest}".format(dest=self.mw.pref['workspace'])
 
         self.th = HtmlThread(self.mw, textDest)
         self.th.start()

@@ -1,6 +1,9 @@
 <title>{% block title %}{% endblock %}</title>
 <ui>
-    {% for word in words %}
-    <li>{{ word }}</a></li>
+    {% for bw in bwDatas %}
+    <font size="5" color="red">{{ bw['name'] }}</font><br>
+    <font size="4"><b>{{ bw['def-1'] }}</b></font><br>
+    <font size="4">"{{ bw['ex-1-1'] }}"</font>
+    <br><br>
     {% endfor %}
 </ui>

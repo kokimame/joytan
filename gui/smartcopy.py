@@ -36,7 +36,7 @@ class CopyDialog(QDialog):
 
         # Change language mapping of the framelist based on the copy
         fset = self.mw.framelist.setting
-        fset.langMap[tbox.currentText().lower()] = fset.langMap[fbox.currentText().lower()]
+        fset.langMap[tbox.currentText().lower()][0] = fset.langMap[fbox.currentText().lower()][0]
 
 
         self.mw.framelist._update()

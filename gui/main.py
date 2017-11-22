@@ -124,21 +124,12 @@ class EmotanMW(QMainWindow):
 
 
     def onDownload(self):
-        if self.framelist.count() == 0:
-            QMessageBox.critical(self, "No bundle",
-                                 "You didn't add any bundle.")
-            return
-
         # To update 'Anonymous bundle' if a name is added to it
         self.framelist._update()
         import gui.download
         gui.download.onDownload(self)
 
     def onTranslate(self):
-        if self.framelist.count() == 0:
-            print("Nothing to translate")
-            return
-
         # To update 'Anonymous bundle' if a name is added to it
         self.framelist._update()
         import gui.translate
@@ -154,20 +145,11 @@ class EmotanMW(QMainWindow):
         gui.mp3dialog.onMp3Dialog(self)
 
     def onCreateText(self):
-        if self.framelist.count() == 0:
-            QMessageBox.critical(self, "No bundle",
-                                 "You didn't add any bundle.")
-            return
-        self.framelist._update()
         import gui.textdialog
         gui.textdialog.onTextDialog(self)
 
 
     def onCopy(self):
-        if self.framelist.count() == 0:
-            QMessageBox.critical(self, "No bundle",
-                                 "You didn't add any bundle.")
-            return
         import gui.smartcopy
         gui.smartcopy.onCopy(self)
 

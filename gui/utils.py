@@ -80,6 +80,37 @@ def rmdir(path):
         call("rm -rf {path}".format(path=path), shell=True)
     print("rmdir %s" % path)
 
+def showWarning(text, parent=None, help="", title="Emotan"):
+    "Show a small warning with an OK button."
+    return showInfo(text, parent, help, "warning", title=title)
+
+def showCritical(text, parent=None, help="", title="Emotan"):
+    "Show a small critical error with an OK button."
+    return showInfo(text, parent, help, "critical", title=title)
+
+def showInfo(text, parent=False, help="", type="info", title="Emotan"):
+    "Show a small info window with an OK button."
+    if parent is False:
+        parent = gui.mw.app.activeWindow() or gui.mw
+    if type == "warning":
+        icon = QMessageBox.Warning
+    elif type == "critical":
+        icon = QMessageBox.Critical
+    else:
+        icon = QMessageBox.Information
+    mb = QMessageBox(parent)
+    mb.setText(text)
+    mb.setIcon(icon)
+    mb.setWindowModality(Qt.WindowModal)
+    mb.setWindowTitle(title)
+    b = mb.addButton(QMessageBox.Ok)
+    b.setDefault(True)
+    if help:
+        b = mb.addButton(QMessageBox.Help)
+        b.clicked.connect(lambda: print("Help is under development."))
+        b.setAutoDefault(False)
+    return mb.exec_()
+
 LANGUAGES = {
     'af': 'afrikaans',
     'sq': 'albanian',

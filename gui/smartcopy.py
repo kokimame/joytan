@@ -1,5 +1,7 @@
-from gui.qt import *
 import gui
+from gui.qt import *
+from gui.utils import showCritical
+
 
 def onCopy(mw):
     gui.dialogs.open("CopyDialog", mw)
@@ -15,6 +17,10 @@ class CopyDialog(QDialog):
         self.show()
 
     def start(self):
+        if self.mw.framelist.count() == 0:
+            showCritical("No bundles found.", title="Error")
+            return
+
         form = self.form
         fbox, tbox = form.fromBox, form.toBox
         if fbox.currentText() == tbox.currentText():

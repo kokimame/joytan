@@ -1,5 +1,6 @@
-from gui.qt import *
 import gui
+from gui.qt import *
+from gui.utils import showCritical
 
 from googletrans import Translator
 from googletrans.constants import LANGCODES
@@ -58,6 +59,10 @@ class TranslateDialog(QDialog):
 
     # Start translation
     def start(self):
+        if self.mw.framelist.count() == 0:
+            showCritical("No bundles found.", title="Error")
+            return
+
         form = self.form
         transGroup = []
         # Get language code of target language to translate to from the library

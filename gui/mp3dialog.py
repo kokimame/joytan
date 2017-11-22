@@ -136,7 +136,7 @@ class Mp3Dialog(QDialog):
 
     def onCreate(self):
         if self.framelist.count() == 0:
-            print("Nothing to create")
+            utils.showCritical("No budles found.", title="Error")
             return
         setting = {}
         setting['repeat'] = self.form.wordSpin.value()

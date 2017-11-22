@@ -2,6 +2,7 @@ import os, requests
 
 import gui
 from gui.qt import *
+from gui.utils import showCritical
 from tools.parser import Parsers
 
 def onDownload(mw):
@@ -24,6 +25,9 @@ class DownloadDialog(QDialog):
         form.sourceCombo.setCurrentText(self.mw.pref["onlineSrc"])
 
     def start(self):
+        if self.mw.framelist.count() == 0:
+            showCritical("No bundles found.", title="Error")
+            return
         parser = Parsers[self.form.sourceCombo.currentText()]()
         simpleDownload(self.mw, parser)
         self.mw.framelist._update()

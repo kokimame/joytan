@@ -73,10 +73,34 @@ class TranslateDialog(QDialog):
 
         print(transGroup)
         # This causes a warning from PyQt about seting a parent on other thread.
-        self.tt = self.TranslateThread(self.mw, transGroup, destCode)
-        self.tt.start()
+        #self.tt = self.TranslateThread(self.mw, transGroup, destCode)
+        #self.tt.start()
+        #self.tt.finished.connect(lambda: self.mw.framelist._update())
 
+        translate = lambda text: Translator().translate(text, dest=destCode).text
+        self.mw.progress.start(min=0, max=self.mw.framelist.count(),
+                               label="Start translating", immediate=True, cancellable=True)
+        for bw in self.mw.framelist.getCurrentBundleWidgets():
+            self.mw.progress.update(label="Translating %s" % bw.name, maybeShow=False)
+            if 'name' in transGroup:
+                bw.editors['name'].setText(translate(bw.name))
+                self.mw.framelist.setting.langMap['name'][0] = destCode
+
+            for i in range(1, bw.dpw + 1):
+                define = bw.editors['def-%d' % i].text()
+                if 'definition' in transGroup and define != '':
+                    bw.editors['def-%d' % i].setText(translate(define))
+                    self.mw.framelist.setting.langMap['def-%d' % i][0] = destCode
+
+                for j in range(1, bw.epd + 1):
+                    examp = bw.editors['ex-%d-%d' % (i, j)].text()
+                    if 'example' in transGroup and examp != '':
+                        bw.editors['ex-%d-%d' % (i, j)].setText(translate(examp))
+                        self.mw.framelist.setting.langMap['ex-%d-%d' % (i, j)][0] = destCode
+
+        self.mw.progress.finish()
         self.mw.framelist._update()
+
         self.reject()
 
     def reject(self):

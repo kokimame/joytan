@@ -150,9 +150,8 @@ class Preferences(QDialog):
                 fset.langMap[wig.label][0] = newLang
                 fset.langMap[wig.label][1] = newVid
 
-        fs = self.mw.framelist.setting
-        fs.expand(dpw=self.form.dpwSpin.value())
-        fs.expand(epd=self.form.epdSpin.value())
+        fset.expand(dpw=self.form.dpwSpin.value())
+        fset.expand(epd=self.form.epdSpin.value())
 
 
 

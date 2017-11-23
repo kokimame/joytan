@@ -151,7 +151,7 @@ class Mp3Dialog(QDialog):
         from gui.utils import rmdir
         audDest = os.path.join(self.mw.getRootPath(), "audio")
         rmdir(audDest)
-        setting['root'] = audDest
+        setting['dest'] = audDest
 
         sfxList = self.form.sfxList
         bgmList = self.form.bgmList

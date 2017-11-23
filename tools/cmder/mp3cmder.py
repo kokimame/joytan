@@ -11,7 +11,7 @@ class Mp3Cmder:
         self.setting = setting
         self.setting['sampling'] = 44100
         self.setting['bitrate'] = 64
-        self.finalDir = os.path.join(self.setting['root'], "FINAL")
+        self.finalDir = os.path.join(self.setting['dest'], "FINAL")
         self.bgmMp3 = os.path.join(self.finalDir, "bgm.mp3")
         # A-capella mp3: TTS voice + SFX without BGM
         self.acapMp3 = os.path.join(self.finalDir, "acap.mp3")
@@ -28,7 +28,7 @@ class Mp3Cmder:
         print("Audio Setting: ", self.setting)
 
     def setupAudio(self):
-        mkdir(os.path.join(self.setting['root'], "FINAL"))
+        mkdir(os.path.join(self.setting['dest'], "FINAL"))
         fs = self.setting['sampling']
         bps = self.setting['bitrate']
 
@@ -85,7 +85,7 @@ class Mp3Cmder:
 
 
     def dictateContents(self, bw):
-        curdir = os.path.join(self.setting['root'], bw.getDirname())
+        curdir = os.path.join(self.setting['dest'], bw.getDirname())
         assert os.path.exists(curdir)
 
         self.bwFileMap[bw.name] = {}
@@ -113,7 +113,7 @@ class Mp3Cmder:
                 self.bwFileMap[bw.name]['ex-%d-%d' % (i + 1, j + 1)] = filename
 
     def compileBundle(self, bw, isGstatic=True):
-        curdir = os.path.join(self.setting['root'], bw.getDirname())
+        curdir = os.path.join(self.setting['dest'], bw.getDirname())
 
         nameLang = self.setting['langMap']['name'][0]
         nameVid = self.setting['langMap']['name'][1]
@@ -150,16 +150,16 @@ class Mp3Cmder:
                 except KeyError:
                     pass
 
-        catMp3(inputs, "", os.path.join(self.setting['root'], bw.getDirname() + ".mp3"))
+        catMp3(inputs, "", os.path.join(self.setting['dest'], bw.getDirname() + ".mp3"))
 
     def mergeMp3s(self):
-        print("Merge all mp3 files in %s" % self.setting['root'])
-        mergeDirMp3(self.setting['root'], self.acapMp3)
+        print("Merge all mp3 files in %s" % self.setting['dest'])
+        mergeDirMp3(self.setting['dest'], self.acapMp3)
 
     def createBgmLoop(self):
         if len(self.setting['loop']) != 0:
             print("Create BGM Loop")
-            createLoopMp3(self.setting['root'], self.setting['loop'], mp3lenSec(self.acapMp3), self.bgmMp3)
+            createLoopMp3(self.setting['dest'], self.setting['loop'], mp3lenSec(self.acapMp3), self.bgmMp3)
 
     def mixWithBgm(self):
         if len(self.setting['loop']) != 0:

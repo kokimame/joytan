@@ -99,6 +99,7 @@ class Mp3Dialog(QDialog):
         self.setupButton()
         self.setupSfxList()
         self.setupBgmList()
+        self.setupProgress()
         self.show()
 
     def setupSfxList(self):
@@ -134,6 +135,10 @@ class Mp3Dialog(QDialog):
 
         form.settingBtn.clicked.connect(lambda: gui.dialogs.open("Preferences", self.mw, tab="TTS"))
 
+    def setupProgress(self):
+        form = self.form
+        form.progressBar.setValue(0)
+
     def onCreate(self):
         if self.framelist.count() == 0:
             utils.showCritical("No budles found.", title="Error")
@@ -144,9 +149,9 @@ class Mp3Dialog(QDialog):
         setting['langMap'] = self.mw.framelist.setting.langMap
 
         from gui.utils import rmdir
-        audRoot = os.path.join(self.mw.getRootPath(), "audio")
-        rmdir(audRoot)
-        setting['root'] = audRoot
+        audDest = os.path.join(self.mw.getRootPath(), "audio")
+        rmdir(audDest)
+        setting['root'] = audDest
 
         sfxList = self.form.sfxList
         bgmList = self.form.bgmList
@@ -184,44 +189,53 @@ class Mp3Dialog(QDialog):
         setting['loop'] = bgmloop
 
 
+        class Mp3Thread(QThread):
+            sig = pyqtSignal(str)
+            def __init__(self, mw, cmder):
+                QThread.__init__(self)
+                self.mw = mw
+                self.cmder = cmder
+
+            def run(self):
+                # Setting up the properties of audio files such as bitrate and sampling rate
+                self.sig.emit("Setting up aufio files. This takes a few minues")
+                self.wait(10)
+                self.cmder.setupAudio()
+
+                for i in range(self.mw.framelist.count()):
+                    bw = self.mw.framelist.getBundleWidget(i)
+                    self.sig.emit("Creating audio file of %s." % bw.name)
+                    os.makedirs(os.path.join(audDest, bw.getDirname()), exist_ok=True)
+                    self.cmder.dictateContents(bw)
+                    self.cmder.compileBundle(bw, isGstatic=isGstatic)
+
+                self.cmder.mergeMp3s()
+                self.cmder.createBgmLoop()
+                self.sig.emit("Mixing with BGM. This takes a few minutes.")
+                self.cmder.mixWithBgm()
+
+                self.save(self.cmder.finalMp3)
+                self.quit()
+
+            def save(self, file):
+                pref = self.mw.pref
+                output = os.path.join(pref['workspace'], pref['title'] + '-audio.mp3')
+                from shutil import copyfile
+                copyfile(file, output)
+
         from tools.cmder.mp3cmder import Mp3Cmder
-        # The extra 50 goes for setting up audio, merging, bgm loop and mixing
-        # This is merely a rough assumption.
-        self.mw.progress.start(min=0, max=self.framelist.count() + 50, immediate=True)
         cmder = Mp3Cmder(setting)
-        self.mw.progress.update(value=0, label="Setting up audio files", maybeShow=False)
-        # Setting up the properties of audio files such as bitrate and sampling rate
-        cmder.setupAudio()
-        self.mw.progress.update(step=10, maybeShow=False)
+        self.form.progressBar.setRange(0, self.mw.framelist.count()+2)
 
-        for i in range(self.framelist.count()):
-            bw = self.framelist.getBundleWidget(i)
-            self.mw.progress.update(label="Creating audio for %s" % bw.name, maybeShow=False)
-            os.makedirs(os.path.join(audRoot, bw.getDirname()), exist_ok=True)
-            cmder.dictateContents(bw)
-            cmder.compileBundle(bw, isGstatic=isGstatic)
+        def onUpdate(msg):
+            self.form.pgMsg.setText(msg)
+            val = self.form.progressBar.value()
+            self.form.progressBar.setValue(val+1)
 
-        self.mw.progress.update(step=10, label="Merging generated audio files...", maybeShow=False)
-        cmder.mergeMp3s()
-
-        self.mw.progress.update(step=10, label="Creating BGM loop...", maybeShow=False)
-        cmder.createBgmLoop()
-
-        self.mw.progress.update(step=10, label="Mixing audio with BGM", maybeShow=False)
-        cmder.mixWithBgm()
-
-        self.mw.progress.update(step=10, maybeShow=False)
-        self.mw.progress.finish()
-
-        self.save(cmder.finalMp3)
-
-        self.reject()
-
-    def save(self, file):
-        pref = self.mw.pref
-        output = os.path.join(pref['workspace'], pref['title'] + '-audio.mp3')
-        from shutil import copyfile
-        copyfile(file, output)
+        self.thread = Mp3Thread(self.mw, cmder)
+        self.thread.start()
+        self.thread.sig.connect(onUpdate)
+        self.thread.finished.connect(self.reject)
 
     def onSfxClicked(self, idx=None):
         sfxList = self.form.sfxList
@@ -293,6 +307,8 @@ class Mp3Dialog(QDialog):
             w.forceStop()
 
     def reject(self):
+        self.form.progressBar.reset()
+        self.form.pgMsg.setText("")
         self.stopAllAudio()
         self.done(0)
         gui.dialogs.close("Mp3Dialog", save=True)

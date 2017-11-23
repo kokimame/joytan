@@ -22,10 +22,10 @@ class TranslateThread(QThread):
     def run(self):
         # FIXME: !!!!!!!!!!!WARNING!!!!!!!!!!!!
         # On Linux(Ubuntu), after translating English to other languages,
-        # then turning on the 'Display (or View)' mode causes Segmentation fault then
+        # then turning on the 'Edit' mode causes Segmentation fault then
         # the app ends with exit code 139.
         # As a note, this bug didn't occur before TranslateThread was introduced,
-        # and also this bug does not occur at leaset on Mac.
+        # and also this bug does not occur at least on Mac.
         translate = lambda text: Translator().translate(text, dest=self.destCode).text
         for bw in self.mw.framelist.getCurrentBundleWidgets():
             self.sig.emit(bw.name)

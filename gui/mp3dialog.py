@@ -93,7 +93,6 @@ class Mp3Dialog(QDialog):
     def __init__(self, mw):
         QDialog.__init__(self, mw, Qt.Window)
         self.mw = mw
-        self.framelist = mw.framelist
         self.form = gui.forms.mp3dialog.Ui_Mp3Dialog()
         self.form.setupUi(self)
         self.setupButton()
@@ -101,6 +100,11 @@ class Mp3Dialog(QDialog):
         self.setupBgmList()
         self.setupProgress()
         self.show()
+        # TODO: Is this a real solution to initialize voice ids?
+        # Open Preferences and set up voice id.
+        # This is called only the first time audio popup opens
+        # and set a voice id if it's None.
+        gui.dialogs.open("Preferences", mw, tab="TTS")
 
     def setupSfxList(self):
         sfxList = self.form.sfxList
@@ -140,7 +144,7 @@ class Mp3Dialog(QDialog):
         form.progressBar.setValue(0)
 
     def onCreate(self):
-        if self.framelist.count() == 0:
+        if self.mw.framelist.count() == 0:
             utils.showCritical("No budles found.", title="Error")
             return
         setting = {}

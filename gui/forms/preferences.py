@@ -136,7 +136,7 @@ class Ui_Preferences(object):
         self.verticalLayout_2.addWidget(self.buttonBox)
 
         self.retranslateUi(Preferences)
-        self.tabWidget.setCurrentIndex(1)
+        self.tabWidget.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(Preferences)
 
     def retranslateUi(self, Preferences):

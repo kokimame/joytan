@@ -199,7 +199,6 @@ class Mp3Dialog(QDialog):
             def run(self):
                 # Setting up the properties of audio files such as bitrate and sampling rate
                 self.sig.emit("Setting up aufio files. This takes a few minues")
-                self.wait(10)
                 self.cmder.setupAudio()
 
                 for i in range(self.mw.framelist.count()):
@@ -233,8 +232,8 @@ class Mp3Dialog(QDialog):
             self.form.progressBar.setValue(val+1)
 
         self.thread = Mp3Thread(self.mw, cmder)
-        self.thread.start()
         self.thread.sig.connect(onUpdate)
+        self.thread.start()
         self.thread.finished.connect(self.reject)
 
     def onSfxClicked(self, idx=None):

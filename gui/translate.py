@@ -9,39 +9,40 @@ def onTranslate(mw):
     gui.dialogs.open("TranslateDialog", mw)
 
 
+class TranslateThread(QThread):
+
+    sig = pyqtSignal(str)
+
+    def __init__(self, mw, group, destCode):
+        QThread.__init__(self)
+        self.mw = mw
+        self.group = group
+        self.destCode = destCode
+
+    def run(self):
+        translate = lambda text: Translator().translate(text, dest=self.destCode).text
+        for bw in self.mw.framelist.getCurrentBundleWidgets():
+            self.sig.emit(bw.name)
+            if 'name' in self.group:
+                bw.editors['name'].setText(translate(bw.name))
+                self.mw.framelist.setting.langMap['name'][0] = self.destCode
+
+            for i in range(1, bw.dpw + 1):
+                define = bw.editors['def-%d' % i].text()
+                if 'definition' in self.group and define != '':
+                    bw.editors['def-%d' % i].setText(translate(define))
+                    self.mw.framelist.setting.langMap['def-%d' % i][0] = self.destCode
+
+                for j in range(1, bw.epd + 1):
+                    examp = bw.editors['ex-%d-%d' % (i, j)].text()
+                    if 'example' in self.group and examp != '':
+                        bw.editors['ex-%d-%d' % (i, j)].setText(translate(examp))
+                        self.mw.framelist.setting.langMap['ex-%d-%d' % (i, j)][0] = self.destCode
+
+        self.quit()
+
+
 class TranslateDialog(QDialog):
-
-    class TranslateThread(QThread):
-        def __init__(self, mw, group, destCode):
-            QThread.__init__(self)
-            self.mw = mw
-            self.group = group
-            self.destCode = destCode
-
-        def run(self):
-            translate = lambda text: Translator().translate(text, dest=self.destCode).text
-            self.mw.progress.start(min=0, max=self.mw.framelist.count(),
-                                   label="Start translating", immediate=True, cancellable=True)
-            for bw in self.mw.framelist.getCurrentBundleWidgets():
-                self.mw.progress.update(label="Translating %s" % bw.name, maybeShow=False)
-                if 'name' in self.group:
-                    bw.editors['name'].setText(translate(bw.name))
-                    self.mw.framelist.setting.langMap['name'][0] = self.destCode
-
-                for i in range(1, bw.dpw + 1):
-                    define = bw.editors['def-%d' % i].text()
-                    if 'definition' in self.group and define != '':
-                        bw.editors['def-%d' % i].setText(translate(define))
-                        self.mw.framelist.setting.langMap['def-%d' % i][0] = self.destCode
-
-                    for j in range(1, bw.epd + 1):
-                        examp = bw.editors['ex-%d-%d' % (i, j)].text()
-                        if 'example' in self.group and examp != '':
-                            bw.editors['ex-%d-%d' % (i, j)].setText(translate(examp))
-                            self.mw.framelist.setting.langMap['ex-%d-%d' % (i, j)][0] = self.destCode
-
-            self.mw.progress.finish()
-
     def __init__(self, mw):
         QDialog.__init__(self, mw, Qt.Window)
         self.mw = mw
@@ -72,37 +73,22 @@ class TranslateDialog(QDialog):
         if form.exCheck.isChecked(): transGroup.append('example')
 
         print(transGroup)
+
         # This causes a warning from PyQt about seting a parent on other thread.
-        #self.tt = self.TranslateThread(self.mw, transGroup, destCode)
-        #self.tt.start()
-        #self.tt.finished.connect(lambda: self.mw.framelist._update())
+        self.tt = TranslateThread(self.mw, transGroup, destCode)
+        self.form.progressBar.setRange(0, self.mw.framelist.count())
 
-        translate = lambda text: Translator().translate(text, dest=destCode).text
-        self.mw.progress.start(min=0, max=self.mw.framelist.count(),
-                               label="Start translating", immediate=True, cancellable=True)
-        for bw in self.mw.framelist.getCurrentBundleWidgets():
-            self.mw.progress.update(label="Translating %s" % bw.name, maybeShow=False)
-            if 'name' in transGroup:
-                bw.editors['name'].setText(translate(bw.name))
-                self.mw.framelist.setting.langMap['name'][0] = destCode
+        def onUpdate(name):
+            self.form.pgMsg.setText("Translating %s." % name)
+            val = self.form.progressBar.value()
+            self.form.progressBar.setValue(val+1)
 
-            for i in range(1, bw.dpw + 1):
-                define = bw.editors['def-%d' % i].text()
-                if 'definition' in transGroup and define != '':
-                    bw.editors['def-%d' % i].setText(translate(define))
-                    self.mw.framelist.setting.langMap['def-%d' % i][0] = destCode
+        self.tt.sig.connect(onUpdate)
+        self.tt.start()
+        self.tt.finished.connect(lambda: self.reject(update=True))
 
-                for j in range(1, bw.epd + 1):
-                    examp = bw.editors['ex-%d-%d' % (i, j)].text()
-                    if 'example' in transGroup and examp != '':
-                        bw.editors['ex-%d-%d' % (i, j)].setText(translate(examp))
-                        self.mw.framelist.setting.langMap['ex-%d-%d' % (i, j)][0] = destCode
-
-        self.mw.progress.finish()
-        self.mw.framelist._update()
-
-        self.reject()
-
-    def reject(self):
+    def reject(self, update=False):
+        if update:
+            self.mw.framelist._update()
         self.done(0)
         gui.dialogs.close("TranslateDialog")

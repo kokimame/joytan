@@ -21,7 +21,7 @@ class LvMapWidget(QWidget):
         self.langCombo.addItems(sorted([lang.title() for lang in LANGUAGES.values()]))
         self.langCombo.setCurrentText(LANGUAGES[self.lv[0]].title())
         self.langCombo.currentTextChanged.connect(self.updateVoiceCombo)
-        lbl2 = QLabel('---> TTS:')
+        lbl2 = QLabel('Voice:')
         self.voiceCombo = QComboBox()
         self.voiceCombo.addItems([name for name in self.tts.code2Vids[self.lv[0]]])
 
@@ -34,12 +34,18 @@ class LvMapWidget(QWidget):
         self.testBtn = QPushButton('Test')
         self.testBtn.clicked.connect(self.testVoice)
 
-        hbox = QHBoxLayout()
-        hbox.addWidget(lbl)
-        hbox.addWidget(self.langCombo)
-        hbox.addWidget(lbl2)
-        hbox.addWidget(self.voiceCombo)
-        hbox.addWidget(self.testBtn)
+        lh = QHBoxLayout()
+        lh.addWidget(lbl)
+        lh.addItem(QSpacerItem(0, 0, QSizePolicy.Expanding, QSizePolicy.Minimum))
+        lh.addWidget(self.langCombo)
+        vh = QHBoxLayout()
+        vh.addWidget(lbl2)
+        vh.addWidget(self.voiceCombo)
+        vh.addItem(QSpacerItem(0, 0, QSizePolicy.Expanding, QSizePolicy.Minimum))
+        vh.addWidget(self.testBtn)
+        hbox = QVBoxLayout()
+        hbox.addLayout(lh)
+        hbox.addLayout(vh)
         self.setLayout(hbox)
 
     def updateVoiceCombo(self):
@@ -104,6 +110,9 @@ class Preferences(QDialog):
 
     def setupList(self):
         testList = self.form.testList
+        testList.setStyleSheet("""
+                            QListWidget::item { border-bottom: 1px solid black; }
+                           """)
         # Sort items in the order of 'name', 'def-x' and 'ex-x-x'
         for item in sorted(sorted(list(self.mw.framelist.setting.langMap.keys())),
                           key=lambda x: ['n', 'd', 'e'].index(x[0])):

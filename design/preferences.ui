@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>583</width>
+    <width>508</width>
     <height>405</height>
    </rect>
   </property>
@@ -238,6 +238,13 @@
           <widget class="QComboBox" name="ttsCombo"/>
          </item>
         </layout>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_10">
+         <property name="text">
+          <string>Current Item to Voice map:</string>
+         </property>
+        </widget>
        </item>
        <item>
         <widget class="QListWidget" name="testList"/>

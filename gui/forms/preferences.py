@@ -11,7 +11,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_Preferences(object):
     def setupUi(self, Preferences):
         Preferences.setObjectName("Preferences")
-        Preferences.resize(583, 405)
+        Preferences.resize(508, 405)
         self.verticalLayout_2 = QtWidgets.QVBoxLayout(Preferences)
         self.verticalLayout_2.setObjectName("verticalLayout_2")
         self.tabWidget = QtWidgets.QTabWidget(Preferences)
@@ -122,6 +122,9 @@ class Ui_Preferences(object):
         self.ttsCombo.setObjectName("ttsCombo")
         self.horizontalLayout.addWidget(self.ttsCombo)
         self.verticalLayout_6.addLayout(self.horizontalLayout)
+        self.label_10 = QtWidgets.QLabel(self.tabTTS)
+        self.label_10.setObjectName("label_10")
+        self.verticalLayout_6.addWidget(self.label_10)
         self.testList = QtWidgets.QListWidget(self.tabTTS)
         self.testList.setObjectName("testList")
         self.verticalLayout_6.addWidget(self.testList)
@@ -156,6 +159,7 @@ class Ui_Preferences(object):
         self.label_7.setText(_translate("Preferences", "Wordlist Directory"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tabGeneral), _translate("Preferences", "General"))
         self.label_9.setText(_translate("Preferences", "Software"))
+        self.label_10.setText(_translate("Preferences", "Current Item to Voice map:"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tabTTS), _translate("Preferences", "TTS"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tabPDF), _translate("Preferences", "PDF"))
 

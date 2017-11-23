@@ -92,25 +92,22 @@ class Mp3Cmder:
 
         for i in range(0, bw.dpw):
             define = bw.editors['def-%d' % (i+1)].text()
-            if define == '':
-                continue
-
-            # Fixme: Too complex isn't is? Maybe need a class for storing
-            # the relation among content type, language code, label for combobox and
-            # voice ID.
-            defVid = self.setting['langMap']['def-%d' % (i+1)][1]
-            filename = os.path.join(curdir, "def-%d" % (i+1))
-            self.tts.dictate(define, defVid, output=filename)
-            self.bwFileMap[bw.name]['def-%d' % (i + 1)] = filename
+            if define != '':
+                # Fixme: Too complex isn't is? Maybe need a class for storing
+                # the relation among content type, language code, label for combobox and
+                # voice ID.
+                defVid = self.setting['langMap']['def-%d' % (i+1)][1]
+                filename = os.path.join(curdir, "def-%d" % (i+1))
+                self.tts.dictate(define, defVid, output=filename)
+                self.bwFileMap[bw.name]['def-%d' % (i + 1)] = filename
 
             for j in range(0, bw.epd):
                 examp = bw.editors['ex-%d-%d' % (i+1, j+1)].text()
-                if examp == '':
-                    continue
-                exVid = self.setting['langMap']['ex-%d-%d' % (i+1, j+1)][1]
-                filename = os.path.join(curdir, "ex-%d-%d" % ((i+1), (j+1)))
-                self.tts.dictate(examp, exVid, output=filename)
-                self.bwFileMap[bw.name]['ex-%d-%d' % (i + 1, j + 1)] = filename
+                if examp != '':
+                    exVid = self.setting['langMap']['ex-%d-%d' % (i+1, j+1)][1]
+                    filename = os.path.join(curdir, "ex-%d-%d" % ((i+1), (j+1)))
+                    self.tts.dictate(examp, exVid, output=filename)
+                    self.bwFileMap[bw.name]['ex-%d-%d' % (i + 1, j + 1)] = filename
 
     def compileBundle(self, bw, isGstatic=True):
         curdir = os.path.join(self.setting['dest'], bw.getDirname())

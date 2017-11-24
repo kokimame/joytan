@@ -2,6 +2,7 @@ from gui.qt import *
 import gui
 import gui.utils as utils
 from tools.cmder.mp3cmder import mp3Duration, getMp3Info
+from PyQt5.QtMultimedia import QMediaPlayer
 
 
 def onMp3Dialog(mw):

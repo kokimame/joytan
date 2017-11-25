@@ -36,8 +36,8 @@ class LvMapWidget(QWidget):
 
         lh = QHBoxLayout()
         lh.addWidget(lbl)
-        lh.addItem(QSpacerItem(0, 0, QSizePolicy.Expanding, QSizePolicy.Minimum))
         lh.addWidget(self.langCombo)
+        lh.addItem(QSpacerItem(0, 0, QSizePolicy.Expanding, QSizePolicy.Minimum))
         vh = QHBoxLayout()
         vh.addWidget(lbl2)
         vh.addWidget(self.voiceCombo)

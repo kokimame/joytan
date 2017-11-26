@@ -96,6 +96,7 @@ class Mp3Dialog(QDialog):
         self.mw = mw
         self.form = gui.forms.mp3dialog.Ui_Mp3Dialog()
         self.form.setupUi(self)
+        self.thread = None
         self.setupButton()
         self.setupSfxList()
         self.setupBgmList()
@@ -136,7 +137,8 @@ class Mp3Dialog(QDialog):
     def setupButton(self):
         form = self.form
         form.createBtn.clicked.connect(self.onCreate)
-        form.cancelBtn.clicked.connect(self.reject)
+        form.stopBtn.setEnabled(False)
+        form.stopBtn.clicked.connect(self.stopThread)
 
         form.settingBtn.clicked.connect(lambda: gui.dialogs.open("Preferences", self.mw, tab="TTS"))
 
@@ -239,7 +241,21 @@ class Mp3Dialog(QDialog):
         self.thread = Mp3Thread(self.mw, cmder)
         self.thread.sig.connect(onUpdate)
         self.thread.start()
+        self.form.createBtn.setEnabled(False)
+        self.form.stopBtn.setEnabled(True)
         self.thread.finished.connect(self.reject)
+
+    def stopThread(self):
+        if self.thread:
+            self.thread.terminate()
+            audDest = os.path.join(self.mw.getRootPath(), "audio")
+            from gui.utils import rmdir
+            rmdir(audDest)
+            self.form.progressBar.reset()
+            self.form.pgMsg.setText("")
+        self.form.stopBtn.setEnabled(False)
+        self.form.createBtn.setEnabled(True)
+
 
     def onSfxClicked(self, idx=None):
         sfxList = self.form.sfxList
@@ -311,6 +327,8 @@ class Mp3Dialog(QDialog):
             w.forceStop()
 
     def reject(self):
+        self.form.stopBtn.setEnabled(False)
+        self.form.createBtn.setEnabled(True)
         self.form.progressBar.reset()
         self.form.pgMsg.setText("")
         self.stopAllAudio()

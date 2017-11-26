@@ -189,9 +189,9 @@
           </spacer>
          </item>
          <item>
-          <widget class="QPushButton" name="cancelBtn">
+          <widget class="QPushButton" name="stopBtn">
            <property name="text">
-            <string>Cancel</string>
+            <string>Stop</string>
            </property>
           </widget>
          </item>

@@ -3,7 +3,6 @@ from gui.utils import LANGUAGES
 
 def getTtsHelp():
     # Returns ['langCode', 'Voice name', 'Voice name + detail langCode (Shown in Combobox)', 'example']
-    # Fixme: Failed to read voices with multiple-words name such as 'Pipe Organ' and 'Bad News'.
     i1 = str(check_output("say -v ?", shell=True), 'utf-8').strip().split('\n')
     i2 = [' '.join(row.split()) for row in i1]
     i3 = []

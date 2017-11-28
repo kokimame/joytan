@@ -16,6 +16,7 @@ def getTtsHelp():
                 langCode = i4[1].lower().replace('_', '-')
         elif len(i4) == 3:
             name, langCode = ' '.join([i4[0], i4[1]]), i4[2].replace('_', '-').split('-')[0]
+            i4 = i4[0:2] # Unifying the length of i4 equal to 2
         else:
             raise Exception("Unexpected voice name found on Mac's say: ", i4)
 

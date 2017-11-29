@@ -41,7 +41,7 @@ class EmotanMW(QMainWindow):
         print(self.pref)
 
         self.initUi()
-        self.entryMode = "Disp"
+        self.entryMode = "View"
 
         self.center()
         self.show()
@@ -111,16 +111,16 @@ class EmotanMW(QMainWindow):
         gui.extract.onExtract(self)
 
     def onUpdateMode(self):
-        if self.entryMode == "Disp":
-            # Change EntryList Mode to "Edit" and the icon to "Display"
+        if self.entryMode == "View":
+            # Change EntryList Mode to "Edit" and the icon to "View"
             self.form.modeButton.setIcon(QIcon("design/icons/disp_button.png"))
             self.entrylist.updateMode("Edit")
             self.entryMode = "Edit"
         elif self.entryMode == "Edit":
             self.form.modeButton.setIcon(QIcon("design/icons/edit_button.png"))
-            self.entrylist.updateMode("Disp")
+            self.entrylist.updateMode("View")
             self.entrylist.updateAll()
-            self.entryMode = "Disp"
+            self.entryMode = "View"
 
 
     def onDownload(self):

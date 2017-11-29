@@ -24,10 +24,10 @@ class EntryWidget(QWidget):
         self.setupUi(name)
 
     def setupUi(self, name):
-        self.setupDisplay()
+        self.setupView()
         self.setupEditors(name)
         self.setLayout(self.stackedLayout)
-        if self.mode == "Disp":
+        if self.mode == "View":
             self.stackedLayout.setCurrentIndex(0)
         if self.mode == "Edit":
             self.stackedLayout.setCurrentIndex(1)
@@ -38,34 +38,31 @@ class EntryWidget(QWidget):
         # Return directory name replacing whitespace with underscore
         return "{snum}".format(snum=snum)
 
-    def updateMode(self, newMode):
+    def setMode(self, newMode):
         if newMode == self.mode: return
 
-        if newMode == "Disp":
+        if newMode == "View":
             self.stackedLayout.setCurrentIndex(0)
             self.mode = newMode
         if newMode == "Edit":
             self.stackedLayout.setCurrentIndex(1)
             self.mode = newMode
 
-    def deleteSelf(self):
-        self.parent.deleteUi(self)
+    def setupView(self):
+        viewWidget = QWidget()
+        viewLayout = QVBoxLayout()
 
-    def setupDisplay(self):
-        dispWidget = QWidget()
-        dispLayout = QVBoxLayout()
-
-        self.dispLabel = QLabel()
+        self.viewLabel = QLabel()
 
         if self.name == '':
             name = "Empty entry"
         else:
             name = self.name
-        self.dispLabel.setText(self.html.format
+        self.viewLabel.setText(self.html.format
                            (content=self.nameFormat.format(num=self.index, name=name)))
-        dispLayout.addWidget(self.dispLabel)
-        dispWidget.setLayout(dispLayout)
-        self.stackedLayout.addWidget(dispWidget)
+        viewLayout.addWidget(self.viewLabel)
+        viewWidget.setLayout(viewLayout)
+        self.stackedLayout.addWidget(viewWidget)
 
     def setupEditors(self, name):
         # Definitions per entry and Examples per definition
@@ -110,7 +107,7 @@ class EntryWidget(QWidget):
         self.italFont = QFont()
         self.italFont.setItalic(True)
 
-    def updateDisplay(self):
+    def updateView(self):
         self.name = self.editors['name'].text()
         if self.name == '':
             name = "Empty entry"
@@ -125,7 +122,7 @@ class EntryWidget(QWidget):
                 if self.editors['ex-%d-%d' % (i+1, j+1)].text() != '':
                     content += self.exFormat.format(example=self.editors['ex-%d-%d' % (i+1, j+1)].text())
 
-        self.dispLabel.setText(self.html.format(content=content))
+        self.viewLabel.setText(self.html.format(content=content))
 
     # Set the text of downloaded contents to each of matched editors
     def updateEditors(self, items):

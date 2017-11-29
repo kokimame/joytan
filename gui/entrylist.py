@@ -114,14 +114,14 @@ class EntryList(QListWidget):
             eui = self.item(i)
             ew = self.itemWidget(eui)
             ew.index = i + 1
-            ew.updateDisplay()
+            ew.updateView()
             eui.setSizeHint(ew.sizeHint())
 
         self.repaint()
 
     def updateMode(self, newMode):
         for ew in self.getCurrentEntries():
-            ew.updateMode(newMode)
+            ew.setMode(newMode)
 
     def getCurrentEntries(self):
         return [self.getByIndex(i) for i in range(self.count())]

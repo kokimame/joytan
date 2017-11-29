@@ -198,7 +198,7 @@ def reduceVolume(original, vol, output):
 
 
 def createLoopMp3(dir, loop, length, output):
-    tmpMp3 = os.path.join(dir, "tmp-bgm-to-remove.mp3")
+    tmpMp3 = os.path.join(dir, "temporal-bgm-to-rm.mp3")
     if isWin:
         cmd = "type "
     else:
@@ -217,7 +217,7 @@ def createLoopMp3(dir, loop, length, output):
     print("create loop by: ", cmd)
     if isWin and bgmlen == loopInfo['duration']:
         # If required bgm length is less than a single loop contents,
-        # don't use 'type' (on Windows).
+        # don't use 'type' (on Windows) for this purpose.
         tmpMp3 = loopInfo['path']
     else:
         call(cmd, shell=True)

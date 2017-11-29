@@ -17,7 +17,7 @@ class CopyDialog(QDialog):
         self.show()
 
     def start(self):
-        if self.mw.framelist.count() == 0:
+        if self.mw.entrylist.count() == 0:
             showCritical("No entries found.", title="Error")
             return
 
@@ -28,24 +28,24 @@ class CopyDialog(QDialog):
             return
 
         # Copying from and to the contents in Entry Widget
-        for ew in self.mw.framelist.getCurrentEntryWidgets():
+        for ew in self.mw.entrylist.getCurrentEntryWidgets():
             try:
                 ew.editors[tbox.currentText().lower()].setText(ew.editors[fbox.currentText().lower()].text())
             except KeyError:
                 pass
 
-        # Change language mapping of the framelist based on the copy
-        fset = self.mw.framelist.setting
-        fset.langMap[tbox.currentText().lower()][0] = fset.langMap[fbox.currentText().lower()][0]
+        # Change language mapping of the entrylist based on the copy
+        eset = self.mw.entrylist.setting
+        eset.langMap[tbox.currentText().lower()][0] = eset.langMap[fbox.currentText().lower()][0]
 
 
-        self.mw.framelist._update()
+        self.mw.entrylist._update()
 
     def setupCombo(self):
         form = self.form
-        fset = self.mw.framelist.setting
-        form.fromBox.addItems([item.title() for item in fset.langMap])
-        form.toBox.addItems([item.title() for item in fset.langMap])
+        eset = self.mw.entrylist.setting
+        form.fromBox.addItems([item.title() for item in eset.langMap])
+        form.toBox.addItems([item.title() for item in eset.langMap])
         form.fromBox.setCurrentText('Name')
 
     def setupButtons(self):

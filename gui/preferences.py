@@ -114,10 +114,10 @@ class Preferences(QDialog):
                             QListWidget::item { border-bottom: 1px solid black; }
                            """)
         # Sort items in the order of 'name', 'def-x' and 'ex-x-x'
-        for item in sorted(sorted(list(self.mw.framelist.setting.langMap.keys())),
+        for item in sorted(sorted(list(self.mw.entrylist.setting.langMap.keys())),
                           key=lambda x: ['n', 'd', 'e'].index(x[0])):
             # language and Voice ID
-            lv = self.mw.framelist.setting.langMap[item]
+            lv = self.mw.entrylist.setting.langMap[item]
 
             wig = LvMapWidget(self.mw.pref['tts'], item, lv)
 
@@ -128,7 +128,7 @@ class Preferences(QDialog):
 
     def setupSpins(self):
         form = self.form
-        fs = self.mw.framelist.setting
+        fs = self.mw.entrylist.setting
         form.dpwSpin.setValue(fs.dpw)
         form.epdSpin.setValue(fs.epd)
 
@@ -150,17 +150,17 @@ class Preferences(QDialog):
 
     def updateFrameSetting(self):
         testList = self.form.testList
-        fset = self.mw.framelist.setting
+        eset = self.mw.entrylist.setting
         for i in range(testList.count()):
             wig = testList.itemWidget(testList.item(i))
-            if wig.label in fset.langMap:
+            if wig.label in eset.langMap:
                 newLang = LANGCODES[wig.langCombo.currentText().lower()]
                 newVid = wig.tts.code2Vids[newLang][wig.voiceCombo.currentText()]
-                fset.langMap[wig.label][0] = newLang
-                fset.langMap[wig.label][1] = newVid
+                eset.langMap[wig.label][0] = newLang
+                eset.langMap[wig.label][1] = newVid
 
-        fset.expand(dpw=self.form.dpwSpin.value())
-        fset.expand(epd=self.form.epdSpin.value())
+        eset.expand(dpw=self.form.dpwSpin.value())
+        eset.expand(epd=self.form.epdSpin.value())
 
 
 

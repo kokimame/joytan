@@ -41,7 +41,7 @@ class EmotanMW(QMainWindow):
         print(self.pref)
 
         self.initUi()
-        self.frameMode = "Disp"
+        self.entryMode = "Disp"
 
         self.center()
         self.show()
@@ -49,7 +49,7 @@ class EmotanMW(QMainWindow):
     def initUi(self):
         self.setupMainWindow()
         self.setupMenus()
-        self.setupFrameList()
+        self.setupEntryList()
         self.setupButtons()
         self.setupProgress()
 
@@ -60,10 +60,10 @@ class EmotanMW(QMainWindow):
         self.form = gui.forms.main.Ui_MainWindow()
         self.form.setupUi(self)
 
-    def setupFrameList(self):
-        import gui.framelist
-        self.framelist = gui.framelist.FrameList()
-        self.form.verticalLayout.insertWidget(0, self.framelist)
+    def setupEntryList(self):
+        import gui.entrylist
+        self.entrylist = gui.entrylist.EntryList()
+        self.form.verticalLayout.insertWidget(0, self.entrylist)
 
     def setupMenus(self):
         form = self.form
@@ -82,8 +82,8 @@ class EmotanMW(QMainWindow):
         form.editButton.setIcon(QIcon('design/icons/edit_button.png'))
         form.transButton.setIcon(QIcon('design/icons/translate_button2.png'))
         form.configButton.setIcon(QIcon('design/icons/config_button.png'))
-        form.addButton.clicked.connect(lambda: self.framelist.addEntry('', self.frameMode))
-        form.delButton.clicked.connect(self.framelist.deleteSelectedEntries)
+        form.addButton.clicked.connect(lambda: self.entrylist.addEntry('', self.entryMode))
+        form.delButton.clicked.connect(self.entrylist.deleteSelectedEntries)
         form.dlButton.clicked.connect(self.onDownload)
         form.editButton.clicked.connect(self.onUpdateFrameMode)
         form.transButton.clicked.connect(self.onTranslate)
@@ -111,27 +111,27 @@ class EmotanMW(QMainWindow):
         gui.extract.onExtract(self)
 
     def onUpdateFrameMode(self):
-        if self.frameMode == "Disp":
+        if self.entryMode == "Disp":
             # Change Frame Mode to "Edit" and the icon to "Display"
             self.form.editButton.setIcon(QIcon("design/icons/disp_button.png"))
-            self.framelist.updateMode("Edit")
-            self.frameMode = "Edit"
-        elif self.frameMode == "Edit":
+            self.entrylist.updateMode("Edit")
+            self.entryMode = "Edit"
+        elif self.entryMode == "Edit":
             self.form.editButton.setIcon(QIcon("design/icons/edit_button.png"))
-            self.framelist.updateMode("Disp")
-            self.framelist._update()
-            self.frameMode = "Disp"
+            self.entrylist.updateMode("Disp")
+            self.entrylist._update()
+            self.entryMode = "Disp"
 
 
     def onDownload(self):
         # To update 'Empty entry' if a name is added to it
-        self.framelist._update()
+        self.entrylist._update()
         import gui.download
         gui.download.onDownload(self)
 
     def onTranslate(self):
         # To update 'Empty entry' if a name is added to it
-        self.framelist._update()
+        self.entrylist._update()
         import gui.translate
         gui.translate.onTranslate(self)
 
@@ -140,7 +140,7 @@ class EmotanMW(QMainWindow):
 
     def onCreateMp3(self):
         # To update 'Empty entry' if a name is added to it
-        self.framelist._update()
+        self.entrylist._update()
         import gui.mp3dialog
         gui.mp3dialog.onMp3Dialog(self)
 

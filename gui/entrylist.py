@@ -1,6 +1,6 @@
 from gui.qt import *
 
-class FrameList(QListWidget):
+class EntryList(QListWidget):
 
     class Setting:
         def __init__(self):
@@ -54,7 +54,7 @@ class FrameList(QListWidget):
             return data
 
     def __init__(self, parent=None):
-        super(FrameList, self).__init__(parent)
+        super(EntryList, self).__init__(parent)
         self.setSelectionMode(QAbstractItemView.ExtendedSelection)
         self.setStyleSheet("""
                             QListWidget::item { border-bottom: 1px solid black; }

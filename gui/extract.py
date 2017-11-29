@@ -17,9 +17,9 @@ def onExtract(mw):
     # Extract files one by one
     for file in files:
         words = extract(file)
-    # Add word to frame
+    # Add word to the EntryList
     for word in words:
-        mw.framelist.addEntry(word, mw.frameMode)
+        mw.entrylist.addEntry(word, mw.entryMode)
 
 
 

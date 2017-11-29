@@ -27,23 +27,23 @@ class TranslateThread(QThread):
         # As a note, this bug didn't occur before TranslateThread was introduced,
         # and also this bug does not occur at least on Mac.
         translate = lambda text: Translator().translate(text, dest=self.destCode).text
-        for ew in self.mw.framelist.getCurrentEntryWidgets():
+        for ew in self.mw.entrylist.getCurrentEntryWidgets():
             self.sig.emit(ew.name)
             if 'name' in self.group:
                 ew.editors['name'].setText(translate(ew.name))
-                self.mw.framelist.setting.langMap['name'][0] = self.destCode
+                self.mw.entrylist.setting.langMap['name'][0] = self.destCode
 
             for i in range(1, ew.dpw + 1):
                 define = ew.editors['def-%d' % i].text()
                 if 'definition' in self.group and define != '':
                     ew.editors['def-%d' % i].setText(translate(define))
-                    self.mw.framelist.setting.langMap['def-%d' % i][0] = self.destCode
+                    self.mw.entrylist.setting.langMap['def-%d' % i][0] = self.destCode
 
                 for j in range(1, ew.epd + 1):
                     examp = ew.editors['ex-%d-%d' % (i, j)].text()
                     if 'example' in self.group and examp != '':
                         ew.editors['ex-%d-%d' % (i, j)].setText(translate(examp))
-                        self.mw.framelist.setting.langMap['ex-%d-%d' % (i, j)][0] = self.destCode
+                        self.mw.entrylist.setting.langMap['ex-%d-%d' % (i, j)][0] = self.destCode
 
         self.quit()
 
@@ -66,7 +66,7 @@ class TranslateDialog(QDialog):
 
     # Start translation
     def start(self):
-        if self.mw.framelist.count() == 0:
+        if self.mw.entrylist.count() == 0:
             showCritical("No entries found.", title="Error")
             return
 
@@ -82,7 +82,7 @@ class TranslateDialog(QDialog):
 
         # This causes a warning from PyQt about seting a parent on other thread.
         self.tt = TranslateThread(self.mw, transGroup, destCode)
-        self.form.progressBar.setRange(0, self.mw.framelist.count())
+        self.form.progressBar.setRange(0, self.mw.entrylist.count())
 
         def onUpdate(name):
             self.form.pgMsg.setText("Translating %s." % name)
@@ -95,6 +95,6 @@ class TranslateDialog(QDialog):
 
     def reject(self, update=False):
         if update:
-            self.mw.framelist._update()
+            self.mw.entrylist._update()
         self.done(0)
         gui.dialogs.close("TranslateDialog")

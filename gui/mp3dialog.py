@@ -147,13 +147,13 @@ class Mp3Dialog(QDialog):
         form.progressBar.setValue(0)
 
     def onCreate(self):
-        if self.mw.framelist.count() == 0:
+        if self.mw.entrylist.count() == 0:
             utils.showCritical("No budles found.", title="Error")
             return
         setting = {}
         setting['repeat'] = self.form.wordSpin.value()
         setting['tts'] = self.mw.pref['tts']
-        setting['langMap'] = self.mw.framelist.setting.langMap
+        setting['langMap'] = self.mw.entrylist.setting.langMap
 
         from gui.utils import rmdir
         audDest = os.path.join(self.mw.getRootPath(), "audio")
@@ -208,8 +208,8 @@ class Mp3Dialog(QDialog):
                 self.sig.emit("Setting up aufio files. This takes a few minues")
                 self.cmder.setupAudio()
 
-                for i in range(self.mw.framelist.count()):
-                    ew = self.mw.framelist.getEntryWidget(i)
+                for i in range(self.mw.entrylist.count()):
+                    ew = self.mw.entrylist.getEntryWidget(i)
                     self.sig.emit("Creating audio file of %s." % ew.name)
                     os.makedirs(os.path.join(audDest, ew.getDirname()), exist_ok=True)
                     self.cmder.dictateContents(ew)
@@ -231,7 +231,7 @@ class Mp3Dialog(QDialog):
 
         from tools.cmder.mp3cmder import Mp3Cmder
         cmder = Mp3Cmder(setting)
-        self.form.progressBar.setRange(0, self.mw.framelist.count()+2)
+        self.form.progressBar.setRange(0, self.mw.entrylist.count()+2)
 
         def onUpdate(msg):
             self.form.pgMsg.setText(msg)

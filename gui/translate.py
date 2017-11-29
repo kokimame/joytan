@@ -27,22 +27,22 @@ class TranslateThread(QThread):
         # As a note, this bug didn't occur before TranslateThread was introduced,
         # and also this bug does not occur at least on Mac.
         translate = lambda text: Translator().translate(text, dest=self.destCode).text
-        for bw in self.mw.framelist.getCurrentBundleWidgets():
-            self.sig.emit(bw.name)
+        for ew in self.mw.framelist.getCurrentEntryWidgets():
+            self.sig.emit(ew.name)
             if 'name' in self.group:
-                bw.editors['name'].setText(translate(bw.name))
+                ew.editors['name'].setText(translate(ew.name))
                 self.mw.framelist.setting.langMap['name'][0] = self.destCode
 
-            for i in range(1, bw.dpw + 1):
-                define = bw.editors['def-%d' % i].text()
+            for i in range(1, ew.dpw + 1):
+                define = ew.editors['def-%d' % i].text()
                 if 'definition' in self.group and define != '':
-                    bw.editors['def-%d' % i].setText(translate(define))
+                    ew.editors['def-%d' % i].setText(translate(define))
                     self.mw.framelist.setting.langMap['def-%d' % i][0] = self.destCode
 
-                for j in range(1, bw.epd + 1):
-                    examp = bw.editors['ex-%d-%d' % (i, j)].text()
+                for j in range(1, ew.epd + 1):
+                    examp = ew.editors['ex-%d-%d' % (i, j)].text()
                     if 'example' in self.group and examp != '':
-                        bw.editors['ex-%d-%d' % (i, j)].setText(translate(examp))
+                        ew.editors['ex-%d-%d' % (i, j)].setText(translate(examp))
                         self.mw.framelist.setting.langMap['ex-%d-%d' % (i, j)][0] = self.destCode
 
         self.quit()
@@ -67,7 +67,7 @@ class TranslateDialog(QDialog):
     # Start translation
     def start(self):
         if self.mw.framelist.count() == 0:
-            showCritical("No bundles found.", title="Error")
+            showCritical("No entries found.", title="Error")
             return
 
         form = self.form

@@ -82,8 +82,8 @@ class EmotanMW(QMainWindow):
         form.editButton.setIcon(QIcon('design/icons/edit_button.png'))
         form.transButton.setIcon(QIcon('design/icons/translate_button2.png'))
         form.configButton.setIcon(QIcon('design/icons/config_button.png'))
-        form.addButton.clicked.connect(lambda: self.framelist.addBundle('', self.frameMode))
-        form.delButton.clicked.connect(self.framelist.deleteBundle)
+        form.addButton.clicked.connect(lambda: self.framelist.addEntry('', self.frameMode))
+        form.delButton.clicked.connect(self.framelist.deleteSelectedEntries)
         form.dlButton.clicked.connect(self.onDownload)
         form.editButton.clicked.connect(self.onUpdateFrameMode)
         form.transButton.clicked.connect(self.onTranslate)
@@ -124,13 +124,13 @@ class EmotanMW(QMainWindow):
 
 
     def onDownload(self):
-        # To update 'Anonymous bundle' if a name is added to it
+        # To update 'Empty entry' if a name is added to it
         self.framelist._update()
         import gui.download
         gui.download.onDownload(self)
 
     def onTranslate(self):
-        # To update 'Anonymous bundle' if a name is added to it
+        # To update 'Empty entry' if a name is added to it
         self.framelist._update()
         import gui.translate
         gui.translate.onTranslate(self)
@@ -139,7 +139,7 @@ class EmotanMW(QMainWindow):
         gui.dialogs.open("Preferences", self, tab="TTS")
 
     def onCreateMp3(self):
-        # To update 'Anonymous bundle' if a name is added to it
+        # To update 'Empty entry' if a name is added to it
         self.framelist._update()
         import gui.mp3dialog
         gui.mp3dialog.onMp3Dialog(self)

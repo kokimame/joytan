@@ -11,10 +11,10 @@ class BaseParser:
     def run(self, data):
         """
         :param: data - HTML data to parse
-        :return: Dictionary contents to be stored in word bundles
+        :return: Dictionary contents to be stored in the entries
         All Parser classes need to overwrite this method.
         Do parsing and return contents as much as possible.
-        Do only one parsing for a word even if Bundle or Frame preference modified
+        Do only one parsing for a word even if Entry or Frame preference modified
         after the parsing session.
         Each class uses a parsing method specific to their target dictionary.
         """

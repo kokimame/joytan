@@ -18,7 +18,7 @@ def onSave(mw):
     with open(newfile, "w") as f:
         dataToSave.append(mw.framelist.setting.data())
 
-        for bw in mw.framelist.getCurrentBundleWidgets():
-            dataToSave.append(bw.data())
+        for ew in mw.framelist.getCurrentEntryWidgets():
+            dataToSave.append(ew.data())
 
         json.dump(dataToSave, f, indent=4)

@@ -1,9 +1,9 @@
 from gui.qt import *
 
 
-class BundleWidget(QWidget):
+class EntryWidget(QWidget):
     def __init__(self, index, name, mode, pref, parent=None):
-        super(BundleWidget, self).__init__(parent)
+        super(EntryWidget, self).__init__(parent)
         self.initFont()
         self.parent = parent
         self.index = index
@@ -11,7 +11,7 @@ class BundleWidget(QWidget):
         self.mode = mode
         self.dpw = pref['dpw']
         self.epd = pref['epd']
-        # External sources that the bundle used
+        # External sources where the items of an entry came
         self.sources = []
 
         self.html = '<html><head/><body>{content}</body></html>'
@@ -33,7 +33,7 @@ class BundleWidget(QWidget):
             self.stackedLayout.setCurrentIndex(1)
 
     def getDirname(self):
-        # Make string number from the index of the bundle from 00000 to 99999
+        # Make string number from the index of the entry from 00000 to 99999
         snum = (5 - len(str(self.index))) * '0' + str(self.index)
         # Return directory name replacing whitespace with underscore
         return "{snum}".format(snum=snum)
@@ -58,7 +58,7 @@ class BundleWidget(QWidget):
         self.dispLabel = QLabel()
 
         if self.name == '':
-            name = "Anonymous bundle"
+            name = "Empty entry"
         else:
             name = self.name
         self.dispLabel.setText(self.html.format
@@ -68,7 +68,7 @@ class BundleWidget(QWidget):
         self.stackedLayout.addWidget(dispWidget)
 
     def setupEditors(self, name):
-        # Definitions per bundle and Examples per definition
+        # Definitions per entry and Examples per definition
         editWidget = QWidget()
         editLayout = QGridLayout()
 
@@ -113,7 +113,7 @@ class BundleWidget(QWidget):
     def updateDisplay(self):
         self.name = self.editors['name'].text()
         if self.name == '':
-            name = "Anonymous bundle"
+            name = "Empty entry"
         else:
             name = self.name
         content = self.nameFormat.format(num=self.index, name=name)

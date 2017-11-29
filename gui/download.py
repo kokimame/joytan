@@ -26,7 +26,7 @@ class DownloadDialog(QDialog):
 
     def start(self):
         if self.mw.framelist.count() == 0:
-            showCritical("No bundles found.", title="Error")
+            showCritical("No entries found.", title="Error")
             return
         parser = Parsers[self.form.sourceCombo.currentText()]()
         simpleDownload(self.mw, parser)
@@ -40,19 +40,19 @@ class DownloadDialog(QDialog):
 def simpleDownload(mw, parser):
     mw.progress.start(min=0, max=mw.framelist.count(), label="Start downloading", immediate=True, cancellable=True)
     for i in range(mw.framelist.count()):
-        bw = mw.framelist.getBundleWidget(i)
+        ew = mw.framelist.getEntryWidget(i)
         # Don't forget to turn off 'maybeShow'. That breaks the sync of the bar and the actual progress
         mw.progress.update(label="Downloading %s from %s" %
-                                 (bw.name, parser.sourceName), maybeShow=False)
+                                 (ew.name, parser.sourceName), maybeShow=False)
         # Don't download contents from the source you already had.
-        if parser.sourceName in bw.sources:
+        if parser.sourceName in ew.sources:
             continue
-        r = requests.get(parser.sourceUrl + bw.name)
+        r = requests.get(parser.sourceUrl + ew.name)
         data = r.text
         items = parser.run(data)
 
-        mw.framelist.updateBundle(bw.name, items)
-        bw.sources.append(parser.sourceName)
+        mw.framelist.updateEntry(ew.name, items)
+        ew.sources.append(parser.sourceName)
     mw.progress.finish()
 
 def downloadGstaticSound(word, filename):

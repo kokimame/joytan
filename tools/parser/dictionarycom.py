@@ -30,7 +30,7 @@ class DictionaryComParser(BaseParser):
             defex.append({'define': define, 'examples': [examp]})
 
             """
-            Bundle item format (temporally)
+            Entry item format (temporally)
             {
                 'define' : 'a definition of a word'
                 'examples' : ['a example for the definition', 'another example', ...]

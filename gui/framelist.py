@@ -10,7 +10,7 @@ class FrameList(QListWidget):
             # Fixme: Allow users to choose default language from preference
             # Temporally set English by default
             self.defaultLang = 'en'
-            # This maps from content type in a bundle to language code and Voice ID
+            # This maps from item type in an entry to language code and Voice ID
             self.langMap = {'name': [self.defaultLang, None]}
 
             self.expand(dpw=1, epd=1)
@@ -63,76 +63,76 @@ class FrameList(QListWidget):
         self.setting = self.Setting()
 
     def createUi(self, index, name, mode, setting, parent=None):
-        from gui.bundle import BundleWidget
-        bui, bw = QListWidgetItem(), BundleWidget(index, name, mode, setting, parent=parent)
-        bui.setSizeHint(bw.sizeHint())
-        return bui, bw
+        from gui.entry import EntryWidget
+        eui, ew = QListWidgetItem(), EntryWidget(index, name, mode, setting, parent=parent)
+        eui.setSizeHint(ew.sizeHint())
+        return eui, ew
 
-    def updateBundle(self, name, items):
-        for bw in self.getCurrentBundleWidgets():
-            if bw.name == name:
-                bw.updateEditors(items)
+    def updateEntry(self, name, items):
+        for ew in self.getCurrentEntryWidgets():
+            if ew.name == name:
+                ew.updateEditors(items)
                 return
-        raise Exception("Error: Bundle with name '%s' is not found in the Frame" % name)
+        raise Exception("Error: Entry with name '%s' is not found in the Frame" % name)
 
-    def addBundle(self, name, mode, setting=None):
+    def addEntry(self, name, mode, setting=None):
         if not setting:
             setting = self.setting.data()
         if name == '': pass
-        elif name in [bw.name for bw in self.getCurrentBundleWidgets()]:
-            print("Bundle with name %s already exists." % name)
+        elif name in [ew.name for ew in self.getCurrentEntryWidgets()]:
+            print("Entry with name %s already exists." % name)
             return
 
-        bui, bw = self.createUi(self.count() + 1, name, mode, setting, parent=self)
+        eui, ew = self.createUi(self.count() + 1, name, mode, setting, parent=self)
 
-        self.setting.expand(dpw=bw.dpw, epd=bw.epd)
+        self.setting.expand(dpw=ew.dpw, epd=ew.epd)
 
-        self.addItem(bui)
-        self.setItemWidget(bui, bw)
+        self.addItem(eui)
+        self.setItemWidget(eui, ew)
 
-    def deleteBundle(self):
-        for bui in self.selectedItems():
-            bw = self.itemWidget(bui)
-            self.takeItem(bw.index - 1)
+    def deleteSelectedEntries(self):
+        for eui in self.selectedItems():
+            ew = self.itemWidget(eui)
+            self.takeItem(ew.index - 1)
             self.updateIndex()
         self._update()
 
-    def deleteAll(self):
+    def deleteAllEntries(self):
         for _ in range(self.count()):
             self.takeItem(0)
 
     def updateIndex(self):
-        # Update index of bundles after Nth bundle
+        # Update index of Entries after Nth Entry
         for i in range(self.count()):
-            bw = self.getBundleWidget(i)
-            bw.index = i + 1
+            ew = self.getEntryWidget(i)
+            ew.index = i + 1
 
     # Fixme: Remove the leading underscore by rename it to 'updateAll'
     def _update(self):
-        # Update the inside of the bundles in the list
-        print("Bundle updates")
+        # Update the inside of the Entries in the list
+        print("Entry updates")
         for i in range(self.count()):
-            bui = self.item(i)
-            bw = self.itemWidget(bui)
-            bw.index = i + 1
-            bw.updateDisplay()
-            bui.setSizeHint(bw.sizeHint())
+            eui = self.item(i)
+            ew = self.itemWidget(eui)
+            ew.index = i + 1
+            ew.updateDisplay()
+            eui.setSizeHint(ew.sizeHint())
 
         self.repaint()
 
     def updateMode(self, newMode):
-        for bw in self.getCurrentBundleWidgets():
-            bw.updateMode(newMode)
+        for ew in self.getCurrentEntryWidgets():
+            ew.updateMode(newMode)
 
 
-    def getBundle(self, name):
-        for bw in self.getCurrentBundleWidgets():
-            if bw.name == name:
-                return bw
-        raise Exception("Error: Bundle with name '%s' is not found in the Frame" % name)
+    def getEntry(self, name):
+        for ew in self.getCurrentEntryWidgets():
+            if ew.name == name:
+                return ew
+        raise Exception("Error: Entry with name '%s' is not found in the Frame" % name)
 
-    def getCurrentBundleWidgets(self):
-        return [self.getBundleWidget(i) for i in range(self.count())]
+    def getCurrentEntryWidgets(self):
+        return [self.getEntryWidget(i) for i in range(self.count())]
 
-    def getBundleWidget(self, index):
+    def getEntryWidget(self, index):
         return self.itemWidget(self.item(index))

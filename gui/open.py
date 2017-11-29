@@ -17,7 +17,7 @@ def onOpen(mw):
         jd = json.loads(f.read())
 
     fset = jd[0]
-    mw.framelist.deleteAll()
+    mw.framelist.deleteAllEntries()
     mw.framelist.setting.expand(dpw=fset['dpw'])
     mw.framelist.setting.expand(epd=fset['epd'])
     mw.framelist.setting.langMap = fset['langMap']
@@ -26,11 +26,11 @@ def onOpen(mw):
     for data in jd[1:]:
         setting['dpw'] = data['dpw']
         setting['epd'] = data['epd']
-        mw.framelist.addBundle(data['name'], mw.frameMode)
-        bw = mw.framelist.getBundle(data['name'])
-        for i in range(0, bw.dpw):
-            bw.editors['def-%d' % (i+1)].setText(data['def-%d' % (i+1)])
-            for j in range(0, bw.epd):
-                bw.editors['ex-%d-%d' % (i+1, j+1)].setText(data['ex-%d-%d' % (i+1, j+1)])
+        mw.framelist.addEntry(data['name'], mw.frameMode)
+        ew = mw.framelist.getEntry(data['name'])
+        for i in range(0, ew.dpw):
+            ew.editors['def-%d' % (i+1)].setText(data['def-%d' % (i+1)])
+            for j in range(0, ew.epd):
+                ew.editors['ex-%d-%d' % (i+1, j+1)].setText(data['ex-%d-%d' % (i+1, j+1)])
 
     mw.framelist._update()

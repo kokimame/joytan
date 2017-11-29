@@ -18,7 +18,7 @@ class CopyDialog(QDialog):
 
     def start(self):
         if self.mw.framelist.count() == 0:
-            showCritical("No bundles found.", title="Error")
+            showCritical("No entries found.", title="Error")
             return
 
         form = self.form
@@ -27,10 +27,10 @@ class CopyDialog(QDialog):
             print("Choose different contents for copying")
             return
 
-        # Copying from and to the contents in Bundle Widget
-        for bw in self.mw.framelist.getCurrentBundleWidgets():
+        # Copying from and to the contents in Entry Widget
+        for ew in self.mw.framelist.getCurrentEntryWidgets():
             try:
-                bw.editors[tbox.currentText().lower()].setText(bw.editors[fbox.currentText().lower()].text())
+                ew.editors[tbox.currentText().lower()].setText(ew.editors[fbox.currentText().lower()].text())
             except KeyError:
                 pass
 

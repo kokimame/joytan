@@ -209,11 +209,11 @@ class Mp3Dialog(QDialog):
                 self.cmder.setupAudio()
 
                 for i in range(self.mw.framelist.count()):
-                    bw = self.mw.framelist.getBundleWidget(i)
-                    self.sig.emit("Creating audio file of %s." % bw.name)
-                    os.makedirs(os.path.join(audDest, bw.getDirname()), exist_ok=True)
-                    self.cmder.dictateContents(bw)
-                    self.cmder.compileBundle(bw, isGstatic=isGstatic)
+                    ew = self.mw.framelist.getEntryWidget(i)
+                    self.sig.emit("Creating audio file of %s." % ew.name)
+                    os.makedirs(os.path.join(audDest, ew.getDirname()), exist_ok=True)
+                    self.cmder.dictateContents(ew)
+                    self.cmder.compileEntry(ew, isGstatic=isGstatic)
 
                 self.cmder.mergeMp3s()
                 self.cmder.createBgmLoop()

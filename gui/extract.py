@@ -19,7 +19,7 @@ def onExtract(mw):
         words = extract(file)
     # Add word to frame
     for word in words:
-        mw.framelist.addBundle(word, mw.frameMode)
+        mw.framelist.addEntry(word, mw.frameMode)
 
 
 

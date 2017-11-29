@@ -13,15 +13,15 @@ class TxtThread(QThread):
     def run(self):
         ftxt = open("{dest}/{title}.txt".format(dest=self.dest, title=self.mw.pref['title']), 'w')
         for s in range(self.mw.framelist.count()):
-            bw = self.mw.framelist.getBundleWidget(s)
+            ew = self.mw.framelist.getEntryWidget(s)
             ftxt.write("{index}. {name}\n".format(
-                index=bw.index, name=bw.editors['name'].text()))
-            for i in range(0, bw.dpw):
-                if bw.editors['def-%d' % (i + 1)].text() != '':
-                    ftxt.write(bw.editors['def-%d' % (i + 1)].text() + '\n')
-                for j in range(0, bw.epd):
-                    if bw.editors['ex-%d-%d' % (i + 1, j + 1)].text() != '':
-                        ftxt.write('\t' + bw.editors['ex-%d-%d' % (i + 1, j + 1)].text() + '\n')
+                index=ew.index, name=ew.editors['name'].text()))
+            for i in range(0, ew.dpw):
+                if ew.editors['def-%d' % (i + 1)].text() != '':
+                    ftxt.write(ew.editors['def-%d' % (i + 1)].text() + '\n')
+                for j in range(0, ew.epd):
+                    if ew.editors['ex-%d-%d' % (i + 1, j + 1)].text() != '':
+                        ftxt.write('\t' + ew.editors['ex-%d-%d' % (i + 1, j + 1)].text() + '\n')
             ftxt.write('\n')
         ftxt.close()
 
@@ -32,12 +32,12 @@ class HtmlThread(QThread):
         self.dest = dest
 
     def run(self):
-        datas = [bw.data() for bw in self.mw.framelist.getCurrentBundleWidgets()]
+        datas = [ew.data() for ew in self.mw.framelist.getCurrentEntryWidgets()]
 
         from jinja2 import Environment, FileSystemLoader
         env = Environment(loader=FileSystemLoader('templates/html'))
         temp = env.get_template('words.html')
-        rendered_temp = temp.render(bwDatas=datas)
+        rendered_temp = temp.render(ewDatas=datas)
 
         with open('{dest}/{title}.html'.format(dest=self.dest, title=self.mw.pref['title']), 'w') as f:
             f.write(rendered_temp)

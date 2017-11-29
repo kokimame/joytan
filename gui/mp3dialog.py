@@ -26,7 +26,8 @@ class Mp3Widget(QWidget):
     def __init__(self, mp3path, groupIdx, delTrigger, lwi):
         super(Mp3Widget, self).__init__()
         self.mp = MediaPlayer(self)
-        self.mp3path = mp3path
+        # Store path as raw string otherwise causes bug on concatenation
+        self.mp3path = "%r" % mp3path
         self.gidx = groupIdx
         self.delTrigger = delTrigger
         self.lwi = lwi      # ListWidgetItem that contains this widget

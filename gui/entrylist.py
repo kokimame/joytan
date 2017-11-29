@@ -24,7 +24,7 @@ class EntryList(QListWidget):
                 self.epd = epd
                 self.expandLangMap()
 
-            print("FrameSetting: LangMap -> ", self.langMap)
+            print("EntrySetting: LangMap -> ", self.langMap)
 
         def expandLangMap(self):
             for i in range(0, self.dpw):
@@ -62,53 +62,52 @@ class EntryList(QListWidget):
                            """)
         self.setting = self.Setting()
 
-    def createUi(self, index, name, mode, setting, parent=None):
+    def initEntry(self, index, name, mode, setting, parent=None):
         from gui.entry import EntryWidget
         eui, ew = QListWidgetItem(), EntryWidget(index, name, mode, setting, parent=parent)
         eui.setSizeHint(ew.sizeHint())
         return eui, ew
 
     def updateEntry(self, name, items):
-        for ew in self.getCurrentEntryWidgets():
+        for ew in self.getCurrentEntries():
             if ew.name == name:
                 ew.updateEditors(items)
                 return
-        raise Exception("Error: Entry with name '%s' is not found in the Frame" % name)
+        raise Exception("Error: Entry with name '%s' is not found in the list" % name)
 
     def addEntry(self, name, mode, setting=None):
         if not setting:
             setting = self.setting.data()
         if name == '': pass
-        elif name in [ew.name for ew in self.getCurrentEntryWidgets()]:
+        elif name in [ew.name for ew in self.getCurrentEntries()]:
             print("Entry with name %s already exists." % name)
             return
 
-        eui, ew = self.createUi(self.count() + 1, name, mode, setting, parent=self)
+        eui, ew = self.initEntry(self.count() + 1, name, mode, setting, parent=self)
 
         self.setting.expand(dpw=ew.dpw, epd=ew.epd)
 
         self.addItem(eui)
         self.setItemWidget(eui, ew)
 
-    def deleteSelectedEntries(self):
+    def deleteSelected(self):
         for eui in self.selectedItems():
             ew = self.itemWidget(eui)
             self.takeItem(ew.index - 1)
             self.updateIndex()
-        self._update()
+        self.updateAll()
 
-    def deleteAllEntries(self):
+    def deleteAll(self):
         for _ in range(self.count()):
             self.takeItem(0)
 
     def updateIndex(self):
         # Update index of Entries after Nth Entry
         for i in range(self.count()):
-            ew = self.getEntryWidget(i)
+            ew = self.getByIndex(i)
             ew.index = i + 1
 
-    # Fixme: Remove the leading underscore by rename it to 'updateAll'
-    def _update(self):
+    def updateAll(self):
         # Update the inside of the Entries in the list
         print("Entry updates")
         for i in range(self.count()):
@@ -121,18 +120,17 @@ class EntryList(QListWidget):
         self.repaint()
 
     def updateMode(self, newMode):
-        for ew in self.getCurrentEntryWidgets():
+        for ew in self.getCurrentEntries():
             ew.updateMode(newMode)
 
+    def getCurrentEntries(self):
+        return [self.getByIndex(i) for i in range(self.count())]
 
-    def getEntry(self, name):
-        for ew in self.getCurrentEntryWidgets():
+    def getByName(self, name):
+        for ew in self.getCurrentEntries():
             if ew.name == name:
                 return ew
-        raise Exception("Error: Entry with name '%s' is not found in the Frame" % name)
+        raise Exception("Error: Entry with name '%s' is not found in the list" % name)
 
-    def getCurrentEntryWidgets(self):
-        return [self.getEntryWidget(i) for i in range(self.count())]
-
-    def getEntryWidget(self, index):
+    def getByIndex(self, index):
         return self.itemWidget(self.item(index))

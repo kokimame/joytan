@@ -144,11 +144,11 @@ class Preferences(QDialog):
 
     def onOk(self):
         # FIXME: Switching TTS service may break LvMapping.
-        self.updateFrameSetting()
+        self.updateEntrySetting()
         self.updateMainPref()
         self.reject()
 
-    def updateFrameSetting(self):
+    def updateEntrySetting(self):
         testList = self.form.testList
         eset = self.mw.entrylist.setting
         for i in range(testList.count()):

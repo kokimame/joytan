@@ -13,7 +13,7 @@ class TxtThread(QThread):
     def run(self):
         ftxt = open("{dest}/{title}.txt".format(dest=self.dest, title=self.mw.pref['title']), 'w')
         for s in range(self.mw.entrylist.count()):
-            ew = self.mw.entrylist.getEntryWidget(s)
+            ew = self.mw.entrylist.getByIndex(s)
             ftxt.write("{index}. {name}\n".format(
                 index=ew.index, name=ew.editors['name'].text()))
             for i in range(0, ew.dpw):
@@ -32,7 +32,7 @@ class HtmlThread(QThread):
         self.dest = dest
 
     def run(self):
-        datas = [ew.data() for ew in self.mw.entrylist.getCurrentEntryWidgets()]
+        datas = [ew.data() for ew in self.mw.entrylist.getCurrentEntries()]
 
         from jinja2 import Environment, FileSystemLoader
         env = Environment(loader=FileSystemLoader('templates/html'))

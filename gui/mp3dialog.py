@@ -209,7 +209,7 @@ class Mp3Dialog(QDialog):
                 self.cmder.setupAudio()
 
                 for i in range(self.mw.entrylist.count()):
-                    ew = self.mw.entrylist.getEntryWidget(i)
+                    ew = self.mw.entrylist.getByIndex(i)
                     self.sig.emit("Creating audio file of %s." % ew.name)
                     os.makedirs(os.path.join(audDest, ew.getDirname()), exist_ok=True)
                     self.cmder.dictateContents(ew)

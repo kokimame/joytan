@@ -83,9 +83,9 @@ class EmotanMW(QMainWindow):
         form.transButton.setIcon(QIcon('design/icons/translate_button2.png'))
         form.configButton.setIcon(QIcon('design/icons/config_button.png'))
         form.addButton.clicked.connect(lambda: self.entrylist.addEntry('', self.entryMode))
-        form.delButton.clicked.connect(self.entrylist.deleteSelectedEntries)
+        form.delButton.clicked.connect(self.entrylist.deleteSelected)
         form.dlButton.clicked.connect(self.onDownload)
-        form.editButton.clicked.connect(self.onUpdateFrameMode)
+        form.editButton.clicked.connect(self.onUpdateEntryMode)
         form.transButton.clicked.connect(self.onTranslate)
         form.configButton.clicked.connect(self.onConfigure)
         form.audioButton.clicked.connect(self.onCreateMp3)
@@ -110,28 +110,28 @@ class EmotanMW(QMainWindow):
         import gui.extract
         gui.extract.onExtract(self)
 
-    def onUpdateFrameMode(self):
+    def onUpdateEntryMode(self):
         if self.entryMode == "Disp":
-            # Change Frame Mode to "Edit" and the icon to "Display"
+            # Change EntryList Mode to "Edit" and the icon to "Display"
             self.form.editButton.setIcon(QIcon("design/icons/disp_button.png"))
             self.entrylist.updateMode("Edit")
             self.entryMode = "Edit"
         elif self.entryMode == "Edit":
             self.form.editButton.setIcon(QIcon("design/icons/edit_button.png"))
             self.entrylist.updateMode("Disp")
-            self.entrylist._update()
+            self.entrylist.updateAll()
             self.entryMode = "Disp"
 
 
     def onDownload(self):
         # To update 'Empty entry' if a name is added to it
-        self.entrylist._update()
+        self.entrylist.updateAll()
         import gui.download
         gui.download.onDownload(self)
 
     def onTranslate(self):
         # To update 'Empty entry' if a name is added to it
-        self.entrylist._update()
+        self.entrylist.updateAll()
         import gui.translate
         gui.translate.onTranslate(self)
 
@@ -140,7 +140,7 @@ class EmotanMW(QMainWindow):
 
     def onCreateMp3(self):
         # To update 'Empty entry' if a name is added to it
-        self.entrylist._update()
+        self.entrylist.updateAll()
         import gui.mp3dialog
         gui.mp3dialog.onMp3Dialog(self)
 

@@ -30,7 +30,7 @@ class DownloadDialog(QDialog):
             return
         parser = Parsers[self.form.sourceCombo.currentText()]()
         simpleDownload(self.mw, parser)
-        self.mw.entrylist._update()
+        self.mw.entrylist.updateAll()
 
     def reject(self):
         self.done(0)
@@ -40,7 +40,7 @@ class DownloadDialog(QDialog):
 def simpleDownload(mw, parser):
     mw.progress.start(min=0, max=mw.entrylist.count(), label="Start downloading", immediate=True, cancellable=True)
     for i in range(mw.entrylist.count()):
-        ew = mw.entrylist.getEntryWidget(i)
+        ew = mw.entrylist.getByIndex(i)
         # Don't forget to turn off 'maybeShow'. That breaks the sync of the bar and the actual progress
         mw.progress.update(label="Downloading %s from %s" %
                                  (ew.name, parser.sourceName), maybeShow=False)

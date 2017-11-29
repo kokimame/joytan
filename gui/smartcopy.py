@@ -28,7 +28,7 @@ class CopyDialog(QDialog):
             return
 
         # Copying from and to the contents in Entry Widget
-        for ew in self.mw.entrylist.getCurrentEntryWidgets():
+        for ew in self.mw.entrylist.getCurrentEntries():
             try:
                 ew.editors[tbox.currentText().lower()].setText(ew.editors[fbox.currentText().lower()].text())
             except KeyError:
@@ -39,7 +39,7 @@ class CopyDialog(QDialog):
         eset.langMap[tbox.currentText().lower()][0] = eset.langMap[fbox.currentText().lower()][0]
 
 
-        self.mw.entrylist._update()
+        self.mw.entrylist.updateAll()
 
     def setupCombo(self):
         form = self.form

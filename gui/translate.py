@@ -27,7 +27,7 @@ class TranslateThread(QThread):
         # As a note, this bug didn't occur before TranslateThread was introduced,
         # and also this bug does not occur at least on Mac.
         translate = lambda text: Translator().translate(text, dest=self.destCode).text
-        for ew in self.mw.entrylist.getCurrentEntryWidgets():
+        for ew in self.mw.entrylist.getCurrentEntries():
             self.sig.emit(ew.name)
             if 'name' in self.group:
                 ew.editors['name'].setText(translate(ew.name))
@@ -95,6 +95,6 @@ class TranslateDialog(QDialog):
 
     def reject(self, update=False):
         if update:
-            self.mw.entrylist._update()
+            self.mw.entrylist.updateAll()
         self.done(0)
         gui.dialogs.close("TranslateDialog")

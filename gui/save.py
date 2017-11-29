@@ -18,7 +18,7 @@ def onSave(mw):
     with open(newfile, "w") as f:
         dataToSave.append(mw.entrylist.setting.data())
 
-        for ew in mw.entrylist.getCurrentEntryWidgets():
+        for ew in mw.entrylist.getCurrentEntries():
             dataToSave.append(ew.data())
 
         json.dump(dataToSave, f, indent=4)

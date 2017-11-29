@@ -1,14 +1,14 @@
 from gui.qt import *
 import gui
 from tools.parser import Parsers
-from tools.speecher import Speechers
+from tools.talker import Talkers
 from gui.utils import LANGUAGES, LANGCODES
 
 class LvMapWidget(QWidget):
     # Maps from content type and language code and Voice ID, and test sample text-to-speech
     def __init__(self, tts, label, lv):
         super(LvMapWidget, self).__init__()
-        self.tts = Speechers[tts]
+        self.tts = Talkers[tts]
         # Label for content section such as 'name' and 'def-x'
         self.label = label
         # Language and Voice ID for the label (e.g, 'name' or 'def-x' etc)
@@ -100,7 +100,7 @@ class Preferences(QDialog):
         tc = self.form.ttsCombo
         sc.addItems(sorted([site for site in Parsers.keys()]))
         sc.setCurrentText(self.mw.pref['onlineSrc'])
-        tc.addItems(sorted([site for site in Speechers.keys()]))
+        tc.addItems(sorted([site for site in Talkers.keys()]))
         tc.setCurrentText(self.mw.pref['tts'])
 
     def setupButtons(self):

@@ -7,7 +7,7 @@ from subprocess import call, check_output
 from gui.utils import isWin
 
 
-class BaseSpeecher:
+class BaseTalker:
     # voiceId: A unique name, pre-defined by a given TTS, that specifies a voice in the service.
     def dictate(self, script, voiceId, output=None):
         raise NotImplementedError
@@ -19,11 +19,11 @@ class BaseSpeecher:
         raise NotImplementedError
 
 
-from tools.speecher.say import Say
-from tools.speecher.espeak import Espeak
+from tools.talker.say import Say
+from tools.talker.espeak import Espeak
 
 # Interfaces for various text-to-speech application
-Speechers = {
+Talkers = {
     "say": Say,
     "espeak": Espeak,
 }

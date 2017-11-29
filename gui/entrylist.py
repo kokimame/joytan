@@ -38,6 +38,14 @@ class EntryList(QListWidget):
                     except KeyError:
                         self.langMap['ex-%d-%d' % (i + 1, j + 1)] = [self.defaultLang, None]
 
+        def isVidNone(self):
+            for item, map in self.langMap.items():
+                # Voice id is still None
+                if not map[1]:
+                    return True
+            else:
+                return False
+
         # Returns the class' properties in a dictionary. Will be called on saving.
         def data(self):
             data = {'dpw': self.dpw,
@@ -67,6 +75,9 @@ class EntryList(QListWidget):
         eui, ew = QListWidgetItem(), EntryWidget(index, name, mode, setting, parent=parent)
         eui.setSizeHint(ew.sizeHint())
         return eui, ew
+
+    def isVoiceless(self):
+        return self.setting.isVidNone()
 
     def updateEntry(self, name, items):
         for ew in self.getCurrentEntries():

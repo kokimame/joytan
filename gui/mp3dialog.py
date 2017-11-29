@@ -107,7 +107,8 @@ class Mp3Dialog(QDialog):
         # Open Preferences and set up voice id.
         # This is called only the first time audio popup opens
         # and set a voice id if it's None.
-        gui.dialogs.open("Preferences", mw, tab="TTS")
+        if self.mw.entrylist.isVoiceless():
+            gui.dialogs.open("Preferences", mw, tab="TTS")
 
     def setupSfxList(self):
         sfxList = self.form.sfxList

@@ -79,13 +79,13 @@ class EmotanMW(QMainWindow):
         form.addButton.setIcon(QIcon('design/icons/plus_button_green.png'))
         form.delButton.setIcon(QIcon('design/icons/minus_button_red.png'))
         form.dlButton.setIcon(QIcon('design/icons/dl_button.png'))
-        form.editButton.setIcon(QIcon('design/icons/edit_button.png'))
+        form.modeButton.setIcon(QIcon('design/icons/edit_button.png'))
         form.transButton.setIcon(QIcon('design/icons/translate_button2.png'))
         form.configButton.setIcon(QIcon('design/icons/config_button.png'))
         form.addButton.clicked.connect(lambda: self.entrylist.addEntry('', self.entryMode))
         form.delButton.clicked.connect(self.entrylist.deleteSelected)
         form.dlButton.clicked.connect(self.onDownload)
-        form.editButton.clicked.connect(self.onUpdateEntryMode)
+        form.modeButton.clicked.connect(self.onUpdateMode)
         form.transButton.clicked.connect(self.onTranslate)
         form.configButton.clicked.connect(self.onConfigure)
         form.audioButton.clicked.connect(self.onCreateMp3)
@@ -110,14 +110,14 @@ class EmotanMW(QMainWindow):
         import gui.extract
         gui.extract.onExtract(self)
 
-    def onUpdateEntryMode(self):
+    def onUpdateMode(self):
         if self.entryMode == "Disp":
             # Change EntryList Mode to "Edit" and the icon to "Display"
-            self.form.editButton.setIcon(QIcon("design/icons/disp_button.png"))
+            self.form.modeButton.setIcon(QIcon("design/icons/disp_button.png"))
             self.entrylist.updateMode("Edit")
             self.entryMode = "Edit"
         elif self.entryMode == "Edit":
-            self.form.editButton.setIcon(QIcon("design/icons/edit_button.png"))
+            self.form.modeButton.setIcon(QIcon("design/icons/edit_button.png"))
             self.entrylist.updateMode("Disp")
             self.entrylist.updateAll()
             self.entryMode = "Disp"

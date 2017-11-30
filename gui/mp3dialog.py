@@ -27,7 +27,7 @@ class Mp3Widget(QWidget):
         super(Mp3Widget, self).__init__()
         self.mp = MediaPlayer(self)
         # Store path as raw string otherwise causes bug on concatenation
-        self.mp3path = "%r" % mp3path
+        self.mp3path = mp3path
         self.gidx = groupIdx
         self.delTrigger = delTrigger
         self.lwi = lwi      # ListWidgetItem that contains this widget
@@ -157,9 +157,8 @@ class Mp3Dialog(QDialog):
         setting['tts'] = self.mw.pref['tts']
         setting['langMap'] = self.mw.entrylist.setting.langMap
 
-        from gui.utils import rmdir
         audDest = os.path.join(self.mw.getRootPath(), "audio")
-        rmdir(audDest)
+        utils.rmdir(audDest)
         setting['dest'] = audDest
 
         sfxList = self.form.sfxList
@@ -251,8 +250,7 @@ class Mp3Dialog(QDialog):
         if self.thread:
             self.thread.terminate()
             audDest = os.path.join(self.mw.getRootPath(), "audio")
-            from gui.utils import rmdir
-            rmdir(audDest)
+            utils.rmdir(audDest)
             self.form.progressBar.reset()
             self.form.pgMsg.setText("")
         self.form.stopBtn.setEnabled(False)

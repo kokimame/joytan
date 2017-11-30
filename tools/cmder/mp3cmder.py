@@ -167,23 +167,35 @@ class Mp3Cmder:
             os.rename(self.acapMp3, self.finalMp3)
 
 
+####################################
+# FIXME:
+# The handler doesn't support filename with whitespaces
+# Reading these files stops the app, so
+# first implement a way to raise warning message
+# if the files are selected and ignore them.
+# Then we should have more abstract mp3 handling method in general.
+# Using command-line depending on OS requires exhaustive full modification for each OS.
+# The solution is to use cross-platform module like pydub.
+#
+# TODO:
+# Rename 'Cmder' to 'Handler'
+#
+# TODO:
+# Use command-line tool as few as possible
+# Remove all redundant use of the tools and put them in a single line.
+####################################
 
 def mixWithBgm(bgm, acap, output):
     cmd = "sox -m {bgm} {acapella} {output}".format\
             (bgm=bgm, acapella=acap, output=output)
     call(cmd, shell=True)
 
-####################################
-# TODO:
-# Use command-line tool as few as possible
-# Remove all redundant use of the tools and put them in a single line.
-####################################
 def resampling(original, fskhz, output):
-    cmd = "sox '%s' -r %d '%s'" % (original, fskhz, output)
+    cmd = "sox %s -r %d %s" % (original, fskhz, output)
     call(cmd, shell=True)
 
 def convertBps(original, bitkps, output):
-    cmd = "sox '%s' -C %d '%s'" % (original, bitkps, output)
+    cmd = "sox %s -C %d %s" % (original, bitkps, output)
     call(cmd, shell=True)
 
 def reduceVolume(original, vol, output):
@@ -222,7 +234,7 @@ def createLoopMp3(dir, loop, length, output):
     else:
         call(cmd, shell=True)
 
-    cmd = "ffmpeg -loglevel panic -t %d -i %s -acodec copy '%s'" % (length, tmpMp3, output)
+    cmd = "ffmpeg -loglevel panic -t %d -i %s -acodec copy %s" % (length, tmpMp3, output)
     call(cmd, shell=True)
 
 
@@ -257,10 +269,10 @@ def getMp3Info(mp3file):
 
     # Fixme: This is temporal. Need Python coding equivalent to what awk does below.
     if isWin:
-        res = str(check_output("ffmpeg -i '%s' 2>&1 | findstr Stream" % mp3file, shell=True).strip(), 'utf-8')
+        res = str(check_output("ffmpeg -i %s 2>&1 | findstr Stream" % mp3file, shell=True).strip(), 'utf-8')
         info = [res.split(" ")[4], res.split(" ")[8]]
     else:
-        info = str(check_output("ffmpeg -i '%s' 2>&1 | awk '/Stream/' | awk '{print $5, $9}'"
+        info = str(check_output("ffmpeg -i %s 2>&1 | awk '/Stream/' | awk '{print $5, $9}'"
                             % mp3file, shell=True).strip(), 'utf-8').split(" ")
     assert len(info) == 2, 'On %s of %s' % (info, mp3file)
     fskhz, bitkbs = info
@@ -293,11 +305,11 @@ def mp3Duration(mp3file):
     # turning down the bitrate of espeak from 192k to 64k, everything works fine.
 
     if isWin:
-        cmd = "ffmpeg -i '%s' 2>&1 | findstr Duration" % mp3file
+        cmd = "ffmpeg -i %s 2>&1 | findstr Duration" % mp3file
         res = str(check_output(cmd, shell=True).strip(), 'utf-8')
         return res.split("Duration: ")[1].split(",")[0]
     else:
-        cmd = "ffmpeg -i '%s' 2>&1 | grep Duration | awk '{ print $2 }' | tr -d ," % mp3file
+        cmd = "ffmpeg -i %s 2>&1 | grep Duration | awk '{ print $2 }' | tr -d ," % mp3file
         return str(check_output(cmd, shell=True).strip(), 'utf-8')
 
 def mp3lenSec(mp3file):

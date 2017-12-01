@@ -1,7 +1,8 @@
 import gui
 from gui.qt import *
 from gui.utils import rmdir, showCritical, getFile
-from gui.customs import GroupButton, Mp3Widget
+from gui.customs.groupbtn import GroupButton
+from gui.customs.mp3widget import Mp3Widget
 
 
 def onMp3Dialog(mw):

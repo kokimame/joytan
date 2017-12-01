@@ -3,7 +3,7 @@ import gui
 from tools.parser import Parsers
 from tools.speaker import Speaker
 from gui.utils import LANGUAGES, LANGCODES
-from gui.customs import LvMapWidget
+from gui.customs.lvmap import LvMapWidget
 
 
 class Preferences(QDialog):

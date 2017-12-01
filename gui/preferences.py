@@ -1,7 +1,7 @@
 from gui.qt import *
 import gui
 from tools.parser import Parsers
-from tools.talker import Talkers
+from tools.speaker import Speaker
 from gui.utils import LANGUAGES, LANGCODES
 from gui.customs import LvMapWidget
 
@@ -36,7 +36,7 @@ class Preferences(QDialog):
         tc = self.form.ttsCombo
         sc.addItems(sorted([site for site in Parsers.keys()]))
         sc.setCurrentText(self.mw.pref['onlineSrc'])
-        tc.addItems(sorted([site for site in Talkers.keys()]))
+        tc.addItems(sorted([site for site in Speaker.keys()]))
         tc.setCurrentText(self.mw.pref['tts'])
 
     def setupButtons(self):

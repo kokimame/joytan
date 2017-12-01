@@ -2,7 +2,7 @@ import os
 from subprocess import call, check_output
 
 from gui.utils import getFileNameFromPath, mkdir, isLin, isMac, isWin
-from tools.talker import Talkers
+from tools.speaker import Speaker
 
 class Mp3Cmder:
     # Do NOT use OS dependent commands in this class method.
@@ -23,7 +23,7 @@ class Mp3Cmder:
         self.sfxMap = {}
 
         # Setting Text-to-speech
-        self.tts = Talkers[self.setting['tts']]()
+        self.tts = Speaker[self.setting['tts']]()
 
         print("Audio Setting: ", self.setting)
 

@@ -1,5 +1,5 @@
 
-from tools.talker import *
+from tools.speaker import *
 from gui.utils import LANGUAGES, LANGCODES
 
 def getTtsHelp():
@@ -13,7 +13,7 @@ def getTtsHelp():
     return i3
 
 
-class Espeak(BaseTalker):
+class Espeak(BaseSpeaker):
     # We want to call TTS help command only once at runtime.
     # Don't call the command every time voice type changed.
     from gui.utils import isWin, isLin

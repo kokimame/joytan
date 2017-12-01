@@ -4,14 +4,14 @@ from PyQt5.QtMultimedia import QMediaPlayer
 from tools.cmder.mp3cmder import mp3Duration, getMp3Info
 from gui.qt import *
 from gui.utils import getFileNameFromPath
-from tools.talker import Talkers
+from tools.speaker import Speaker
 from gui.utils import LANGUAGES, LANGCODES
 
 class LvMapWidget(QWidget):
     # Maps from content type and language code and Voice ID, and test sample text-to-speech
     def __init__(self, tts, label, lv):
         super(LvMapWidget, self).__init__()
-        self.tts = Talkers[tts]
+        self.tts = Speaker[tts]
         # Label for content section such as 'name' and 'def-x'
         self.label = label
         # Language and Voice ID for the label (e.g, 'name' or 'def-x' etc)

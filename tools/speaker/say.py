@@ -1,4 +1,4 @@
-from tools.talker import *
+from tools.speaker import *
 from gui.utils import LANGUAGES
 
 def getTtsHelp():
@@ -27,7 +27,7 @@ def getTtsHelp():
     return i3
 
 
-class Say(BaseTalker):
+class Say(BaseSpeaker):
     # We want to call 'say -v ?' only once at runtime.
     # Don't call the command every time voice type changed.
 

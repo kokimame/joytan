@@ -1,0 +1,17 @@
+{
+  "linux": {
+    "workspace": ["/home", "kokimame", "Emotan", "workspace"],
+    "tts": "espeak"
+  },
+
+  "mac": {
+    "workspace": ["/Users", "Koki", "Emotan", "workspace"],
+    "tts": "say"
+  },
+
+  "windows": {
+    "workspace": ["C:", "\\Users", "Koki", "Documents", "Emotan", "workspace"],
+    "tts" : "espeak"
+  }
+
+}

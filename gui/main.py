@@ -5,24 +5,24 @@ import gui
 
 
 def defaultPref():
-    import os
+    import os, json
     cwd = os.getcwd()
-    workspace = None
-    tts = None
+    setting = None
+
+    with open(os.path.join(cwd, "mysetting.json"), 'r') as f:
+        setjs = json.loads(f.read())
 
     if isLin:
-        workspace = os.path.join("/home", "kokimame", "Emotan", "workspace")
-        tts = "espeak"
+        setting = setjs['linux']
     elif isMac:
-        workspace = os.path.join("/Users", "Koki", "Emotan", "workspace")
-        tts = "say"
-    else:
-        workspace = os.path.join("C:", "\\Users", "Koki", "Documents", "Emotan", "workspace")
-        tts = "espeak"
+        setting = setjs['mac']
+    elif isWin:
+        setting = setjs['windows']
+
 
     return {
-        "workspace": workspace,
-        "tts": tts,
+        "workspace": os.path.join(*setting['workspace']),
+        "tts": setting['tts'],
         "sfxdir": os.path.join(cwd, "templates", "sfx"),
         "worddir": os.path.join(cwd, "templates", "wordlist"),
         "bgmdir": os.path.join(cwd, "templates", "song"),

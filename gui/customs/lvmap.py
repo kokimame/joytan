@@ -9,14 +9,15 @@ class LvMapWidget(QWidget):
         super(LvMapWidget, self).__init__()
         self.tts = Speaker[tts]
         # Label for content section such as 'atop' and 'def-x'
-        if label == "atop": label = "name"
         self.label = label
+        if label == "atop": self.tag = "name"
+        self.tag = label
         # Language and Voice ID for the label (e.g, 'atop' or 'def-x' etc)
         self.lv = lv
         self.initUi()
 
     def initUi(self):
-        lbl = QLabel('%s:' % self.label.title())
+        lbl = QLabel('%s:' % self.tag.title())
         self.langCombo = QComboBox()
         self.langCombo.addItems(sorted([lang.title() for lang in LANGUAGES.values()]))
         self.langCombo.setCurrentText(LANGUAGES[self.lv[0]].title())

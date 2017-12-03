@@ -11,6 +11,7 @@ class Preferences(QDialog):
     def __init__(self, mw, tab="General"):
         QDialog.__init__(self, mw, Qt.Window)
         self.mw = mw
+        self.eset = mw.entrylist.setting
         self.form = gui.forms.preferences.Ui_Preferences()
         self.form.setupUi(self)
         self.initUi()
@@ -50,9 +51,9 @@ class Preferences(QDialog):
                             QListWidget::item { border-bottom: 1px solid black; }
                            """)
         # Sort items in the order of 'atop', 'def-x' and 'ex-x-x'
-        for item in sorted(list(self.mw.entrylist.setting.langMap.keys())):
+        for item in sorted(list(self.eset.langMap.keys())):
             # language and Voice ID
-            lv = self.mw.entrylist.setting.langMap[item]
+            lv = self.eset.langMap[item]
 
             wig = LvMapWidget(self.mw.pref['tts'], item, lv)
 
@@ -63,9 +64,8 @@ class Preferences(QDialog):
 
     def setupSpins(self):
         form = self.form
-        fs = self.mw.entrylist.setting
-        form.dpwSpin.setValue(fs.dpw)
-        form.epdSpin.setValue(fs.epd)
+        form.dpwSpin.setValue(self.eset.dpw)
+        form.epdSpin.setValue(self.eset.epd)
 
     def setupEditors(self):
         form = self.form
@@ -85,30 +85,28 @@ class Preferences(QDialog):
 
     def updateEntrySetting(self):
         testList = self.form.testList
-        eset = self.mw.entrylist.setting
         for i in range(testList.count()):
             wig = testList.itemWidget(testList.item(i))
-            if wig.label in eset.langMap:
+            if wig.label in self.eset.langMap:
                 newLang = LANGCODES[wig.langCombo.currentText().lower()]
                 newVid = wig.tts.code2Vids[newLang][wig.voiceCombo.currentText()]
-                eset.langMap[wig.label][0] = newLang
-                eset.langMap[wig.label][1] = newVid
+                self.eset.langMap[wig.label][0] = newLang
+                self.eset.langMap[wig.label][1] = newVid
 
-        eset.expand(dpw=self.form.dpwSpin.value())
-        eset.expand(epd=self.form.epdSpin.value())
+        self.eset.expand(dpw=self.form.dpwSpin.value())
+        self.eset.expand(epd=self.form.epdSpin.value())
 
 
 
     def updateMainPref(self):
         form = self.form
-        mw = self.mw
-        mw.pref['title'] = form.titleEdit.text()
-        mw.pref['workspace'] = form.workingEdit.text()
-        mw.pref['worddir'] = form.wordEdit.text()
-        mw.pref['bgmdir'] = form.bgmEdit.text()
-        mw.pref['sfxdir'] = form.sfxEdit.text()
-        mw.pref['onlineSrc'] = form.sourceCombo.currentText()
-        mw.pref['tts'] = form.ttsCombo.currentText()
+        self.mw.pref['title'] = form.titleEdit.text()
+        self.mw.pref['workspace'] = form.workingEdit.text()
+        self.mw.pref['worddir'] = form.wordEdit.text()
+        self.mw.pref['bgmdir'] = form.bgmEdit.text()
+        self.mw.pref['sfxdir'] = form.sfxEdit.text()
+        self.mw.pref['onlineSrc'] = form.sourceCombo.currentText()
+        self.mw.pref['tts'] = form.ttsCombo.currentText()
 
 
     def reject(self):

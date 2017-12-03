@@ -112,8 +112,8 @@ class Mp3Cmder:
     def compileEntry(self, ew, isGstatic=True):
         curdir = os.path.join(self.setting['dest'], ew.getDirname())
 
-        nameLang = self.setting['langMap']['name'][0]
-        nameVid = self.setting['langMap']['name'][1]
+        nameLang = self.setting['langMap']['atop'][0]
+        nameVid = self.setting['langMap']['atop'][1]
         if isGstatic and (nameLang == 'en'):
             from gui.download import downloadGstaticSound
             try:

@@ -15,7 +15,7 @@ class TxtThread(QThread):
         for s in range(self.mw.entrylist.count()):
             ew = self.mw.entrylist.getByIndex(s)
             ftxt.write("{index}. {name}\n".format(
-                index=ew.index, name=ew.editors['name'].text()))
+                index=ew.index, name=ew.editors['atop'].text()))
             for i in range(0, ew.dpw):
                 if ew.editors['def-%d' % (i + 1)].text() != '':
                     ftxt.write(ew.editors['def-%d' % (i + 1)].text() + '\n')

@@ -29,9 +29,9 @@ class TranslateThread(QThread):
         translate = lambda text: Translator().translate(text, dest=self.destCode).text
         for ew in self.mw.entrylist.getCurrentEntries():
             self.sig.emit(ew.name)
-            if 'name' in self.group:
-                ew.editors['name'].setText(translate(ew.name))
-                self.mw.entrylist.setting.langMap['name'][0] = self.destCode
+            if 'atop' in self.group:
+                ew.editors['atop'].setText(translate(ew.name))
+                self.mw.entrylist.setting.langMap['atop'][0] = self.destCode
 
             for i in range(1, ew.dpw + 1):
                 define = ew.editors['def-%d' % i].text()
@@ -74,7 +74,7 @@ class TranslateDialog(QDialog):
         transGroup = []
         # Get language code of target language to translate to from the library
         destCode = LANGCODES[form.langCombo.currentText().lower()]
-        if form.nameCheck.isChecked(): transGroup.append('name')
+        if form.nameCheck.isChecked(): transGroup.append('atop')
         if form.defCheck.isChecked(): transGroup.append('definition')
         if form.exCheck.isChecked(): transGroup.append('example')
 

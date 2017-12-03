@@ -26,8 +26,8 @@ def onOpen(mw):
     for data in jd[1:]:
         setting['dpw'] = data['dpw']
         setting['epd'] = data['epd']
-        mw.entrylist.addEntry(data['name'], mw.entryMode)
-        ew = mw.entrylist.getByName(data['name'])
+        mw.entrylist.addEntry(data['atop'], mw.entryMode)
+        ew = mw.entrylist.getByName(data['atop'])
         for i in range(0, ew.dpw):
             ew.editors['def-%d' % (i+1)].setText(data['def-%d' % (i+1)])
             for j in range(0, ew.epd):

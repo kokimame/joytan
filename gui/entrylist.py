@@ -11,7 +11,7 @@ class EntryList(QListWidget):
             # Temporally set English by default
             self.defaultLang = 'en'
             # This maps from item type in an entry to language code and Voice ID
-            self.langMap = {'name': [self.defaultLang, None]}
+            self.langMap = {'atop': [self.defaultLang, None]}
 
             self.expand(dpw=1, epd=1)
 
@@ -51,7 +51,7 @@ class EntryList(QListWidget):
             data = {'dpw': self.dpw,
                     'epd': self.epd,
                     'langMap': None}
-            langMap = {'name': self.langMap['name']}
+            langMap = {'atop': self.langMap['atop']}
 
             for i in range(0, self.dpw):
                 langMap['def-%d' % (i + 1)] = self.langMap['def-%d' % (i + 1)]

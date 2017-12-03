@@ -8,9 +8,10 @@ class LvMapWidget(QWidget):
     def __init__(self, tts, label, lv):
         super(LvMapWidget, self).__init__()
         self.tts = Speaker[tts]
-        # Label for content section such as 'name' and 'def-x'
+        # Label for content section such as 'atop' and 'def-x'
+        if label == "atop": label = "name"
         self.label = label
-        # Language and Voice ID for the label (e.g, 'name' or 'def-x' etc)
+        # Language and Voice ID for the label (e.g, 'atop' or 'def-x' etc)
         self.lv = lv
         self.initUi()
 

@@ -75,7 +75,7 @@ class EntryWidget(QWidget):
         nameedit = QLineEdit(name)
         editLayout.addWidget(namelabel, 0, 0)
         editLayout.addWidget(nameedit, 0, 1)
-        self.editors["name"] = nameedit
+        self.editors["atop"] = nameedit
 
         row = 1
         for i in range(0, self.dpw):
@@ -108,7 +108,7 @@ class EntryWidget(QWidget):
         self.italFont.setItalic(True)
 
     def updateView(self):
-        self.name = self.editors['name'].text()
+        self.name = self.editors['atop'].text()
         if self.name == '':
             name = "Empty entry"
         else:
@@ -134,7 +134,7 @@ class EntryWidget(QWidget):
     # Returns the class' properties in a dictionary. Will be called on saving.
     def data(self):
         data = {}
-        data['name'] = self.editors['name'].text()
+        data['atop'] = self.editors['atop'].text()
         data['dpw'] = self.dpw
         data['epd'] = self.epd
         for i in range(0, self.dpw):

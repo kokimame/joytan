@@ -49,9 +49,8 @@ class Preferences(QDialog):
         testList.setStyleSheet("""
                             QListWidget::item { border-bottom: 1px solid black; }
                            """)
-        # Sort items in the order of 'name', 'def-x' and 'ex-x-x'
-        for item in sorted(sorted(list(self.mw.entrylist.setting.langMap.keys())),
-                          key=lambda x: ['n', 'd', 'e'].index(x[0])):
+        # Sort items in the order of 'atop', 'def-x' and 'ex-x-x'
+        for item in sorted(list(self.mw.entrylist.setting.langMap.keys())):
             # language and Voice ID
             lv = self.mw.entrylist.setting.langMap[item]
 

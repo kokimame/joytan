@@ -28,7 +28,7 @@ class Mp3Cmder:
         print("Audio Setting: ", self.setting)
 
     def setupAudio(self):
-        mkdir(os.path.join(self.setting['dest'], "FINAL"))
+        mkdir(self.finalDir)
         fs = self.setting['sampling']
         bps = self.setting['bitrate']
 

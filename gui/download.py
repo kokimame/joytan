@@ -22,7 +22,7 @@ class DownloadDialog(QDialog):
         form.cancelBtn.clicked.connect(self.reject)
         form.startBtn.clicked.connect(self.start)
         form.sourceCombo.addItems(sorted([site for site in Parsers.keys()]))
-        form.sourceCombo.setCurrentText(self.mw.pref["onlineSrc"])
+        form.sourceCombo.setCurrentText(self.mw.setting["onlineSrc"])
 
     def start(self):
         if self.mw.entrylist.count() == 0:

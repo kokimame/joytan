@@ -8,7 +8,7 @@ from gui.utils import getFiles
 def onExtract(mw):
     filter = ";;".join([x[0] for x in extractor.Extractors])
     # Fixme: Enable to select multiple files
-    files = getFiles(mw, "Extract Words from File", dir=mw.pref['worddir'], filter=filter)
+    files = getFiles(mw, "Extract Words from File", dir=mw.setting['worddir'], filter=filter)
 
     if not files:
         print("Error: File not found")

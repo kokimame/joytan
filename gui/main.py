@@ -4,7 +4,7 @@ from gui.utils import isMac, isLin, isWin, rmdir
 import gui
 
 
-def defaultPref():
+def defaultSetting():
     import os, json
     cwd = os.getcwd()
     setting = None
@@ -23,11 +23,11 @@ def defaultPref():
     return {
         "workspace": os.path.join(*setting['workspace']),
         "tts": setting['tts'],
+        "title": setjs['title'],
+        "onlineSrc": setjs['onlineSrc'],
         "sfxdir": os.path.join(cwd, "templates", "sfx"),
         "worddir": os.path.join(cwd, "templates", "wordlist"),
         "bgmdir": os.path.join(cwd, "templates", "song"),
-        "title": "emotan-sample",
-        "onlineSrc": "Wiktionary"
     }
 
 class EmotanMW(QMainWindow):
@@ -36,9 +36,9 @@ class EmotanMW(QMainWindow):
         gui.mw = self
         self.app = app
 
-        self.pref = defaultPref()
-        rmdir(self.getRootPath())
-        print(self.pref)
+        self.setting = defaultSetting()
+        rmdir(self.getProjectPath())
+        print(self.setting)
 
         self.initUi()
         self.entryMode = "View"
@@ -53,8 +53,8 @@ class EmotanMW(QMainWindow):
         self.setupButtons()
         self.setupProgress()
 
-    def getRootPath(self):
-        return os.path.join(self.pref['workspace'], self.pref['title'])
+    def getProjectPath(self):
+        return os.path.join(self.setting['workspace'], self.setting['title'])
 
     def setupMainWindow(self):
         self.form = gui.forms.main.Ui_MainWindow()

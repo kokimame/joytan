@@ -6,7 +6,7 @@ from gui.utils import getFile
 def onOpen(mw):
     filter = "Emotan EntryList format (*.eel)"
     # Fixme: Read multiple files and adding their contents one by one to the list.
-    file = getFile(mw, "Open exising Emotan EntryList", dir=mw.pref['workspace'], filter=filter)
+    file = getFile(mw, "Open exising Emotan EntryList", dir=mw.setting['workspace'], filter=filter)
 
     if not file:
         print("Exception: File not found")

@@ -72,10 +72,10 @@ class Mp3Dialog(QDialog):
             return
         setting = {}
         setting['repeat'] = self.form.wordSpin.value()
-        setting['tts'] = self.mw.pref['tts']
+        setting['tts'] = self.mw.setting['tts']
         setting['langMap'] = self.mw.entrylist.setting.langMap
 
-        audDest = os.path.join(self.mw.getRootPath(), "audio")
+        audDest = os.path.join(self.mw.getProjectPath(), "audio")
         rmdir(audDest)
         setting['dest'] = audDest
 
@@ -143,8 +143,8 @@ class Mp3Dialog(QDialog):
                 self.quit()
 
             def save(self, file):
-                pref = self.mw.pref
-                output = os.path.join(pref['workspace'], pref['title'] + '-audio.mp3')
+                mset = self.mw.setting
+                output = os.path.join(mset['workspace'], mset['title'] + '-audio.mp3')
                 from shutil import copyfile
                 copyfile(file, output)
 
@@ -167,7 +167,7 @@ class Mp3Dialog(QDialog):
     def stopThread(self):
         if self.thread:
             self.thread.terminate()
-            audDest = os.path.join(self.mw.getRootPath(), "audio")
+            audDest = os.path.join(self.mw.getProjectPath(), "audio")
             rmdir(audDest)
             self.form.progressBar.reset()
             self.form.pgMsg.setText("")
@@ -179,7 +179,7 @@ class Mp3Dialog(QDialog):
         sfxList = self.form.sfxList
         try:
             file = getFile(self.mw, "Add song to BGM Loop",
-                        dir=self.mw.pref['sfxdir'], filter="*.mp3")
+                        dir=self.mw.setting['sfxdir'], filter="*.mp3")
             assert os.path.isdir(file) != True
             lwi = QListWidgetItem()
             w = Mp3Widget(file, idx, self.onDeleteSfx, lwi)
@@ -201,7 +201,7 @@ class Mp3Dialog(QDialog):
         bgmList = self.form.bgmList
         try:
             file = getFile(self.mw, "Add song to BGM Loop",
-                        dir=self.mw.pref['bgmdir'], filter="*.mp3")
+                        dir=self.mw.setting['bgmdir'], filter="*.mp3")
             assert os.path.isdir(file) != True
             lwi = QListWidgetItem()
             w = Mp3Widget(file, idx, self.onDeleteBgm, lwi)

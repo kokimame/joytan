@@ -36,9 +36,9 @@ class Preferences(QDialog):
         sc = self.form.sourceCombo
         tc = self.form.ttsCombo
         sc.addItems(sorted([site for site in Parsers.keys()]))
-        sc.setCurrentText(self.mw.pref['onlineSrc'])
+        sc.setCurrentText(self.mw.setting['onlineSrc'])
         tc.addItems(sorted([site for site in Speaker.keys()]))
-        tc.setCurrentText(self.mw.pref['tts'])
+        tc.setCurrentText(self.mw.setting['tts'])
 
     def setupButtons(self):
         form = self.form
@@ -56,7 +56,7 @@ class Preferences(QDialog):
             lv = self.eset.langMap[lineKey]
             tag = self.eset.tags[lineKey]
 
-            wig = LvMapWidget(self.mw.pref['tts'], lv, tag)
+            wig = LvMapWidget(self.mw.setting['tts'], lv, tag)
 
             lwi1 = QListWidgetItem()
             lwi1.setSizeHint(wig.sizeHint())
@@ -76,11 +76,11 @@ class Preferences(QDialog):
     def setupEditors(self):
         form = self.form
         mw = self.mw
-        form.titleEdit.setText(mw.pref['title'])
-        form.workingEdit.setText(mw.pref['workspace'])
-        form.wordEdit.setText(mw.pref['worddir'])
-        form.bgmEdit.setText(mw.pref['bgmdir'])
-        form.sfxEdit.setText(mw.pref['sfxdir'])
+        form.titleEdit.setText(mw.setting['title'])
+        form.workingEdit.setText(mw.setting['workspace'])
+        form.wordEdit.setText(mw.setting['worddir'])
+        form.bgmEdit.setText(mw.setting['bgmdir'])
+        form.sfxEdit.setText(mw.setting['sfxdir'])
 
 
     def onOk(self):
@@ -116,13 +116,13 @@ class Preferences(QDialog):
 
     def updateMainPref(self):
         form = self.form
-        self.mw.pref['title'] = form.titleEdit.text()
-        self.mw.pref['workspace'] = form.workingEdit.text()
-        self.mw.pref['worddir'] = form.wordEdit.text()
-        self.mw.pref['bgmdir'] = form.bgmEdit.text()
-        self.mw.pref['sfxdir'] = form.sfxEdit.text()
-        self.mw.pref['onlineSrc'] = form.sourceCombo.currentText()
-        self.mw.pref['tts'] = form.ttsCombo.currentText()
+        self.mw.setting['title'] = form.titleEdit.text()
+        self.mw.setting['workspace'] = form.workingEdit.text()
+        self.mw.setting['worddir'] = form.wordEdit.text()
+        self.mw.setting['bgmdir'] = form.bgmEdit.text()
+        self.mw.setting['sfxdir'] = form.sfxEdit.text()
+        self.mw.setting['onlineSrc'] = form.sourceCombo.currentText()
+        self.mw.setting['tts'] = form.ttsCombo.currentText()
 
 
     def reject(self):

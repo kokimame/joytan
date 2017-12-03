@@ -112,17 +112,17 @@ class Mp3Cmder:
     def compileEntry(self, ew, isGstatic=True):
         curdir = os.path.join(self.setting['dest'], ew.getDirname())
 
-        nameLang = self.setting['langMap']['atop'][0]
-        nameVid = self.setting['langMap']['atop'][1]
-        if isGstatic and (nameLang == 'en'):
+        atopLang = self.setting['langMap']['atop'][0]
+        atopVid = self.setting['langMap']['atop'][1]
+        if isGstatic and (atopLang == 'en'):
             from gui.download import downloadGstaticSound
             try:
                 downloadGstaticSound(ew.name, os.path.join(curdir, "pronounce.mp3"))
             except:
                 # If gstatic pronunciation file is not found, use TTS.
-                self.tts.dictate(ew.name, nameVid, output=os.path.join(curdir, "pronounce"))
+                self.tts.dictate(ew.name, atopVid, output=os.path.join(curdir, "pronounce"))
         else:
-            self.tts.dictate(ew.name, nameVid, output=os.path.join(curdir, "pronounce"))
+            self.tts.dictate(ew.name, atopVid, output=os.path.join(curdir, "pronounce"))
 
         pronMp3 = repeatMp3(os.path.join(curdir, "pronounce.mp3"), self.setting['repeat'])
 

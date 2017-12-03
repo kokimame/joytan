@@ -84,14 +84,14 @@ class EntryList(QListWidget):
             if ew.name == name:
                 ew.updateEditors(items)
                 return
-        raise Exception("Error: Entry with name '%s' is not found in the list" % name)
+        raise Exception("Error: Entry with atop '%s' is not found in the list" % name)
 
     def addEntry(self, name, mode, setting=None):
         if not setting:
             setting = self.setting.data()
         if name == '': pass
         elif name in [ew.name for ew in self.getCurrentEntries()]:
-            print("Entry with name %s already exists." % name)
+            print("Entry with atop %s already exists." % name)
             return
 
         eui, ew = self.initEntry(self.count() + 1, name, mode, setting, parent=self)
@@ -141,7 +141,7 @@ class EntryList(QListWidget):
         for ew in self.getCurrentEntries():
             if ew.name == name:
                 return ew
-        raise Exception("Error: Entry with name '%s' is not found in the list" % name)
+        raise Exception("Error: Entry with atop '%s' is not found in the list" % name)
 
     def getByIndex(self, index):
         return self.itemWidget(self.item(index))

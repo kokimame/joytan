@@ -2,12 +2,12 @@ from gui.qt import *
 
 
 class EntryWidget(QWidget):
-    def __init__(self, index, name, mode, pref, parent=None):
+    def __init__(self, index, atop, mode, pref, parent=None):
         super(EntryWidget, self).__init__(parent)
         self.initFont()
         self.parent = parent
         self.index = index
-        self.name = name
+        self.atop = atop
         self.mode = mode
         self.dpw = pref['dpw']
         self.epd = pref['epd']
@@ -15,17 +15,17 @@ class EntryWidget(QWidget):
         self.sources = []
 
         self.html = '<html><head/><body>{content}</body></html>'
-        self.nameFormat = '<p><span style=" font-size:16pt; font-weight:600;">{num}. {name}</span></p>'
+        self.atopFormat = '<p><span style=" font-size:16pt; font-weight:600;">{num}. {atop}</span></p>'
         self.defFormat = '<p>{num}. {define}</p>'
         self.exFormat = '<p><span style="color:#8d8d8d;">&quot;{example}&quot;</span></p>'
         self.editors = {}
         self.stackedLayout = QStackedLayout()
 
-        self.setupUi(name)
+        self.setupUi(atop)
 
-    def setupUi(self, name):
+    def setupUi(self, atop):
         self.setupView()
-        self.setupEditors(name)
+        self.setupEditors(atop)
         self.setLayout(self.stackedLayout)
         if self.mode == "View":
             self.stackedLayout.setCurrentIndex(0)
@@ -35,7 +35,7 @@ class EntryWidget(QWidget):
     def getDirname(self):
         # Make string number from the index of the entry from 00000 to 99999
         snum = (5 - len(str(self.index))) * '0' + str(self.index)
-        # Return directory name replacing whitespace with underscore
+        # Return directory atop replacing whitespace with underscore
         return "{snum}".format(snum=snum)
 
     def setMode(self, newMode):
@@ -54,46 +54,46 @@ class EntryWidget(QWidget):
 
         self.viewLabel = QLabel()
 
-        if self.name == '':
-            name = "Empty entry"
+        if self.atop == '':
+            atop = "Empty entry"
         else:
-            name = self.name
+            atop = self.atop
         self.viewLabel.setText(self.html.format
-                           (content=self.nameFormat.format(num=self.index, name=name)))
+                           (content=self.atopFormat.format(num=self.index, atop=atop)))
         viewLayout.addWidget(self.viewLabel)
         viewWidget.setLayout(viewLayout)
         self.stackedLayout.addWidget(viewWidget)
 
-    def setupEditors(self, name):
+    def setupEditors(self, atop):
         # Definitions per entry and Examples per definition
         editWidget = QWidget()
         editLayout = QGridLayout()
 
-        namelabel = QLabel("Name")
-        namelabel.setFont(self.italFont)
-        namelabel.setStyleSheet("QLabel { background-color : rgb(255, 255, 180); }")
-        nameedit = QLineEdit(name)
-        editLayout.addWidget(namelabel, 0, 0)
-        editLayout.addWidget(nameedit, 0, 1)
-        self.editors["atop"] = nameedit
+        atopLabel = QLabel("Name")
+        atopLabel.setFont(self.italFont)
+        atopLabel.setStyleSheet("QLabel { background-color : rgb(255, 255, 180); }")
+        atopEdit = QLineEdit(atop)
+        editLayout.addWidget(atopLabel, 0, 0)
+        editLayout.addWidget(atopEdit, 0, 1)
+        self.editors["atop"] = atopEdit
 
         row = 1
         for i in range(0, self.dpw):
-            deflabel = QLabel("Def%d" % (i+1))
-            deflabel.setFont(self.italFont)
-            deflabel.setStyleSheet("QLabel { background-color : rgb(255, 180, 230); }")
-            defedit = QLineEdit()
-            editLayout.addWidget(deflabel, row, 0)
-            editLayout.addWidget(defedit, row, 1)
-            self.editors["def-%d" % (i+1)] = defedit
+            defLabel = QLabel("Def%d" % (i+1))
+            defLabel.setFont(self.italFont)
+            defLabel.setStyleSheet("QLabel { background-color : rgb(255, 180, 230); }")
+            defEdit = QLineEdit()
+            editLayout.addWidget(defLabel, row, 0)
+            editLayout.addWidget(defEdit, row, 1)
+            self.editors["def-%d" % (i+1)] = defEdit
             for j in range(0, self.epd):
-                exlabel = QLabel("Ex%d-%d" % (i+1, j+1))
-                exlabel.setFont(self.italFont)
-                exlabel.setStyleSheet("QLabel { background-color : rgb(180, 230, 255); }")
-                exedit = QLineEdit()
-                editLayout.addWidget(exlabel, row+1, 0)
-                editLayout.addWidget(exedit, row+1, 1)
-                self.editors["ex-%d-%d" % (i+1, j+1)] = exedit
+                exLabel = QLabel("Ex%d-%d" % (i+1, j+1))
+                exLabel.setFont(self.italFont)
+                exLabel.setStyleSheet("QLabel { background-color : rgb(180, 230, 255); }")
+                exEdit = QLineEdit()
+                editLayout.addWidget(exLabel, row+1, 0)
+                editLayout.addWidget(exEdit, row+1, 1)
+                self.editors["ex-%d-%d" % (i+1, j+1)] = exEdit
                 row += 1
             row += 1
 
@@ -108,12 +108,12 @@ class EntryWidget(QWidget):
         self.italFont.setItalic(True)
 
     def updateView(self):
-        self.name = self.editors['atop'].text()
-        if self.name == '':
-            name = "Empty entry"
+        self.atop = self.editors['atop'].text()
+        if self.atop == '':
+            atop = "Empty entry"
         else:
-            name = self.name
-        content = self.nameFormat.format(num=self.index, name=name)
+            atop = self.atop
+        content = self.atopFormat.format(num=self.index, atop=atop)
 
         for i in range(0, self.dpw):
             if self.editors['def-%d' % (i+1)].text() != '':

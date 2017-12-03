@@ -17,6 +17,7 @@ class EntryList(QListWidget):
             self.expand(dpw=1, epd=1)
 
 
+        # FIXME: Need a method to shrink this setting
         def expand(self, dpw=None, epd=None):
             if dpw and (self.dpw < dpw):
                 self.dpw = dpw
@@ -26,6 +27,7 @@ class EntryList(QListWidget):
                 self.expandData()
 
             print("EntrySetting: LangMap -> ", self.langMap)
+            print("EntrySetting: Tags -> ", self.tags)
 
         def expandData(self):
             # Expand langMap and tags with default value
@@ -110,7 +112,6 @@ class EntryList(QListWidget):
             print("Entry with atop %s already exists." % name)
             return
 
-        self.setting.expand(dpw=setting['dpw'], epd=setting['epd'])
         eui, ew = self.initEntry(self.count() + 1, name, mode, setting, parent=self)
 
         self.addItem(eui)

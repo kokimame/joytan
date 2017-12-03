@@ -42,26 +42,31 @@ class Preferences(QDialog):
 
     def setupButtons(self):
         form = self.form
-        form.buttonBox.button(QDialogButtonBox.Ok).clicked.connect(self.onOk)
+        form.okBtn.clicked.connect(self.onOk)
+        form.applyBtn.clicked.connect(self.onApply)
 
 
     def setupList(self):
         testList = self.form.testList
-        testList.setStyleSheet("""
-                            QListWidget::item { border-bottom: 1px solid black; }
-                           """)
-        # Sort items in the order of 'atop', 'def-x' and 'ex-x-x'
-        for key in sorted(list(self.eset.langMap.keys())):
+        tagList = self.form.tagList
+        # Sort keys for Entry's dict of QLineEdit alphabetically
+        # i.e. 'atop', 'def-x' and 'ex-x-x'
+        for lineKey in sorted(list(self.eset.langMap.keys())):
             # language and Voice ID
-            lv = self.eset.langMap[key]
-            tag = self.eset.tags[key]
+            lv = self.eset.langMap[lineKey]
+            tag = self.eset.tags[lineKey]
 
             wig = LvMapWidget(self.mw.pref['tts'], lv, tag)
 
-            lwi = QListWidgetItem()
-            lwi.setSizeHint(wig.sizeHint())
-            testList.addItem(lwi)
-            testList.setItemWidget(lwi, wig)
+            lwi1 = QListWidgetItem()
+            lwi1.setSizeHint(wig.sizeHint())
+            testList.addItem(lwi1)
+            testList.setItemWidget(lwi1, wig)
+
+            lwi2 = QListWidgetItem()
+            tagEdit = QLineEdit(self.eset.tags[lineKey])
+            tagList.addItem(lwi2)
+            tagList.setItemWidget(lwi2, tagEdit)
 
     def setupSpins(self):
         form = self.form
@@ -83,6 +88,14 @@ class Preferences(QDialog):
         self.updateEntrySetting()
         self.updateMainPref()
         self.reject()
+
+    def onApply(self):
+        self.updateEntrySetting()
+        self.updateMainPref()
+        self.form.testList.clear()
+        self.form.tagList.clear()
+
+        self.initUi()
 
     def updateEntrySetting(self):
         testList = self.form.testList

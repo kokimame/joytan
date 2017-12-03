@@ -88,11 +88,13 @@ class Preferences(QDialog):
         testList = self.form.testList
         for i in range(testList.count()):
             wig = testList.itemWidget(testList.item(i))
-            if wig.label in self.eset.langMap:
+            # Key for Entry's dictionary of QLineEdit
+            lineKey = self.eset.getKeyByTag(wig.tag)
+            if lineKey in list(self.eset.langMap.keys()):
                 newLang = LANGCODES[wig.langCombo.currentText().lower()]
                 newVid = wig.tts.code2Vids[newLang][wig.voiceCombo.currentText()]
-                self.eset.langMap[wig.label][0] = newLang
-                self.eset.langMap[wig.label][1] = newVid
+                self.eset.langMap[lineKey][0] = newLang
+                self.eset.langMap[lineKey][1] = newVid
 
         self.eset.expand(dpw=self.form.dpwSpin.value())
         self.eset.expand(epd=self.form.epdSpin.value())

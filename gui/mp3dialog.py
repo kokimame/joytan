@@ -129,7 +129,7 @@ class Mp3Dialog(QDialog):
 
                 for i in range(self.mw.entrylist.count()):
                     ew = self.mw.entrylist.getByIndex(i)
-                    self.sig.emit("Creating audio file of %s." % ew.name)
+                    self.sig.emit("Creating audio file of %s." % ew.atop)
                     os.makedirs(os.path.join(audDest, ew.getDirname()), exist_ok=True)
                     self.cmder.dictateContents(ew)
                     self.cmder.compileEntry(ew, isGstatic=isGstatic)

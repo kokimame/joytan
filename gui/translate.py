@@ -28,9 +28,9 @@ class TranslateThread(QThread):
         # and also this bug does not occur at least on Mac.
         translate = lambda text: Translator().translate(text, dest=self.destCode).text
         for ew in self.mw.entrylist.getCurrentEntries():
-            self.sig.emit(ew.name)
+            self.sig.emit(ew.atop)
             if 'atop' in self.group:
-                ew.editors['atop'].setText(translate(ew.name))
+                ew.editors['atop'].setText(translate(ew.atop))
                 self.mw.entrylist.setting.langMap['atop'][0] = self.destCode
 
             for i in range(1, ew.dpw + 1):

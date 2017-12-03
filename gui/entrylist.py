@@ -42,6 +42,11 @@ class EntryList(QListWidget):
                         self.langMap['ex-%d-%d' % (i + 1, j + 1)] = [self.defaultLang, None]
                         self.tags['ex-%d-%d' % (i + 1, j + 1)] = 'Ex%d-%d' % (i + 1, j + 1)
 
+        def getKeyByTag(self, tag):
+            for key, val in self.tags.items():
+                if val == tag:
+                    return key
+
         def isVidNone(self):
             for item, map in self.langMap.items():
                 # Voice id is still None
@@ -90,7 +95,7 @@ class EntryList(QListWidget):
 
     def updateEntry(self, name, items):
         for ew in self.getCurrentEntries():
-            if ew.name == name:
+            if ew.atop == name:
                 ew.updateEditors(items)
                 return
         raise Exception("Error: Entry with atop '%s' is not found in the list" % name)
@@ -101,7 +106,7 @@ class EntryList(QListWidget):
 
         if name == '':
             pass
-        elif name in [ew.name for ew in self.getCurrentEntries()]:
+        elif name in [ew.atop for ew in self.getCurrentEntries()]:
             print("Entry with atop %s already exists." % name)
             return
 
@@ -149,7 +154,7 @@ class EntryList(QListWidget):
 
     def getByName(self, name):
         for ew in self.getCurrentEntries():
-            if ew.name == name:
+            if ew.atop == name:
                 return ew
         raise Exception("Error: Entry with atop '%s' is not found in the list" % name)
 

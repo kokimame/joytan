@@ -43,15 +43,15 @@ def simpleDownload(mw, parser):
         ew = mw.entrylist.getByIndex(i)
         # Don't forget to turn off 'maybeShow'. That breaks the sync of the bar and the actual progress
         mw.progress.update(label="Downloading %s from %s" %
-                                 (ew.name, parser.sourceName), maybeShow=False)
+                                 (ew.atop, parser.sourceName), maybeShow=False)
         # Don't download contents from the source you already had.
         if parser.sourceName in ew.sources:
             continue
-        r = requests.get(parser.sourceUrl + ew.name)
+        r = requests.get(parser.sourceUrl + ew.atop)
         data = r.text
         items = parser.run(data)
 
-        mw.entrylist.updateEntry(ew.name, items)
+        mw.entrylist.updateEntry(ew.atop, items)
         ew.sources.append(parser.sourceName)
     mw.progress.finish()
 

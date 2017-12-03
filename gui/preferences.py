@@ -51,11 +51,12 @@ class Preferences(QDialog):
                             QListWidget::item { border-bottom: 1px solid black; }
                            """)
         # Sort items in the order of 'atop', 'def-x' and 'ex-x-x'
-        for item in sorted(list(self.eset.langMap.keys())):
+        for key in sorted(list(self.eset.langMap.keys())):
             # language and Voice ID
-            lv = self.eset.langMap[item]
+            lv = self.eset.langMap[key]
+            tag = self.eset.tags[key]
 
-            wig = LvMapWidget(self.mw.pref['tts'], item, lv)
+            wig = LvMapWidget(self.mw.pref['tts'], lv, tag)
 
             lwi = QListWidgetItem()
             lwi.setSizeHint(wig.sizeHint())

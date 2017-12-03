@@ -12,6 +12,7 @@ class EntryList(QListWidget):
             self.defaultLang = 'en'
             # This maps from item type in an entry to language code and Voice ID
             self.langMap = {'atop': [self.defaultLang, None]}
+            self.tags = {'atop': "Name"}
 
             self.expand(dpw=1, epd=1)
 
@@ -19,24 +20,27 @@ class EntryList(QListWidget):
         def expand(self, dpw=None, epd=None):
             if dpw and (self.dpw < dpw):
                 self.dpw = dpw
-                self.expandLangMap()
+                self.expandData()
             if epd and (self.epd < epd):
                 self.epd = epd
-                self.expandLangMap()
+                self.expandData()
 
             print("EntrySetting: LangMap -> ", self.langMap)
 
-        def expandLangMap(self):
+        def expandData(self):
+            # Expand langMap and tags with default value
             for i in range(0, self.dpw):
                 try:
                     self.langMap['def-%d' % (i + 1)]
                 except KeyError:
                     self.langMap['def-%d' % (i + 1)] = [self.defaultLang, None]
+                    self.tags['def-%d' % (i + 1)] = 'Def%d' % (i + 1)
                 for j in range(0, self.epd):
                     try:
                         self.langMap['ex-%d-%d' % (i + 1, j + 1)]
                     except KeyError:
                         self.langMap['ex-%d-%d' % (i + 1, j + 1)] = [self.defaultLang, None]
+                        self.tags['ex-%d-%d' % (i + 1, j + 1)] = 'Ex%d-%d' % (i + 1, j + 1)
 
         def isVidNone(self):
             for item, map in self.langMap.items():
@@ -50,15 +54,20 @@ class EntryList(QListWidget):
         def data(self):
             data = {'dpw': self.dpw,
                     'epd': self.epd,
-                    'langMap': None}
+                    'langMap': None,
+                    'tags': None}
             langMap = {'atop': self.langMap['atop']}
+            tags = {'atop' : self.tags['atop']}
 
             for i in range(0, self.dpw):
                 langMap['def-%d' % (i + 1)] = self.langMap['def-%d' % (i + 1)]
+                tags['def-%d' % (i + 1)] = self.tags['def-%d' % (i + 1)]
                 for j in range(0, self.epd):
                     langMap['ex-%d-%d' % (i + 1, j + 1)] = self.langMap['ex-%d-%d' % (i + 1, j + 1)]
+                    tags['ex-%d-%d' % (i + 1, j + 1)] = self.tags['ex-%d-%d' % (i + 1, j + 1)]
 
             data['langMap'] = langMap
+            data['tags'] = tags
             return data
 
     def __init__(self, parent=None):
@@ -89,14 +98,15 @@ class EntryList(QListWidget):
     def addEntry(self, name, mode, setting=None):
         if not setting:
             setting = self.setting.data()
-        if name == '': pass
+
+        if name == '':
+            pass
         elif name in [ew.name for ew in self.getCurrentEntries()]:
             print("Entry with atop %s already exists." % name)
             return
 
+        self.setting.expand(dpw=setting['dpw'], epd=setting['epd'])
         eui, ew = self.initEntry(self.count() + 1, name, mode, setting, parent=self)
-
-        self.setting.expand(dpw=ew.dpw, epd=ew.epd)
 
         self.addItem(eui)
         self.setItemWidget(eui, ew)

@@ -2,15 +2,17 @@ from gui.qt import *
 
 
 class EntryWidget(QWidget):
-    def __init__(self, index, atop, mode, pref, parent=None):
+    def __init__(self, index, atop, mode, eset, parent=None):
         super(EntryWidget, self).__init__(parent)
         self.initFont()
         self.parent = parent
         self.index = index
         self.atop = atop
         self.mode = mode
-        self.dpw = pref['dpw']
-        self.epd = pref['epd']
+        # Entry setting
+        self.dpw = eset['dpw']
+        self.epd = eset['epd']
+        self.tags = eset['tags']
         # External sources where the items of an entry came
         self.sources = []
 
@@ -69,7 +71,7 @@ class EntryWidget(QWidget):
         editWidget = QWidget()
         editLayout = QGridLayout()
 
-        atopLabel = QLabel("Name")
+        atopLabel = QLabel(self.tags['atop'])
         atopLabel.setFont(self.italFont)
         atopLabel.setStyleSheet("QLabel { background-color : rgb(255, 255, 180); }")
         atopEdit = QLineEdit(atop)
@@ -79,7 +81,7 @@ class EntryWidget(QWidget):
 
         row = 1
         for i in range(0, self.dpw):
-            defLabel = QLabel("Def%d" % (i+1))
+            defLabel = QLabel(self.tags['def-%d' % (i+1)])
             defLabel.setFont(self.italFont)
             defLabel.setStyleSheet("QLabel { background-color : rgb(255, 180, 230); }")
             defEdit = QLineEdit()
@@ -87,7 +89,7 @@ class EntryWidget(QWidget):
             editLayout.addWidget(defEdit, row, 1)
             self.editors["def-%d" % (i+1)] = defEdit
             for j in range(0, self.epd):
-                exLabel = QLabel("Ex%d-%d" % (i+1, j+1))
+                exLabel = QLabel(self.tags['ex-%d-%d' % (i+1, j+1)])
                 exLabel.setFont(self.italFont)
                 exLabel.setStyleSheet("QLabel { background-color : rgb(180, 230, 255); }")
                 exEdit = QLineEdit()

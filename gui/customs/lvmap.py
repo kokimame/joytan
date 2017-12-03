@@ -5,19 +5,16 @@ from gui.utils import LANGUAGES, LANGCODES
 
 class LvMapWidget(QWidget):
     # Maps from content type and language code and Voice ID, and test sample text-to-speech
-    def __init__(self, tts, label, lv):
+    def __init__(self, tts, lv, tag):
         super(LvMapWidget, self).__init__()
         self.tts = Speaker[tts]
-        # Label for content section such as 'atop' and 'def-x'
-        self.label = label
-        if label == "atop": self.tag = "atop"
-        self.tag = label
-        # Language and Voice ID for the label (e.g, 'atop' or 'def-x' etc)
+        self.tag = tag
+        # Language and Voice ID for an item (e.g, 'atop' or 'def-x' etc)
         self.lv = lv
         self.initUi()
 
     def initUi(self):
-        lbl = QLabel('%s:' % self.tag.title())
+        lbl = QLabel('%s:' % self.tag)
         self.langCombo = QComboBox()
         self.langCombo.addItems(sorted([lang.title() for lang in LANGUAGES.values()]))
         self.langCombo.setCurrentText(LANGUAGES[self.lv[0]].title())
@@ -26,7 +23,7 @@ class LvMapWidget(QWidget):
         self.voiceCombo = QComboBox()
         self.voiceCombo.addItems([name for name in self.tts.code2Vids[self.lv[0]]])
 
-        # If a voice id is already specified for a given content section,
+        # If a voice id is already specified for an item,
         # search and set the according combobox label from the given TTS's code2Vids dictionary
         if self.lv[1]:
             for combo in self.tts.code2Vids[self.lv[0]]:

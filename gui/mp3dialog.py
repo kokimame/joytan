@@ -100,10 +100,6 @@ class Mp3Dialog(QDialog):
                 continue
 
             sfxdir[lineKey].append({"path": iw.mp3path,
-                                  "filename": iw.filename,
-                                  "duration": iw.duration,
-                                  "sampling": iw.fskhz,
-                                  "bitrate": iw.bitkbs,
                                   "volume": iw.mp.volume()})
         setting['sfx'] = sfxdir
 
@@ -111,10 +107,6 @@ class Mp3Dialog(QDialog):
         for i in range(1, bgmList.count()):
             iw = bgmList.itemWidget(bgmList.item(i))
             bgmloop.append({"path": iw.mp3path,
-                            "filename": iw.filename,
-                            "duration": iw.duration,
-                            "sampling": iw.fskhz,
-                            "bitrate": iw.bitkbs,
                             "volume": iw.mp.volume()})
         setting['loop'] = bgmloop
 

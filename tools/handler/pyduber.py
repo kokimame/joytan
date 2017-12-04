@@ -16,22 +16,37 @@ class Mp3Handler:
         self.acapList = []
 
     def setupAudio(self):
-        #
-        #
-        # TODO: Ajusting volume, combining into one SFX for each lineKey
-        #
-        #
+        # Setup SFX and BGM by organizing them into groups and adjusting volume.
         for key, sfxInfos in self.setting['sfx'].items():
             if len(sfxInfos) == 0:
                 continue
-            self.sfxMap[key] = sum([Aseg.from_mp3(info['path']) for info in sfxInfos])
+            sfxs = []
+            for sfxInfo in sfxInfos:
+                sfx = Aseg.from_mp3(sfxInfo['path'])
+                vtr = self.volToReduce(sfx.dBFS, (1 - sfxInfo['volume']/100))
+                sfxs.append(sfx - vtr)
+            self.sfxMap[key] = sum(sfxs)
 
         for bgmInfo in self.setting['loop']:
-            self.bgmLoop.append(Aseg.from_mp3(bgmInfo['path']))
+            bgm = Aseg.from_mp3(bgmInfo['path'])
+            vtr = self.volToReduce(bgm.dBFS,(1 - bgmInfo['volume']/100))
+            self.bgmLoop.append(bgm - vtr)
+
+    def volToReduce(self, dBFS, percent):
+        # Takes dBFS (db relative to full scale, 0 as upper bounds) of the mp3file for volume reducing
+        # and the percentage of volume to reduce from the dBFS.
+        # The percent is defined by sliderson Mp3Widget.
+
+        # Experimental minimum dBFS for human to hear,
+        # which corresponds to 0 in percentage
+        minDbfs = -50
+        if dBFS < minDbfs:
+            return 0
+        return int(abs(minDbfs - dBFS) * percent)
 
 
     def runSpeaker(self, ew):
-        print(self.sfxMap)
+        # TODO: Create Final.mp3 without generating intermediate mp3files
         curdir = os.path.join(self.setting['dest'], ew.getDirname())
         assert os.path.exists(curdir)
         asegList = []

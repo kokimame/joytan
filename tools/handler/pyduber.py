@@ -47,10 +47,13 @@ class Mp3Handler:
 
     def runSpeaker(self, ew):
         # TODO: Create Final.mp3 without generating intermediate mp3files
+        # Create complete audio contents in MP3 of an Entry
+        # including 3 section; 'atop', 'def-x' and 'ex-x-x'
         curdir = os.path.join(self.setting['dest'], ew.getDirname())
         assert os.path.exists(curdir)
         asegList = []
 
+        # Atop section
         atopLang, atopVid = self.setting['langMap']['atop']
         toAtop = os.path.join(curdir, "atop")
 
@@ -68,6 +71,7 @@ class Mp3Handler:
             asegList.append(self.sfxMap['atop'])
         asegList.append(Aseg.from_mp3(toAtop + ".mp3") * self.setting['repeat'])
 
+        # Def-x and ex-x-x section
         for i in range(0, ew.dpw):
             lineKey = 'def-%d' % (i+1)
             defText = ew.editors[lineKey].text()

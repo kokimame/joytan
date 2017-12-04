@@ -4,7 +4,7 @@ from subprocess import call, check_output
 from gui.utils import getFileNameFromPath, mkdir, isLin, isMac, isWin
 from tools.speaker import Speaker
 
-class Mp3Cmder:
+class Mp3Handler:
     # Do NOT use OS dependent commands in this class method.
     # Those methods with the commands needs to be abstracted.
     def __init__(self, setting):
@@ -176,9 +176,6 @@ class Mp3Cmder:
 # Then we should have more abstract mp3 handling method in general.
 # Using command-line depending on OS requires exhaustive full modification for each OS.
 # The solution is to use cross-platform module like pydub.
-#
-# TODO:
-# Rename 'Cmder' to 'Handler'
 #
 # TODO:
 # Use command-line tool as few as possible

@@ -2,7 +2,7 @@ from PyQt5.QtMultimedia import QMediaPlayer
 
 import gui
 from gui.qt import *
-from tools.cmder.mp3cmder import mp3Duration, getMp3Info
+from tools.handler.mp3handler import mp3Duration, getMp3Info
 from gui.utils import getFileNameFromPath
 
 

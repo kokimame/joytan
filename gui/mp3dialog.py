@@ -117,29 +117,29 @@ class Mp3Dialog(QDialog):
 
         class Mp3Thread(QThread):
             sig = pyqtSignal(str)
-            def __init__(self, mw, cmder):
+            def __init__(self, mw, handler):
                 QThread.__init__(self)
                 self.mw = mw
-                self.cmder = cmder
+                self.handler = handler
 
             def run(self):
                 # Setting up the properties of audio files such as bitrate and sampling rate
                 self.sig.emit("Setting up aufio files. This takes a few minues")
-                self.cmder.setupAudio()
+                self.handler.setupAudio()
 
                 for i in range(self.mw.entrylist.count()):
                     ew = self.mw.entrylist.getByIndex(i)
                     self.sig.emit("Creating audio file of %s." % ew.atop)
                     os.makedirs(os.path.join(audDest, ew.getDirname()), exist_ok=True)
-                    self.cmder.dictateContents(ew)
-                    self.cmder.compileEntry(ew, isGstatic=isGstatic)
+                    self.handler.dictateContents(ew)
+                    self.handler.compileEntry(ew, isGstatic=isGstatic)
 
-                self.cmder.mergeMp3s()
-                self.cmder.createBgmLoop()
+                self.handler.mergeMp3s()
+                self.handler.createBgmLoop()
                 self.sig.emit("Mixing with BGM. This takes a few minutes.")
-                self.cmder.mixWithBgm()
+                self.handler.mixWithBgm()
 
-                self.save(self.cmder.finalMp3)
+                self.save(self.handler.finalMp3)
                 self.quit()
 
             def save(self, file):
@@ -148,8 +148,8 @@ class Mp3Dialog(QDialog):
                 from shutil import copyfile
                 copyfile(file, output)
 
-        from tools.cmder.mp3cmder import Mp3Cmder
-        cmder = Mp3Cmder(setting)
+        from tools.handler.mp3handler import Mp3Handler
+        handler = Mp3Handler(setting)
         self.form.progressBar.setRange(0, self.mw.entrylist.count()+2)
 
         def onUpdate(msg):
@@ -157,7 +157,7 @@ class Mp3Dialog(QDialog):
             val = self.form.progressBar.value()
             self.form.progressBar.setValue(val+1)
 
-        self.thread = Mp3Thread(self.mw, cmder)
+        self.thread = Mp3Thread(self.mw, handler)
         self.thread.sig.connect(onUpdate)
         self.thread.start()
         self.form.createBtn.setEnabled(False)

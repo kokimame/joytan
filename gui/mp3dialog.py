@@ -110,7 +110,7 @@ class Mp3Dialog(QDialog):
                             "volume": iw.mp.volume()})
         setting['loop'] = bgmloop
 
-        class PydubThread(QThread):
+        class Mp3HandlerThread(QThread):
             sig = pyqtSignal(str)
 
             def __init__(self, mw, handler):
@@ -133,7 +133,7 @@ class Mp3Dialog(QDialog):
                 final.export(setting['dest'] + "/Final.mp3")
                 self.quit()
 
-        from tools.handler.pyduber import Mp3Handler
+        from tools.handler.mp3handler import Mp3Handler
         print("Audio setting: ", setting)
         handler = Mp3Handler(setting)
         self.form.progressBar.setRange(0, self.mw.entrylist.count()+3)
@@ -143,7 +143,7 @@ class Mp3Dialog(QDialog):
             val = self.form.progressBar.value()
             self.form.progressBar.setValue(val+1)
 
-        self.thread = PydubThread(self.mw, handler)
+        self.thread = Mp3HandlerThread(self.mw, handler)
         self.thread.sig.connect(onUpdate)
         self.thread.start()
         self.form.createBtn.setEnabled(False)

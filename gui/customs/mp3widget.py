@@ -2,7 +2,7 @@ from PyQt5.QtMultimedia import QMediaPlayer
 
 import gui
 from gui.qt import *
-from tools.handler import pyduber
+from tools.handler import mp3handler
 from gui.utils import getFileNameFromPath
 
 
@@ -29,7 +29,7 @@ class Mp3Widget(QWidget):
         self.delTrigger = delTrigger
         self.lwi = lwi      # ListWidgetItem that contains this widget
         self.filename = getFileNameFromPath(mp3path)
-        self.hhmmss = pyduber.getMp3Duration(mp3path)
+        self.hhmmss = mp3handler.getMp3Duration(mp3path)
         self.content = QMediaContent(QUrl.fromLocalFile(mp3path))
 
         self.initUi()

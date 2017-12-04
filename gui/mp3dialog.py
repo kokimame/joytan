@@ -136,7 +136,7 @@ class Mp3Dialog(QDialog):
         from tools.handler.pyduber import Mp3Handler
         print("Audio setting: ", setting)
         handler = Mp3Handler(setting)
-        self.form.progressBar.setRange(0, self.mw.entrylist.count()+2)
+        self.form.progressBar.setRange(0, self.mw.entrylist.count()+3)
 
         def onUpdate(msg):
             self.form.pgMsg.setText(msg)

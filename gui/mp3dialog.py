@@ -22,12 +22,7 @@ class Mp3Dialog(QDialog):
         self.setupBgmList()
         self.setupProgress()
         self.show()
-        # TODO: Is this a real solution to initialize voice ids?
-        # Open Preferences and set up voice id.
-        # This is called only the first time audio popup opens
-        # and set a voice id if it's None.
-        if self.mw.entrylist.isVoiceless():
-            gui.dialogs.open("Preferences", mw, tab="TTS")
+
 
     def setupSfxList(self):
         sfxList = self.form.sfxList
@@ -63,6 +58,16 @@ class Mp3Dialog(QDialog):
         if self.mw.entrylist.count() == 0:
             showCritical("No budles found.", title="Error")
             return
+
+        # TODO: Is this a real solution to initialize voice ids?
+        # Open Preferences and set up voice id.
+        # This is called only the first time audio popup opens
+        # and set a voice id if it's None.
+        if self.mw.entrylist.isVoiceless():
+            showCritical("Please set TTS voice to all section", title="Error")
+            gui.dialogs.open("Preferences", self.mw, tab="TTS")
+            return
+
         setting = {}
         setting['repeat'] = self.form.wordSpin.value()
         setting['tts'] = self.mw.setting['tts']
@@ -121,8 +126,11 @@ class Mp3Dialog(QDialog):
 
                 self.sig.emit("Mixing with BGM. This takes a few minutes.")
                 acapella = sum(self.handler.acapList)
-                final = acapella.overlay(self.handler.getBgmLoop(len(acapella)))
-                final.export(setting['dest'] + "/Final.mp3")
+                if len(setting['loop']) != 0:
+                    final = acapella.overlay(self.handler.getBgmLoop(len(acapella)))
+                    final.export(setting['dest'] + "/Final.mp3")
+                else:
+                    acapella.export(setting['dest'] + "/Final.mp3")
                 self.quit()
 
         from tools.handler.mp3handler import Mp3Handler

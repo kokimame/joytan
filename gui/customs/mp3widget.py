@@ -2,10 +2,8 @@ from PyQt5.QtMultimedia import QMediaPlayer
 
 import gui
 from gui.qt import *
-from tools.handler.mp3handler import mp3Duration, getMp3Info
 from tools.handler import pyduber
 from gui.utils import getFileNameFromPath
-
 
 
 class MediaPlayer(QMediaPlayer):
@@ -32,7 +30,6 @@ class Mp3Widget(QWidget):
         self.lwi = lwi      # ListWidgetItem that contains this widget
         self.filename = getFileNameFromPath(mp3path)
         self.hhmmss = pyduber.getMp3Duration(mp3path)
-        self.duration, self.fskhz, self.bitkbs = getMp3Info(mp3path)
         self.content = QMediaContent(QUrl.fromLocalFile(mp3path))
 
         self.initUi()

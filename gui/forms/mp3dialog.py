@@ -59,7 +59,7 @@ class Ui_Mp3Dialog(object):
         self.verticalLayout_3.addWidget(self.label_2)
         self.sfxList = QtWidgets.QListWidget(Mp3Dialog)
         self.sfxList.setStyleSheet("QListWidget::item { border-bottom: 1px solid black; }\n"
-"QListWidget::item { background-color: rgb(200,200,200);}")
+"QListWidget::item { background-color: rgb(211,208,204);}")
         self.sfxList.setObjectName("sfxList")
         self.verticalLayout_3.addWidget(self.sfxList)
         self.label_4 = QtWidgets.QLabel(Mp3Dialog)
@@ -70,7 +70,7 @@ class Ui_Mp3Dialog(object):
         self.verticalLayout_3.addWidget(self.label_3)
         self.bgmList = QtWidgets.QListWidget(Mp3Dialog)
         self.bgmList.setStyleSheet("QListWidget::item { border-bottom: 1px solid black; }\n"
-"QListWidget::item { background-color: rgb(200,200,200); }")
+"QListWidget::item { background-color: rgb(211,208,204); }")
         self.bgmList.setObjectName("bgmList")
         self.verticalLayout_3.addWidget(self.bgmList)
         self.line = QtWidgets.QFrame(Mp3Dialog)

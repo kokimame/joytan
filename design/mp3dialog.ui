@@ -112,7 +112,7 @@
         <widget class="QListWidget" name="sfxList">
          <property name="styleSheet">
           <string notr="true">QListWidget::item { border-bottom: 1px solid black; }
-QListWidget::item { background-color: rgb(200,200,200);}</string>
+QListWidget::item { background-color: rgb(211,208,204);}</string>
          </property>
         </widget>
        </item>
@@ -134,7 +134,7 @@ QListWidget::item { background-color: rgb(200,200,200);}</string>
         <widget class="QListWidget" name="bgmList">
          <property name="styleSheet">
           <string notr="true">QListWidget::item { border-bottom: 1px solid black; }
-QListWidget::item { background-color: rgb(200,200,200); }</string>
+QListWidget::item { background-color: rgb(211,208,204); }</string>
          </property>
         </widget>
        </item>

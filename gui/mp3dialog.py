@@ -134,8 +134,11 @@ class Mp3Dialog(QDialog):
 
                 self.sig.emit("Mixing with BGM. This takes a few minutes.")
                 acapella = sum(self.handler.acapList)
-                final = acapella.overlay(self.handler.getBgmLoop(len(acapella)))
-                final.export(setting['dest'] + "/Final.mp3")
+                if len(setting['loop']) != 0:
+                    final = acapella.overlay(self.handler.getBgmLoop(len(acapella)))
+                    final.export(setting['dest'] + "/Final.mp3")
+                else:
+                    acapella.export(setting['dest'] + "/Final.mp3")
                 self.quit()
 
         from tools.handler.mp3handler import Mp3Handler

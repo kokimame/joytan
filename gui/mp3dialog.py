@@ -31,10 +31,6 @@ class Mp3Dialog(QDialog):
 
     def setupSfxList(self):
         sfxList = self.form.sfxList
-        sfxList.setStyleSheet("""
-                              QListWidget::item { border-bottom: 1px solid black; }
-                              QListWidget::item { background-color: rgb(200,200,200); }
-                              """)
         groups = [self.eset.tags[key] for key in sorted(self.eset.tags)]
         self.sfxCnt = [1] * len(groups)
         for i, group in enumerate(groups):
@@ -46,10 +42,6 @@ class Mp3Dialog(QDialog):
 
     def setupBgmList(self):
         bgmList = self.form.bgmList
-        bgmList.setStyleSheet("""
-                              QListWidget::item { border-bottom: 1px solid black; }
-                              QListWidget::item { background-color: rgb(200,200,200); }
-                              """)
         lwi, gb = QListWidgetItem(), GroupButton(self.onBgmClicked, group="BGM")
         lwi.setSizeHint(gb.sizeHint())
         bgmList.addItem(lwi)

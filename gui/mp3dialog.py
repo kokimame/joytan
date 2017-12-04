@@ -81,10 +81,12 @@ class Mp3Dialog(QDialog):
 
         sfxList = self.form.sfxList
         bgmList = self.form.bgmList
-        # Check if nice pronunciation is needs to be downloaded
-        isGstatic = self.form.gstaticCheck.isChecked()
+
+        # Check if to download online pronounce data or not
+        setting['gstatic'] = self.form.gstaticCheck.isChecked()
         # Check if LRC file needs to be created
         setting['lrc'] = self.form.lrcCheck.isChecked()
+
 
         sfxdir = {}
         group = None
@@ -114,6 +116,21 @@ class Mp3Dialog(QDialog):
                             "volume": iw.mp.volume()})
         setting['loop'] = bgmloop
 
+        class PydubThread(QThread):
+            sig = pyqtSignal(str)
+
+            def __init__(self, mw, handler):
+                QThread.__init__(self)
+                self.mw = mw
+                self.handler = handler
+
+            def run(self):
+                for i in range(self.mw.entrylist.count()):
+                    ew = self.mw.entrylist.getByIndex(i)
+                    os.makedirs(os.path.join(audDest, ew.getDirname()), exist_ok=True)
+                    self.handler.runSpeaker(ew)
+
+                self.quit()
 
         class Mp3Thread(QThread):
             sig = pyqtSignal(str)
@@ -132,7 +149,7 @@ class Mp3Dialog(QDialog):
                     self.sig.emit("Creating audio file of %s." % ew.atop)
                     os.makedirs(os.path.join(audDest, ew.getDirname()), exist_ok=True)
                     self.handler.dictateContents(ew)
-                    self.handler.compileEntry(ew, isGstatic=isGstatic)
+                    self.handler.compileEntry(ew, isGstatic=setting['gstatic'])
 
                 self.handler.mergeMp3s()
                 self.handler.createBgmLoop()
@@ -148,7 +165,7 @@ class Mp3Dialog(QDialog):
                 from shutil import copyfile
                 copyfile(file, output)
 
-        from tools.handler.mp3handler import Mp3Handler
+        from tools.handler.pyduber import Mp3Handler
         handler = Mp3Handler(setting)
         self.form.progressBar.setRange(0, self.mw.entrylist.count()+2)
 
@@ -157,7 +174,7 @@ class Mp3Dialog(QDialog):
             val = self.form.progressBar.value()
             self.form.progressBar.setValue(val+1)
 
-        self.thread = Mp3Thread(self.mw, handler)
+        self.thread = PydubThread(self.mw, handler)
         self.thread.sig.connect(onUpdate)
         self.thread.start()
         self.form.createBtn.setEnabled(False)

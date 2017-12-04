@@ -52,3 +52,17 @@ class Mp3Handler:
                     asegList.append(Aseg.from_mp3(toEx + ".mp3"))
 
         sum(asegList).export(curdir + ".mp3", format="mp3")
+
+def getMp3Duration(mp3path, format="hhmmss"):
+    if format == "msec":
+        return len(Aseg.from_mp3(mp3path))
+    elif format == "hhmmss":
+        return msec2hhmmss(len(Aseg.from_mp3(mp3path)))
+    else:
+        raise Exception("Error: Wrong Duration format selected")
+
+def msec2hhmmss(msec):
+    sec = msec / 1000
+    m, s = divmod(sec, 60)
+    h, m = divmod(m, 60)
+    return "%02d:%02d:%02d" % (h, m, s)

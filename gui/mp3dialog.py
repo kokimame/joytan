@@ -119,49 +119,19 @@ class Mp3Dialog(QDialog):
                 self.handler = handler
 
             def run(self):
-                self.handler.setupAudio()
-                for i in range(self.mw.entrylist.count()):
-                    ew = self.mw.entrylist.getByIndex(i)
-                    os.makedirs(os.path.join(audDest, ew.getDirname()), exist_ok=True)
-                    self.handler.runSpeaker(ew)
-
-                acapella = sum(self.handler.acapList)
-                final = acapella.overlay(self.handler.getBgmLoop(len(acapella)))
-                final.export(setting['dest'] + "/Final.mp3")
-                self.quit()
-
-        class Mp3Thread(QThread):
-            sig = pyqtSignal(str)
-            def __init__(self, mw, handler):
-                QThread.__init__(self)
-                self.mw = mw
-                self.handler = handler
-
-            def run(self):
-                # Setting up the properties of audio files such as bitrate and sampling rate
                 self.sig.emit("Setting up aufio files. This takes a few minutes")
                 self.handler.setupAudio()
-
                 for i in range(self.mw.entrylist.count()):
                     ew = self.mw.entrylist.getByIndex(i)
                     self.sig.emit("Creating audio file of %s." % ew.atop)
                     os.makedirs(os.path.join(audDest, ew.getDirname()), exist_ok=True)
-                    self.handler.dictateContents(ew)
-                    self.handler.compileEntry(ew, isGstatic=setting['gstatic'])
+                    self.handler.runSpeaker(ew)
 
-                self.handler.mergeMp3s()
-                self.handler.createBgmLoop()
                 self.sig.emit("Mixing with BGM. This takes a few minutes.")
-                self.handler.mixWithBgm()
-
-                self.save(self.handler.finalMp3)
+                acapella = sum(self.handler.acapList)
+                final = acapella.overlay(self.handler.getBgmLoop(len(acapella)))
+                final.export(setting['dest'] + "/Final.mp3")
                 self.quit()
-
-            def save(self, file):
-                mset = self.mw.setting
-                output = os.path.join(mset['workspace'], mset['title'] + '-audio.mp3')
-                from shutil import copyfile
-                copyfile(file, output)
 
         from tools.handler.pyduber import Mp3Handler
         print("Audio setting: ", setting)

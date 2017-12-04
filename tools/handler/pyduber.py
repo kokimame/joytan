@@ -11,18 +11,23 @@ class Mp3Handler:
         # Setting Text-to-speech
         self.tts = Speaker[self.setting['tts']]()
         self.sfxMap = {}
+        self.bgmLoop = []
+        # List of acapella mp3file (no BGM but with SFX) for each entry
+        self.acapList = []
 
     def setupAudio(self):
-        sfxMap = self.setting['sfx']
         #
         #
         # TODO: Ajusting volume, combining into one SFX for each lineKey
         #
         #
-        for key, sfxInfos in sfxMap.items():
+        for key, sfxInfos in self.setting['sfx'].items():
             if len(sfxInfos) == 0:
                 continue
             self.sfxMap[key] = sum([Aseg.from_mp3(info['path']) for info in sfxInfos])
+
+        for bgmInfo in self.setting['loop']:
+            self.bgmLoop.append(Aseg.from_mp3(bgmInfo['path']))
 
 
     def runSpeaker(self, ew):
@@ -71,8 +76,22 @@ class Mp3Handler:
                         asegList.append(self.sfxMap[lineKey])
                     asegList.append(Aseg.from_mp3(toEx + ".mp3"))
 
-        print(asegList)
-        sum(asegList).export(curdir + ".mp3", format="mp3")
+        acapella = sum(asegList)
+        acapella.export(curdir + ".mp3")
+        self.acapList.append(acapella)
+
+    def getBgmLoop(self, msec):
+        done = False
+        bl = []
+        while not done:
+            for bgm in self.bgmLoop:
+                if msec <= 0:
+                    done = True
+                    break
+                msec -= len(bgm)
+                bl.append(bgm)
+        return sum(bl)
+
 
 def getMp3Duration(mp3path, format="hhmmss"):
     if format == "msec":

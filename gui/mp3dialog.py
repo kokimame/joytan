@@ -133,6 +133,9 @@ class Mp3Dialog(QDialog):
                     os.makedirs(os.path.join(audDest, ew.getDirname()), exist_ok=True)
                     self.handler.runSpeaker(ew)
 
+                acapella = sum(self.handler.acapList)
+                final = acapella.overlay(self.handler.getBgmLoop(len(acapella)))
+                final.export(setting['dest'] + "/Final.mp3")
                 self.quit()
 
         class Mp3Thread(QThread):
@@ -144,7 +147,7 @@ class Mp3Dialog(QDialog):
 
             def run(self):
                 # Setting up the properties of audio files such as bitrate and sampling rate
-                self.sig.emit("Setting up aufio files. This takes a few minues")
+                self.sig.emit("Setting up aufio files. This takes a few minutes")
                 self.handler.setupAudio()
 
                 for i in range(self.mw.entrylist.count()):

@@ -13,6 +13,7 @@ class Mp3Dialog(QDialog):
     def __init__(self, mw):
         QDialog.__init__(self, mw, Qt.Window)
         self.mw = mw
+        self.eset = mw.entrylist.setting
         self.form = gui.forms.mp3dialog.Ui_Mp3Dialog()
         self.form.setupUi(self)
         self.thread = None
@@ -34,7 +35,7 @@ class Mp3Dialog(QDialog):
                               QListWidget::item { border-bottom: 1px solid black; }
                               QListWidget::item { background-color: rgb(200,200,200); }
                               """)
-        groups = ['word', 'definition', 'example']
+        groups = [self.eset.tags[key] for key in sorted(self.eset.tags)]
         self.sfxCnt = [1] * len(groups)
         for i, group in enumerate(groups):
             lwi, gb = QListWidgetItem(), GroupButton(self.onSfxClicked, group=group, idx=i)
@@ -89,15 +90,16 @@ class Mp3Dialog(QDialog):
 
 
         sfxdir = {}
-        group = None
+        # Key for Entry's dictionary of QLineEdit
+        lineKey = None
         for i in range(sfxList.count()):
             iw = sfxList.itemWidget(sfxList.item(i))
             if isinstance(iw, GroupButton):
-                group = iw.group
-                sfxdir[group] = []
+                lineKey = self.eset.getKeyByTag(iw.group)
+                sfxdir[lineKey] = []
                 continue
 
-            sfxdir[group].append({"path": iw.mp3path,
+            sfxdir[lineKey].append({"path": iw.mp3path,
                                   "filename": iw.filename,
                                   "duration": iw.duration,
                                   "sampling": iw.fskhz,
@@ -125,6 +127,7 @@ class Mp3Dialog(QDialog):
                 self.handler = handler
 
             def run(self):
+                self.handler.setupAudio()
                 for i in range(self.mw.entrylist.count()):
                     ew = self.mw.entrylist.getByIndex(i)
                     os.makedirs(os.path.join(audDest, ew.getDirname()), exist_ok=True)
@@ -166,6 +169,7 @@ class Mp3Dialog(QDialog):
                 copyfile(file, output)
 
         from tools.handler.pyduber import Mp3Handler
+        print("Audio setting: ", setting)
         handler = Mp3Handler(setting)
         self.form.progressBar.setRange(0, self.mw.entrylist.count()+2)
 

@@ -10,11 +10,23 @@ class Mp3Handler:
         self.setting = setting
         # Setting Text-to-speech
         self.tts = Speaker[self.setting['tts']]()
+        self.sfxMap = {}
 
     def setupAudio(self):
-        pass
+        sfxMap = self.setting['sfx']
+        #
+        #
+        # TODO: Ajusting volume, combining into one SFX for each lineKey
+        #
+        #
+        for key, sfxInfos in sfxMap.items():
+            if len(sfxInfos) == 0:
+                continue
+            self.sfxMap[key] = sum([Aseg.from_mp3(info['path']) for info in sfxInfos])
+
 
     def runSpeaker(self, ew):
+        print(self.sfxMap)
         curdir = os.path.join(self.setting['dest'], ew.getDirname())
         assert os.path.exists(curdir)
         asegList = []
@@ -32,25 +44,34 @@ class Mp3Handler:
         else:
             self.tts.dictate(ew.atop, atopVid, output=toAtop)
 
+        if "atop" in self.sfxMap:
+            asegList.append(self.sfxMap['atop'])
         asegList.append(Aseg.from_mp3(toAtop + ".mp3") * self.setting['repeat'])
 
         for i in range(0, ew.dpw):
-            defText = ew.editors['def-%d' % (i+1)].text()
+            lineKey = 'def-%d' % (i+1)
+            defText = ew.editors[lineKey].text()
             if defText != '':
-                defVid = self.setting['langMap']['def-%d' % (i+1)][1]
-                toDef = os.path.join(curdir, "def-%d" % (i+1))
+                defVid = self.setting['langMap'][lineKey][1]
+                toDef = os.path.join(curdir, lineKey)
                 # TODO: Rename 'dictate' to 'speak' or 'run'
                 self.tts.dictate(defText, defVid, output=toDef)
+                if lineKey in self.sfxMap:
+                    asegList.append(self.sfxMap[lineKey])
                 asegList.append(Aseg.from_mp3(toDef + ".mp3"))
 
             for j in range(0, ew.epd):
-                exText = ew.editors['ex-%d-%d' % (i+1, j+1)].text()
+                lineKey = 'ex-%d-%d' % (i + 1, j + 1)
+                exText = ew.editors[lineKey].text()
                 if exText != '':
-                    exVid = self.setting['langMap']['ex-%d-%d' % (i+1, j+1)][1]
-                    toEx = os.path.join(curdir, "ex-%d-%d" % ((i+1), (j+1)))
+                    exVid = self.setting['langMap'][lineKey][1]
+                    toEx = os.path.join(curdir, lineKey)
                     self.tts.dictate(exText, exVid, output=toEx)
+                    if lineKey in self.sfxMap:
+                        asegList.append(self.sfxMap[lineKey])
                     asegList.append(Aseg.from_mp3(toEx + ".mp3"))
 
+        print(asegList)
         sum(asegList).export(curdir + ".mp3", format="mp3")
 
 def getMp3Duration(mp3path, format="hhmmss"):

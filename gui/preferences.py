@@ -86,12 +86,12 @@ class Preferences(QDialog):
     def onOk(self):
         # FIXME: Switching TTS service may break LvMapping.
         self.updateEntrySetting()
-        self.updateMainPref()
+        self.updateMainSetting()
         self.reject()
 
     def onApply(self):
         self.updateEntrySetting()
-        self.updateMainPref()
+        self.updateMainSetting()
         self.form.testList.clear()
         self.form.tagList.clear()
 
@@ -114,7 +114,7 @@ class Preferences(QDialog):
 
 
 
-    def updateMainPref(self):
+    def updateMainSetting(self):
         form = self.form
         self.mw.setting['title'] = form.titleEdit.text()
         self.mw.setting['workspace'] = form.workingEdit.text()

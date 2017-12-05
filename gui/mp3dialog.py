@@ -70,8 +70,9 @@ class Mp3Dialog(QDialog):
             return
 
         setting = {}
-        setting['repeat'] = self.form.wordSpin.value()
         setting['tts'] = self.mw.setting['tts']
+        setting['title'] = self.mw.setting['title']
+        setting['repeat'] = self.form.wordSpin.value()
         setting['langMap'] = self.mw.entrylist.setting.langMap
 
         audDest = os.path.join(self.mw.getProjectPath(), "audio")
@@ -108,6 +109,9 @@ class Mp3Dialog(QDialog):
                             "volume": iw.mp.volume()})
         setting['loop'] = bgmloop
 
+        finalMp3 = os.path.join(setting['dest'], setting['title'] + ".mp3")
+        finalLrc = os.path.join(setting['dest'], setting['title'] + ".lrc")
+
         class Mp3HandlerThread(QThread):
             sig = pyqtSignal(str)
 
@@ -129,9 +133,13 @@ class Mp3Dialog(QDialog):
                 acapella = sum(self.handler.acapList)
                 if len(setting['loop']) != 0:
                     final = acapella.overlay(self.handler.getBgmLoop(len(acapella)))
-                    final.export(setting['dest'] + "/Final.mp3")
+                    final.export(finalMp3)
                 else:
-                    acapella.export(setting['dest'] + "/Final.mp3")
+                    acapella.export(finalMp3)
+
+                if setting['lrc']:
+                    self.handler.writeLyrics(finalLrc)
+
                 self.quit()
 
         from tools.handler.mp3handler import Mp3Handler

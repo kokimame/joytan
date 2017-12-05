@@ -20,13 +20,13 @@ class MediaPlayer(QMediaPlayer):
 
 
 class Mp3Widget(QWidget):
-    def __init__(self, mp3path, groupIdx, delTrigger, lwi):
+    sig = pyqtSignal(str, QListWidgetItem)
+    def __init__(self, mp3path, group, lwi):
         super(Mp3Widget, self).__init__()
         self.mp = MediaPlayer(self)
         # Store path as raw string otherwise causes bug on concatenation
         self.mp3path = mp3path
-        self.gidx = groupIdx
-        self.delTrigger = delTrigger
+        self.group = group
         self.lwi = lwi      # ListWidgetItem that contains this widget
         self.filename = getFileNameFromPath(mp3path)
         self.hhmmss = mp3handler.getMp3Duration(mp3path)
@@ -37,7 +37,7 @@ class Mp3Widget(QWidget):
     def initUi(self):
         delBtn = QPushButton()
         delBtn.setIcon(QIcon("design/icons/delete_button.png"))
-        delBtn.clicked.connect(lambda: self.delTrigger(self.lwi))
+        delBtn.clicked.connect(lambda: self.sig.emit(self.group, self.lwi))
         label = QLabel("{name} {hhmmss}".
                        format(name=self.filename, hhmmss=self.hhmmss))
         self.playBtn = QPushButton("Play")

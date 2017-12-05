@@ -35,10 +35,10 @@ class Mp3Handler:
     def volToReduce(self, dBFS, percent):
         # Takes dBFS (db relative to full scale, 0 as upper bounds) of the mp3file for volume reducing
         # and the percentage of volume to reduce from the dBFS.
-        # The percent is defined by sliderson Mp3Widget.
+        # The percent is defined by sliders on Mp3Widget.
 
         # Experimental minimum dBFS for human to hear,
-        # which corresponds to 0 in percentage
+        # which corresponds to 0% in percentage
         minDbfs = -50
         if dBFS < minDbfs:
             return 0
@@ -47,7 +47,7 @@ class Mp3Handler:
 
     def runSpeaker(self, ew):
         # TODO: Create Final.mp3 without generating intermediate mp3files
-        # Create complete audio contents in MP3 of an Entry
+        # Create complete MP3 contents for an Entry
         # including 3 section; 'atop', 'def-x' and 'ex-x-x'
         curdir = os.path.join(self.setting['dest'], ew.getDirname())
         assert os.path.exists(curdir)

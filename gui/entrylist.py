@@ -5,12 +5,12 @@ class EntryList(QListWidget):
     class Setting:
         def __init__(self):
             # Fixme: ...................
-            self.dpw = 0 # Will be expanded soon later at the 'expand()' below!
-            self.epd = 0 # Same here. The method is a bit dumb though.
+            self.dpw = 0 # This will be expanded soon at the 'expand()' below!
+            self.epd = 0 # Same here. The method is a little bit dumb.
             # Fixme: Allow users to choose default language from preference
             # Temporally set English by default
             self.defaultLang = 'en'
-            # This maps from item type in an entry to language code and Voice ID
+            # This maps from line key of an entry to language code and Voice ID for its text
             self.langMap = {'atop': [self.defaultLang, None]}
             self.tags = {'atop': "Name"}
 
@@ -57,7 +57,7 @@ class EntryList(QListWidget):
             else:
                 return False
 
-        # Returns the class' properties in a dictionary. Will be called on saving.
+        # Returns EntryList properties in a dictionary. Will be called on saving the list.
         def data(self):
             data = {'dpw': self.dpw,
                     'epd': self.epd,

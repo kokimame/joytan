@@ -39,7 +39,7 @@ class Mp3Handler:
 
         # Experimental minimum dBFS for human to hear,
         # which corresponds to 0% in percentage
-        minDbfs = -50
+        minDbfs = -40
         if dBFS < minDbfs:
             return 0
         return int(abs(minDbfs - dBFS) * percent)

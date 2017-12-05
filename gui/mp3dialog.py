@@ -15,8 +15,8 @@ class Mp3Dialog(QDialog):
         self.mw = mw
         self.eset = mw.entrylist.setting
         self.form = gui.forms.mp3dialog.Ui_Mp3Dialog()
-        self.form.setupUi(self)
         self.thread = None
+        self.form.setupUi(self)
         self.setupButton()
         self.setupSfxList()
         self.setupBgmList()
@@ -26,18 +26,19 @@ class Mp3Dialog(QDialog):
 
     def setupSfxList(self):
         sfxList = self.form.sfxList
-        groups = [self.eset.tags[key] for key in sorted(self.eset.tags)]
-        self.sfxCnt = [1] * len(groups)
-        for i, group in enumerate(groups):
-            lwi, gb = QListWidgetItem(), GroupButton(self.onSfxClicked, group=group, idx=i)
+        tags = [self.eset.tags[key] for key in sorted(self.eset.tags)]
+        self.sfxCnt = [1] * len(tags)
+        for i, tag in enumerate(tags):
+            lwi, gb = QListWidgetItem(), GroupButton(self.mw, tag, idx=i)
+            gb.sig.connect(self.onAddMp3Widget)
             lwi.setSizeHint(gb.sizeHint())
             sfxList.addItem(lwi)
             sfxList.setItemWidget(lwi, gb)
 
-
     def setupBgmList(self):
         bgmList = self.form.bgmList
-        lwi, gb = QListWidgetItem(), GroupButton(self.onBgmClicked, group="BGM")
+        lwi, gb = QListWidgetItem(), GroupButton(self.mw, "BGM")
+        gb.sig.connect(self.onAddMp3Widget)
         lwi.setSizeHint(gb.sizeHint())
         bgmList.addItem(lwi)
         bgmList.setItemWidget(lwi, gb)
@@ -46,9 +47,9 @@ class Mp3Dialog(QDialog):
         form = self.form
         form.createBtn.clicked.connect(self.onCreate)
         form.stopBtn.setEnabled(False)
-        form.stopBtn.clicked.connect(self.stopThread)
-
-        form.settingBtn.clicked.connect(lambda: gui.dialogs.open("Preferences", self.mw, tab="TTS"))
+        form.stopBtn.clicked.connect(self.onStopThread)
+        form.settingBtn.clicked.connect(
+            lambda: gui.dialogs.open("Preferences", self.mw, tab="TTS"))
 
     def setupProgress(self):
         form = self.form
@@ -150,7 +151,7 @@ class Mp3Dialog(QDialog):
         self.form.stopBtn.setEnabled(True)
         self.thread.finished.connect(self.reject)
 
-    def stopThread(self):
+    def onStopThread(self):
         if self.thread:
             self.thread.terminate()
             audDest = os.path.join(self.mw.getProjectPath(), "audio")
@@ -160,66 +161,43 @@ class Mp3Dialog(QDialog):
         self.form.stopBtn.setEnabled(False)
         self.form.createBtn.setEnabled(True)
 
+    def onAddMp3Widget(self, mp3path, group, idx):
+        lwi = QListWidgetItem()
+        wig = Mp3Widget(mp3path, group, lwi)
+        wig.sig.connect(self.onDeleteMp3Widget)
+        lwi.setSizeHint(wig.sizeHint())
 
-    def onSfxClicked(self, idx=None):
-        sfxList = self.form.sfxList
-        try:
-            file = getFile(self.mw, "Add song to BGM Loop",
-                        dir=self.mw.setting['sfxdir'], filter="*.mp3")
-            assert os.path.isdir(file) != True
-            lwi = QListWidgetItem()
-            w = Mp3Widget(file, idx, self.onDeleteSfx, lwi)
-            lwi.setSizeHint(w.sizeHint())
-
-            row = sum(self.sfxCnt[0:idx+1])
+        if group == "BGM":
+            _list = self.form.bgmList
+            _list.addItem(lwi)
+        else:
+            _list = self.form.sfxList
+            row = sum(self.sfxCnt[0:idx + 1])
             self.sfxCnt[idx] += 1
+            _list.insertItem(row, lwi)
 
+        _list.setItemWidget(lwi, wig)
 
-            sfxList.insertItem(row, lwi)
-            sfxList.setItemWidget(lwi, w)
-        except (IndexError, AssertionError, TypeError):
-            print("Error: Invalid file is selected.")
-            pass
+    def onDeleteMp3Widget(self, group, lwi):
+        # Update counter of SFX
+        def updateSfxCounter(i):
+            sum = 0
+            for j, cnt in enumerate(self.sfxCnt):
+                sum += cnt
+                if sum > i:
+                    self.sfxCnt[j] -= 1
+                    break
 
-    def onBgmClicked(self, idx=None):
-        # idx parameter is not in use,
-        # but it cannot be removed in order to have the same interface with SFX.
-        bgmList = self.form.bgmList
-        try:
-            file = getFile(self.mw, "Add song to BGM Loop",
-                        dir=self.mw.setting['bgmdir'], filter="*.mp3")
-            assert os.path.isdir(file) != True
-            lwi = QListWidgetItem()
-            w = Mp3Widget(file, idx, self.onDeleteBgm, lwi)
-            lwi.setSizeHint(w.sizeHint())
-            bgmList.addItem(lwi)
-            bgmList.setItemWidget(lwi, w)
-        except (IndexError, AssertionError, TypeError):
-            print("Error: Invalid file is selected.")
-            pass
+        if group == "BGM":
+            _list = self.form.bgmList
+        else:
+            _list = self.form.sfxList
 
-    def onDeleteSfx(self, lwi):
-        sfxList = self.form.sfxList
-        for i in range(sfxList.count()):
-            if lwi == sfxList.item(i):
-                sfxList.takeItem(i)
-                # Update counter for sfx
-                sum = 0
-                for j, cnt in enumerate(self.sfxCnt):
-                    sum += cnt
-                    if sum > i:
-                        self.sfxCnt[j] -= 1
-                        break
-
-                break
-
-
-    def onDeleteBgm(self, lwi):
-        bgmList = self.form.bgmList
-        for i in range(bgmList.count()):
-            if lwi == bgmList.item(i):
-                bgmList.takeItem(i)
-                break
+        for i in range(_list.count()):
+            if lwi == _list.item(i):
+                _list.takeItem(i)
+                if group != "BGM":
+                    updateSfxCounter(i)
 
     def stopAllAudio(self):
         bgmList = self.form.bgmList

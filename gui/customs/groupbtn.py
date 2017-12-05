@@ -1,11 +1,14 @@
 import gui
 from gui.qt import *
+from gui.utils import getFile
 
 
 class GroupButton(QPushButton):
-    def __init__(self, trigger, group=None, idx=None):
+    sig = pyqtSignal(str, str, int)
+
+    def __init__(self, mw, group, idx=0):
         super(GroupButton, self).__init__()
-        self.trigger = trigger
+        self.mw = mw
         self.group = group
         self.idx = idx
         self.initUi()
@@ -18,4 +21,19 @@ class GroupButton(QPushButton):
         else:
             group = self.group
         self.setText("+ {group}".format(group=group))
-        self.clicked.connect(lambda: self.trigger(idx=self.idx))
+        self.clicked.connect(self.selectFile)
+
+    def selectFile(self):
+        if self.group != "BGM":
+            msg = "Add sound effect to %s" % self.group
+        else:
+            msg = "Add song to BGM Loop"
+        try:
+            file = getFile(self.mw, msg,
+                        dir=self.mw.setting['bgmdir'], filter="*.mp3")
+            assert os.path.isdir(file) != True
+
+            self.sig.emit(file, self.group, self.idx)
+        except (IndexError, AssertionError, TypeError):
+            print("Error: Invalid file is selected.")
+            pass

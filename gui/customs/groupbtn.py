@@ -26,11 +26,13 @@ class GroupButton(QPushButton):
     def selectFile(self):
         if self.group != "BGM":
             msg = "Add sound effect to %s" % self.group
+            dir = self.mw.setting['sfxdir']
         else:
             msg = "Add song to BGM Loop"
+            dir = self.mw.setting['bgmdir']
         try:
             file = getFile(self.mw, msg,
-                        dir=self.mw.setting['bgmdir'], filter="*.mp3")
+                        dir=dir, filter="*.mp3")
             assert os.path.isdir(file) != True
 
             self.sig.emit(file, self.group, self.idx)

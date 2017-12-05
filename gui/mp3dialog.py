@@ -57,7 +57,7 @@ class Mp3Dialog(QDialog):
 
     def onCreate(self):
         if self.mw.entrylist.count() == 0:
-            showCritical("No budles found.", title="Error")
+            showCritical("No entries found in your entry list.", title="Error")
             return
 
         # TODO: Is this a real solution to initialize voice ids?

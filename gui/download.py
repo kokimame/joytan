@@ -26,7 +26,7 @@ class DownloadDialog(QDialog):
 
     def start(self):
         if self.mw.entrylist.count() == 0:
-            showCritical("No entries found.", title="Error")
+            showCritical("No entries found in your entry list.", title="Error")
             return
         parser = Parsers[self.form.sourceCombo.currentText()]()
         simpleDownload(self.mw, parser)

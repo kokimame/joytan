@@ -1,5 +1,6 @@
-from gui.qt import *
 import gui
+from gui.qt import *
+from gui.customs.groupbtn import GroupButton
 
 def onTextDialog(mw):
     gui.dialogs.open("TextDialog", mw)
@@ -51,8 +52,19 @@ class TextDialog(QDialog):
 
         self.form = gui.forms.textdialog.Ui_TextDialog()
         self.form.setupUi(self)
-        self.form.createBtn.clicked.connect(self.onCreate)
+        self.setupList()
+        self.form.startBtn.clicked.connect(self.onCreate)
         self.show()
+
+    def setupList(self):
+        imgList = self.form.imgList
+        for ew in self.entrylist.getCurrentEntries():
+            lwi, gb = QListWidgetItem(), GroupButton(self.mw, ew.editors['atop'].text())
+            lwi.setSizeHint(gb.sizeHint())
+            imgList.addItem(lwi)
+            imgList.setItemWidget(lwi, gb)
+
+
 
     def onCreate(self):
         textDest = "{dest}".format(dest=self.mw.setting['workspace'])

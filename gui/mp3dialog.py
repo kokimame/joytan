@@ -78,7 +78,8 @@ class Mp3Dialog(QDialog):
         setting['langMap'] = self.mw.entrylist.setting.langMap
 
         audDest = os.path.join(self.mw.getProjectPath(), "audio")
-        shutil.rmtree(audDest)
+        if os.path.isdir(audDest):
+            shutil.rmtree(audDest)
         setting['dest'] = audDest
 
         sfxList = self.form.sfxList

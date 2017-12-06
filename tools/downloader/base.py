@@ -10,12 +10,13 @@ class BaseDownloader:
 
     def run(self, data):
         """
-        :param: data - HTML data to download from
-        :return: Contents related with an Entry, such as 'definition' and 'image'
-        All Downloader classes need to overwrite this method.
-        Download and return contents as much as possible.
-        Download only once for an entry even if Entry preference modified
-        after the downloading session.
-        Each class uses a run method specific to their target dictionary.
+        # :param: data - HTML data to download from
+        # :return: Contents related with an Entry, such as 'definition' and 'image'
+        # Each class implements a run method specific to their source.
+        # Download only once for an entry even if 
+        # Entry preference modified after the downloading session.
+        #
+        # FIXME: Child classes are using ugly way of passing downloded contents to each entry.
+        # Save all downloaded contents tagging with lineKey and overwrite entry's editors.
         """
         raise NotImplementedError

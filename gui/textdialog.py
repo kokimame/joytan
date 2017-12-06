@@ -77,7 +77,10 @@ class TextDialog(QDialog):
         imgList = self.form.imgList
         panel = imgList.itemWidget(imgList.item(idx))
 
-        pixmap = QPixmap(imgpath).scaled(128, 128)
+        print(imgpath)
+        # Second argument should be one of a valid img format listed at Qt Docs
+        # Without it, Mac fails to instantiate QPixmap
+        pixmap = QPixmap(imgpath, "1").scaled(128, 128)
         img = QLabel()
         img.setPixmap(pixmap)
         lwi = QListWidgetItem()

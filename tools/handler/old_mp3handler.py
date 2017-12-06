@@ -1,7 +1,9 @@
 import os
+import shutil
+
 from subprocess import call, check_output
 
-from gui.utils import getFileNameFromPath, mkdir, isLin, isMac, isWin
+from gui.utils import getFileNameFromPath, isLin, isMac, isWin
 from tools.speaker import Speaker
 
 class Mp3Handler:
@@ -28,7 +30,8 @@ class Mp3Handler:
         print("Audio Setting: ", self.setting)
 
     def setupAudio(self):
-        mkdir(self.finalDir)
+        shutil.rmtree(self.finalDir)
+        os.mkdir(self.finalDir)
         fs = self.setting['sampling']
         bps = self.setting['bitrate']
 

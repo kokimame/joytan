@@ -1,6 +1,6 @@
 # Copyright: Koki Mametani <kokimametani@gmail.com>
 from gui.qt import *
-from gui.utils import isMac, isLin, isWin, rmdir
+from gui.utils import isMac, isLin, isWin
 import gui
 
 
@@ -37,7 +37,6 @@ class EmotanMW(QMainWindow):
         self.app = app
 
         self.setting = defaultSetting()
-        rmdir(self.getProjectPath())
         print(self.setting)
 
         self.initUi()

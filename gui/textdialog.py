@@ -55,7 +55,6 @@ class TextDialog(QDialog):
         self.show()
 
     def onCreate(self):
-        from gui.utils import rmdir, mkdir
         textDest = "{dest}".format(dest=self.mw.setting['workspace'])
 
         self.th = HtmlThread(self.mw, textDest)

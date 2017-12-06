@@ -1,6 +1,8 @@
+import shutil
+
 import gui
 from gui.qt import *
-from gui.utils import rmdir, showCritical, getFile
+from gui.utils import showCritical, getFile
 from gui.customs.groupbtn import GroupButton
 from gui.customs.mp3widget import Mp3Widget
 
@@ -76,7 +78,7 @@ class Mp3Dialog(QDialog):
         setting['langMap'] = self.mw.entrylist.setting.langMap
 
         audDest = os.path.join(self.mw.getProjectPath(), "audio")
-        rmdir(audDest)
+        shutil.rmtree(audDest)
         setting['dest'] = audDest
 
         sfxList = self.form.sfxList
@@ -163,7 +165,7 @@ class Mp3Dialog(QDialog):
         if self.thread:
             self.thread.terminate()
             audDest = os.path.join(self.mw.getProjectPath(), "audio")
-            rmdir(audDest)
+            shutil.rmtree(audDest)
             self.form.progressBar.reset()
             self.form.pgMsg.setText("")
         self.form.stopBtn.setEnabled(False)

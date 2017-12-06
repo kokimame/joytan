@@ -1,6 +1,5 @@
 import os
 import pydub
-from gui.utils import mkdir
 from pydub import AudioSegment as Aseg
 
 from tools.speaker import Speaker

@@ -15,6 +15,7 @@ class Mp3Dialog(QDialog):
     def __init__(self, mw):
         QDialog.__init__(self, mw, Qt.Window)
         self.mw = mw
+        self.mset = mw.setting
         self.eset = mw.entrylist.setting
         self.form = gui.forms.mp3dialog.Ui_Mp3Dialog()
         self.thread = None
@@ -31,7 +32,9 @@ class Mp3Dialog(QDialog):
         tags = [self.eset.tags[key] for key in sorted(self.eset.tags)]
         self.sfxCnt = [1] * len(tags)
         for i, tag in enumerate(tags):
-            lwi, gb = QListWidgetItem(), GroupButton(self.mw, tag, idx=i)
+            lwi = QListWidgetItem()
+            gb = GroupButton(self.mw, tag, self.mset['sfxdir'], idx=i,
+                             msg="Add sound effect to %s" % tag)
             gb.sig.connect(self.onAddMp3Widget)
             lwi.setSizeHint(gb.sizeHint())
             sfxList.addItem(lwi)
@@ -39,7 +42,9 @@ class Mp3Dialog(QDialog):
 
     def setupBgmList(self):
         bgmList = self.form.bgmList
-        lwi, gb = QListWidgetItem(), GroupButton(self.mw, "BGM")
+        lwi = QListWidgetItem()
+        gb = GroupButton(self.mw, "BGM", self.mset['bgmdir'],
+                              msg="Add song to BGM Loop")
         gb.sig.connect(self.onAddMp3Widget)
         lwi.setSizeHint(gb.sizeHint())
         bgmList.addItem(lwi)
@@ -72,8 +77,8 @@ class Mp3Dialog(QDialog):
             return
 
         setting = {}
-        setting['tts'] = self.mw.setting['tts']
-        setting['title'] = self.mw.setting['title']
+        setting['tts'] = self.mset['tts']
+        setting['title'] = self.mset['title']
         setting['repeat'] = self.form.wordSpin.value()
         setting['langMap'] = self.mw.entrylist.setting.langMap
 

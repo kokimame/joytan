@@ -6,11 +6,14 @@ from gui.utils import getFile
 class GroupButton(QPushButton):
     sig = pyqtSignal(str, str, int)
 
-    def __init__(self, mw, group, idx=0):
+    def __init__(self, mw, group, dir, idx=0, filter=".mp3", msg='Select a file'):
         super(GroupButton, self).__init__()
         self.mw = mw
         self.group = group
         self.idx = idx
+        self.filter = filter
+        self.dir = dir
+        self.msg = msg
         self.initUi()
 
     def initUi(self):
@@ -24,15 +27,9 @@ class GroupButton(QPushButton):
         self.clicked.connect(self.selectFile)
 
     def selectFile(self):
-        if self.group != "BGM":
-            msg = "Add sound effect to %s" % self.group
-            dir = self.mw.setting['sfxdir']
-        else:
-            msg = "Add song to BGM Loop"
-            dir = self.mw.setting['bgmdir']
         try:
-            file = getFile(self.mw, msg,
-                        dir=dir, filter="*.mp3")
+            file = getFile(self.mw, self.msg,
+                        dir=self.dir, filter=self.filter)
             assert os.path.isdir(file) != True
 
             self.sig.emit(file, self.group, self.idx)

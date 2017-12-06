@@ -1,7 +1,7 @@
-from tools.parser.base import BaseParser
+from tools.downloader.base import BaseDownloader
 
-class OxfordParser(BaseParser):
+class OxfordDownloader(BaseDownloader):
     def __init__(self):
-        BaseParser.__init__(self)
+        BaseDownloader.__init__(self)
         self.sourceUrl = "https://en.oxforddictionaries.com/definition/"
         self.sourceName = "Oxford English Dictionary"

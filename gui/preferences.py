@@ -1,6 +1,6 @@
 from gui.qt import *
 import gui
-from tools.parser import Parsers
+from tools.downloader import Downloaders
 from tools.speaker import Speaker
 from gui.utils import LANGUAGES, LANGCODES
 from gui.customs.lvmap import LvMapWidget
@@ -35,7 +35,7 @@ class Preferences(QDialog):
     def setupCombo(self):
         sc = self.form.sourceCombo
         tc = self.form.ttsCombo
-        sc.addItems(sorted([site for site in Parsers.keys()]))
+        sc.addItems(sorted([site for site in Downloaders.keys()]))
         sc.setCurrentText(self.mw.setting['onlineSrc'])
         tc.addItems(sorted([site for site in Speaker.keys()]))
         tc.setCurrentText(self.mw.setting['tts'])

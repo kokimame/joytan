@@ -1,11 +1,11 @@
 import re
 
 from bs4 import BeautifulSoup
-from tools.parser.base import BaseParser
+from tools.downloader.base import BaseDownloader
 
-class DictionaryComParser(BaseParser):
+class DictionaryComDownloader(BaseDownloader):
     def __init__(self):
-        BaseParser.__init__(self)
+        BaseDownloader.__init__(self)
         self.sourceUrl = "http://dictionary.com/browse/"
         self.sourceName = "Dicitionary.com"
 

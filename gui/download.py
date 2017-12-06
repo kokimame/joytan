@@ -3,7 +3,7 @@ import os, requests
 import gui
 from gui.qt import *
 from gui.utils import showCritical
-from tools.parser import Parsers
+from tools.downloader import Downloaders
 
 def onDownload(mw):
     gui.dialogs.open("DownloadDialog", mw)
@@ -21,15 +21,15 @@ class DownloadDialog(QDialog):
         form = self.form
         form.cancelBtn.clicked.connect(self.reject)
         form.startBtn.clicked.connect(self.start)
-        form.sourceCombo.addItems(sorted([site for site in Parsers.keys()]))
+        form.sourceCombo.addItems(sorted([site for site in Downloaders.keys()]))
         form.sourceCombo.setCurrentText(self.mw.setting["onlineSrc"])
 
     def start(self):
         if self.mw.entrylist.count() == 0:
             showCritical("No entries found in your entry list.", title="Error")
             return
-        parser = Parsers[self.form.sourceCombo.currentText()]()
-        simpleDownload(self.mw, parser)
+        dler = Downloaders[self.form.sourceCombo.currentText()]()
+        simpleDownload(self.mw, dler)
         self.mw.entrylist.updateAll()
 
     def reject(self):
@@ -37,22 +37,21 @@ class DownloadDialog(QDialog):
         gui.dialogs.close("DownloadDialog")
 
 
-def simpleDownload(mw, parser):
+def simpleDownload(mw, dler):
     mw.progress.start(min=0, max=mw.entrylist.count(), label="Start downloading", immediate=True, cancellable=True)
     for i in range(mw.entrylist.count()):
         ew = mw.entrylist.getByIndex(i)
         # Don't forget to turn off 'maybeShow'. That breaks the sync of the bar and the actual progress
         mw.progress.update(label="Downloading %s from %s" %
-                                 (ew.atop, parser.sourceName), maybeShow=False)
+                                 (ew.atop, dler.sourceName), maybeShow=False)
         # Don't download contents from the source you already had.
-        if parser.sourceName in ew.sources:
+        if dler.sourceName in ew.sources:
             continue
-        r = requests.get(parser.sourceUrl + ew.atop)
-        data = r.text
-        items = parser.run(data)
+        r = requests.get(dler.sourceUrl + ew.atop)
+        items = dler.run(r.text)
 
         mw.entrylist.updateEntry(ew.atop, items)
-        ew.sources.append(parser.sourceName)
+        ew.sources.append(dler.sourceName)
     mw.progress.finish()
 
 def downloadGstaticSound(word, filename):

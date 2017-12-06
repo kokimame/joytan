@@ -1,6 +1,7 @@
 import gui
 from gui.qt import *
 from gui.customs.groupbtn import GroupButton
+from gui.customs.imgpanel import *
 
 def onTextDialog(mw):
     gui.dialogs.open("TextDialog", mw)
@@ -58,11 +59,31 @@ class TextDialog(QDialog):
 
     def setupList(self):
         imgList = self.form.imgList
-        for ew in self.entrylist.getCurrentEntries():
-            lwi, gb = QListWidgetItem(), GroupButton(self.mw, ew.editors['atop'].text())
-            lwi.setSizeHint(gb.sizeHint())
-            imgList.addItem(lwi)
-            imgList.setItemWidget(lwi, gb)
+        for i, ew in enumerate(self.entrylist.getCurrentEntries()):
+            lwi1 = QListWidgetItem()
+            gb = GroupButton(self.mw, ew.editors['atop'].text(), filter="*.jpg", idx=2*i+1,
+                             dir=self.mw.getProjectPath(), msg="Select an Image")
+            gb.sig.connect(self.onAddImage)
+            lwi1.setSizeHint(gb.sizeHint())
+            lwi2, ip = QListWidgetItem(), ImagePanel()
+            lwi2.setSizeHint(ip.sizeHint())
+
+            imgList.addItem(lwi1)
+            imgList.setItemWidget(lwi1, gb)
+            imgList.addItem(lwi2)
+            imgList.setItemWidget(lwi2, ip)
+
+    def onAddImage(self, imgpath, group, idx):
+        imgList = self.form.imgList
+        panel = imgList.itemWidget(imgList.item(idx))
+
+        pixmap = QPixmap(imgpath).scaled(128, 128)
+        img = QLabel()
+        img.setPixmap(pixmap)
+        lwi = QListWidgetItem()
+        lwi.setSizeHint(img.sizeHint())
+        panel.addItem(lwi)
+        panel.setItemWidget(lwi, img)
 
 
 

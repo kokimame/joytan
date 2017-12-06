@@ -1,6 +1,8 @@
 from tools.speaker import *
 from gui.utils import LANGUAGES
 
+
+# TODO: Rename to 'getHelp' and Move to inside of Speaker class
 def getTtsHelp():
     # Returns ['langCode', 'Voice name', 'Voice name + detail langCode (Shown in Combobox)', 'example']
     i1 = str(check_output("say -v ?", shell=True), 'utf-8').strip().split('\n')
@@ -28,17 +30,8 @@ def getTtsHelp():
 
 
 class Say(BaseSpeaker):
-    # We want to call 'say -v ?' only once at runtime.
-    # Don't call the command every time voice type changed.
+    # Call 'say -v ?' only once at runtime.
 
-    # FIXME: !!!!!!!!!!!!!WARNING!!!!!!!!!!!!!!!!
-    # 11/19/17: Creating audio file without BGM on Mac with say command
-    #           causes a serious bug which makes impossible to concatenate mp3 files.
-    #           The bug seems to come from the difference of bitrate among the mp3 files,
-    #           although we surely try to define the same bitrate for all of mp3 files.
-    #           Exceptionally, if we do not use gstatic pronunciation, we can cat the files,
-    #           but still these output file doesn't stop well at the end.
-    #           A temporal solution will be to mix acap mp3 with empty or muted bgm file.
     from gui.utils import isMac
     if isMac:
         # voiceCombo has voice names shown in a combobox on Preferences

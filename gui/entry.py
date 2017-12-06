@@ -7,7 +7,6 @@ class EntryWidget(QWidget):
         self.initFont()
         self.parent = parent
         self.index = index
-        self.atop = atop
         self.mode = mode
         # Entry setting
         self.dpw = eset['dpw']
@@ -16,17 +15,23 @@ class EntryWidget(QWidget):
         # External sources where the items of an entry came
         self.sources = []
 
+        # QLineEdit dictionary.
+        # The keys, referenced as 'lineKey', come in 'atop', 'def-n', 'ex-n-n' where 0 < n < 10
+        # The name of keys must not be modified because we alphabetically sort them out in a process
+        # Text stored in the editors will be the actual contents of printed or audio output
+        self.editors = {}
+
+        # Design of QLabel shown on 'View' mode
         self.html = '<html><head/><body>{content}</body></html>'
         self.atopFormat = '<p><span style=" font-size:16pt; font-weight:600;">{num}. {atop}</span></p>'
         self.defFormat = '<p>{num}. {define}</p>'
         self.exFormat = '<p><span style="color:#8d8d8d;">&quot;{example}&quot;</span></p>'
-        self.editors = {}
-        self.stackedLayout = QStackedLayout()
 
+        self.stackedLayout = QStackedLayout()
         self.setupUi(atop)
 
     def setupUi(self, atop):
-        self.setupView()
+        self.setupView(atop)
         self.setupEditors(atop)
         self.setLayout(self.stackedLayout)
         if self.mode == "View":
@@ -50,16 +55,15 @@ class EntryWidget(QWidget):
             self.stackedLayout.setCurrentIndex(1)
             self.mode = newMode
 
-    def setupView(self):
+    def setupView(self, atop):
         viewWidget = QWidget()
         viewLayout = QVBoxLayout()
 
         self.viewLabel = QLabel()
 
-        if self.atop == '':
+        if atop == '':
             atop = "Empty entry"
-        else:
-            atop = self.atop
+
         self.viewLabel.setText(self.html.format
                            (content=self.atopFormat.format(num=self.index, atop=atop)))
         viewLayout.addWidget(self.viewLabel)

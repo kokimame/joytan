@@ -91,7 +91,7 @@ class Mp3Handler:
         curdir = os.path.join(self.setting['dest'], ew.getDirname())
         assert os.path.exists(curdir)
 
-        self.ewFileMap[ew.atop] = {}
+        self.ewFileMap[ew.editors['atop']] = {}
 
         for i in range(0, ew.dpw):
             define = ew.editors['def-%d' % (i+1)].text()
@@ -102,7 +102,7 @@ class Mp3Handler:
                 defVid = self.setting['langMap']['def-%d' % (i+1)][1]
                 filename = os.path.join(curdir, "def-%d" % (i+1))
                 self.tts.dictate(define, defVid, output=filename)
-                self.ewFileMap[ew.atop]['def-%d' % (i + 1)] = filename
+                self.ewFileMap[ew.editors['atop']]['def-%d' % (i + 1)] = filename
 
             for j in range(0, ew.epd):
                 examp = ew.editors['ex-%d-%d' % (i+1, j+1)].text()
@@ -110,7 +110,7 @@ class Mp3Handler:
                     exVid = self.setting['langMap']['ex-%d-%d' % (i+1, j+1)][1]
                     filename = os.path.join(curdir, "ex-%d-%d" % ((i+1), (j+1)))
                     self.tts.dictate(examp, exVid, output=filename)
-                    self.ewFileMap[ew.atop]['ex-%d-%d' % (i + 1, j + 1)] = filename
+                    self.ewFileMap[ew.editors['atop']]['ex-%d-%d' % (i + 1, j + 1)] = filename
 
     def compileEntry(self, ew, isGstatic=True):
         curdir = os.path.join(self.setting['dest'], ew.getDirname())
@@ -120,12 +120,12 @@ class Mp3Handler:
         if isGstatic and (atopLang == 'en'):
             from gui.download import downloadGstaticSound
             try:
-                downloadGstaticSound(ew.atop, os.path.join(curdir, "pronounce.mp3"))
+                downloadGstaticSound(ew.editors['atop'], os.path.join(curdir, "pronounce.mp3"))
             except:
                 # If gstatic pronunciation file is not found, use TTS.
-                self.tts.dictate(ew.atop, atopVid, output=os.path.join(curdir, "pronounce"))
+                self.tts.dictate(ew.editors['atop'], atopVid, output=os.path.join(curdir, "pronounce"))
         else:
-            self.tts.dictate(ew.atop, atopVid, output=os.path.join(curdir, "pronounce"))
+            self.tts.dictate(ew.editors['atop'], atopVid, output=os.path.join(curdir, "pronounce"))
 
         pronMp3 = repeatMp3(os.path.join(curdir, "pronounce.mp3"), self.setting['repeat'])
 
@@ -136,7 +136,7 @@ class Mp3Handler:
             os.rename(pronMp3, wordMp3)
 
         inputs = "%s " % wordMp3
-        fileMap = self.ewFileMap[ew.atop]
+        fileMap = self.ewFileMap[ew.editors['atop']]
         for i in range(0, ew.dpw):
             try:
                 file = fileMap['def-%d' % (i + 1)] + ".mp3"

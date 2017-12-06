@@ -97,7 +97,7 @@ class EntryList(QListWidget):
 
     def updateEntry(self, name, items):
         for ew in self.getCurrentEntries():
-            if ew.atop == name:
+            if ew.editors['atop'] == name:
                 ew.updateEditors(items)
                 return
         raise Exception("Error: Entry with atop '%s' is not found in the list" % name)
@@ -108,7 +108,7 @@ class EntryList(QListWidget):
 
         if name == '':
             pass
-        elif name in [ew.atop for ew in self.getCurrentEntries()]:
+        elif name in [ew.editors['atop'] for ew in self.getCurrentEntries()]:
             print("Entry with atop %s already exists." % name)
             return
 
@@ -155,7 +155,7 @@ class EntryList(QListWidget):
 
     def getByName(self, name):
         for ew in self.getCurrentEntries():
-            if ew.atop == name:
+            if ew.editors['atop'].text() == name:
                 return ew
         raise Exception("Error: Entry with atop '%s' is not found in the list" % name)
 

@@ -1,11 +1,11 @@
 import re
 
 from bs4 import BeautifulSoup
-from tools.parser.base import BaseParser
+from tools.downloader.base import BaseDownloader
 
-class WiktionaryParser(BaseParser):
+class WiktionaryDownloader(BaseDownloader):
     def __init__(self):
-        BaseParser.__init__(self)
+        BaseDownloader.__init__(self)
         self.sourceUrl = "https://en.wiktionary.org/wiki/"
         self.sourceName = "Wiktionary"
 

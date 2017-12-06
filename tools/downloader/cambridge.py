@@ -1,7 +1,7 @@
-from tools.parser.base import BaseParser
+from tools.downloader.base import BaseDownloader
 
-class CambridgeParser(BaseParser):
+class CambridgeDownloader(BaseDownloader):
     def __init__(self):
-        BaseParser.__init__()
+        BaseDownloader.__init__()
         self.sourceUrl = "http://dictionary.cambridge.org/dictionary/english/"
         self.sourceName = "Cambridge Dictionary"

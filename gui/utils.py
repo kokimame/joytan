@@ -66,20 +66,6 @@ def getFile(parent, title, filter="*.*", dir=None):
 def getFileNameFromPath(longpath):
     return os.path.basename(os.path.normpath(longpath))
 
-# Fixme: Should be removed
-def mkdir(path):
-    rmdir(path)
-    assert not os.path.exists(path)
-    os.makedirs(path)
-    print("mkdir %s" % path)
-# Fixme: Should be removed
-def rmdir(path):
-    if isWin:
-        call("rmdir {path} /s /q".format(path=path), shell=True)
-    else:
-        call("rm -rf {path}".format(path=path), shell=True)
-    print("rmdir %s" % path)
-
 def showWarning(text, parent=None, help="", title="Emotan"):
     "Show a small warning with an OK button."
     return showInfo(text, parent, help, "warning", title=title)

@@ -6,7 +6,7 @@ from gui.utils import getFile
 class GroupButton(QPushButton):
     sig = pyqtSignal(str, str, int)
 
-    def __init__(self, mw, group, dir, idx=0, filter=".mp3", msg='Select a file'):
+    def __init__(self, mw, group, dir, idx=0, filter="*.mp3", msg='Select a file'):
         super(GroupButton, self).__init__()
         self.mw = mw
         self.group = group
@@ -19,11 +19,8 @@ class GroupButton(QPushButton):
     def initUi(self):
         self.setStyleSheet("QPushButton { background-color: rgb(200,200,200); "
                              "Text-align: left; }")
-        if not self.group.isupper():
-            group = self.group.title()
-        else:
-            group = self.group
-        self.setText("+ {group}".format(group=group))
+
+        self.setText("+ {group}".format(group=self.group))
         self.clicked.connect(self.selectFile)
 
     def selectFile(self):

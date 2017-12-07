@@ -3,30 +3,48 @@
 import os
 import time
 import requests
+import re
 
-keywords = ['happy', 'sad', 'angry', 'love']
 
-size = {'medium': '&tbs=islt:vga,isz:m',
+SIZE = {'medium': '&tbs=islt:vga,isz:m',
         'icon': '&tbs=isz:i'}
-
 HEADERS = {"User-Agent":
                "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) "\
                + "Chrome/41.0.2228.0 Safari/537.36"}
 URL = 'https://www.google.com/search?q={keyword}&espv=2&biw=1366&bih=667&site=webhp&source=lnms'\
-      + size['medium'] + '&tbm=isch&sa=X&ei=XosDVaCXD8TasATItgE&ved=0CAcQ_AUoAg'
+      + SIZE['medium'] + '&tbm=isch&sa=X&ei=XosDVaCXD8TasATItgE&ved=0CAcQ_AUoAg'
 MAXIMG = 5
 
-from PyQt5.QtCore import QThread
+from PyQt5.QtCore import QThread, pyqtSignal
+
 class GimageThread(QThread):
+    sig = pyqtSignal(str)
+
     def __init__(self, keyword, destDir):
         QThread.__init__(self)
         self.keyword = keyword
         self.destDir = destDir
+        self.url = None
+        self.links = []
 
     def run(self):
-        downloadImages(self.keyword, self.destDir)
-        self.quit()
+        if not self.url:
+            self.url = URL.format(keyword=self.keyword)
+            raw_html = (downloadPage(self.url))
+            self.links += (_getAllLinks(raw_html, max=5))
 
+            if os.path.isdir(self.destDir):
+                import shutil
+                shutil.rmtree(self.destDir)
+            os.makedirs(self.destDir)
+
+        for i, link in enumerate(self.links[:MAXIMG]):
+            imgfile = downloadImage(link, os.path.join(self.destDir, str(i)))
+            if imgfile:
+                self.sig.emit(imgfile)
+            time.sleep(0.1)
+
+        self.quit()
 
 
 # Downloading entire Web Document (Raw Page Content)
@@ -68,38 +86,28 @@ def _getAllLinks(page, max=10):
     return links
 
 
-def downloadImages(keyword, destDir):
-    start = time.time()
-    links = []
-    iteration = "Search = " + keyword
-    print(iteration)
-    print("Evaluating...")
-    # make a search keyword  directory
-    if os.path.isdir(destDir):
-        import shutil
-        shutil.rmtree(destDir)
-    os.makedirs(destDir)
+def downloadImage(link, piwoe):
+    # link: URL of the image
+    # piwoe: Path to image file without extension
+    try:
+        # Filtering image files with extension any other than jpeg, jpg and png
+        ff = None
+        for chunk in re.split(':|/|\.|\?', link):
+            if chunk in ['jpeg', 'jpg', 'png']:
+                ff = chunk
+                break
+        if not ff:
+            return None
 
-    url = URL.format(keyword=keyword)
-    raw_html = (downloadPage(url))
-    time.sleep(0.1)
-    links = links + (_getAllLinks(raw_html, max=5))
+        req = requests.get(link, headers=HEADERS)
+        imgfile = os.path.join(piwoe + "." + ff)
+        output_file = open(imgfile, 'wb')
 
-    total_time = time.time() - start
-    print("Total time taken: %.2f Seconds" % total_time)
-    print("Total Image Links = " + str(len(links)))
-    print("Starting Download...")
+        # Save the actual image
+        output_file.write(req.content)
+        print("completed ====> " + imgfile + " (%.3fMB)" % float(len(req.content) / 1000000))
+        return imgfile
 
-    for j, link in enumerate(links[:MAXIMG]):
-        try:
-            req = requests.get(link, headers=HEADERS)
-            imgfile = os.path.join(destDir, str(j + 1) + ".jpg")
-            output_file = open(imgfile, 'wb')
+    except (IOError, requests.HTTPError, requests.ConnectionError) as e:
+        print(e)
 
-            # Save the actual image
-            output_file.write(req.content)
-            print("completed ====> " + str(j + 1) + " (%.3fMB)" % float(len(req.content)/1000000))
-
-        except (IOError, requests.HTTPError, requests.ConnectionError) as e:
-            print(e)
-    print("= Done =\n")

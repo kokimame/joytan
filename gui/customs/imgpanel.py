@@ -10,23 +10,21 @@ class ImagePanel(QListWidget):
         def __init__(self, panel):
             super().__init__('Download')
             self.panel = panel
-            self.clicked.connect(self.startDownloading)
-
-        def startDownloading(self):
             self.dlThread = GimageThread(self.panel.group, self.panel.destDir)
-            self.dlThread.finished.connect(self.uploadImages)
+            self.dlThread.sig.connect(self.uploadImage)
+            self.clicked.connect(self.startThread)
+
+        def startThread(self):
             self.dlThread.start()
 
-        def uploadImages(self):
-            for i in range(1, 4):
-                imgpath = os.path.join(self.panel.destDir, "%d.jpg" % i)
-                pixmap = QPixmap(imgpath).scaled(128, 128)
-                img = QLabel()
-                img.setPixmap(pixmap)
-                lwi = QListWidgetItem()
-                lwi.setSizeHint(img.sizeHint())
-                self.panel.insertItem(self.panel.count() - 1, lwi)
-                self.panel.setItemWidget(lwi, img)
+        def uploadImage(self, imgfile):
+            pixmap = QPixmap(imgfile).scaled(128, 128)
+            img = QLabel()
+            img.setPixmap(pixmap)
+            lwi = QListWidgetItem()
+            lwi.setSizeHint(img.sizeHint())
+            self.panel.insertItem(self.panel.count() - 1, lwi)
+            self.panel.setItemWidget(lwi, img)
 
 
     def __init__(self, group, destDir):

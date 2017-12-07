@@ -69,7 +69,8 @@ class TextDialog(QDialog):
                 # TODO: Change 'pass' to 'continue' on commit
                 pass
             lwi1 = QListWidgetItem()
-            gb = GroupButton(self.mw, group, filter="*.jpg", idx=index,
+            gb = GroupButton(self.mw, group, filter="Images (*.jpg *.jpeg *.png)",
+                             idx=index,
                              dir=self.mw.getProjectPath(), msg="Select an Image")
             gb.sig.connect(self.onAddImage)
             lwi1.setSizeHint(gb.sizeHint())

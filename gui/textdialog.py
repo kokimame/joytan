@@ -39,7 +39,7 @@ class HtmlThread(QThread):
         from jinja2 import Environment, FileSystemLoader
         env = Environment(loader=FileSystemLoader('templates/html'))
         temp = env.get_template('words.html')
-        rendered_temp = temp.render(ewDatas=datas)
+        rendered_temp = temp.render(entries=datas)
 
         with open('{dest}/{title}.html'.format(dest=self.dest, title=self.mw.setting['title']), 'w') as f:
             f.write(rendered_temp)
@@ -49,7 +49,6 @@ class TextDialog(QDialog):
     def __init__(self, mw):
         QDialog.__init__(self, mw, Qt.Window)
         self.mw = mw
-        self.entrylist = mw.entrylist
         self.textDir = os.path.join(mw.getProjectPath(), "text")
         self.form = gui.forms.textdialog.Ui_TextDialog()
         self.form.setupUi(self)
@@ -64,7 +63,7 @@ class TextDialog(QDialog):
         # according to the value of imgSpin
         maxImg = self.form.imgSpin.value()
 
-        for i, ew in enumerate(self.entrylist.getCurrentEntries()):
+        for i, ew in enumerate(self.mw.entrylist.getCurrentEntries()):
             group = ew.editors['atop'].text()
             index = 2 * i + 1
             destDir = os.path.join(self.textDir, ew.getDirname())
@@ -98,10 +97,29 @@ class TextDialog(QDialog):
         panel.insertItem(panel.count() - 1, lwi)
         panel.setItemWidget(lwi, img)
 
+    def getPanel(self, i):
+        form = self.form
+        return form.imgList.itemWidget(form.imgList.item(2 * i + 1))
+
+
     def onCreate(self):
-        self.th = HtmlThread(self.mw, self.textDir)
-        self.th.start()
-        self.th.finished.connect(lambda: self.reject())
+        datas = []
+        for i, ew in enumerate(self.mw.entrylist.getCurrentEntries()):
+            data = ew.data()
+            panel = self.getPanel(i)
+            for j, img in enumerate(panel.images):
+                data['img-%d' % (j + 1)] = img
+            datas.append(data)
+
+        print(datas)
+
+        from jinja2 import Environment, FileSystemLoader
+        env = Environment(loader=FileSystemLoader('templates/html'))
+        temp = env.get_template('words.html')
+        rendered_temp = temp.render(entries=datas)
+
+        with open('{dest}.html'.format(dest=self.textDir), 'w') as f:
+            f.write(rendered_temp)
 
     def reject(self):
         self.done(0)

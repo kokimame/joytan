@@ -16,7 +16,7 @@ class ImagePanel(QListWidget):
             self.clicked.connect(self.startThread)
 
         def startThread(self):
-                self.dlThread.start()
+            self.dlThread.start()
 
         def uploadImage(self, imgfile):
             pixmap = QPixmap(imgfile).scaled(128, 128)
@@ -26,6 +26,7 @@ class ImagePanel(QListWidget):
             lwi.setSizeHint(img.sizeHint())
             self.panel.insertItem(self.panel.count() - 1, lwi)
             self.panel.setItemWidget(lwi, img)
+            self.panel.images.append(imgfile)
 
 
     def __init__(self, group, destDir, maxImg):
@@ -33,6 +34,7 @@ class ImagePanel(QListWidget):
         self.group = group
         self.destDir = destDir
         self.maxImg = maxImg
+        self.images = []
 
         self.setFlow(QListView.LeftToRight)
         self.setFixedHeight(150)

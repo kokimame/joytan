@@ -1,0 +1,12 @@
+angry
+hungry
+sad
+lovely
+happy
+busy
+tired
+bored
+depressed
+energetic
+horrible
+mad

@@ -21,6 +21,7 @@ class Ui_TextDialog(object):
         self.horizontalLayout_3.addWidget(self.label_2)
         self.imgSpin = QtWidgets.QSpinBox(TextDialog)
         self.imgSpin.setMaximum(5)
+        self.imgSpin.setProperty("value", 4)
         self.imgSpin.setObjectName("imgSpin")
         self.horizontalLayout_3.addWidget(self.imgSpin)
         spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)

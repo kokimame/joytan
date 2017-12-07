@@ -16,6 +16,18 @@ URL = 'https://www.google.com/search?q={keyword}&espv=2&biw=1366&bih=667&site=we
       + size['medium'] + '&tbm=isch&sa=X&ei=XosDVaCXD8TasATItgE&ved=0CAcQ_AUoAg'
 MAXIMG = 5
 
+from PyQt5.QtCore import QThread
+class GimageThread(QThread):
+    def __init__(self, keyword, destDir):
+        QThread.__init__(self)
+        self.keyword = keyword
+        self.destDir = destDir
+
+    def run(self):
+        downloadImages(self.keyword, self.destDir)
+        self.quit()
+
+
 
 # Downloading entire Web Document (Raw Page Content)
 def downloadPage(url):
@@ -56,17 +68,17 @@ def _getAllLinks(page, max=10):
     return links
 
 
-def download(keyword, destdir):
+def downloadImages(keyword, destDir):
     start = time.time()
     links = []
     iteration = "Search = " + keyword
     print(iteration)
     print("Evaluating...")
     # make a search keyword  directory
-    if os.path.isdir(destdir):
+    if os.path.isdir(destDir):
         import shutil
-        shutil.rmtree(destdir)
-    os.makedirs(destdir)
+        shutil.rmtree(destDir)
+    os.makedirs(destDir)
 
     url = URL.format(keyword=keyword)
     raw_html = (downloadPage(url))
@@ -81,7 +93,7 @@ def download(keyword, destdir):
     for j, link in enumerate(links[:MAXIMG]):
         try:
             req = requests.get(link, headers=HEADERS)
-            imgfile = os.path.join(destdir, str(j + 1) + ".jpg")
+            imgfile = os.path.join(destDir, str(j + 1) + ".jpg")
             output_file = open(imgfile, 'wb')
 
             # Save the actual image

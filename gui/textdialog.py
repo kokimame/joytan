@@ -59,14 +59,22 @@ class TextDialog(QDialog):
 
     def setupList(self):
         imgList = self.form.imgList
+        textDir = os.path.join(self.mw.getProjectPath(), "text")
+
         for i, ew in enumerate(self.entrylist.getCurrentEntries()):
+            group = ew.editors['atop'].text()
+            index = 2 * i + 1
+            destDir = os.path.join(textDir, ew.getDirname())
+            if group == '':
+                # TODO: Change 'pass' to 'continue' on commit
+                pass
             lwi1 = QListWidgetItem()
-            gb = GroupButton(self.mw, ew.editors['atop'].text(), filter="*.jpg", idx=2*i+1,
+            gb = GroupButton(self.mw, group, filter="*.jpg", idx=index,
                              dir=self.mw.getProjectPath(), msg="Select an Image")
             gb.sig.connect(self.onAddImage)
             lwi1.setSizeHint(gb.sizeHint())
-            lwi2, ip = QListWidgetItem(), ImagePanel()
-            lwi2.setSizeHint(ip.sizeHint())
+            lwi2, ip = QListWidgetItem(), ImagePanel(group, destDir)
+            lwi2.setSizeHint(ip.size())
 
             imgList.addItem(lwi1)
             imgList.setItemWidget(lwi1, gb)
@@ -77,15 +85,13 @@ class TextDialog(QDialog):
         imgList = self.form.imgList
         panel = imgList.itemWidget(imgList.item(idx))
 
-        print(imgpath)
-        # Second argument should be one of a valid img format listed at Qt Docs
-        # Without it, Mac fails to instantiate QPixmap
-        pixmap = QPixmap(imgpath, "1").scaled(128, 128)
+        pixmap = QPixmap(imgpath).scaled(128, 128)
         img = QLabel()
         img.setPixmap(pixmap)
         lwi = QListWidgetItem()
         lwi.setSizeHint(img.sizeHint())
-        panel.addItem(lwi)
+        # Insert item in front of DL button
+        panel.insertItem(panel.count() - 1, lwi)
         panel.setItemWidget(lwi, img)
 
 

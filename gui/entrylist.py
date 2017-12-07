@@ -97,7 +97,7 @@ class EntryList(QListWidget):
 
     def updateEntry(self, name, items):
         for ew in self.getCurrentEntries():
-            if ew.editors['atop'] == name:
+            if ew.editors['atop'].text() == name:
                 ew.updateEditors(items)
                 return
         raise Exception("Error: Entry with atop '%s' is not found in the list" % name)

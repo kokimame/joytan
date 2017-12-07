@@ -46,7 +46,10 @@
     </layout>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_2">
+    <layout class="QHBoxLayout" name="horizontalLayout_2"/>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_5">
      <item>
       <widget class="QLabel" name="label">
        <property name="text">
@@ -54,13 +57,6 @@
        </property>
       </widget>
      </item>
-    </layout>
-   </item>
-   <item>
-    <widget class="QListWidget" name="imgList"/>
-   </item>
-   <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_5">
      <item>
       <spacer name="horizontalSpacer_5">
        <property name="orientation">
@@ -77,11 +73,14 @@
      <item>
       <widget class="QPushButton" name="shortcutBtn">
        <property name="text">
-        <string>Download Images for all</string>
+        <string>Download All</string>
        </property>
       </widget>
      </item>
     </layout>
+   </item>
+   <item>
+    <widget class="QListWidget" name="imgList"/>
    </item>
    <item>
     <widget class="Line" name="line">

@@ -13,17 +13,18 @@ HEADERS = {"User-Agent":
                + "Chrome/41.0.2228.0 Safari/537.36"}
 URL = 'https://www.google.com/search?q={keyword}&espv=2&biw=1366&bih=667&site=webhp&source=lnms'\
       + SIZE['medium'] + '&tbm=isch&sa=X&ei=XosDVaCXD8TasATItgE&ved=0CAcQ_AUoAg'
-MAXIMG = 5
+
 
 from PyQt5.QtCore import QThread, pyqtSignal
 
 class GimageThread(QThread):
     sig = pyqtSignal(str)
 
-    def __init__(self, keyword, destDir):
+    def __init__(self, keyword, destDir, maxImg):
         QThread.__init__(self)
         self.keyword = keyword
         self.destDir = destDir
+        self.maxImg = maxImg
         self.url = None
         self.links = []
 
@@ -31,14 +32,14 @@ class GimageThread(QThread):
         if not self.url:
             self.url = URL.format(keyword=self.keyword)
             raw_html = (downloadPage(self.url))
-            self.links += (_getAllLinks(raw_html, max=5))
+            self.links += (_getAllLinks(raw_html, max=15))
 
             if os.path.isdir(self.destDir):
                 import shutil
                 shutil.rmtree(self.destDir)
             os.makedirs(self.destDir)
 
-        for i, link in enumerate(self.links[:MAXIMG]):
+        for i, link in enumerate(self.links[:self.maxImg]):
             imgfile = downloadImage(link, os.path.join(self.destDir, str(i)))
             if imgfile:
                 self.sig.emit(imgfile)

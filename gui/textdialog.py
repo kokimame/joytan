@@ -49,8 +49,8 @@ class TextDialog(QDialog):
     def __init__(self, mw):
         QDialog.__init__(self, mw, Qt.Window)
         self.mw = mw
-        self.entrylist = self.mw.entrylist
-
+        self.entrylist = mw.entrylist
+        self.textDir = os.path.join(mw.getProjectPath(), "text")
         self.form = gui.forms.textdialog.Ui_TextDialog()
         self.form.setupUi(self)
         self.setupList()
@@ -59,12 +59,15 @@ class TextDialog(QDialog):
 
     def setupList(self):
         imgList = self.form.imgList
-        textDir = os.path.join(self.mw.getProjectPath(), "text")
+        # FIXME: maxImg is not in use.
+        # Look for the solution to tell DLer how many images are in short
+        # according to the value of imgSpin
+        maxImg = self.form.imgSpin.value()
 
         for i, ew in enumerate(self.entrylist.getCurrentEntries()):
             group = ew.editors['atop'].text()
             index = 2 * i + 1
-            destDir = os.path.join(textDir, ew.getDirname())
+            destDir = os.path.join(self.textDir, ew.getDirname())
             if group == '':
                 # TODO: Change 'pass' to 'continue' on commit
                 pass
@@ -74,7 +77,7 @@ class TextDialog(QDialog):
                              dir=self.mw.getProjectPath(), msg="Select an Image")
             gb.sig.connect(self.onAddImage)
             lwi1.setSizeHint(gb.sizeHint())
-            lwi2, ip = QListWidgetItem(), ImagePanel(group, destDir)
+            lwi2, ip = QListWidgetItem(), ImagePanel(group, destDir, maxImg)
             lwi2.setSizeHint(ip.size())
 
             imgList.addItem(lwi1)
@@ -95,12 +98,8 @@ class TextDialog(QDialog):
         panel.insertItem(panel.count() - 1, lwi)
         panel.setItemWidget(lwi, img)
 
-
-
     def onCreate(self):
-        textDest = "{dest}".format(dest=self.mw.setting['workspace'])
-
-        self.th = HtmlThread(self.mw, textDest)
+        self.th = HtmlThread(self.mw, self.textDir)
         self.th.start()
         self.th.finished.connect(lambda: self.reject())
 

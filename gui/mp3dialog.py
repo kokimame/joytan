@@ -82,10 +82,10 @@ class Mp3Dialog(QDialog):
         setting['repeat'] = self.form.wordSpin.value()
         setting['langMap'] = self.mw.entrylist.setting.langMap
 
-        audDest = os.path.join(self.mw.getProjectPath(), "audio")
-        if os.path.isdir(audDest):
-            shutil.rmtree(audDest)
-        setting['dest'] = audDest
+        audioDir = os.path.join(self.mw.getProjectPath(), "audio")
+        if os.path.isdir(audioDir):
+            shutil.rmtree(audioDir)
+        setting['dest'] = audioDir
 
         sfxList = self.form.sfxList
         bgmList = self.form.bgmList
@@ -134,7 +134,7 @@ class Mp3Dialog(QDialog):
                 for i in range(self.mw.entrylist.count()):
                     ew = self.mw.entrylist.getByIndex(i)
                     self.sig.emit("Creating audio file of %s." % ew.editors['atop'].text())
-                    os.makedirs(os.path.join(audDest, ew.getDirname()), exist_ok=True)
+                    os.makedirs(os.path.join(audioDir, ew.getDirname()), exist_ok=True)
                     self.handler.runSpeaker(ew)
 
                 self.sig.emit("Mixing with BGM. This takes a few minutes.")

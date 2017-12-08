@@ -10,14 +10,17 @@ class ImagePanel(QListWidget):
         def __init__(self, panel):
             super().__init__('Click to Download')
             self.panel = panel
+            self.dlThread = GimageThread(panel.group, panel.destDir)
             self.clicked.connect(self.startThread)
+            self.dlThread.finished.connect(self.threadFinished)
 
         def startThread(self):
             panel = self.panel
-            if not panel.isFull():
-                self.dlThread = GimageThread(panel.group, panel.destDir, panel.maxImg)
+            capa = panel.getCapacity()
+            if capa >= 1:
+                print(capa)
                 self.dlThread.sig.connect(self.uploadImage)
-                self.dlThread.finished.connect(self.threadFinished)
+                self.dlThread.setImgNumber(capa)
                 self.dlThread.start()
                 self.setText("Downloading")
                 self.setEnabled(False)
@@ -42,6 +45,8 @@ class ImagePanel(QListWidget):
         self.group = group
         self.destDir = destDir
         self.maxImg = maxImg
+        # Because QPixmap doesn't store the path of image they have,
+        # all imgpathes in the panel are stored in this list.
         self.images = []
 
         self.setFlow(QListView.LeftToRight)
@@ -53,5 +58,6 @@ class ImagePanel(QListWidget):
         self.addItem(lwi)
         self.setItemWidget(lwi, dlBtn)
 
-    def isFull(self):
-        return self.count() >= self.maxImg + 1
+    def getCapacity(self):
+        print(self.maxImg, self.count())
+        return self.maxImg - self.count() + 1

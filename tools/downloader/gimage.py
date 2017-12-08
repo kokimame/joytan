@@ -14,17 +14,18 @@ HEADERS = {"User-Agent":
 URL = 'https://www.google.com/search?q={keyword}&espv=2&biw=1366&bih=667&site=webhp&source=lnms'\
       + SIZE['medium'] + '&tbm=isch&sa=X&ei=XosDVaCXD8TasATItgE&ved=0CAcQ_AUoAg'
 
+IMG_SUPPORTED = ['jpeg', 'jpg', 'png']
 
 from PyQt5.QtCore import QThread, pyqtSignal
 
 class GimageThread(QThread):
     sig = pyqtSignal(str)
 
-    def __init__(self, keyword, destDir, maxImg):
+    def __init__(self, keyword, destDir):
         QThread.__init__(self)
         self.keyword = keyword
         self.destDir = destDir
-        self.maxImg = maxImg
+        self.imgNumber = 0
         self.url = None
         self.links = []
 
@@ -39,19 +40,22 @@ class GimageThread(QThread):
                 shutil.rmtree(self.destDir)
             os.makedirs(self.destDir)
 
-        i, upcnt = 0, 0
+        i, upCount = 0, 0
         while True:
             link = self.links[i]
             imgfile = downloadImage(link, os.path.join(self.destDir, str(i)))
             if imgfile:
                 self.sig.emit(imgfile)
-                upcnt += 1
-            if upcnt >= self.maxImg:
+                upCount += 1
+            if upCount >= self.imgNumber:
                 break
             i += 1
             time.sleep(0.1)
 
         self.quit()
+
+    def setImgNumber(self, n):
+        self.imgNumber = n
 
 
 # Downloading entire Web Document (Raw Page Content)
@@ -100,9 +104,10 @@ def downloadImage(link, piwoe):
         # Filtering image files with extension any other than jpeg, jpg and png
         ff = None
         for chunk in re.split(':|/|\.|\?', link):
-            if chunk in ['jpeg', 'jpg', 'png']:
+            if chunk in IMG_SUPPORTED:
                 ff = chunk
                 break
+        print(ff)
         if not ff:
             return None
 

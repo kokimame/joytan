@@ -96,6 +96,7 @@ class TextDialog(QDialog):
         # Insert item in front of DL button
         panel.insertItem(panel.count() - 1, lwi)
         panel.setItemWidget(lwi, img)
+        panel.images.append(imgpath)
 
     def getPanel(self, i):
         form = self.form

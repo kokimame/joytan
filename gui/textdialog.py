@@ -6,6 +6,7 @@ from gui.customs.imgpanel import *
 def onTextDialog(mw):
     gui.dialogs.open("TextDialog", mw)
 
+# Not in use
 class TxtThread(QThread):
     def __init__(self, mw, dest):
         QThread.__init__(self)
@@ -27,6 +28,7 @@ class TxtThread(QThread):
             ftxt.write('\n')
         ftxt.close()
 
+# Not in use
 class HtmlThread(QThread):
     def __init__(self, mw, dest):
         QThread.__init__(self)
@@ -44,6 +46,8 @@ class HtmlThread(QThread):
         with open('{dest}/{title}.html'.format(dest=self.dest, title=self.mw.setting['title']), 'w') as f:
             f.write(rendered_temp)
 
+class BookInfo(QWidget):
+    pass
 
 class TextDialog(QDialog):
     def __init__(self, mw):
@@ -61,7 +65,7 @@ class TextDialog(QDialog):
         # FIXME: maxImg is not in use.
         # Look for the solution to tell DLer how many images are in short
         # according to the value of imgSpin
-        maxImg = self.form.imgSpin.value()
+        maxImg = 4
 
         for i, ew in enumerate(self.mw.entrylist.getCurrentEntries()):
             group = ew.editors['atop'].text()

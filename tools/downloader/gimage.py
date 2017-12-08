@@ -39,10 +39,16 @@ class GimageThread(QThread):
                 shutil.rmtree(self.destDir)
             os.makedirs(self.destDir)
 
-        for i, link in enumerate(self.links[:self.maxImg]):
+        i, upcnt = 0, 0
+        while True:
+            link = self.links[i]
             imgfile = downloadImage(link, os.path.join(self.destDir, str(i)))
             if imgfile:
                 self.sig.emit(imgfile)
+                upcnt += 1
+            if upcnt >= self.maxImg:
+                break
+            i += 1
             time.sleep(0.1)
 
         self.quit()

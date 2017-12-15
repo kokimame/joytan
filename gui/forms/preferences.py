@@ -155,7 +155,7 @@ class Ui_Preferences(object):
         self.verticalLayout_2.addLayout(self.horizontalLayout_11)
 
         self.retranslateUi(Preferences)
-        self.tabWidget.setCurrentIndex(2)
+        self.tabWidget.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(Preferences)
 
     def retranslateUi(self, Preferences):
@@ -167,8 +167,8 @@ class Ui_Preferences(object):
         self.sourceCombo.setItemText(1, _translate("Preferences", "Wiktionary"))
         self.sourceCombo.setItemText(2, _translate("Preferences", "Cambridge Dictionary"))
         self.sourceCombo.setItemText(3, _translate("Preferences", "Oxford English Dictionary"))
-        self.label.setText(_translate("Preferences", "Definitions per Word"))
-        self.label_2.setText(_translate("Preferences", "Examples per Definition"))
+        self.label.setText(_translate("Preferences", "Main part per Entry"))
+        self.label_2.setText(_translate("Preferences", "Sub Part per Main part"))
         self.label_6.setText(_translate("Preferences", "BGM Directory"))
         self.label_5.setText(_translate("Preferences", "SFX Directory"))
         self.label_3.setText(_translate("Preferences", "Working Directory"))

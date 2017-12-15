@@ -28,7 +28,7 @@ class CopyDialog(QDialog):
             return
 
         # Copying from and to the contents in Entry Widget
-        for ew in self.mw.entrylist.getCurrentEntries():
+        for ew in self.mw.entrylist.getEntries():
             try:
                 ew.editors[tbox.currentText().lower()].setText(ew.editors[fbox.currentText().lower()].text())
             except KeyError:

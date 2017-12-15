@@ -18,8 +18,8 @@ def onOpen(mw):
 
     eset = jd[0]
     mw.entrylist.deleteAll()
-    mw.entrylist.setting.expand(dpw=eset['dpw'])
-    mw.entrylist.setting.expand(epd=eset['epd'])
+    mw.entrylist.setting.reshape(dpw=eset['dpw'])
+    mw.entrylist.setting.reshape(epd=eset['epd'])
     mw.entrylist.setting.langMap = eset['langMap']
 
     setting = mw.entrylist.setting.data()

@@ -5,7 +5,7 @@ class EntryList(QListWidget):
     class Setting:
         def __init__(self):
             # Fixme: ...................
-            self.dpw = 0 # This will be expanded soon at the 'expand()' below!
+            self.dpw = 0 # This will be expanded soon at the 'reshape()' below!
             self.epd = 0 # Same here. The method is a little bit dumb.
             # Fixme: Allow users to choose default language from preference
             # Temporally set English by default
@@ -13,21 +13,21 @@ class EntryList(QListWidget):
             # This maps from line key of an entry to language code and Voice ID for its text
             self.langMap = {'atop': [self.defaultLang, None]}
 
-            self.expand(dpw=1, epd=1)
+            self.reshape(dpw=1, epd=1)
 
 
         # FIXME: Need a method to shrink this setting
-        def expand(self, dpw=None, epd=None):
-            if dpw and (self.dpw < dpw):
+        def reshape(self, dpw=None, epd=None):
+            if dpw and (self.dpw != dpw):
                 self.dpw = dpw
-                self.expandData()
-            if epd and (self.epd < epd):
+                self._reshape()
+            if epd and (self.epd != epd):
                 self.epd = epd
-                self.expandData()
+                self._reshape()
 
             print("EntrySetting: LangMap -> ", self.langMap)
 
-        def expandData(self):
+        def _reshape(self):
             # Expand langMap and tags with default value
             for i in range(0, self.dpw):
                 try:
@@ -40,7 +40,7 @@ class EntryList(QListWidget):
                     except KeyError:
                         self.langMap['ex-%d-%d' % (i + 1, j + 1)] = [self.defaultLang, None]
 
-        def isVidNone(self):
+        def isVoiceless(self):
             for item, map in self.langMap.items():
                 # Voice id is still None
                 if not map[1]:
@@ -78,11 +78,9 @@ class EntryList(QListWidget):
         eui.setSizeHint(ew.sizeHint())
         return eui, ew
 
-    def isVoiceless(self):
-        return self.setting.isVidNone()
 
     def updateEntry(self, name, items):
-        for ew in self.getCurrentEntries():
+        for ew in self.getEntries():
             if ew.editors['atop'].text() == name:
                 ew.updateEditors(items)
                 return
@@ -94,7 +92,7 @@ class EntryList(QListWidget):
 
         if name == '':
             pass
-        elif name in [ew.editors['atop'] for ew in self.getCurrentEntries()]:
+        elif name in [ew.editors['atop'] for ew in self.getEntries()]:
             print("Entry with atop %s already exists." % name)
             return
 
@@ -133,14 +131,14 @@ class EntryList(QListWidget):
         self.repaint()
 
     def updateMode(self, newMode):
-        for ew in self.getCurrentEntries():
+        for ew in self.getEntries():
             ew.setMode(newMode)
 
-    def getCurrentEntries(self):
+    def getEntries(self):
         return [self.getByIndex(i) for i in range(self.count())]
 
     def getByName(self, name):
-        for ew in self.getCurrentEntries():
+        for ew in self.getEntries():
             if ew.editors['atop'].text() == name:
                 return ew
         raise Exception("Error: Entry with atop '%s' is not found in the list" % name)

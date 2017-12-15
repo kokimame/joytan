@@ -29,12 +29,12 @@ class Mp3Dialog(QDialog):
 
     def setupSfxList(self):
         sfxList = self.form.sfxList
-        tags = [self.eset.tags[key] for key in sorted(self.eset.tags)]
-        self.sfxCnt = [1] * len(tags)
-        for i, tag in enumerate(tags):
+        keys = [key for key in sorted(self.eset.langMap)]
+        self.sfxCnt = [1] * len(keys)
+        for i, key in enumerate(keys):
             lwi = QListWidgetItem()
-            gb = GroupButton(self.mw, tag.title(), self.mset['sfxdir'], idx=i,
-                             msg="Add sound effect to %s" % tag)
+            gb = GroupButton(self.mw, key, self.mset['sfxdir'], idx=i,
+                             msg="Add sound effect to %s" % key)
             gb.sig.connect(self.onAddMp3Widget)
             lwi.setSizeHint(gb.sizeHint())
             sfxList.addItem(lwi)
@@ -71,7 +71,7 @@ class Mp3Dialog(QDialog):
         # Open Preferences and set up voice id.
         # This is called only the first time audio popup opens
         # and set a voice id if it's None.
-        if self.mw.entrylist.isVoiceless():
+        if self.eset.isVoiceless():
             showCritical("Please set TTS voice to all section", title="Error")
             gui.dialogs.open("Preferences", self.mw, tab="TTS")
             return
@@ -102,7 +102,7 @@ class Mp3Dialog(QDialog):
         for i in range(sfxList.count()):
             iw = sfxList.itemWidget(sfxList.item(i))
             if isinstance(iw, GroupButton):
-                lineKey = self.eset.getKeyByTag(iw.group)
+                lineKey = iw.group
                 sfxdir[lineKey] = []
                 continue
 

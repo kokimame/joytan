@@ -100,8 +100,8 @@ class Preferences(QDialog):
                 self.eset.langMap[lineKey][0] = newLang
                 self.eset.langMap[lineKey][1] = newVid
 
-        self.eset.expand(dpw=self.form.dpwSpin.value())
-        self.eset.expand(epd=self.form.epdSpin.value())
+        self.eset.reshape(dpw=self.form.dpwSpin.value())
+        self.eset.reshape(epd=self.form.epdSpin.value())
 
 
 

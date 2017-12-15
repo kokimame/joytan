@@ -27,7 +27,7 @@ class TranslateThread(QThread):
         # As a note, this bug didn't occur before TranslateThread was introduced,
         # and cannot be reproduced on Mac and Windows
         translate = lambda text: Translator().translate(text, dest=self.destCode).text
-        for ew in self.mw.entrylist.getCurrentEntries():
+        for ew in self.mw.entrylist.getEntries():
             self.sig.emit(ew.editors['atop'].text())
             if 'atop' in self.group:
                 ew.editors['atop'].setText(translate(ew.editors['atop'].text()))

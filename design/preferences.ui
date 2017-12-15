@@ -23,7 +23,7 @@
       <string/>
      </property>
      <property name="currentIndex">
-      <number>2</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tabGeneral">
       <attribute name="title">
@@ -99,7 +99,7 @@
            <item>
             <widget class="QLabel" name="label">
              <property name="text">
-              <string>Definitions per Word</string>
+              <string>Main part per Entry</string>
              </property>
             </widget>
            </item>
@@ -136,7 +136,7 @@
            <item>
             <widget class="QLabel" name="label_2">
              <property name="text">
-              <string>Examples per Definition</string>
+              <string>Sub Part per Main part</string>
              </property>
             </widget>
            </item>

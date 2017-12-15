@@ -36,7 +36,7 @@ class HtmlThread(QThread):
         self.dest = dest
 
     def run(self):
-        datas = [ew.data() for ew in self.mw.entrylist.getCurrentEntries()]
+        datas = [ew.data() for ew in self.mw.entrylist.getEntries()]
 
         from jinja2 import Environment, FileSystemLoader
         env = Environment(loader=FileSystemLoader('templates/html'))
@@ -67,7 +67,7 @@ class TextDialog(QDialog):
         # according to the value of imgSpin
         maxImg = 4
 
-        for i, ew in enumerate(self.mw.entrylist.getCurrentEntries()):
+        for i, ew in enumerate(self.mw.entrylist.getEntries()):
             group = ew.editors['atop'].text()
             index = 2 * i + 1
             destDir = os.path.join(self.textDir, ew.getDirname())
@@ -109,7 +109,7 @@ class TextDialog(QDialog):
 
     def onCreate(self):
         datas = []
-        for i, ew in enumerate(self.mw.entrylist.getCurrentEntries()):
+        for i, ew in enumerate(self.mw.entrylist.getEntries()):
             data = ew.data()
             panel = self.getPanel(i)
             for j, img in enumerate(panel.images):

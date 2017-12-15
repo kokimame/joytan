@@ -70,7 +70,7 @@ class TextDialog(QDialog):
         for i, ew in enumerate(self.mw.entrylist.getEntries()):
             group = ew.editors['atop'].text()
             index = 2 * i + 1
-            destDir = os.path.join(self.textDir, ew.getDirname())
+            destDir = os.path.join(self.textDir, ew.stringIndex())
             if group == '':
                 # TODO: Change 'pass' to 'continue' on commit
                 pass

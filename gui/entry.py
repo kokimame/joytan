@@ -38,11 +38,10 @@ class EntryWidget(QWidget):
         if self.mode == "Edit":
             self.stackedLayout.setCurrentIndex(1)
 
-    def getDirname(self):
-        # Make string number from the index of the entry from 00000 to 99999
+    def stringIndex(self):
+        # Return string number from 00000 to 99999 based on the index
         snum = (5 - len(str(self.index))) * '0' + str(self.index)
-        # Return directory atop replacing whitespace with underscore
-        return "{snum}".format(snum=snum)
+        return snum
 
     def setMode(self, newMode):
         if newMode == self.mode: return

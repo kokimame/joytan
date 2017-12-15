@@ -10,7 +10,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 
 class Ui_Mp3Dialog(object):
     def setupUi(self, Mp3Dialog):
-        Mp3Dialog.setObjectName("Mp3Dialog")
+        Mp3Dialog.setObjectName("AudioDialog")
         Mp3Dialog.resize(507, 653)
         self.verticalLayout_2 = QtWidgets.QVBoxLayout(Mp3Dialog)
         self.verticalLayout_2.setObjectName("verticalLayout_2")
@@ -118,17 +118,17 @@ class Ui_Mp3Dialog(object):
 
     def retranslateUi(self, Mp3Dialog):
         _translate = QtCore.QCoreApplication.translate
-        Mp3Dialog.setWindowTitle(_translate("Mp3Dialog", "Audio Setting"))
-        self.label.setText(_translate("Mp3Dialog", "TTS"))
-        self.settingBtn.setText(_translate("Mp3Dialog", "Setting"))
-        self.label_5.setText(_translate("Mp3Dialog", "Repeat word"))
-        self.label_6.setText(_translate("Mp3Dialog", "times"))
-        self.lrcCheck.setText(_translate("Mp3Dialog", "Create Lyrics file"))
-        self.gstaticCheck.setText(_translate("Mp3Dialog", "Download nice pronunciation for English words if possible"))
-        self.label_2.setText(_translate("Mp3Dialog", "Sound effects"))
-        self.label_4.setText(_translate("Mp3Dialog", ">>> Preview Coming <<<"))
-        self.label_3.setText(_translate("Mp3Dialog", "BGM Loop"))
-        self.label_7.setText(_translate("Mp3Dialog", "Progress:"))
-        self.stopBtn.setText(_translate("Mp3Dialog", "Stop"))
-        self.createBtn.setText(_translate("Mp3Dialog", "Start"))
+        Mp3Dialog.setWindowTitle(_translate("AudioDialog", "Audio Setting"))
+        self.label.setText(_translate("AudioDialog", "TTS"))
+        self.settingBtn.setText(_translate("AudioDialog", "Setting"))
+        self.label_5.setText(_translate("AudioDialog", "Repeat word"))
+        self.label_6.setText(_translate("AudioDialog", "times"))
+        self.lrcCheck.setText(_translate("AudioDialog", "Create Lyrics file"))
+        self.gstaticCheck.setText(_translate("AudioDialog", "Download nice pronunciation for English words if possible"))
+        self.label_2.setText(_translate("AudioDialog", "Sound effects"))
+        self.label_4.setText(_translate("AudioDialog", ">>> Preview Coming <<<"))
+        self.label_3.setText(_translate("AudioDialog", "BGM Loop"))
+        self.label_7.setText(_translate("AudioDialog", "Progress:"))
+        self.stopBtn.setText(_translate("AudioDialog", "Stop"))
+        self.createBtn.setText(_translate("AudioDialog", "Start"))
 

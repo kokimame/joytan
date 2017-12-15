@@ -60,41 +60,6 @@
        <item>
         <layout class="QVBoxLayout" name="verticalLayout">
          <item>
-          <layout class="QHBoxLayout" name="horizontalLayout_5">
-           <item>
-            <widget class="QLabel" name="label_8">
-             <property name="text">
-              <string>Online Dictionary</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QComboBox" name="sourceCombo">
-             <item>
-              <property name="text">
-               <string>Dictionary.com</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>Wiktionary</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>Cambridge Dictionary</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>Oxford English Dictionary</string>
-              </property>
-             </item>
-            </widget>
-           </item>
-          </layout>
-         </item>
-         <item>
           <layout class="QHBoxLayout" name="horizontalLayout_3">
            <item>
             <widget class="QLabel" name="label">

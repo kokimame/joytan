@@ -26,16 +26,16 @@ class Mp3Handler:
             sfxs = []
             for sfxInfo in sfxInfos:
                 sfx = Aseg.from_mp3(sfxInfo['path'])
-                vtr = self.volToReduce(sfx.dBFS, (1 - sfxInfo['volume']/100))
-                sfxs.append(sfx - vtr)
+                vol = self.volume(sfx.dBFS, (1 - sfxInfo['volume'] / 100))
+                sfxs.append(sfx - vol)
             self.sfxMap[key] = sum(sfxs)
 
         for bgmInfo in self.setting['loop']:
             bgm = Aseg.from_mp3(bgmInfo['path'])
-            vtr = self.volToReduce(bgm.dBFS,(1 - bgmInfo['volume']/100))
-            self.bgmLoop.append(bgm - vtr)
+            vol = self.volume(bgm.dBFS, (1 - bgmInfo['volume'] / 100))
+            self.bgmLoop.append(bgm - vol)
 
-    def volToReduce(self, dBFS, percent):
+    def volume(self, dBFS, percent):
         # Takes dBFS (db relative to full scale, 0 as upper bounds) of the mp3file for volume reducing
         # and the percentage of volume to reduce from the dBFS.
         # The percent is defined by sliders on Mp3Widget.
@@ -52,7 +52,7 @@ class Mp3Handler:
         # TODO: Create Final.mp3 without generating intermediate mp3files
         # Create complete MP3 contents for an Entry
         # including 3 section; 'atop', 'def-x' and 'ex-x-x'
-        curdir = os.path.join(self.setting['dest'], ew.getDirname())
+        curdir = os.path.join(self.setting['dest'], ew.stringIndex())
         assert os.path.exists(curdir)
         asegList = []
 

@@ -33,10 +33,7 @@ class Preferences(QDialog):
             self.form.tabWidget.setCurrentIndex(1)
 
     def setupCombo(self):
-        sc = self.form.sourceCombo
         tc = self.form.ttsCombo
-        sc.addItems(sorted([site for site in Downloaders.keys()]))
-        sc.setCurrentText(self.mw.setting['onlineSrc'])
         tc.addItems(sorted([site for site in Speaker.keys()]))
         tc.setCurrentText(self.mw.setting['tts'])
 
@@ -112,7 +109,6 @@ class Preferences(QDialog):
         self.mw.setting['worddir'] = form.wordEdit.text()
         self.mw.setting['bgmdir'] = form.bgmEdit.text()
         self.mw.setting['sfxdir'] = form.sfxEdit.text()
-        self.mw.setting['onlineSrc'] = form.sourceCombo.currentText()
         self.mw.setting['tts'] = form.ttsCombo.currentText()
 
 

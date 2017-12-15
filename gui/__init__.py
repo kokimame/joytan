@@ -23,12 +23,12 @@ except ImportError as e:
     raise
 
 
-from gui import preferences, mp3dialog, textdialog, download, translate, smartcopy
+from gui import preferences, audiodialog, textdialog, download, translate, smartcopy
 
 class DialogManager:
     _dialogs = {
         "Preferences": [preferences.Preferences, None],
-        "Mp3Dialog": [mp3dialog.Mp3Dialog, None],
+        "AudioDialog": [audiodialog.AudioDialog, None],
         "TextDialog": [textdialog.TextDialog, None],
         "DownloadDialog": [download.DownloadDialog, None],
         "TranslateDialog": [translate.TranslateDialog, None],

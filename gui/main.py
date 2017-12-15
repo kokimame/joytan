@@ -24,7 +24,6 @@ def defaultSetting():
         "workspace": os.path.join(*setting['workspace']),
         "tts": setting['tts'],
         "title": setjs['title'],
-        "onlineSrc": setjs['onlineSrc'],
         "sfxdir": os.path.join(cwd, "templates", "sfx"),
         "worddir": os.path.join(cwd, "templates", "wordlist"),
         "bgmdir": os.path.join(cwd, "templates", "song"),
@@ -140,8 +139,8 @@ class EmotanMW(QMainWindow):
     def onCreateMp3(self):
         # To update 'Empty entry' if a name is added to it
         self.entrylist.updateAll()
-        import gui.mp3dialog
-        gui.mp3dialog.onMp3Dialog(self)
+        import gui.audiodialog
+        gui.audiodialog.onMp3Dialog(self)
 
     def onCreateText(self):
         import gui.textdialog

@@ -8,10 +8,10 @@ from gui.customs.mp3widget import Mp3Widget
 
 
 def onMp3Dialog(mw):
-    gui.dialogs.open("Mp3Dialog", mw)
+    gui.dialogs.open("AudioDialog", mw)
 
 
-class Mp3Dialog(QDialog):
+class AudioDialog(QDialog):
     def __init__(self, mw):
         QDialog.__init__(self, mw, Qt.Window)
         self.mw = mw
@@ -35,7 +35,7 @@ class Mp3Dialog(QDialog):
             lwi = QListWidgetItem()
             gb = GroupButton(self.mw, key, self.mset['sfxdir'], idx=i,
                              msg="Add sound effect to %s" % key)
-            gb.sig.connect(self.onAddMp3Widget)
+            gb.sig.connect(self.onAddMp3)
             lwi.setSizeHint(gb.sizeHint())
             sfxList.addItem(lwi)
             sfxList.setItemWidget(lwi, gb)
@@ -45,7 +45,7 @@ class Mp3Dialog(QDialog):
         lwi = QListWidgetItem()
         gb = GroupButton(self.mw, "BGM", self.mset['bgmdir'],
                               msg="Add song to BGM Loop")
-        gb.sig.connect(self.onAddMp3Widget)
+        gb.sig.connect(self.onAddMp3)
         lwi.setSizeHint(gb.sizeHint())
         bgmList.addItem(lwi)
         bgmList.setItemWidget(lwi, gb)
@@ -134,7 +134,7 @@ class Mp3Dialog(QDialog):
                 for i in range(self.mw.entrylist.count()):
                     ew = self.mw.entrylist.getByIndex(i)
                     self.sig.emit("Creating audio file of %s." % ew.editors['atop'].text())
-                    os.makedirs(os.path.join(audioDir, ew.getDirname()), exist_ok=True)
+                    os.makedirs(os.path.join(audioDir, ew.stringIndex()), exist_ok=True)
                     self.handler.runSpeaker(ew)
 
                 self.sig.emit("Mixing with BGM. This takes a few minutes.")
@@ -177,10 +177,10 @@ class Mp3Dialog(QDialog):
         self.form.stopBtn.setEnabled(False)
         self.form.createBtn.setEnabled(True)
 
-    def onAddMp3Widget(self, mp3path, group, idx):
+    def onAddMp3(self, mp3path, group, idx):
         lwi = QListWidgetItem()
         wig = Mp3Widget(mp3path, group, lwi)
-        wig.sig.connect(self.onDeleteMp3Widget)
+        wig.sig.connect(self.onDeleteMp3)
         lwi.setSizeHint(wig.sizeHint())
 
         if group == "BGM":
@@ -194,7 +194,7 @@ class Mp3Dialog(QDialog):
 
         _list.setItemWidget(lwi, wig)
 
-    def onDeleteMp3Widget(self, group, lwi):
+    def onDeleteMp3(self, group, lwi):
         # Update counter of SFX
         def updateSfxCounter(i):
             sum = 0
@@ -231,4 +231,4 @@ class Mp3Dialog(QDialog):
         self.form.pgMsg.setText("")
         self.stopAllAudio()
         self.done(0)
-        gui.dialogs.close("Mp3Dialog", save=True)
+        gui.dialogs.close("AudioDialog", save=True)

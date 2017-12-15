@@ -3,8 +3,8 @@ import shutil
 import gui
 from gui.qt import *
 from gui.utils import showCritical, getFile
-from gui.customs.groupbtn import GroupButton
-from gui.customs.mp3widget import Mp3Widget
+from gui.widgets.groupbtn import GroupButton
+from gui.widgets.mp3widget import Mp3Widget
 
 
 def onMp3Dialog(mw):

@@ -11,7 +11,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_Preferences(object):
     def setupUi(self, Preferences):
         Preferences.setObjectName("Preferences")
-        Preferences.resize(508, 405)
+        Preferences.resize(872, 537)
         self.verticalLayout_2 = QtWidgets.QVBoxLayout(Preferences)
         self.verticalLayout_2.setObjectName("verticalLayout_2")
         self.tabWidget = QtWidgets.QTabWidget(Preferences)
@@ -117,9 +117,9 @@ class Ui_Preferences(object):
         self.testList.setObjectName("testList")
         self.verticalLayout_6.addWidget(self.testList)
         self.tabWidget.addTab(self.tabTTS, "")
-        self.tabPDF = QtWidgets.QWidget()
-        self.tabPDF.setObjectName("tabPDF")
-        self.tabWidget.addTab(self.tabPDF, "")
+        self.tabAtts = QtWidgets.QWidget()
+        self.tabAtts.setObjectName("tabAtts")
+        self.tabWidget.addTab(self.tabAtts, "")
         self.verticalLayout_2.addWidget(self.tabWidget)
         self.horizontalLayout_11 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_11.setObjectName("horizontalLayout_11")
@@ -142,7 +142,7 @@ class Ui_Preferences(object):
         self.verticalLayout_2.addLayout(self.horizontalLayout_11)
 
         self.retranslateUi(Preferences)
-        self.tabWidget.setCurrentIndex(0)
+        self.tabWidget.setCurrentIndex(2)
         QtCore.QMetaObject.connectSlotsByName(Preferences)
 
     def retranslateUi(self, Preferences):
@@ -159,7 +159,7 @@ class Ui_Preferences(object):
         self.label_9.setText(_translate("Preferences", "Software"))
         self.label_10.setText(_translate("Preferences", "Current Item to Voice map:"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tabTTS), _translate("Preferences", "TTS"))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tabPDF), _translate("Preferences", "PDF"))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tabAtts), _translate("Preferences", "ATTS"))
         self.cancelBtn.setText(_translate("Preferences", "Cancel"))
         self.applyBtn.setText(_translate("Preferences", "Apply"))
         self.okBtn.setText(_translate("Preferences", "OK"))

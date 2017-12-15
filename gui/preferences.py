@@ -1,9 +1,8 @@
-from gui.qt import *
 import gui
-from tools.downloader import Downloaders
+from gui.widgets.lvmap import LvMapWidget
+from gui.qt import *
+from gui.utils import LANGCODES
 from tools.speaker import Speaker
-from gui.utils import LANGUAGES, LANGCODES
-from gui.customs.lvmap import LvMapWidget
 
 
 class Preferences(QDialog):
@@ -24,6 +23,15 @@ class Preferences(QDialog):
         self.setupCombo()
         self.setupButtons()
         self.setupList()
+        self.setupATTS()
+
+    def setupATTS(self):
+        from gui.widgets.awesometts import AwesomeTTS
+        from gui.utils import showCritical, getText
+        tab = self.form.tabAtts
+        hbox= QHBoxLayout()
+        hbox.addWidget(AwesomeTTS(showCritical, getText))
+        tab.setLayout(hbox)
 
     def setTab(self, tab):
         # Set by the absolute index of a tab based

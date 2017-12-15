@@ -8,6 +8,7 @@ import os
 os.environ["LIBOVERLAY_SCROLLBAR"] = "0"
 
 from PyQt5.Qt import *
+from PyQt5.QtMultimedia import QMediaPlayer
 # trigger explicit message in case of missing libraries
 # insted of silently failing to import
 

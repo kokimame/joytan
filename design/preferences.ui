@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>508</width>
-    <height>405</height>
+    <width>872</width>
+    <height>537</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -23,7 +23,7 @@
       <string/>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="tabGeneral">
       <attribute name="title">
@@ -220,9 +220,9 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="tabPDF">
+     <widget class="QWidget" name="tabAtts">
       <attribute name="title">
-       <string>PDF</string>
+       <string>ATTS</string>
       </attribute>
      </widget>
     </widget>

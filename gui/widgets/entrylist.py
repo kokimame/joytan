@@ -72,7 +72,7 @@ class EntryList(QListWidget):
         self.setting = self.Setting()
 
     def initEntry(self, index, name, mode, setting, parent=None):
-        from gui.entry import EntryWidget
+        from gui.widgets.entry import EntryWidget
         eui, ew = QListWidgetItem(), EntryWidget(index, name, mode, setting, parent=parent)
         eui.setSizeHint(ew.sizeHint())
         return eui, ew

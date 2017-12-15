@@ -1,5 +1,3 @@
-from PyQt5.QtMultimedia import QMediaPlayer
-
 import gui
 from gui.qt import *
 from tools.handler import mp3handler

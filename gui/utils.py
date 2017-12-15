@@ -30,6 +30,60 @@ def getFileToSave(parent, title, filter="*.*", dir=None, suf='eel'):
     except:
         return
 
+class GetTextDialog(QDialog):
+
+    def __init__(self, parent, question, help=None, edit=None, default="", \
+                 title="Anki", minWidth=400):
+        QDialog.__init__(self, parent)
+        self.setWindowTitle(title)
+        self.question = question
+        self.help = help
+        self.qlabel = QLabel(question)
+        self.setMinimumWidth(minWidth)
+        v = QVBoxLayout()
+        v.addWidget(self.qlabel)
+        if not edit:
+            edit = QLineEdit()
+        self.l = edit
+        if default:
+            self.l.setText(default)
+            self.l.selectAll()
+        v.addWidget(self.l)
+        buts = QDialogButtonBox.Ok | QDialogButtonBox.Cancel
+        if help:
+            buts |= QDialogButtonBox.Help
+        b = QDialogButtonBox(buts)
+        v.addWidget(b)
+        self.setLayout(v)
+        b.button(QDialogButtonBox.Ok).clicked.connect(self.accept)
+        b.button(QDialogButtonBox.Cancel).clicked.connect(self.reject)
+        if help:
+            b.button(QDialogButtonBox.Help).clicked.connect(self.helpRequested)
+
+    def accept(self):
+        return QDialog.accept(self)
+
+    def reject(self):
+        return QDialog.reject(self)
+
+    def helpRequested(self):
+        pass
+        #openHelp(self.help)
+
+
+def getText(prompt, parent=None, help=None, edit=None, default="",
+            title="Anki", geomKey=None, **kwargs):
+    if not parent:
+        parent = gui.mw.app.activeWindow() or gui.mw
+    d = GetTextDialog(parent, prompt, help=help, edit=edit,
+                      default=default, title=title, **kwargs)
+    d.setWindowModality(Qt.WindowModal)
+    if geomKey:
+        print("Should restore Geom")
+    ret = d.exec_()
+    if geomKey and ret:
+        print("Should save Geom")
+    return (str(d.l.text()), ret)
 
 def getFiles(parent, title, filter="*.*", dir=None):
     opts = QFileDialog.Options()

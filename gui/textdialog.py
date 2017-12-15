@@ -1,7 +1,7 @@
 import gui
 from gui.qt import *
-from gui.customs.groupbtn import GroupButton
-from gui.customs.imgpanel import *
+from gui.widgets.groupbtn import GroupButton
+from gui.widgets.imgpanel import *
 
 def onTextDialog(mw):
     gui.dialogs.open("TextDialog", mw)

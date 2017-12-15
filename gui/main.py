@@ -1,8 +1,8 @@
 # Copyright: Koki Mametani <kokimametani@gmail.com>
+import gui
+from gui import ICONS
 from gui.qt import *
 from gui.utils import isMac, isLin, isWin
-from gui import ICONS
-import gui
 
 
 def defaultSetting():
@@ -60,8 +60,8 @@ class EmotanMW(QMainWindow):
         self.form.setupUi(self)
 
     def setupEntryList(self):
-        import gui.entrylist
-        self.entrylist = gui.entrylist.EntryList()
+        import gui.widgets.entrylist
+        self.entrylist = gui.widgets.entrylist.EntryList()
         self.form.verticalLayout.insertWidget(0, self.entrylist)
 
     def setupMenus(self):
@@ -135,7 +135,7 @@ class EmotanMW(QMainWindow):
         gui.translate.onTranslate(self)
 
     def onConfigure(self):
-        gui.dialogs.open("Preferences", self, tab="TTS")
+        gui.dialogs.open("Preferences", self, tab="ATTS")
 
     def onCreateMp3(self):
         # To update 'Empty entry' if a name is added to it

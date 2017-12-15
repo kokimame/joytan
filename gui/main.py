@@ -1,6 +1,7 @@
 # Copyright: Koki Mametani <kokimametani@gmail.com>
 from gui.qt import *
 from gui.utils import isMac, isLin, isWin
+from gui import ICONS
 import gui
 
 
@@ -74,12 +75,12 @@ class EmotanMW(QMainWindow):
 
     def setupButtons(self):
         form = self.form
-        form.addButton.setIcon(QIcon('design/icons/plus_button_green.png'))
-        form.delButton.setIcon(QIcon('design/icons/minus_button_red.png'))
-        form.dlButton.setIcon(QIcon('design/icons/dl_button.png'))
-        form.modeButton.setIcon(QIcon('design/icons/edit_button.png'))
-        form.transButton.setIcon(QIcon('design/icons/translate_button2.png'))
-        form.configButton.setIcon(QIcon('design/icons/config_button.png'))
+        form.addButton.setIcon(QIcon('{}/plus_button_green.png'.format(ICONS)))
+        form.delButton.setIcon(QIcon('{}/minus_button_red.png'.format(ICONS)))
+        form.dlButton.setIcon(QIcon('{}/dl_button.png'.format(ICONS)))
+        form.modeButton.setIcon(QIcon('{}/edit_button.png'.format(ICONS)))
+        form.transButton.setIcon(QIcon('{}/translate_button2.png'.format(ICONS)))
+        form.configButton.setIcon(QIcon('{}/config_button.png'.format(ICONS)))
         form.addButton.clicked.connect(lambda: self.entrylist.addEntry('', self.entryMode))
         form.delButton.clicked.connect(self.entrylist.deleteSelected)
         form.dlButton.clicked.connect(self.onDownload)
@@ -111,11 +112,11 @@ class EmotanMW(QMainWindow):
     def onUpdateMode(self):
         if self.entryMode == "View":
             # Change EntryList Mode to "Edit" and the icon to "View"
-            self.form.modeButton.setIcon(QIcon("design/icons/disp_button.png"))
+            self.form.modeButton.setIcon(QIcon("{}/disp_button.png".format(ICONS)))
             self.entrylist.updateMode("Edit")
             self.entryMode = "Edit"
         elif self.entryMode == "Edit":
-            self.form.modeButton.setIcon(QIcon("design/icons/edit_button.png"))
+            self.form.modeButton.setIcon(QIcon("{}/edit_button.png".format(ICONS)))
             self.entrylist.updateMode("View")
             self.entrylist.updateAll()
             self.entryMode = "View"

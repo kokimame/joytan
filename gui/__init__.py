@@ -22,7 +22,7 @@ except ImportError as e:
         print("Error: Build UI first by running build_ui.sh from the project root.\n")
     raise
 
-
+ICONS = 'design/icons'
 from gui import preferences, audiodialog, textdialog, download, translate, smartcopy
 
 class DialogManager:

@@ -62,8 +62,8 @@ class Preferences(QDialog):
 
     def setupSpins(self):
         form = self.form
-        form.dpwSpin.setValue(self.eset.dpw)
-        form.epdSpin.setValue(self.eset.epd)
+        form.dpwSpin.setValue(self.eset.lv1)
+        form.epdSpin.setValue(self.eset.lv2)
 
     def setupEditors(self):
         form = self.form
@@ -100,8 +100,8 @@ class Preferences(QDialog):
                 self.eset.langMap[lineKey][0] = newLang
                 self.eset.langMap[lineKey][1] = newVid
 
-        self.eset.reshape(dpw=self.form.dpwSpin.value())
-        self.eset.reshape(epd=self.form.epdSpin.value())
+        self.eset.reshape(lv1=self.form.dpwSpin.value())
+        self.eset.reshape(lv2=self.form.epdSpin.value())
 
 
 

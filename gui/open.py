@@ -18,19 +18,19 @@ def onOpen(mw):
 
     eset = jd[0]
     mw.entrylist.deleteAll()
-    mw.entrylist.setting.reshape(dpw=eset['dpw'])
-    mw.entrylist.setting.reshape(epd=eset['epd'])
+    mw.entrylist.setting.reshape(dpw=eset['lv1'])
+    mw.entrylist.setting.reshape(lv2=eset['lv2'])
     mw.entrylist.setting.langMap = eset['langMap']
 
     setting = mw.entrylist.setting.data()
     for data in jd[1:]:
-        setting['dpw'] = data['dpw']
-        setting['epd'] = data['epd']
+        setting['lv1'] = data['lv1']
+        setting['lv2'] = data['lv2']
         mw.entrylist.addEntry(data['atop'], mw.entryMode)
         ew = mw.entrylist.getByName(data['atop'])
-        for i in range(0, ew.dpw):
+        for i in range(0, ew.lv1):
             ew.editors['def-%d' % (i+1)].setText(data['def-%d' % (i+1)])
-            for j in range(0, ew.epd):
+            for j in range(0, ew.lv2):
                 ew.editors['ex-%d-%d' % (i+1, j+1)].setText(data['ex-%d-%d' % (i+1, j+1)])
 
     mw.entrylist.updateAll()

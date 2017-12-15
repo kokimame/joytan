@@ -104,7 +104,7 @@ class Mp3Handler:
                 self.tts.dictate(define, defVid, output=filename)
                 self.ewFileMap[ew.editors['atop']]['def-%d' % (i + 1)] = filename
 
-            for j in range(0, ew.epd):
+            for j in range(0, ew.lv2):
                 examp = ew.editors['ex-%d-%d' % (i+1, j+1)].text()
                 if examp != '':
                     exVid = self.setting['langMap']['ex-%d-%d' % (i+1, j+1)][1]
@@ -137,13 +137,13 @@ class Mp3Handler:
 
         inputs = "%s " % wordMp3
         fileMap = self.ewFileMap[ew.editors['atop']]
-        for i in range(0, ew.dpw):
+        for i in range(0, ew.lv1):
             try:
                 file = fileMap['def-%d' % (i + 1)] + ".mp3"
                 inputs += "%s %s " % (self.sfxMap['definition'], file)
             except KeyError:
                 pass
-            for j in range(0, ew.epd):
+            for j in range(0, ew.lv2):
                 try:
                     file = fileMap['ex-%d-%d' % (i + 1, j + 1)] + ".mp3"
                     inputs += "%s %s " % (self.sfxMap['example'], file)

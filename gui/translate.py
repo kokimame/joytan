@@ -33,13 +33,13 @@ class TranslateThread(QThread):
                 ew.editors['atop'].setText(translate(ew.editors['atop'].text()))
                 self.mw.entrylist.setting.langMap['atop'][0] = self.destCode
 
-            for i in range(1, ew.dpw + 1):
+            for i in range(1, ew.lv1 + 1):
                 define = ew.editors['def-%d' % i].text()
                 if 'definition' in self.group and define != '':
                     ew.editors['def-%d' % i].setText(translate(define))
                     self.mw.entrylist.setting.langMap['def-%d' % i][0] = self.destCode
 
-                for j in range(1, ew.epd + 1):
+                for j in range(1, ew.lv2 + 1):
                     examp = ew.editors['ex-%d-%d' % (i, j)].text()
                     if 'example' in self.group and examp != '':
                         ew.editors['ex-%d-%d' % (i, j)].setText(translate(examp))

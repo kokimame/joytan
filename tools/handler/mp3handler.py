@@ -76,7 +76,7 @@ class Mp3Handler:
         asegList.append((Aseg.from_mp3(toAtop + ".mp3") * self.setting['repeat'], atopText))
 
         # Def-x and ex-x-x section
-        for i in range(0, ew.dpw):
+        for i in range(0, ew.lv1):
             lineKey = 'def-%d' % (i+1)
             defText = ew.editors[lineKey].text()
             if defText != '':
@@ -88,7 +88,7 @@ class Mp3Handler:
                 self.tts.dictate(defText, defVid, output=toDef)
                 asegList.append((Aseg.from_mp3(toDef + ".mp3"), defText))
 
-            for j in range(0, ew.epd):
+            for j in range(0, ew.lv2):
                 lineKey = 'ex-%d-%d' % (i + 1, j + 1)
                 exText = ew.editors[lineKey].text()
                 if exText != '':

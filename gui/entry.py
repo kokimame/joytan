@@ -9,8 +9,8 @@ class EntryWidget(QWidget):
         self.index = index
         self.mode = mode
         # Entry setting
-        self.dpw = eset['dpw']
-        self.epd = eset['epd']
+        self.lv1 = eset['lv1']
+        self.lv2 = eset['lv2']
         # External sources where the items of an entry came
         self.sources = []
 
@@ -83,7 +83,7 @@ class EntryWidget(QWidget):
         self.editors["atop"] = atopEdit
 
         row = 1
-        for i in range(0, self.dpw):
+        for i in range(0, self.lv1):
             defLabel = QLabel('def-%d' % (i+1))
             defLabel.setFont(self.italFont)
             defLabel.setStyleSheet("QLabel { background-color : rgb(255, 180, 230); }")
@@ -91,7 +91,7 @@ class EntryWidget(QWidget):
             editLayout.addWidget(defLabel, row, 0)
             editLayout.addWidget(defEdit, row, 1)
             self.editors["def-%d" % (i+1)] = defEdit
-            for j in range(0, self.epd):
+            for j in range(0, self.lv2):
                 exLabel = QLabel('ex-%d-%d' % (i+1, j+1))
                 exLabel.setFont(self.italFont)
                 exLabel.setStyleSheet("QLabel { background-color : rgb(180, 230, 255); }")
@@ -120,10 +120,10 @@ class EntryWidget(QWidget):
             atop = self.atop
         content = self.atopFormat.format(num=self.index, atop=atop)
 
-        for i in range(0, self.dpw):
+        for i in range(0, self.lv1):
             if self.editors['def-%d' % (i+1)].text() != '':
                 content += self.defFormat.format(num=i+1, define=self.editors['def-%d' % (i+1)].text())
-            for j in range(0, self.epd):
+            for j in range(0, self.lv2):
                 if self.editors['ex-%d-%d' % (i+1, j+1)].text() != '':
                     content += self.exFormat.format(example=self.editors['ex-%d-%d' % (i+1, j+1)].text())
 
@@ -131,20 +131,20 @@ class EntryWidget(QWidget):
 
     # Set the text of downloaded contents to each of matched editors
     def updateEditors(self, items):
-        for i in range(0, min(self.dpw, len(items))):
+        for i in range(0, min(self.lv1, len(items))):
             self.editors['def-%d' % (i+1)].setText(items[i]['define'])
-            for j in range(0, min(self.epd, len(items[i]['examples']))):
+            for j in range(0, min(self.lv2, len(items[i]['examples']))):
                 self.editors['ex-%d-%d' % (i+1, j+1)].setText(items[i]['examples'][j])
 
     # Returns the class' properties in a dictionary. Will be called on saving.
     def data(self):
         data = {}
         data['atop'] = self.editors['atop'].text()
-        data['dpw'] = self.dpw
-        data['epd'] = self.epd
-        for i in range(0, self.dpw):
+        data['lv1'] = self.lv1
+        data['lv2'] = self.lv2
+        for i in range(0, self.lv1):
             data['def-%d' % (i+1)] = self.editors['def-%d' % (i+1)].text()
-            for j in range(self.epd):
+            for j in range(self.lv2):
                 data['ex-%d-%d' % (i+1, j+1)] = self.editors['ex-%d-%d' % (i+1, j+1)].text()
 
         return data

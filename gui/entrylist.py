@@ -5,36 +5,35 @@ class EntryList(QListWidget):
     class Setting:
         def __init__(self):
             # Fixme: ...................
-            self.dpw = 0 # This will be expanded soon at the 'reshape()' below!
-            self.epd = 0 # Same here. The method is a little bit dumb.
+            self.lv1 = 0 # This will be expanded soon at the 'reshape()' below!
+            self.lv2 = 0 # Same here. The method is a little bit dumb.
             # Fixme: Allow users to choose default language from preference
             # Temporally set English by default
             self.defaultLang = 'en'
             # This maps from line key of an entry to language code and Voice ID for its text
             self.langMap = {'atop': [self.defaultLang, None]}
 
-            self.reshape(dpw=1, epd=1)
+            self.reshape(lv1=1, lv2=1)
 
 
-        # FIXME: Need a method to shrink this setting
-        def reshape(self, dpw=None, epd=None):
-            if dpw and (self.dpw != dpw):
-                self.dpw = dpw
+        def reshape(self, lv1=None, lv2=None):
+            if lv1 and (self.lv1 != lv1):
+                self.lv1 = lv1
                 self._reshape()
-            if epd and (self.epd != epd):
-                self.epd = epd
+            if lv2 and (self.lv2 != lv2):
+                self.lv2 = lv2
                 self._reshape()
 
             print("EntrySetting: LangMap -> ", self.langMap)
 
         def _reshape(self):
             # Expand langMap and tags with default value
-            for i in range(0, self.dpw):
+            for i in range(0, self.lv1):
                 try:
                     self.langMap['def-%d' % (i + 1)]
                 except KeyError:
                     self.langMap['def-%d' % (i + 1)] = [self.defaultLang, None]
-                for j in range(0, self.epd):
+                for j in range(0, self.lv2):
                     try:
                         self.langMap['ex-%d-%d' % (i + 1, j + 1)]
                     except KeyError:
@@ -50,14 +49,14 @@ class EntryList(QListWidget):
 
         # Returns EntryList properties in a dictionary. Will be called on saving the list.
         def data(self):
-            data = {'dpw': self.dpw,
-                    'epd': self.epd,
+            data = {'lv1': self.lv1,
+                    'lv2': self.lv2,
                     'langMap': None}
             langMap = {'atop': self.langMap['atop']}
 
-            for i in range(0, self.dpw):
+            for i in range(0, self.lv1):
                 langMap['def-%d' % (i + 1)] = self.langMap['def-%d' % (i + 1)]
-                for j in range(0, self.epd):
+                for j in range(0, self.lv2):
                     langMap['ex-%d-%d' % (i + 1, j + 1)] = self.langMap['ex-%d-%d' % (i + 1, j + 1)]
 
             data['langMap'] = langMap

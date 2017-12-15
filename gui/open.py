@@ -18,7 +18,7 @@ def onOpen(mw):
 
     eset = jd[0]
     mw.entrylist.deleteAll()
-    mw.entrylist.setting.reshape(dpw=eset['lv1'])
+    mw.entrylist.setting.reshape(lv1=eset['lv1'])
     mw.entrylist.setting.reshape(lv2=eset['lv2'])
     mw.entrylist.setting.langMap = eset['langMap']
 

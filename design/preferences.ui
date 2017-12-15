@@ -23,7 +23,7 @@
       <string/>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="tabGeneral">
       <attribute name="title">
@@ -259,30 +259,6 @@
       <attribute name="title">
        <string>PDF</string>
       </attribute>
-     </widget>
-     <widget class="QWidget" name="tabTag">
-      <attribute name="title">
-       <string>Tag</string>
-      </attribute>
-      <layout class="QVBoxLayout" name="verticalLayout_4">
-       <item>
-        <widget class="QLabel" name="label_11">
-         <property name="text">
-          <string>Current Tags</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QListWidget" name="tagList">
-         <property name="autoFillBackground">
-          <bool>true</bool>
-         </property>
-         <property name="styleSheet">
-          <string notr="true"/>
-         </property>
-        </widget>
-       </item>
-      </layout>
      </widget>
     </widget>
    </item>

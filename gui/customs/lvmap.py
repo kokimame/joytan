@@ -5,16 +5,16 @@ from gui.utils import LANGUAGES, LANGCODES
 
 class LvMapWidget(QWidget):
     # Maps from content type and language code and Voice ID, and test sample text-to-speech
-    def __init__(self, tts, lv, tag):
+    def __init__(self, tts, lv, key):
         super(LvMapWidget, self).__init__()
         self.tts = Speaker[tts]
-        self.tag = tag
+        self.key = key
         # Language and Voice ID for an item (e.g, 'atop' or 'def-x' etc)
         self.lv = lv
         self.initUi()
 
     def initUi(self):
-        lbl = QLabel('%s:' % self.tag)
+        lbl = QLabel('%s:' % self.key)
         self.langCombo = QComboBox()
         self.langCombo.addItems(sorted([lang.title() for lang in LANGUAGES.values()]))
         self.langCombo.setCurrentText(LANGUAGES[self.lv[0]].title())

@@ -11,7 +11,6 @@ class EntryWidget(QWidget):
         # Entry setting
         self.dpw = eset['dpw']
         self.epd = eset['epd']
-        self.tags = eset['tags']
         # External sources where the items of an entry came
         self.sources = []
 
@@ -75,7 +74,7 @@ class EntryWidget(QWidget):
         editWidget = QWidget()
         editLayout = QGridLayout()
 
-        atopLabel = QLabel(self.tags['atop'])
+        atopLabel = QLabel('atop')
         atopLabel.setFont(self.italFont)
         atopLabel.setStyleSheet("QLabel { background-color : rgb(255, 255, 180); }")
         atopEdit = QLineEdit(atop)
@@ -85,7 +84,7 @@ class EntryWidget(QWidget):
 
         row = 1
         for i in range(0, self.dpw):
-            defLabel = QLabel(self.tags['def-%d' % (i+1)])
+            defLabel = QLabel('def-%d' % (i+1))
             defLabel.setFont(self.italFont)
             defLabel.setStyleSheet("QLabel { background-color : rgb(255, 180, 230); }")
             defEdit = QLineEdit()
@@ -93,7 +92,7 @@ class EntryWidget(QWidget):
             editLayout.addWidget(defEdit, row, 1)
             self.editors["def-%d" % (i+1)] = defEdit
             for j in range(0, self.epd):
-                exLabel = QLabel(self.tags['ex-%d-%d' % (i+1, j+1)])
+                exLabel = QLabel('ex-%d-%d' % (i+1, j+1))
                 exLabel.setFont(self.italFont)
                 exLabel.setStyleSheet("QLabel { background-color : rgb(180, 230, 255); }")
                 exEdit = QLineEdit()

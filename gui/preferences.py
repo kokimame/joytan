@@ -48,25 +48,17 @@ class Preferences(QDialog):
 
     def setupList(self):
         testList = self.form.testList
-        tagList = self.form.tagList
         # Sort keys for Entry's dict of QLineEdit alphabetically
         # i.e. 'atop', 'def-x' and 'ex-x-x'
         for lineKey in sorted(list(self.eset.langMap.keys())):
             # language and Voice ID
             lv = self.eset.langMap[lineKey]
-            tag = self.eset.tags[lineKey]
-
-            wig = LvMapWidget(self.mw.setting['tts'], lv, tag)
+            wig = LvMapWidget(self.mw.setting['tts'], lv, lineKey)
 
             lwi1 = QListWidgetItem()
             lwi1.setSizeHint(wig.sizeHint())
             testList.addItem(lwi1)
             testList.setItemWidget(lwi1, wig)
-
-            lwi2 = QListWidgetItem()
-            tagEdit = QLineEdit(self.eset.tags[lineKey])
-            tagList.addItem(lwi2)
-            tagList.setItemWidget(lwi2, tagEdit)
 
     def setupSpins(self):
         form = self.form
@@ -93,7 +85,6 @@ class Preferences(QDialog):
         self.updateEntrySetting()
         self.updateMainSetting()
         self.form.testList.clear()
-        self.form.tagList.clear()
 
         self.initUi()
 
@@ -102,7 +93,7 @@ class Preferences(QDialog):
         for i in range(testList.count()):
             wig = testList.itemWidget(testList.item(i))
             # Key for Entry's dictionary of QLineEdit
-            lineKey = self.eset.getKeyByTag(wig.tag)
+            lineKey = wig.key
             if lineKey in list(self.eset.langMap.keys()):
                 newLang = LANGCODES[wig.langCombo.currentText().lower()]
                 newVid = wig.tts.code2Vids[newLang][wig.voiceCombo.currentText()]

@@ -12,7 +12,6 @@ class EntryList(QListWidget):
             self.defaultLang = 'en'
             # This maps from line key of an entry to language code and Voice ID for its text
             self.langMap = {'atop': [self.defaultLang, None]}
-            self.tags = {'atop': "Name"}
 
             self.expand(dpw=1, epd=1)
 
@@ -27,7 +26,6 @@ class EntryList(QListWidget):
                 self.expandData()
 
             print("EntrySetting: LangMap -> ", self.langMap)
-            print("EntrySetting: Tags -> ", self.tags)
 
         def expandData(self):
             # Expand langMap and tags with default value
@@ -36,18 +34,11 @@ class EntryList(QListWidget):
                     self.langMap['def-%d' % (i + 1)]
                 except KeyError:
                     self.langMap['def-%d' % (i + 1)] = [self.defaultLang, None]
-                    self.tags['def-%d' % (i + 1)] = 'Def%d' % (i + 1)
                 for j in range(0, self.epd):
                     try:
                         self.langMap['ex-%d-%d' % (i + 1, j + 1)]
                     except KeyError:
                         self.langMap['ex-%d-%d' % (i + 1, j + 1)] = [self.defaultLang, None]
-                        self.tags['ex-%d-%d' % (i + 1, j + 1)] = 'Ex%d-%d' % (i + 1, j + 1)
-
-        def getKeyByTag(self, tag):
-            for key, val in self.tags.items():
-                if val == tag:
-                    return key
 
         def isVidNone(self):
             for item, map in self.langMap.items():
@@ -61,20 +52,15 @@ class EntryList(QListWidget):
         def data(self):
             data = {'dpw': self.dpw,
                     'epd': self.epd,
-                    'langMap': None,
-                    'tags': None}
+                    'langMap': None}
             langMap = {'atop': self.langMap['atop']}
-            tags = {'atop' : self.tags['atop']}
 
             for i in range(0, self.dpw):
                 langMap['def-%d' % (i + 1)] = self.langMap['def-%d' % (i + 1)]
-                tags['def-%d' % (i + 1)] = self.tags['def-%d' % (i + 1)]
                 for j in range(0, self.epd):
                     langMap['ex-%d-%d' % (i + 1, j + 1)] = self.langMap['ex-%d-%d' % (i + 1, j + 1)]
-                    tags['ex-%d-%d' % (i + 1, j + 1)] = self.tags['ex-%d-%d' % (i + 1, j + 1)]
 
             data['langMap'] = langMap
-            data['tags'] = tags
             return data
 
     def __init__(self, parent=None):

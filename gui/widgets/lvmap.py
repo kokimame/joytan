@@ -1,6 +1,6 @@
 import gui
 from gui.qt import *
-from tools.speaker import Speaker
+from emotan.speaker import Speaker
 from gui.utils import LANGUAGES, LANGCODES
 
 class LvMapWidget(QWidget):

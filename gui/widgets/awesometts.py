@@ -45,7 +45,7 @@ class AwesomeTTS(QWidget):
     def __init__(self, alerts, ask, *args, **kargs):
         super(AwesomeTTS, self).__init__()
 
-        from tools.speaker import router, config
+        from emotan.speaker import router, config
         self.router = router
         self.config = config
         self._panel_built = {}

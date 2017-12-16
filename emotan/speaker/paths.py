@@ -24,8 +24,8 @@ import os
 import tempfile
 
 __all__ = [
-    'ADDON',
-    'ADDON_IS_LINKED',
+    'BASE',
+    'BASE_IS_LINKED',
     'CACHE',
     'CONFIG',
     'LOG',
@@ -37,20 +37,16 @@ __all__ = [
 # n.b. When determining the code directory, abspath() is needed since
 # the __file__ constant is not a full path by itself.
 
-ADDON = os.path.dirname(os.path.abspath(__file__))
+BASE = os.path.dirname(os.path.abspath(__file__))
 
-ADDON_IS_LINKED = os.path.islink(ADDON)
+BASE_IS_LINKED = os.path.islink(BASE)
 
-BLANK = os.path.join(ADDON, 'blank.mp3')
+BLANK = os.path.join(BASE, 'blank.mp3')
 
-CACHE = os.path.join(ADDON, '.cache')
-
-ICONS = os.path.join(ADDON, 'gui/icons')
+CACHE = os.path.join(BASE, '.cache')
 
 os.makedirs(CACHE, exist_ok=True)
 
-CONFIG = os.path.join(ADDON, 'config.db')
-
-LOG = os.path.join(ADDON, 'addon.log')
+LOG = os.path.join(BASE, 'addon.log')
 
 TEMP = tempfile.gettempdir()

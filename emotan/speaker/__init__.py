@@ -19,8 +19,8 @@ class BaseSpeaker:
         raise NotImplementedError
 
 
-from tools.speaker.say import Say
-from tools.speaker.espeak import Espeak
+from emotan.speaker.espeak import Espeak
+from emotan.speaker.say import Say
 
 # Interfaces for various text-to-speech application
 Speaker = {
@@ -60,9 +60,10 @@ from PyQt5.QtGui import QKeySequence
 #import anki
 #import aqt
 
+import emotan
 from . import conversion as to, paths, service
 from .bundle import Bundle
-from .config import Config
+from emotan.config import Config
 from .router import Router
 
 __all__ = ['browser_menus', 'cards_button', 'config_menu', 'editor_button',
@@ -120,7 +121,7 @@ sequences = {key: QKeySequence()
                          'configurator', 'editor_generator', 'templater']}
 
 config = Config(
-    db=Bundle(path=paths.CONFIG,
+    db=Bundle(path=emotan.CONFIG,
               table='general',
               normalize=to.normalized_ascii),
     cols=[

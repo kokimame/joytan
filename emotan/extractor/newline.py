@@ -1,4 +1,4 @@
-from tools.extractor.base import Extractor
+from emotan.extractor.base import Extractor
 
 class NewlineExtractor(Extractor):
     def __init__(self, file):

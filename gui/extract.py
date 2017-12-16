@@ -1,7 +1,7 @@
 import re
 
 import gui
-import tools.extractor as extractor
+import emotan.extractor as extractor
 from gui.utils import getFiles
 
 

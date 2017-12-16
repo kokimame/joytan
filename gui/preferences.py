@@ -2,7 +2,7 @@ import gui
 from gui.widgets.lvmap import LvMapWidget
 from gui.qt import *
 from gui.utils import LANGCODES
-from tools.speaker import Speaker
+from emotan.speaker import Speaker
 
 
 class Preferences(QDialog):

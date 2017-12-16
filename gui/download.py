@@ -3,7 +3,7 @@ import os, requests
 import gui
 from gui.qt import *
 from gui.utils import showCritical
-from tools.downloader import Downloaders
+from emotan.downloader import Downloaders
 
 def onDownload(mw):
     gui.dialogs.open("DownloadDialog", mw)

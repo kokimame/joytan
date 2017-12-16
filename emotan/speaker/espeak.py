@@ -1,5 +1,5 @@
 
-from tools.speaker import *
+from emotan.speaker import *
 from gui.utils import LANGUAGES, LANGCODES
 
 def getTtsHelp():

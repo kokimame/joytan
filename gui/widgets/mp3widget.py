@@ -1,6 +1,6 @@
 import gui
 from gui.qt import *
-from tools.handler import mp3handler
+from emotan.handler import mp3handler
 from gui.utils import getFileNameFromPath
 
 

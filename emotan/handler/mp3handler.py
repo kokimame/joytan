@@ -2,7 +2,7 @@ import os
 import pydub
 from pydub import AudioSegment as Aseg
 
-from tools.speaker import Speaker
+from emotan.speaker import Speaker
 
 class Mp3Handler:
     def __init__(self, setting):

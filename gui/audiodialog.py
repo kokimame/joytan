@@ -150,7 +150,7 @@ class AudioDialog(QDialog):
 
                 self.quit()
 
-        from tools.handler.mp3handler import Mp3Handler
+        from emotan.handler.mp3handler import Mp3Handler
         print("Audio setting: ", setting)
         handler = Mp3Handler(setting)
         self.form.progressBar.setRange(0, self.mw.entrylist.count()+3)

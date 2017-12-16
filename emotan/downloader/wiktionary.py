@@ -1,7 +1,7 @@
 import re
 
 from bs4 import BeautifulSoup
-from tools.downloader.base import BaseDownloader
+from emotan.downloader.base import BaseDownloader
 
 class WiktionaryDownloader(BaseDownloader):
     def __init__(self):

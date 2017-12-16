@@ -1,6 +1,6 @@
 import gui
 from gui.qt import *
-from tools.downloader.gimage import GimageThread
+from emotan.downloader.gimage import GimageThread
 
 
 

@@ -44,7 +44,7 @@ class ServiceQuo(QLabel):
         else:
             content = self._BODY.format(body=self.lineKey, svc=svc_id)
             # desc = self.summarizer(option)
-            content += self._OPTIONS.format(options=str(options))
+            content += self._OPTIONS.format(options=str(sorted(options.items())))
             self.options = options
         self.setText(content)
 
@@ -206,7 +206,7 @@ class AwesomeTTS(QWidget):
         layout.addWidget(header)
         layout.addWidget(overview)
         print(overview.currentItem())
-
+        print("OVERVIEW CREATED")
         return layout
 
     def _on_overview_changed(self):
@@ -295,7 +295,7 @@ class AwesomeTTS(QWidget):
 
 
         hor = QHBoxLayout()
-        hor.addWidget(Label("Service option:"))
+        hor.addWidget(Label("Generate using:"))
         hor.addWidget(dropdown)
         hor.addStretch()
 

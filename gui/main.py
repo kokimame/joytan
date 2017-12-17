@@ -23,7 +23,6 @@ def defaultSetting():
 
     return {
         "workspace": os.path.join(*setting['workspace']),
-        "tts": setting['tts'],
         "title": setjs['title'],
         "sfxdir": os.path.join(cwd, "templates", "sfx"),
         "worddir": os.path.join(cwd, "templates", "wordlist"),
@@ -135,7 +134,7 @@ class EmotanMW(QMainWindow):
         gui.translate.onTranslate(self)
 
     def onConfigure(self):
-        gui.dialogs.open("Preferences", self, tab="ATTS")
+        gui.dialogs.open("Preferences", self, tab="TTS")
 
     def onCreateMp3(self):
         # To update 'Empty entry' if a name is added to it

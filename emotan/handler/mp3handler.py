@@ -8,7 +8,6 @@ class Mp3Handler:
     def __init__(self, setting):
         self.setting = setting
         # Setting Text-to-speech
-        self.tts = Speaker[self.setting['tts']]()
         self.sfxMap = {}
         self.bgmLoop = []
         # List of acapella mp3file (no BGM but with SFX) for each entry
@@ -29,23 +28,15 @@ class Mp3Handler:
         from emotan.speaker import router
         routers = {}
         for key in self.setting['ttsMap']:
-            if key == "atop":
-                okay = lambda path: self.asegList.append(Aseg.from_mp3(path) * self.setting['repeat'])
-            else:
-                okay = lambda path: self.asegList.append(Aseg.from_mp3(path))
-
-            fail = lambda: print("ROUTER FAILED!")
-
-            callbacks = dict(
-                okay=okay,
-                fail=lambda x: print(x, "ROUTER FAILED!")
-            )
             routers[key] = lambda path, text: router.force_run(
                                                svc_id=self.setting['ttsMap'][key][1],
                                                options=self.setting['ttsMap'][key][2],
                                                path=path,
                                                text=text,
                                                )
+            print(self.setting['ttsMap'][key][2])
+            print(key)
+        print(routers)
 
         return routers
 

@@ -77,10 +77,8 @@ class AudioDialog(QDialog):
             return
 
         setting = {}
-        setting['tts'] = self.mset['tts']
         setting['title'] = self.mset['title']
         setting['repeat'] = self.form.wordSpin.value()
-        setting['langMap'] = self.eset.langMap
         setting['ttsMap'] = self.eset.ttsMap
 
         audioDir = os.path.join(self.mw.getProjectPath(), "audio")
@@ -93,7 +91,6 @@ class AudioDialog(QDialog):
 
         # Check if LRC file needs to be created
         setting['lrc'] = self.form.lrcCheck.isChecked()
-
 
         sfxdir = {}
         # Key for Entry's dictionary of QLineEdit
@@ -141,6 +138,7 @@ class AudioDialog(QDialog):
 
                 self.sig.emit("Mixing with BGM. This takes a few minutes.")
                 acapella = sum(self.handler.acapList)
+                print("Acap")
                 if len(setting['loop']) != 0:
                     final = acapella.overlay(self.handler.getBgmLoop(len(acapella)))
                     final.export(finalMp3)
@@ -161,7 +159,6 @@ class AudioDialog(QDialog):
             self.form.pgMsg.setText(msg)
             val = self.form.progressBar.value()
             self.form.progressBar.setValue(val+1)
-
         self.thread = Mp3HandlerThread(self.mw, handler)
         self.thread.sig.connect(onUpdate)
         self.thread.start()

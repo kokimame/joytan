@@ -1,5 +1,4 @@
 import gui
-from gui.widgets.lvmap import LvMapWidget
 from gui.qt import *
 from gui.utils import LANGCODES
 from emotan.speaker import Speaker
@@ -21,12 +20,20 @@ class Preferences(QDialog):
         self.show()
 
     def initUi(self):
-        self.setupSpins()
-        self.setupEditors()
-        self.setupCombo()
-        self.setupButtons()
-        self.setupList()
         self.setupATTS()
+        form = self.form
+        # Buttons
+        form.okBtn.clicked.connect(self.onOk)
+        form.applyBtn.clicked.connect(self.onApply)
+        # Spins
+        form.dpwSpin.setValue(self.eset.lv1)
+        form.epdSpin.setValue(self.eset.lv2)
+        # Editors
+        form.titleEdit.setText(self.mw.setting['title'])
+        form.workingEdit.setText(self.mw.setting['workspace'])
+        form.wordEdit.setText(self.mw.setting['worddir'])
+        form.bgmEdit.setText(self.mw.setting['bgmdir'])
+        form.sfxEdit.setText(self.mw.setting['sfxdir'])
 
     def setupATTS(self):
         tab = self.form.tabAtts
@@ -45,46 +52,6 @@ class Preferences(QDialog):
         elif tab == "TTS":
             self.form.tabWidget.setCurrentIndex(1)
 
-    def setupCombo(self):
-        tc = self.form.ttsCombo
-        tc.addItems(sorted([site for site in Speaker.keys()]))
-        tc.setCurrentText(self.mw.setting['tts'])
-
-    def setupButtons(self):
-        form = self.form
-        form.okBtn.clicked.connect(self.onOk)
-        form.applyBtn.clicked.connect(self.onApply)
-
-
-    def setupList(self):
-        testList = self.form.testList
-        # Sort keys for Entry's dict of QLineEdit alphabetically
-        # i.e. 'atop', 'def-x' and 'ex-x-x'
-        for lineKey in sorted(list(self.eset.langMap.keys())):
-            # language and Voice ID
-            lv = self.eset.langMap[lineKey]
-            wig = LvMapWidget(self.mw.setting['tts'], lv, lineKey)
-
-            lwi1 = QListWidgetItem()
-            lwi1.setSizeHint(wig.sizeHint())
-            testList.addItem(lwi1)
-            testList.setItemWidget(lwi1, wig)
-
-    def setupSpins(self):
-        form = self.form
-        form.dpwSpin.setValue(self.eset.lv1)
-        form.epdSpin.setValue(self.eset.lv2)
-
-    def setupEditors(self):
-        form = self.form
-        mw = self.mw
-        form.titleEdit.setText(mw.setting['title'])
-        form.workingEdit.setText(mw.setting['workspace'])
-        form.wordEdit.setText(mw.setting['worddir'])
-        form.bgmEdit.setText(mw.setting['bgmdir'])
-        form.sfxEdit.setText(mw.setting['sfxdir'])
-
-
     def onOk(self):
         # FIXME: Switching TTS service may break LvMapping.
         self.updateSetting()
@@ -92,8 +59,6 @@ class Preferences(QDialog):
 
     def onApply(self):
         self.updateSetting()
-        self.form.testList.clear()
-
         self.initUi()
 
     def updateSetting(self):
@@ -103,18 +68,6 @@ class Preferences(QDialog):
         self.mw.setting['worddir'] = form.wordEdit.text()
         self.mw.setting['bgmdir'] = form.bgmEdit.text()
         self.mw.setting['sfxdir'] = form.sfxEdit.text()
-        self.mw.setting['tts'] = form.ttsCombo.currentText()
-
-        testList = self.form.testList
-        for i in range(testList.count()):
-            wig = testList.itemWidget(testList.item(i))
-            # Key for Entry's dictionary of QLineEdit
-            lineKey = wig.key
-            if lineKey in list(self.eset.langMap.keys()):
-                newLang = LANGCODES[wig.langCombo.currentText().lower()]
-                newVid = wig.tts.code2Vids[newLang][wig.voiceCombo.currentText()]
-                self.eset.langMap[lineKey][0] = newLang
-                self.eset.langMap[lineKey][1] = newVid
 
         self.eset.reshape(lv1=self.form.dpwSpin.value())
         self.eset.reshape(lv2=self.form.epdSpin.value())

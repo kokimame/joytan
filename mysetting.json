@@ -1,17 +1,14 @@
 {
   "linux": {
-    "workspace": ["/home", "kokimame", "Emotan", "workspace"],
-    "tts": "espeak"
+    "workspace": ["/home", "kokimame", "Emotan", "workspace"]
   },
 
   "mac": {
-    "workspace": ["/Users", "Koki", "Emotan", "workspace"],
-    "tts": "say"
+    "workspace": ["/Users", "Koki", "Emotan", "workspace"]
   },
 
   "windows": {
-    "workspace": ["C:", "\\Users", "Koki", "Documents", "Emotan", "workspace"],
-    "tts" : "espeak"
+    "workspace": ["C:", "\\Users", "Koki", "Documents", "Emotan", "workspace"]
   },
   "title": "emotan-sample"
 

@@ -30,13 +30,13 @@ class CopyDialog(QDialog):
         # Copying from and to the contents in Entry Widget
         for ew in self.mw.entrylist.getEntries():
             try:
-                ew.editors[tbox.currentText().lower()].setText(ew.editors[fbox.currentText().lower()].text())
+                ew.editors[tbox.currentText()].setText(ew.editors[fbox.currentText()].text())
             except KeyError:
                 pass
 
         # Change language mapping of the entrylist based on the copy
         eset = self.mw.entrylist.setting
-        eset.langMap[tbox.currentText().lower()][0] = eset.langMap[fbox.currentText().lower()][0]
+        eset.ttsMap[tbox.currentText()][0] = eset.ttsMap[fbox.currentText()]
 
 
         self.mw.entrylist.updateAll()
@@ -44,8 +44,8 @@ class CopyDialog(QDialog):
     def setupCombo(self):
         form = self.form
         eset = self.mw.entrylist.setting
-        form.fromBox.addItems([item.title() for item in eset.langMap])
-        form.toBox.addItems([item.title() for item in eset.langMap])
+        form.fromBox.addItems([item for item in eset.ttsMap])
+        form.toBox.addItems([item for item in eset.ttsMap])
         form.fromBox.setCurrentText('Name')
 
     def setupButtons(self):

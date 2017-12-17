@@ -7,16 +7,10 @@ class EntryList(QListWidget):
             # Fixme: ...................
             self.lv1 = 0 # This will be expanded soon at the 'reshape()' below!
             self.lv2 = 0 # Same here. The method is a little bit dumb.
-            # Fixme: Allow users to choose default language from preference
-            # Temporally set English by default
-            self.defaultLang = 'en'
-            # This maps from line key of an entry to language code and Voice ID for its text
-            # TODO: When completely merged ATTS, langMap will be replaced by ttsMap
-            self.langMap = {'atop': [self.defaultLang, None]}
+            # Maps given Entry editor section to TTS service for dictation
             self.ttsMap = {'atop': None}
 
             self.reshape(lv1=1, lv2=1)
-
 
         def reshape(self, lv1=None, lv2=None):
             if lv1 and (self.lv1 != lv1):
@@ -25,32 +19,21 @@ class EntryList(QListWidget):
             if lv2 and (self.lv2 != lv2):
                 self.lv2 = lv2
                 self._reshape()
-
-            print("EntrySetting: LangMap -> ", self.langMap)
             print("EntrySetting: ttsMap -> ", self.ttsMap)
 
         def _reshape(self):
-            # Expand langMap and tags with default value
+            # Expand ttsMap and tags with default value
             for i in range(0, self.lv1):
                 if 'def-%d' % (i + 1) not in self.ttsMap:
                     self.ttsMap['def-%d' % (i + 1)] = None
-                # TODO: Replace langMap with ttsMap at all
-                try:
-                    self.langMap['def-%d' % (i + 1)]
-                except KeyError:
-                    self.langMap['def-%d' % (i + 1)] = [self.defaultLang, None]
                 for j in range(0, self.lv2):
                     if 'ex-%d-%d' % (i + 1, j + 1) not in self.ttsMap:
                         self.ttsMap['ex-%d-%d' % (i + 1, j + 1)] = None
-                    try:
-                        self.langMap['ex-%d-%d' % (i + 1, j + 1)]
-                    except KeyError:
-                        self.langMap['ex-%d-%d' % (i + 1, j + 1)] = [self.defaultLang, None]
 
         def isVoiceless(self):
-            for item, map in self.langMap.items():
-                # Voice id is still None
-                if not map[1]:
+            for key, val in self.ttsMap.items():
+                # if TTS is not allocated
+                if not val:
                     return True
             else:
                 return False
@@ -59,15 +42,15 @@ class EntryList(QListWidget):
         def data(self):
             data = {'lv1': self.lv1,
                     'lv2': self.lv2,
-                    'langMap': None}
-            langMap = {'atop': self.langMap['atop']}
+                    'ttsMap': None}
+            ttsMap = {'atop': self.ttsMap['atop']}
 
             for i in range(0, self.lv1):
-                langMap['def-%d' % (i + 1)] = self.langMap['def-%d' % (i + 1)]
+                ttsMap['def-%d' % (i + 1)] = self.ttsMap['def-%d' % (i + 1)]
                 for j in range(0, self.lv2):
-                    langMap['ex-%d-%d' % (i + 1, j + 1)] = self.langMap['ex-%d-%d' % (i + 1, j + 1)]
+                    ttsMap['ex-%d-%d' % (i + 1, j + 1)] = self.ttsMap['ex-%d-%d' % (i + 1, j + 1)]
 
-            data['langMap'] = langMap
+            data['ttsMap'] = ttsMap
             return data
 
     def __init__(self, parent=None):

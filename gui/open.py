@@ -20,7 +20,7 @@ def onOpen(mw):
     mw.entrylist.deleteAll()
     mw.entrylist.setting.reshape(lv1=eset['lv1'])
     mw.entrylist.setting.reshape(lv2=eset['lv2'])
-    mw.entrylist.setting.langMap = eset['langMap']
+    mw.entrylist.setting.ttsMap = eset['ttsMap']
 
     setting = mw.entrylist.setting.data()
     for data in jd[1:]:

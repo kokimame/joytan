@@ -57,12 +57,10 @@ from time import time
 from PyQt5.QtCore import PYQT_VERSION_STR, Qt
 from PyQt5.QtGui import QKeySequence
 
-#import anki
-#import aqt
-
 import emotan
-from . import conversion as to, paths, service
-from .bundle import Bundle
+from . import paths, service
+from emotan import conversion as to
+from emotan.bundle import Bundle
 from emotan.config import Config
 from .router import Router
 

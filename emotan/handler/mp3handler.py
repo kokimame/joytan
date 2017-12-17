@@ -17,6 +17,39 @@ class Mp3Handler:
         self.currentTime = 0
         self.needsLrc = self.setting['lrc']
         self.lrcFormat = []
+        self.routers = self.getRouters()
+
+    def getRouters(self):
+        """
+        Returns a dict of function to force router to generate audio file
+        based on given svc_id, options, path, and text.
+        These functions are only compatible with offline TTS service such as
+        Say on Mac, espeak on Linux.
+        """
+        from emotan.speaker import router
+        routers = {}
+        for key in self.setting['ttsMap']:
+            if key == "atop":
+                okay = lambda path: self.asegList.append(Aseg.from_mp3(path) * self.setting['repeat'])
+            else:
+                okay = lambda path: self.asegList.append(Aseg.from_mp3(path))
+
+            fail = lambda: print("ROUTER FAILED!")
+
+            callbacks = dict(
+                okay=okay,
+                fail=lambda x: print(x, "ROUTER FAILED!")
+            )
+            routers[key] = lambda path, text: router.force_run(
+                                               svc_id=self.setting['ttsMap'][key][1],
+                                               options=self.setting['ttsMap'][key][2],
+                                               path=path,
+                                               text=text,
+                                               )
+
+        return routers
+
+
 
     def setupAudio(self):
         # Setup SFX and BGM by organizing them into groups and adjusting volume.
@@ -52,41 +85,40 @@ class Mp3Handler:
         # TODO: Create Final.mp3 without generating intermediate mp3files
         # Create complete MP3 contents for an Entry
         # including 3 section; 'atop', 'def-x' and 'ex-x-x'
+        asegList = []
         curdir = os.path.join(self.setting['dest'], ew.stringIndex())
         assert os.path.exists(curdir)
-        asegList = []
 
         # Atop section
         if "atop" in self.sfxMap:
             asegList.append((self.sfxMap['atop'], None))
         atopLang, atopVid = self.setting['langMap']['atop']
         atopText = ew.editors['atop'].text()
-        toAtop = os.path.join(curdir, "atop")
+        toAtop = os.path.join(curdir, "atop") + ".mp3"
 
         if self.setting['gstatic'] and (atopLang == 'en'):
             from gui.download import downloadGstaticSound
             try:
-                downloadGstaticSound(atopText, toAtop + ".mp3")
+                downloadGstaticSound(atopText, toAtop)
             except:
                 # If gstatic pronunciation file is not found, use TTS.
-                self.tts.dictate(atopText, atopVid, output=toAtop)
+                self.routers['atop'](path=toAtop, text=atopText)
         else:
-            self.tts.dictate(atopText, atopVid, output=toAtop)
+            self.routers['atop'](path=toAtop, text=atopText)
 
-        asegList.append((Aseg.from_mp3(toAtop + ".mp3") * self.setting['repeat'], atopText))
+        asegList.append((Aseg.from_mp3(toAtop) * self.setting['repeat'], atopText))
 
         # Def-x and ex-x-x section
         for i in range(0, ew.lv1):
-            lineKey = 'def-%d' % (i+1)
+            lineKey = 'def-%d' % (i + 1)
             defText = ew.editors[lineKey].text()
             if defText != '':
                 if lineKey in self.sfxMap:
                     asegList.append((self.sfxMap[lineKey], None))
-                defVid = self.setting['langMap'][lineKey][1]
-                toDef = os.path.join(curdir, lineKey)
-                # TODO: Rename 'dictate' to 'speak' or 'run'
-                self.tts.dictate(defText, defVid, output=toDef)
-                asegList.append((Aseg.from_mp3(toDef + ".mp3"), defText))
+                toDef = os.path.join(curdir, lineKey) + ".mp3"
+                self.routers['def-%d' % (i + 1)](path=toDef, text=defText)
+                asegList.append((Aseg.from_mp3(toDef), defText))
+
 
             for j in range(0, ew.lv2):
                 lineKey = 'ex-%d-%d' % (i + 1, j + 1)
@@ -94,10 +126,9 @@ class Mp3Handler:
                 if exText != '':
                     if lineKey in self.sfxMap:
                         asegList.append((self.sfxMap[lineKey], None))
-                    exVid = self.setting['langMap'][lineKey][1]
                     toEx = os.path.join(curdir, lineKey)
-                    self.tts.dictate(exText, exVid, output=toEx)
-                    asegList.append((Aseg.from_mp3(toEx + ".mp3"), exText))
+                    self.routers['ex-%d-%d' % (i + 1, j + 1)](path=toEx, text=exText)
+                    asegList.append((Aseg.from_mp3(toEx), exText))
 
         acapella = sum(set[0] for set in asegList)
         if self.needsLrc:

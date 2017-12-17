@@ -331,6 +331,25 @@ class Router(object):
 
             try_next()
 
+    def force_run(self, svc_id, options, path, text):
+        try:
+            self._logger.debug("Force Run for '%s' w/ %s", svc_id, options)
+
+            if not text:
+                raise ValueError("No speakable text is present")
+            if len(text) > 2000:
+                raise ValueError("Text to speak is too long")
+            svc_id, service, options = self._validate_service(svc_id, options)
+            text = service['instance'].modify(text)
+            if not text:
+                raise ValueError("Text not usable by " + service['class'].NAME)
+
+            service['instance'].run(text, options, path)
+
+        except:
+            print("ERROR: FORCE RUN FAILED")
+
+
     def __call__(self, svc_id, text, options, callbacks,
                  want_human=False, note=None, async=True):
         """

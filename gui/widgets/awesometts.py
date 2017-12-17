@@ -21,6 +21,38 @@ class Note(Label):
         self.setWordWrap(True)
 
 
+class ServiceQuo(QLabel):
+    """Description of TTS options for a given Entry's editor"""
+    _BODY = '<p><span style="font-size:13pt">{body}</span>' \
+            '<span style="font-size:15pt; font-weight:600;">  {svc}</span></p>'
+    _UNINIT = '<p><span style="color:#ff0000;">TTS undefined</span></p>'
+    _OPTIONS = '<p>{options}</p>'
+
+    def __init__(self, lineKey):
+        super(ServiceQuo, self).__init__()
+        self.setWordWrap(True)
+        self.lineKey = lineKey
+        self.idx = None
+        self.options = None
+
+        self.set_desc(None, None)
+
+    def set_desc(self, svc_id, options):
+        if not options:
+            content = self._BODY.format(body=self.lineKey, svc="")
+            content += self._UNINIT
+        else:
+            content = self._BODY.format(body=self.lineKey, svc=svc_id)
+            # desc = self.summarizer(option)
+            content += self._OPTIONS.format(options=str(options))
+            self.options = options
+        self.setText(content)
+
+    def summarizer(self):
+        pass
+
+
+
 class AwesomeTTS(QWidget):
     _FONT_HEADER = QFont()
     _FONT_HEADER.setPointSize(12)
@@ -42,30 +74,35 @@ class AwesomeTTS(QWidget):
     _INPUT_WIDGETS = _OPTIONS_WIDGETS + (QAbstractButton,
                                          QLineEdit, QTextEdit)
 
-    def __init__(self, alerts, ask, *args, **kargs):
+    def __init__(self, eset, alerts, ask, *args, **kargs):
         super(AwesomeTTS, self).__init__()
 
-        from emotan.speaker import router, config
+        from emotan.speaker import router, config, logger
         self.router = router
         self.config = config
+        self.logger = logger
+
         self._panel_built = {}
         self._panel_set = {}
         self._svc_id = None
         self._svc_count = 0
         self._alerts = alerts
         self._ask = ask
-
+        # Update mw.entrylist settings
+        self.eset = eset
 
         vbox = QVBoxLayout()
-        vbox.addLayout(self._banner())
-        vbox.addWidget(self._divider(QFrame.HLine))
+        # vbox.addLayout(self._banner())
+        # vbox.addWidget(self._divider(QFrame.HLine))
         vbox.addLayout(self._services())
         vbox.addSpacing(self._SPACING)
         vbox.addLayout(self._control())
+
         hbox = QHBoxLayout()
         hbox.addLayout(self._overview())
         hbox.addWidget(self._divider())
         hbox.addLayout(vbox)
+
 
         self.setLayout(hbox)
 
@@ -98,32 +135,6 @@ class AwesomeTTS(QWidget):
         except AttributeError:
             text.setPlainText("")
 
-    def _banner(self):
-        title = Label('AwesomeTTS Interface')
-        title.setFont(self._FONT_TITLE)
-        version = Label("Emotan version x.x.x")
-        version.setFont(self._FONT_INFO)
-
-        layout = QHBoxLayout()
-        layout.addWidget(title)
-        layout.addSpacing(self._SPACING)
-        layout.addStretch()
-        layout.addWidget(version)
-
-        return layout
-
-    def _divider(self, orientation_style=QFrame.VLine):
-        """
-        Returns a divider.
-
-        For subclasses, this method will be called automatically as part
-        of the base class _ui() method.
-        """
-
-        frame = QFrame()
-        frame.setFrameStyle(orientation_style | QFrame.Sunken)
-
-        return frame
 
     def _control(self):
         """
@@ -165,19 +176,84 @@ class AwesomeTTS(QWidget):
         return layout
 
     def _overview(self):
-        """
-        Returns the superclass's text and preview buttons, adding our
-        field input selector, then the base class's cancel/OK buttons.
-        """
+        overview = QListWidget()
+        overview.setStyleSheet("""
+                            QListWidget::item { border-bottom: 1px solid black; }
+                            QListWidget::item:selected { background: rgba(0,255,255,30); }
+                           """)
+        overview.setObjectName('overview')
+        for i, key in enumerate(sorted(self.eset.ttsMap)):
+            quo = ServiceQuo(key)
+            svc_values = self.eset.ttsMap[key]
+            if svc_values:
+                quo.idx = svc_values[0]
+                # Pass svc_id & options
+                quo.set_desc(svc_values[1], svc_values[2])
+            lwi = QListWidgetItem()
+            lwi.setSizeHint(quo.sizeHint())
+            overview.addItem(lwi)
+            overview.setItemWidget(lwi, quo)
+            # First item in the list is selected by default
+            if i == 0:
+                lwi.setSelected(True)
+                overview.setCurrentItem(lwi)
+
+        overview.currentItemChanged.connect(self._on_overview_changed)
 
         header = Label("Overview")
         header.setFont(self._FONT_HEADER)
         layout = QVBoxLayout()
         layout.addWidget(header)
-        layout.addWidget(QListWidget())
+        layout.addWidget(overview)
+        print(overview.currentItem())
 
         return layout
 
+    def _on_overview_changed(self):
+        """
+        Called when selected item in the Overview list changed,
+        rebuild the service panel based on options the newly selected item stores,
+        or initialize it for undefined new item using previously selected one.
+        """
+        print("OVERVIEW CHANGED")
+        overview = self.findChild(QListWidget, 'overview')
+        item = overview.currentItem()
+        iw = overview.itemWidget(item)
+
+        dropdown = self.findChild(QComboBox, 'service')
+
+        if not iw.options:
+            # If TTS options are undefined for the item
+            idx = dropdown.currentIndex()
+            self._on_service_activated(idx)
+        else:
+            # If TTS options are already defined,
+            # do the same routine as activating presets does
+            dropdown.setCurrentIndex(iw.idx)
+            self._on_service_activated(iw.idx, use_options=iw.options)
+
+
+    def _update_overview(self):
+        overview = self.findChild(QListWidget, 'overview')
+        try:
+            svc_id, options = self._get_service_values()
+            print(svc_id, options)
+        except AssertionError:
+            print("TOO EARLY TO UPDATE OVERVIEW")
+            return
+        print("UPDATE OVERVIEW")
+
+        dropdown = self.findChild(QComboBox, 'service')
+        idx = dropdown.currentIndex()
+        item = overview.currentItem()
+
+        iw = overview.itemWidget(item)
+        iw.options = options
+        iw.idx = idx
+        iw.set_desc(svc_id, options)
+        item.setSizeHint(iw.sizeHint())
+        self.eset.ttsMap[iw.lineKey] = (idx, svc_id, options)
+        overview.repaint()
 
 
     def _services(self):
@@ -219,7 +295,7 @@ class AwesomeTTS(QWidget):
 
 
         hor = QHBoxLayout()
-        hor.addWidget(Label("Generate using"))
+        hor.addWidget(Label("Service option:"))
         hor.addWidget(dropdown)
         hor.addStretch()
 
@@ -241,6 +317,7 @@ class AwesomeTTS(QWidget):
         recall the last-used values for the options, and then switch the
         stack to it.
         """
+        print("SERVICE ACTIVATED")
         combo = self.findChild(QComboBox, 'service')
         svc_id = combo.itemData(idx)
         stack = self.findChild(QStackedWidget, 'panels')
@@ -278,6 +355,7 @@ class AwesomeTTS(QWidget):
 
             if panel_unbuilt:
                 self._panel_built[svc_id] = True
+                # FIXME: Building service panel while opening the tab looks shacky on Mac
                 self._on_service_activated_build(svc_id, widget, options)
 
             if panel_unset or use_options:
@@ -286,7 +364,6 @@ class AwesomeTTS(QWidget):
                                                use_options)
 
         stack.setCurrentIndex(idx)
-
         if panel_unbuilt and not initial:
             self.adjustSize()
 
@@ -294,9 +371,11 @@ class AwesomeTTS(QWidget):
         help_svc = self.findChild(QAction, 'help_svc')
         if help_svc:
             help_svc.setText("Using the %s service" % combo.currentText())
+        self._update_overview()
 
     def _ui_services_presets(self):
         """Returns the preset controls as a horizontal layout."""
+        print("UI SERVICE PRESETS")
 
         label = Label("Quickly access this service later?")
         label.setObjectName('presets_label')
@@ -332,25 +411,14 @@ class AwesomeTTS(QWidget):
 
         return layout
 
-    def _on_preset_reset(self):
-        """Sets preset dropdown back and disables delete button."""
-        if next((True
-                 for frame in inspect.stack()
-                 if frame[3] == '_on_preset_activated'),
-                False):
-            return  # ignore value change events triggered by preset loads
-
-        self.findChild(QPushButton, 'presets_delete').setDisabled(True)
-        self.findChild(QComboBox, 'presets_dropdown').setCurrentIndex(0)
-
-
     def _on_service_activated_build(self, svc_id, widget, options):
         """
         Based on the list of options, build a grid of labels and input
         controls.
         """
 
-        #self._addon.logger.debug("Constructing panel for %s", svc_id)
+        print("SERVICE ACTIVATED BUILD")
+        self.logger.debug("Constructing panel for %s", svc_id)
 
         row = 1
         panel = widget.layout()
@@ -438,8 +506,9 @@ class AwesomeTTS(QWidget):
         Based on the list of options and the user's last known options,
         restore the values of all input controls.
         """
+        print("SERVICE ACTIVATED")
+        self.logger.debug("Restoring options for %s", svc_id)
 
-        #self._addon.logger.debug("Restoring options for %s", svc_id)
 
         last_options = (use_options or
                         self.config['last_options'].get(svc_id, {}))
@@ -484,8 +553,24 @@ class AwesomeTTS(QWidget):
 
                 vinput.setCurrentIndex(idx)
 
+    def _on_preset_reset(self):
+        """Sets preset dropdown back and disables delete button."""
+        print("PRESET RESET")
+        self._update_overview()
+
+        if next((True
+                 for frame in inspect.stack()
+                 if frame[3] == '_on_preset_activated'),
+                False):
+            return  # ignore value change events triggered by preset loads
+
+        self.findChild(QPushButton, 'presets_delete').setDisabled(True)
+        self.findChild(QComboBox, 'presets_dropdown').setCurrentIndex(0)
+
+
     def _on_preset_refresh(self, select=None):
         """Updates the view of the preset controls."""
+        print("PRESET REFRESH")
 
         label = self.findChild(Label, 'presets_label')
         dropdown = self.findChild(QComboBox, 'presets_dropdown')
@@ -533,22 +618,11 @@ class AwesomeTTS(QWidget):
             dropdown.hide()
             delete.hide()
 
-    def _on_preset_reset(self):
-        """Sets preset dropdown back and disables delete button."""
-
-        if next((True
-                 for frame in inspect.stack()
-                 if frame[3] == '_on_preset_activated'),
-                False):
-            return  # ignore value change events triggered by preset loads
-
-        self.findChild(QPushButton, 'presets_delete').setDisabled(True)
-        self.findChild(QComboBox, 'presets_dropdown').setCurrentIndex(0)
-
     def _on_preset_save(self):
         """Saves the current service state back as a preset."""
 
         svc_id, options = self._get_service_values()
+        print("PRESET SAVE", svc_id, options)
         assert "bad get_service_values() value", \
                not svc_id.startswith('group:') and options
         svc_name = self.findChild(QComboBox, 'service').currentText()
@@ -626,7 +700,7 @@ class AwesomeTTS(QWidget):
         except KeyError:
             pass
         else:
-            self._addon.config['presets'] = presets
+            self.config['presets'] = presets
 
         self._on_preset_refresh()
 
@@ -750,3 +824,31 @@ class AwesomeTTS(QWidget):
                 **{svc_id: values}
             },
         } if values else dict(last_service=svc_id)
+
+    def _banner(self):
+        title = Label('AwesomeTTS Interface')
+        title.setFont(self._FONT_TITLE)
+        version = Label("Emotan version x.x.x")
+        version.setFont(self._FONT_INFO)
+
+        layout = QHBoxLayout()
+        layout.addWidget(title)
+        layout.addSpacing(self._SPACING)
+        layout.addStretch()
+        layout.addWidget(version)
+
+        return layout
+
+    def _divider(self, orientation_style=QFrame.VLine):
+        """
+        Returns a divider.
+
+        For subclasses, this method will be called automatically as part
+        of the base class _ui() method.
+        """
+
+        frame = QFrame()
+        frame.setFrameStyle(orientation_style | QFrame.Sunken)
+
+        return frame
+

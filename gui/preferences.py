@@ -3,9 +3,12 @@ from gui.widgets.lvmap import LvMapWidget
 from gui.qt import *
 from gui.utils import LANGCODES
 from emotan.speaker import Speaker
+from gui.widgets.awesometts import AwesomeTTS
 
 
 class Preferences(QDialog):
+    _INDEX_GENERAL = 0
+    _INDEX_ATTS = 2
 
     def __init__(self, mw, tab="General"):
         QDialog.__init__(self, mw, Qt.Window)
@@ -26,12 +29,14 @@ class Preferences(QDialog):
         self.setupATTS()
 
     def setupATTS(self):
-        from gui.widgets.awesometts import AwesomeTTS
-        from gui.utils import showCritical, getText
         tab = self.form.tabAtts
-        hbox= QHBoxLayout()
-        hbox.addWidget(AwesomeTTS(showCritical, getText))
-        tab.setLayout(hbox)
+        if not tab.layout():
+            from gui.utils import showCritical, getText
+            atts = AwesomeTTS(self.eset, showCritical, getText)
+            atts.setObjectName("AwesomeTTS")
+            hbox = QHBoxLayout()
+            hbox.addWidget(atts)
+            tab.setLayout(hbox)
 
     def setTab(self, tab):
         # Set by the absolute index of a tab based
@@ -82,18 +87,24 @@ class Preferences(QDialog):
 
     def onOk(self):
         # FIXME: Switching TTS service may break LvMapping.
-        self.updateEntrySetting()
-        self.updateMainSetting()
+        self.updateSetting()
         self.reject()
 
     def onApply(self):
-        self.updateEntrySetting()
-        self.updateMainSetting()
+        self.updateSetting()
         self.form.testList.clear()
 
         self.initUi()
 
-    def updateEntrySetting(self):
+    def updateSetting(self):
+        form = self.form
+        self.mw.setting['title'] = form.titleEdit.text()
+        self.mw.setting['workspace'] = form.workingEdit.text()
+        self.mw.setting['worddir'] = form.wordEdit.text()
+        self.mw.setting['bgmdir'] = form.bgmEdit.text()
+        self.mw.setting['sfxdir'] = form.sfxEdit.text()
+        self.mw.setting['tts'] = form.ttsCombo.currentText()
+
         testList = self.form.testList
         for i in range(testList.count()):
             wig = testList.itemWidget(testList.item(i))
@@ -107,17 +118,6 @@ class Preferences(QDialog):
 
         self.eset.reshape(lv1=self.form.dpwSpin.value())
         self.eset.reshape(lv2=self.form.epdSpin.value())
-
-
-
-    def updateMainSetting(self):
-        form = self.form
-        self.mw.setting['title'] = form.titleEdit.text()
-        self.mw.setting['workspace'] = form.workingEdit.text()
-        self.mw.setting['worddir'] = form.wordEdit.text()
-        self.mw.setting['bgmdir'] = form.bgmEdit.text()
-        self.mw.setting['sfxdir'] = form.sfxEdit.text()
-        self.mw.setting['tts'] = form.ttsCombo.currentText()
 
 
     def reject(self):

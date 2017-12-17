@@ -11,7 +11,9 @@ class EntryList(QListWidget):
             # Temporally set English by default
             self.defaultLang = 'en'
             # This maps from line key of an entry to language code and Voice ID for its text
+            # TODO: When completely merged ATTS, langMap will be replaced by ttsMap
             self.langMap = {'atop': [self.defaultLang, None]}
+            self.ttsMap = {'atop': None}
 
             self.reshape(lv1=1, lv2=1)
 
@@ -25,15 +27,21 @@ class EntryList(QListWidget):
                 self._reshape()
 
             print("EntrySetting: LangMap -> ", self.langMap)
+            print("EntrySetting: ttsMap -> ", self.ttsMap)
 
         def _reshape(self):
             # Expand langMap and tags with default value
             for i in range(0, self.lv1):
+                if 'def-%d' % (i + 1) not in self.ttsMap:
+                    self.ttsMap['def-%d' % (i + 1)] = None
+                # TODO: Replace langMap with ttsMap at all
                 try:
                     self.langMap['def-%d' % (i + 1)]
                 except KeyError:
                     self.langMap['def-%d' % (i + 1)] = [self.defaultLang, None]
                 for j in range(0, self.lv2):
+                    if 'ex-%d-%d' % (i + 1, j + 1) not in self.ttsMap:
+                        self.ttsMap['ex-%d-%d' % (i + 1, j + 1)] = None
                     try:
                         self.langMap['ex-%d-%d' % (i + 1, j + 1)]
                     except KeyError:

@@ -57,6 +57,7 @@ class EntryWidget(QWidget):
         viewWidget = QWidget()
         viewLayout = QVBoxLayout()
         self.viewLabel = QLabel()
+        self.viewLabel.setWordWrap(True)
 
         if atop == '':
             atop = "Empty entry"

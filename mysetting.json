@@ -13,7 +13,6 @@
     "workspace": ["C:", "\\Users", "Koki", "Documents", "Emotan", "workspace"],
     "tts" : "espeak"
   },
-  "title": "emotan-sample",
-  "onlineSrc": "Wiktionary"
+  "title": "emotan-sample"
 
 }

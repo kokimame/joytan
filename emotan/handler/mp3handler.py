@@ -28,9 +28,10 @@ class Mp3Handler:
         from emotan.speaker import router
         routers = {}
         for key in self.setting['ttsMap']:
-            routers[key] = lambda path, text: router.force_run(
-                                               svc_id=self.setting['ttsMap'][key][1],
-                                               options=self.setting['ttsMap'][key][2],
+            routers[key] = lambda path, text, svc_id=self.setting['ttsMap'][key][1],\
+                                  options=self.setting['ttsMap'][key][2]: router.force_run(
+                                               svc_id=svc_id,
+                                               options=options,
                                                path=path,
                                                text=text,
                                                )
@@ -128,6 +129,7 @@ class Mp3Handler:
             self.currentTime += len(aseg)
 
     def writeLyrics(self, output):
+        # TODO: WARNING!! May cause encoding bug while handling multi-byte characters
         with open(output, 'w') as lrc:
             for set in self.lrcFormat:
                 mmss = msec2hhmmss(set[0], lrc=True)

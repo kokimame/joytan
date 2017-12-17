@@ -53,17 +53,3 @@ def simpleDownload(mw, dler):
         ew.sources.append(dler.sourceName)
     mw.progress.finish()
 
-def downloadGstaticSound(word, filename):
-    url = "http://ssl.gstatic.com/dictionary/static/sounds/oxford/"
-    gb1 = "--_gb_1.mp3"  # A trailing type for gstatic dictionary
-    gb18 = "--_gb_1.8.mp3"  # A trailing type for gstatic dictionary
-
-    for w_key in [word + gb1, word + gb18, "x" + word + gb18]:
-        r = requests.get(url + w_key, stream=True)
-        if r.ok:
-            break
-        elif w_key == "x" + word + gb18 and not r.ok:
-            raise Exception("Audio for '" + word + "' not found")
-
-    with open(filename, "wb") as f:
-        f.write(r.content)

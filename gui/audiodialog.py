@@ -17,7 +17,7 @@ class AudioDialog(QDialog):
         self.mw = mw
         self.mset = mw.setting
         self.eset = mw.entrylist.setting
-        self.form = gui.forms.mp3dialog.Ui_Mp3Dialog()
+        self.form = gui.forms.audiodialog.Ui_AudioDialog()
         self.thread = None
         self.form.setupUi(self)
         self.setupButton()
@@ -29,7 +29,7 @@ class AudioDialog(QDialog):
 
     def setupSfxList(self):
         sfxList = self.form.sfxList
-        keys = [key for key in sorted(self.eset.langMap)]
+        keys = [key for key in sorted(self.eset.ttsMap)]
         self.sfxCnt = [1] * len(keys)
         for i, key in enumerate(keys):
             lwi = QListWidgetItem()
@@ -73,14 +73,15 @@ class AudioDialog(QDialog):
         # and set a voice id if it's None.
         if self.eset.isVoiceless():
             showCritical("Please set TTS voice to all section", title="Error")
-            gui.dialogs.open("Preferences", self.mw, tab="TTS")
+            gui.dialogs.open("Preferences", self.mw, tab="ATTS")
             return
 
         setting = {}
         setting['tts'] = self.mset['tts']
         setting['title'] = self.mset['title']
         setting['repeat'] = self.form.wordSpin.value()
-        setting['langMap'] = self.mw.entrylist.setting.langMap
+        setting['langMap'] = self.eset.langMap
+        setting['ttsMap'] = self.eset.ttsMap
 
         audioDir = os.path.join(self.mw.getProjectPath(), "audio")
         if os.path.isdir(audioDir):
@@ -90,8 +91,6 @@ class AudioDialog(QDialog):
         sfxList = self.form.sfxList
         bgmList = self.form.bgmList
 
-        # Check if to download online pronounce data or not
-        setting['gstatic'] = self.form.gstaticCheck.isChecked()
         # Check if LRC file needs to be created
         setting['lrc'] = self.form.lrcCheck.isChecked()
 
@@ -116,6 +115,9 @@ class AudioDialog(QDialog):
             bgmloop.append({"path": iw.mp3path,
                             "volume": iw.mp.volume()})
         setting['loop'] = bgmloop
+
+
+
 
         finalMp3 = os.path.join(setting['dest'], setting['title'] + ".mp3")
         finalLrc = os.path.join(setting['dest'], setting['title'] + ".lrc")

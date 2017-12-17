@@ -90,16 +90,6 @@
       </widget>
      </item>
      <item>
-      <widget class="QCheckBox" name="gstaticCheck">
-       <property name="text">
-        <string>Download nice pronunciation for English words if possible</string>
-       </property>
-       <property name="checked">
-        <bool>false</bool>
-       </property>
-      </widget>
-     </item>
-     <item>
       <layout class="QVBoxLayout" name="verticalLayout_3">
        <item>
         <widget class="QLabel" name="label_2">

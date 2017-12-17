@@ -92,20 +92,10 @@ class Mp3Handler:
         # Atop section
         if "atop" in self.sfxMap:
             asegList.append((self.sfxMap['atop'], None))
-        atopLang, atopVid = self.setting['langMap']['atop']
         atopText = ew.editors['atop'].text()
         toAtop = os.path.join(curdir, "atop") + ".mp3"
 
-        if self.setting['gstatic'] and (atopLang == 'en'):
-            from gui.download import downloadGstaticSound
-            try:
-                downloadGstaticSound(atopText, toAtop)
-            except:
-                # If gstatic pronunciation file is not found, use TTS.
-                self.routers['atop'](path=toAtop, text=atopText)
-        else:
-            self.routers['atop'](path=toAtop, text=atopText)
-
+        self.routers['atop'](path=toAtop, text=atopText)
         asegList.append((Aseg.from_mp3(toAtop) * self.setting['repeat'], atopText))
 
         # Def-x and ex-x-x section

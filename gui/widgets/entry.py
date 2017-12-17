@@ -2,6 +2,12 @@ from gui.qt import *
 
 
 class EntryWidget(QWidget):
+    # Design of QLabel shown on 'View' mode
+    _ENTRY_VIEW = '<html><head/><body>{content}</body></html>'
+    _FONT_TOP = '<p><span style=" font-size:16pt; font-weight:600;">{num}. {atop}</span></p>'
+    _FONT_DEF = '<p>{num}. {define}</p>'
+    _FONT_EX = '<p><span style="color:#8d8d8d;">&quot;{ex}&quot;</span></p>'
+
     def __init__(self, index, atop, mode, eset, parent=None):
         super(EntryWidget, self).__init__(parent)
         self.initFont()
@@ -19,12 +25,6 @@ class EntryWidget(QWidget):
         # The name of keys must not be modified because we alphabetically sort them out in a process
         # Text stored in the editors will be the actual contents of printed or audio output
         self.editors = {}
-
-        # Design of QLabel shown on 'View' mode
-        self.html = '<html><head/><body>{content}</body></html>'
-        self.atopFormat = '<p><span style=" font-size:16pt; font-weight:600;">{num}. {atop}</span></p>'
-        self.defFormat = '<p>{num}. {define}</p>'
-        self.exFormat = '<p><span style="color:#8d8d8d;">&quot;{example}&quot;</span></p>'
 
         self.stackedLayout = QStackedLayout()
         self.setupUi(atop)
@@ -56,14 +56,13 @@ class EntryWidget(QWidget):
     def setupView(self, atop):
         viewWidget = QWidget()
         viewLayout = QVBoxLayout()
-
         self.viewLabel = QLabel()
 
         if atop == '':
             atop = "Empty entry"
 
-        self.viewLabel.setText(self.html.format
-                           (content=self.atopFormat.format(num=self.index, atop=atop)))
+        self.viewLabel.setText(self._ENTRY_VIEW.format
+                           (content=self._FONT_TOP.format(num=self.index, atop=atop)))
         viewLayout.addWidget(self.viewLabel)
         viewWidget.setLayout(viewLayout)
         self.stackedLayout.addWidget(viewWidget)
@@ -117,16 +116,16 @@ class EntryWidget(QWidget):
             atop = "Empty entry"
         else:
             atop = self.atop
-        content = self.atopFormat.format(num=self.index, atop=atop)
+        content = self._FONT_TOP.format(num=self.index, atop=atop)
 
         for i in range(0, self.lv1):
             if self.editors['def-%d' % (i+1)].text() != '':
-                content += self.defFormat.format(num=i+1, define=self.editors['def-%d' % (i+1)].text())
+                content += self._FONT_DEF.format(num=i+1, define=self.editors['def-%d' % (i+1)].text())
             for j in range(0, self.lv2):
                 if self.editors['ex-%d-%d' % (i+1, j+1)].text() != '':
-                    content += self.exFormat.format(example=self.editors['ex-%d-%d' % (i+1, j+1)].text())
+                    content += self._FONT_EX.format(ex=self.editors['ex-%d-%d' % (i+1, j+1)].text())
 
-        self.viewLabel.setText(self.html.format(content=content))
+        self.viewLabel.setText(self._ENTRY_VIEW.format(content=content))
 
     # Set the text of downloaded contents to each of matched editors
     def updateEditors(self, items):

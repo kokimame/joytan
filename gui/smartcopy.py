@@ -36,7 +36,7 @@ class CopyDialog(QDialog):
 
         # Change language mapping of the entrylist based on the copy
         eset = self.mw.entrylist.setting
-        eset.ttsMap[tbox.currentText()][0] = eset.ttsMap[fbox.currentText()]
+        eset.ttsMap[tbox.currentText()] = eset.ttsMap[fbox.currentText()]
 
 
         self.mw.entrylist.updateAll()

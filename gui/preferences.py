@@ -1,7 +1,6 @@
 import gui
 from gui.qt import *
 from gui.utils import LANGCODES
-from emotan.speaker import Speaker
 from gui.widgets.awesometts import AwesomeTTS
 
 

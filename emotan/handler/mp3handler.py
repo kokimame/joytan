@@ -90,25 +90,25 @@ class Mp3Handler:
         asegList.append((Aseg.from_mp3(toAtop) * self.setting['repeat'], atopText))
 
         # Def-x and ex-x-x section
-        for i in range(0, ew.lv1):
-            lineKey = 'def-%d' % (i + 1)
+        for i in range(1, ew.lv1 + 1):
+            lineKey = 'def-%d' % i
             defText = ew.editors[lineKey].text()
             if defText != '':
                 if lineKey in self.sfxMap:
                     asegList.append((self.sfxMap[lineKey], None))
                 toDef = os.path.join(curdir, lineKey) + ".mp3"
-                self.routers['def-%d' % (i + 1)](path=toDef, text=defText)
+                self.routers['def-%d' % i](path=toDef, text=defText)
                 asegList.append((Aseg.from_mp3(toDef), defText))
 
 
-            for j in range(0, ew.lv2):
-                lineKey = 'ex-%d-%d' % (i + 1, j + 1)
+            for j in range(1, ew.lv2 + 1):
+                lineKey = 'ex-%d-%d' % (i, j)
                 exText = ew.editors[lineKey].text()
                 if exText != '':
                     if lineKey in self.sfxMap:
                         asegList.append((self.sfxMap[lineKey], None))
                     toEx = os.path.join(curdir, lineKey)
-                    self.routers['ex-%d-%d' % (i + 1, j + 1)](path=toEx, text=exText)
+                    self.routers['ex-%d-%d' % (i, j)](path=toEx, text=exText)
                     asegList.append((Aseg.from_mp3(toEx), exText))
 
         acapella = sum(set[0] for set in asegList)

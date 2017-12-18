@@ -82,22 +82,22 @@ class EntryWidget(QWidget):
         self.editors["atop"] = atopEdit
 
         row = 1
-        for i in range(0, self.lv1):
-            defLabel = QLabel('def-%d' % (i+1))
+        for i in range(1, self.lv1 + 1):
+            defLabel = QLabel('def-%d' % i)
             defLabel.setFont(self.italFont)
             defLabel.setStyleSheet("QLabel { background-color : rgb(255, 180, 230); }")
             defEdit = QLineEdit()
             editLayout.addWidget(defLabel, row, 0)
             editLayout.addWidget(defEdit, row, 1)
-            self.editors["def-%d" % (i+1)] = defEdit
-            for j in range(0, self.lv2):
-                exLabel = QLabel('ex-%d-%d' % (i+1, j+1))
+            self.editors["def-%d" % i] = defEdit
+            for j in range(1, self.lv2 + 1):
+                exLabel = QLabel('ex-%d-%d' % (i, j))
                 exLabel.setFont(self.italFont)
                 exLabel.setStyleSheet("QLabel { background-color : rgb(180, 230, 255); }")
                 exEdit = QLineEdit()
                 editLayout.addWidget(exLabel, row+1, 0)
                 editLayout.addWidget(exEdit, row+1, 1)
-                self.editors["ex-%d-%d" % (i+1, j+1)] = exEdit
+                self.editors["ex-%d-%d" % (i, j)] = exEdit
                 row += 1
             row += 1
 
@@ -119,21 +119,26 @@ class EntryWidget(QWidget):
             atop = self.atop
         content = self._FONT_TOP.format(num=self.index, atop=atop)
 
-        for i in range(0, self.lv1):
-            if self.editors['def-%d' % (i+1)].text() != '':
-                content += self._FONT_DEF.format(num=i+1, define=self.editors['def-%d' % (i+1)].text())
-            for j in range(0, self.lv2):
-                if self.editors['ex-%d-%d' % (i+1, j+1)].text() != '':
-                    content += self._FONT_EX.format(ex=self.editors['ex-%d-%d' % (i+1, j+1)].text())
+        for i in range(1, self.lv1 + 1):
+            if self.editors['def-%d' % i].text() != '':
+                content += self._FONT_DEF.format(num=i, define=self.editors['def-%d' % i].text())
+            for j in range(1, self.lv2 + 1):
+                if self.editors['ex-%d-%d' % (i, j)].text() != '':
+                    content += self._FONT_EX.format(ex=self.editors['ex-%d-%d' % (i, j)].text())
 
         self.viewLabel.setText(self._ENTRY_VIEW.format(content=content))
 
     # Set the text of downloaded contents to each of matched editors
     def updateEditors(self, items):
-        for i in range(0, min(self.lv1, len(items))):
-            self.editors['def-%d' % (i+1)].setText(items[i]['define'])
-            for j in range(0, min(self.lv2, len(items[i]['examples']))):
-                self.editors['ex-%d-%d' % (i+1, j+1)].setText(items[i]['examples'][j])
+        if 'atop' in items:
+            self.editors['atop'].setText(items['atop'])
+
+        for i in range(1, self.lv1 + 1):
+            if 'def-%d' % i in items:
+                self.editors['def-%d' % i].setText(items['def-%d' % i])
+            for j in range(1, self.lv2 + 1):
+                if 'ex-%d-%d' % (i, j) in items:
+                    self.editors['ex-%d-%d' % (i, j)].setText(items['ex-%d-%d' % (i, j)])
 
     # Returns the class' properties in a dictionary. Will be called on saving.
     def data(self):
@@ -141,10 +146,10 @@ class EntryWidget(QWidget):
         data['atop'] = self.editors['atop'].text()
         data['lv1'] = self.lv1
         data['lv2'] = self.lv2
-        for i in range(0, self.lv1):
-            data['def-%d' % (i+1)] = self.editors['def-%d' % (i+1)].text()
-            for j in range(self.lv2):
-                data['ex-%d-%d' % (i+1, j+1)] = self.editors['ex-%d-%d' % (i+1, j+1)].text()
+        for i in range(1, self.lv1 + 1):
+            data['def-%d' % i] = self.editors['def-%d' % i].text()
+            for j in range(1, self.lv2 + 1):
+                data['ex-%d-%d' % (i, j)] = self.editors['ex-%d-%d' % (i, j)].text()
 
         return data
 

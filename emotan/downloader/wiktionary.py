@@ -11,11 +11,11 @@ class WiktionaryDownloader(BaseDownloader):
 
     def run(self, data):
         # Dictionary which stores definition and example
-        defex = []
+        items = {}
         soup = BeautifulSoup(data, "html.parser")
         table = soup.find('ol')
 
-        for content in table.find_all('li', recursive=False):
+        for i, content in enumerate(table.find_all('li', recursive=False)):
             examples = []
             for trash in content.find_all('ul'):
                 trash.replaceWith('')
@@ -25,6 +25,8 @@ class WiktionaryDownloader(BaseDownloader):
                 example.replaceWith('')
             if len(examples) == 0:
                 examples = ['']
-            defex.append({'define': content.text, 'examples':examples})
+            items['def-%d' % (i + 1)] = content.text
+            for j, ex in enumerate(examples):
+                items['ex-%d-%d' % (i + 1, j + 1)] = ex
 
-        return defex
+        return items

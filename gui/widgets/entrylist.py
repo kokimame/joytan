@@ -23,12 +23,12 @@ class EntryList(QListWidget):
 
         def _reshape(self):
             # Expand ttsMap and tags with default value
-            for i in range(0, self.lv1):
-                if 'def-%d' % (i + 1) not in self.ttsMap:
-                    self.ttsMap['def-%d' % (i + 1)] = None
-                for j in range(0, self.lv2):
-                    if 'ex-%d-%d' % (i + 1, j + 1) not in self.ttsMap:
-                        self.ttsMap['ex-%d-%d' % (i + 1, j + 1)] = None
+            for i in range(1, self.lv1 + 1):
+                if 'def-%d' % i not in self.ttsMap:
+                    self.ttsMap['def-%d' % i] = None
+                for j in range(1, self.lv2 + 1):
+                    if 'ex-%d-%d' % (i, j) not in self.ttsMap:
+                        self.ttsMap['ex-%d-%d' % (i, j)] = None
 
         def isVoiceless(self):
             for key, val in self.ttsMap.items():
@@ -45,10 +45,10 @@ class EntryList(QListWidget):
                     'ttsMap': None}
             ttsMap = {'atop': self.ttsMap['atop']}
 
-            for i in range(0, self.lv1):
-                ttsMap['def-%d' % (i + 1)] = self.ttsMap['def-%d' % (i + 1)]
-                for j in range(0, self.lv2):
-                    ttsMap['ex-%d-%d' % (i + 1, j + 1)] = self.ttsMap['ex-%d-%d' % (i + 1, j + 1)]
+            for i in range(1, self.lv1 + 1):
+                ttsMap['def-%d' % i] = self.ttsMap['def-%d' % i]
+                for j in range(1, self.lv2 + 1):
+                    ttsMap['ex-%d-%d' % (i, j)] = self.ttsMap['ex-%d-%d' % (i, j)]
 
             data['ttsMap'] = ttsMap
             return data
@@ -68,8 +68,12 @@ class EntryList(QListWidget):
         eui.setSizeHint(ew.sizeHint())
         return eui, ew
 
+    def updateEntry(self, index, items):
+        print("Hey")
+        ew = self.getByIndex(index)
+        ew.updateEditors(items)
 
-    def updateEntry(self, name, items):
+    def updateEntry2(self, name, items):
         for ew in self.getEntries():
             if ew.editors['atop'].text() == name:
                 ew.updateEditors(items)
@@ -105,7 +109,7 @@ class EntryList(QListWidget):
     def updateIndex(self):
         # Update index of Entries after Nth Entry
         for i in range(self.count()):
-            ew = self.getByIndex(i)
+            ew = self.getByIndex(i + 1)
             ew.index = i + 1
 
     def updateAll(self):
@@ -125,7 +129,7 @@ class EntryList(QListWidget):
             ew.setMode(newMode)
 
     def getEntries(self):
-        return [self.getByIndex(i) for i in range(self.count())]
+        return [self.getByIndex(i + 1) for i in range(self.count())]
 
     def getByName(self, name):
         for ew in self.getEntries():
@@ -134,4 +138,4 @@ class EntryList(QListWidget):
         raise Exception("Error: Entry with atop '%s' is not found in the list" % name)
 
     def getByIndex(self, index):
-        return self.itemWidget(self.item(index))
+        return self.itemWidget(self.item(index - 1))

@@ -10,32 +10,25 @@ class DictionaryComDownloader(BaseDownloader):
         self.sourceName = "Dicitionary.com"
 
     def run(self, data):
-        defex = []
+        items = {}
         soup = BeautifulSoup(data, "html.parser")
-        defcs = soup.find_all(attrs={"class": "def-content"})
+        defexs = soup.find_all(attrs={"class": "def-content"})
 
         # First, remove all HTML elements with <> and escape sequences \r and \n,
         # and then split strings at whitespace and join them with a single whitespace.
-        defcs = [' '.join(re.sub('\<.*\>', '', defc.text.strip()
-                    .replace('\r', '').replace('\n', '')).split()) for defc in defcs]
+        defexs = [' '.join(re.sub('\<.*\>', '', d.text.strip()
+                    .replace('\r', '').replace('\n', '')).split()) for d in defexs]
 
-        for n, defc in enumerate(defcs):
+        for i, defex in enumerate(defexs):
             try:
-                define, examp = defc.split(":")
+                define, ex = defex.split(":")
                 define = define.strip()
-                examp = examp.strip()
+                ex = ex.strip()
             except ValueError: # If definition has no example
-                define, examp = defc, ""
+                define, ex = defex, ""
                 define = define.strip()
-            defex.append({'define': define, 'examples': [examp]})
+            items['def-%d' % (i + 1)] = define
+            items['ex-%d-1' % (i + 1)] = ex
 
-            """
-            Entry item format (temporally)
-            {
-                'define' : 'a definition of a word'
-                'examples' : ['a example for the definition', 'another example', ...]
-            }
-            
-            """
 
-        return defex
+        return items

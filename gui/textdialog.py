@@ -116,14 +116,13 @@ class TextDialog(QDialog):
                 data['img-%d' % (j + 1)] = img
             datas.append(data)
 
-        print(datas)
 
         from jinja2 import Environment, FileSystemLoader
         env = Environment(loader=FileSystemLoader('templates/html'))
         temp = env.get_template('words.html')
         rendered_temp = temp.render(entries=datas)
 
-        with open('{dest}.html'.format(dest=self.textDir), 'w') as f:
+        with open('{dest}.html'.format(dest=self.textDir), 'w', encoding='utf-8') as f:
             f.write(rendered_temp)
 
     def reject(self):

@@ -129,7 +129,7 @@ class Mp3Handler:
 
     def writeLyrics(self, output):
         # TODO: WARNING!! May cause encoding bug while handling multi-byte characters
-        with open(output, 'w') as lrc:
+        with open(output, 'w', encoding='utf-8') as lrc:
             for set in self.lrcFormat:
                 mmss = msec2hhmmss(set[0], lrc=True)
                 lrc.write("[{time}]{line}\n".format(

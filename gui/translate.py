@@ -11,7 +11,8 @@ def onTranslate(mw):
 
 class TranslateThread(QThread):
 
-    sig = pyqtSignal(str)
+    prog = pyqtSignal(str)
+    transed = pyqtSignal(int, dict)
 
     def __init__(self, mw, group, destCode):
         QThread.__init__(self)
@@ -20,27 +21,25 @@ class TranslateThread(QThread):
         self.destCode = destCode
 
     def run(self):
-        # FIXME: !!!!!!!!!!!WARNING!!!!!!!!!!!!
-        # On Linux(Ubuntu), after translating English to other languages,
-        # turning on the 'Edit' mode causes Segmentation fault and
-        # the app ends with exit code 139.
-        # As a note, this bug didn't occur before TranslateThread was introduced,
-        # and cannot be reproduced on Mac and Windows
         translate = lambda text: Translator().translate(text, dest=self.destCode).text
         for ew in self.mw.entrylist.getEntries():
-            self.sig.emit(ew.editors['atop'].text())
+            items = {}
+            self.prog.emit(ew.editors['atop'].text())
             if 'atop' in self.group:
-                ew.editors['atop'].setText(translate(ew.editors['atop'].text()))
+                items['atop'] = translate(ew.editors['atop'].text())
+
 
             for i in range(1, ew.lv1 + 1):
                 define = ew.editors['def-%d' % i].text()
                 if 'definition' in self.group and define != '':
-                    ew.editors['def-%d' % i].setText(translate(define))
+                    items['def-%d' % i] = translate(define)
 
                 for j in range(1, ew.lv2 + 1):
                     examp = ew.editors['ex-%d-%d' % (i, j)].text()
                     if 'example' in self.group and examp != '':
-                        ew.editors['ex-%d-%d' % (i, j)].setText(translate(examp))
+                        items['ex-%d-%d' % (i, j)] = translate(examp)
+
+            self.transed.emit(ew.index, items)
 
         self.quit()
 
@@ -59,10 +58,10 @@ class TranslateDialog(QDialog):
         # Setup combo box for languages
         form.langCombo.addItems(sorted([lang.title() for lang in LANGCODES.keys()]))
         form.langCombo.setCurrentText("Japanese")
-        form.startButton.clicked.connect(self.start)
+        form.startButton.clicked.connect(self.translateSelected)
 
     # Start translation
-    def start(self):
+    def translateSelected(self):
         if self.mw.entrylist.count() == 0:
             showCritical("No entries found in your entry list.", title="Error")
             return
@@ -75,18 +74,16 @@ class TranslateDialog(QDialog):
         if form.defCheck.isChecked(): transGroup.append('definition')
         if form.exCheck.isChecked(): transGroup.append('example')
 
-        print(transGroup)
-
-        # This causes a warning from PyQt about seting a parent on other thread.
-        self.tt = TranslateThread(self.mw, transGroup, destCode)
-        self.form.progressBar.setRange(0, self.mw.entrylist.count())
-
-        def onUpdate(name):
+        def onProgress(name):
             self.form.pgMsg.setText("Translating %s." % name)
             val = self.form.progressBar.value()
             self.form.progressBar.setValue(val+1)
 
-        self.tt.sig.connect(onUpdate)
+        # This causes a warning from PyQt about seting a parent on other thread.
+        self.tt = TranslateThread(self.mw, transGroup, destCode)
+        self.form.progressBar.setRange(0, self.mw.entrylist.count())
+        self.tt.prog.connect(onProgress)
+        self.tt.transed.connect(self.mw.entrylist.updateEntry)
         self.tt.start()
         self.tt.finished.connect(lambda: self.reject(update=True))
 

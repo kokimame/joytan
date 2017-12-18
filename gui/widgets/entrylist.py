@@ -19,7 +19,6 @@ class EntryList(QListWidget):
             if lv2 and (self.lv2 != lv2):
                 self.lv2 = lv2
                 self._reshape()
-            print("EntrySetting: ttsMap -> ", self.ttsMap)
 
         def _reshape(self):
             # Expand ttsMap and tags with default value
@@ -69,16 +68,8 @@ class EntryList(QListWidget):
         return eui, ew
 
     def updateEntry(self, index, items):
-        print("Hey")
         ew = self.getByIndex(index)
         ew.updateEditors(items)
-
-    def updateEntry2(self, name, items):
-        for ew in self.getEntries():
-            if ew.editors['atop'].text() == name:
-                ew.updateEditors(items)
-                return
-        raise Exception("Error: Entry with atop '%s' is not found in the list" % name)
 
     def addEntry(self, name, mode, setting=None):
         if not setting:
@@ -113,8 +104,7 @@ class EntryList(QListWidget):
             ew.index = i + 1
 
     def updateAll(self):
-        # Update the inside of the Entries in the list
-        print("Entry updates")
+        # Update the inside of the Entries in the
         for i in range(self.count()):
             eui = self.item(i)
             ew = self.itemWidget(eui)

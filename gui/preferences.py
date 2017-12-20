@@ -14,16 +14,16 @@ class Preferences(QDialog):
         self.eset = mw.entrylist.setting
         self.form = gui.forms.preferences.Ui_Preferences()
         self.form.setupUi(self)
-        self.initUi()
-        self.setTab(tab)
+        self._ui()
+        self._ui_atts()
+        self._set_tab(tab)
         self.show()
 
-    def initUi(self):
-        self.setupATTS()
+    def _ui(self):
         form = self.form
         # Buttons
-        form.okBtn.clicked.connect(self.onOk)
-        form.applyBtn.clicked.connect(self.onApply)
+        form.okBtn.clicked.connect(self.on_ok)
+        form.applyBtn.clicked.connect(self.on_apply)
         # Spins
         form.dpwSpin.setValue(self.eset.lv1)
         form.epdSpin.setValue(self.eset.lv2)
@@ -34,7 +34,10 @@ class Preferences(QDialog):
         form.bgmEdit.setText(self.mw.setting['bgmdir'])
         form.sfxEdit.setText(self.mw.setting['sfxdir'])
 
-    def setupATTS(self):
+    def _ui_atts(self):
+        """
+        Build AwesomeTTS integration 
+        """
         tab = self.form.tabAtts
         if not tab.layout():
             from gui.utils import showCritical, getText
@@ -44,33 +47,31 @@ class Preferences(QDialog):
             hbox.addWidget(atts)
             tab.setLayout(hbox)
 
-    def setTab(self, tab):
+    def _set_tab(self, tab):
         # Set by the absolute index of a tab based
         if tab == "General":
             self.form.tabWidget.setCurrentIndex(0)
         elif tab == "TTS":
             self.form.tabWidget.setCurrentIndex(1)
 
-    def onOk(self):
+    def on_ok(self):
         # FIXME: Switching TTS service may break LvMapping.
-        self.updateSetting()
+        self._update()
         self.reject()
 
-    def onApply(self):
-        self.updateSetting()
-        self.initUi()
+    def on_apply(self):
+        self._update()
+        self._ui()
 
-    def updateSetting(self):
+    def _update(self):
         form = self.form
         self.mw.setting['title'] = form.titleEdit.text()
         self.mw.setting['workspace'] = form.workingEdit.text()
         self.mw.setting['worddir'] = form.wordEdit.text()
         self.mw.setting['bgmdir'] = form.bgmEdit.text()
         self.mw.setting['sfxdir'] = form.sfxEdit.text()
-
         self.eset.reshape(lv1=self.form.dpwSpin.value())
         self.eset.reshape(lv2=self.form.epdSpin.value())
-
 
     def reject(self):
         self.done(0)

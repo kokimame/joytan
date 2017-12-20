@@ -1,74 +1,73 @@
 # coding: utf-8
-
 import os
 import time
 import requests
 import re
 
+from gui.qt import *
 
 SIZE = {'medium': '&tbs=islt:vga,isz:m',
         'icon': '&tbs=isz:i'}
-HEADERS = {"User-Agent":
-               "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) "\
-               + "Chrome/41.0.2228.0 Safari/537.36"}
+HEADERS = {"User-Agent": "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) "
+                         "Chrome/41.0.2228.0 Safari/537.36"}
 URL = 'https://www.google.com/search?q={keyword}&espv=2&biw=1366&bih=667&site=webhp&source=lnms'\
       + SIZE['medium'] + '&tbm=isch&sa=X&ei=XosDVaCXD8TasATItgE&ved=0CAcQ_AUoAg'
 
 IMG_SUPPORTED = ['jpeg', 'jpg', 'png']
 
-from PyQt5.QtCore import QThread, pyqtSignal
 
 class GimageThread(QThread):
     sig = pyqtSignal(str)
 
-    def __init__(self, keyword, destDir):
+    def __init__(self, keyword, destdir):
         QThread.__init__(self)
         self.keyword = keyword
-        self.destDir = destDir
-        self.imgNumber = 0
+        self.destdir = destdir
+        self.img_total = 0
         self.url = None
         self.links = []
 
     def run(self):
         if not self.url:
             self.url = URL.format(keyword=self.keyword)
-            raw_html = (downloadPage(self.url))
-            self.links += (_getAllLinks(raw_html, max=15))
+            raw_html = (download_page(self.url))
+            self.links += (_get_all_links(raw_html, max=15))
 
-            if os.path.isdir(self.destDir):
+            if os.path.isdir(self.destdir):
                 import shutil
-                shutil.rmtree(self.destDir)
-            os.makedirs(self.destDir)
+                shutil.rmtree(self.destdir)
+            os.makedirs(self.destdir)
 
-        i, upCount = 0, 0
+        i, uploads = 0, 0
         while True:
             link = self.links[i]
-            imgfile = downloadImage(link, os.path.join(self.destDir, str(i)))
+            imgfile = download_image(link, os.path.join(self.destdir, str(i)))
             if imgfile:
                 self.sig.emit(imgfile)
-                upCount += 1
-            if upCount >= self.imgNumber:
+                uploads += 1
+            if uploads >= self.img_total:
                 break
             i += 1
             time.sleep(0.1)
 
         self.quit()
 
-    def setImgNumber(self, n):
-        self.imgNumber = n
+    def set_total(self, n):
+        self.img_total = n
 
 
 # Downloading entire Web Document (Raw Page Content)
-def downloadPage(url):
+def download_page(url):
     try:
         req = requests.get(url, headers=HEADERS)
-        respData = req.text
-        return respData
+        resp_data = req.text
+        return resp_data
     except Exception as e:
         print(str(e))
 
+
 # Finding 'Next Image' from the given raw page
-def _getNextLink(s):
+def _get_next_link(s):
     start_line = s.find('rg_di')
     if start_line == -1:  # If no links are found then give an error!
         end_quote = 0
@@ -83,10 +82,10 @@ def _getNextLink(s):
 
 
 # Getting all links with the help of '_images_get_next_image'
-def _getAllLinks(page, max=10):
+def _get_all_links(page, max=10):
     links = []
     while True:
-        link, end_content = _getNextLink(page)
+        link, end_content = _get_next_link(page)
         if link == "no_links" or len(links) >= max:
             break
         else:
@@ -97,7 +96,7 @@ def _getAllLinks(page, max=10):
     return links
 
 
-def downloadImage(link, piwoe):
+def download_image(link, piwoe):
     # link: URL of the image
     # piwoe: Path to image file without extension
     try:

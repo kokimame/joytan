@@ -1,12 +1,14 @@
-import os, requests
+import requests
 
 import gui
 from gui.qt import *
 from gui.utils import showCritical
 from emotan.downloader import Downloaders
 
-def onDownload(mw):
+
+def on_download(mw):
     gui.dialogs.open("DownloadDialog", mw)
+
 
 class DownloadDialog(QDialog):
     def __init__(self, mw):
@@ -14,42 +16,43 @@ class DownloadDialog(QDialog):
         self.mw = mw
         self.form = gui.forms.download.Ui_DownloadDialog()
         self.form.setupUi(self)
-        self.setupWidgets()
+        self._ui()
         self.show()
 
-    def setupWidgets(self):
+    def _ui(self):
         form = self.form
         form.cancelBtn.clicked.connect(self.reject)
-        form.startBtn.clicked.connect(self.start)
+        form.startBtn.clicked.connect(self._download)
         form.sourceCombo.addItems(sorted([site for site in Downloaders.keys()]))
 
-    def start(self):
+    def _download(self):
         if self.mw.entrylist.count() == 0:
             showCritical("No entries found in your entry list.", title="Error")
             return
         dler = Downloaders[self.form.sourceCombo.currentText()]()
-        simpleDownload(self.mw, dler)
-        self.mw.entrylist.updateAll()
+        _simple_dl(self.mw, dler)
+        self.mw.entrylist.update_all()
 
     def reject(self):
         self.done(0)
         gui.dialogs.close("DownloadDialog")
 
 
-def simpleDownload(mw, dler):
+def _simple_dl(mw, dler):
+    # Simple downloading method.
     mw.progress.start(min=0, max=mw.entrylist.count(), label="Start downloading", immediate=True, cancellable=True)
     for i in range(mw.entrylist.count()):
         ew = mw.entrylist.get_entry_at(i)
         # Don't forget to turn off 'maybeShow'. That breaks the sync of the bar and the actual progress
         mw.progress.update(label="Downloading %s from %s" %
-                                 (ew.atop, dler.sourceName), maybeShow=False)
+                                 (ew.atop, dler.source_name), maybeShow=False)
         # Don't download contents from the source you already had.
-        if dler.sourceName in ew.sources:
+        if dler.source_name in ew.sources:
             continue
-        r = requests.get(dler.sourceUrl + ew.atop)
+        r = requests.get(dler.source_url + ew.atop)
         items = dler.run(r.text)
 
-        mw.entrylist.updateEntry(ew.row, items)
-        ew.sources.append(dler.sourceName)
+        mw.entrylist.update_entry(ew.row, items)
+        ew.sources.append(dler.source_name)
     mw.progress.finish()
 

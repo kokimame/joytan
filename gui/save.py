@@ -5,7 +5,8 @@ import gui
 from gui.qt import *
 from gui.utils import getFileToSave
 
-def onSave(mw):
+
+def on_save(mw):
     # Save contents of entrylist as a file, temporally whose extension is original '.eel'.
     filter = "Emotan EntryList format (*.eel)"
     newfile = getFileToSave(mw, "Save Wordlist", dir=mw.setting['workspace'], filter=filter)
@@ -14,11 +15,11 @@ def onSave(mw):
     if os.path.isdir(newfile):
         return
 
-    dataToSave = []
+    saving_data = []
     with open(newfile, "w") as f:
-        dataToSave.append(mw.entrylist.setting.data())
+        saving_data.append(mw.entrylist.setting.data())
 
-        for ew in mw.entrylist.getEntries():
-            dataToSave.append(ew.data())
+        for ew in mw.entrylist.get_entry_all():
+            saving_data.append(ew.data())
 
-        json.dump(dataToSave, f, indent=4)
+        json.dump(saving_data, f, indent=4)

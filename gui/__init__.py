@@ -10,8 +10,8 @@ if sys.getfilesystemencoding().lower() in ("ascii", "ansi_x3.4-1968"):
 
 # build scripts grep this line, so keep this format
 appVersion = "0.0.1beta1"
-
-mw = None # Main window set in runtime
+# Main window set in runtime
+mw = None
 
 moduleDir = os.path.split(os.path.dirname(os.path.abspath(__file__)))[0]
 
@@ -24,6 +24,7 @@ except ImportError as e:
 
 ICONS = 'design/icons'
 from gui import preferences, audiodialog, textdialog, download, translate, smartcopy
+
 
 class DialogManager:
     _dialogs = {
@@ -44,7 +45,8 @@ class DialogManager:
             instance.activateWindow()
             instance.raise_()
             return instance
-        else: # if Dialog instace is new
+        # if Dialog instace is new
+        else:
             instance = creator(*args, **kargs)
             # Remember the newly created instance
             self._dialogs[name][1] = instance
@@ -63,8 +65,9 @@ class EmotanApp(QApplication):
         self._argv = argv
 
 
-def parseArgs(argv):
+def parse_args(argv):
     pass
+
 
 def run():
     try:
@@ -72,8 +75,9 @@ def run():
     except Exception as e:
         QMessageBox.critical(None, "Startup Error")
 
+
 def _run():
-    global mw, app# Main window
+    global mw, app
     print("Run the GUI")
 
     app = EmotanApp(sys.argv)

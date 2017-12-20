@@ -1,33 +1,34 @@
-# Copyright: Koki Mametani <kokimametani@gmail.com>
+import os
+import json
+
 import gui
 from gui import ICONS
 from gui.qt import *
 from gui.utils import isMac, isLin, isWin
 
 
-def defaultSetting():
-    import os, json
+def default_setting():
     cwd = os.getcwd()
     setting = None
 
     with open(os.path.join(cwd, "mysetting.json"), 'r') as f:
-        setjs = json.loads(f.read())
+        js_setting = json.loads(f.read())
 
     if isLin:
-        setting = setjs['linux']
+        setting = js_setting['linux']
     elif isMac:
-        setting = setjs['mac']
+        setting = js_setting['mac']
     elif isWin:
-        setting = setjs['windows']
-
+        setting = js_setting['windows']
 
     return {
         "workspace": os.path.join(*setting['workspace']),
-        "title": setjs['title'],
+        "title": js_setting['title'],
         "sfxdir": os.path.join(cwd, "templates", "sfx"),
         "worddir": os.path.join(cwd, "templates", "wordlist"),
         "bgmdir": os.path.join(cwd, "templates", "song"),
     }
+
 
 class EmotanMW(QMainWindow):
     def __init__(self, app, args):
@@ -35,44 +36,36 @@ class EmotanMW(QMainWindow):
         gui.mw = self
         self.app = app
 
-        self.setting = defaultSetting()
+        self.setting = default_setting()
         print(self.setting)
 
-        self.initUi()
-        self.entryMode = "View"
+        self._ui()
+        self.mode = "View"
 
         self.center()
         self.show()
 
-    def initUi(self):
-        self.setupMainWindow()
-        self.setupMenus()
-        self.setupEntryList()
-        self.setupButtons()
-        self.setupProgress()
-
-    def getProjectPath(self):
-        return os.path.join(self.setting['workspace'], self.setting['title'])
-
-    def setupMainWindow(self):
+    def _ui(self):
         self.form = gui.forms.main.Ui_MainWindow()
         self.form.setupUi(self)
+        self._ui_menu()
+        self._ui_entrylist()
+        self._ui_button()
+        self._ui_progress()
 
-    def setupEntryList(self):
-        import gui.widgets.entrylist
-        self.entrylist = gui.widgets.entrylist.EntryList()
-        self.form.verticalLayout.insertWidget(0, self.entrylist)
+    def basepath(self):
+        return os.path.join(self.setting['workspace'], self.setting['title'])
 
-    def setupMenus(self):
+    def _ui_menu(self):
         form = self.form
         # Fixme: Failed to use the original name 'actionExtract' on Qt Designer
-        form.actionExtract_2.triggered.connect(self.onExtract)
-        form.actionPreferences.triggered.connect(self.onPreferences)
-        form.actionCopy.triggered.connect(self.onCopy)
-        form.actionSave.triggered.connect(self.onSave)
-        form.actionOpen.triggered.connect(self.onOpen)
+        form.actionExtract_2.triggered.connect(self._on_extract)
+        form.actionPreferences.triggered.connect(self._on_preferences)
+        form.actionCopy.triggered.connect(self._on_copy)
+        form.actionSave.triggered.connect(self._on_save)
+        form.actionOpen.triggered.connect(self._on_open)
 
-    def setupButtons(self):
+    def _ui_button(self):
         form = self.form
         form.addButton.setIcon(QIcon('{}/plus_button_green.png'.format(ICONS)))
         form.delButton.setIcon(QIcon('{}/minus_button_red.png'.format(ICONS)))
@@ -80,77 +73,79 @@ class EmotanMW(QMainWindow):
         form.modeButton.setIcon(QIcon('{}/edit_button.png'.format(ICONS)))
         form.transButton.setIcon(QIcon('{}/translate_button2.png'.format(ICONS)))
         form.configButton.setIcon(QIcon('{}/config_button.png'.format(ICONS)))
-        form.addButton.clicked.connect(lambda: self.entrylist.addEntry('', self.entryMode))
-        form.delButton.clicked.connect(self.entrylist.deleteSelected)
-        form.dlButton.clicked.connect(self.onDownload)
-        form.modeButton.clicked.connect(self.onUpdateMode)
-        form.transButton.clicked.connect(self.onTranslate)
-        form.configButton.clicked.connect(self.onConfigure)
-        form.audioButton.clicked.connect(self.onCreateMp3)
-        form.textButton.clicked.connect(self.onCreateText)
+        form.addButton.clicked.connect(lambda: self.entrylist.add_entry('', self.mode))
+        form.delButton.clicked.connect(self.entrylist.remove_selected)
+        form.dlButton.clicked.connect(self._on_download)
+        form.modeButton.clicked.connect(self._on_mode_update)
+        form.transButton.clicked.connect(self._on_translate)
+        form.configButton.clicked.connect(self._on_tts_config)
+        form.audioButton.clicked.connect(self._on_audiobook)
+        form.textButton.clicked.connect(self._on_textbook)
 
-    def setupProgress(self):
+    def _ui_entrylist(self):
+        import gui.widgets.entrylist
+        self.entrylist = gui.widgets.entrylist.EntryList()
+        self.form.verticalLayout.insertWidget(0, self.entrylist)
+
+    def _ui_progress(self):
         import gui.progress
         self.progress = gui.progress.ProgressManager(self)
 
-    def onPreferences(self):
+    def _on_preferences(self):
         gui.dialogs.open("Preferences", self)
 
-    def onOpen(self):
+    def _on_open(self):
         import gui.open
-        gui.open.onOpen(self)
+        gui.open.on_open(self)
 
-    def onSave(self):
+    def _on_save(self):
         import gui.save
-        gui.save.onSave(self)
+        gui.save.on_save(self)
 
-    def onExtract(self):
+    def _on_extract(self):
         import gui.extract
-        gui.extract.onExtract(self)
+        gui.extract.on_extract(self)
 
-    def onUpdateMode(self):
-        if self.entryMode == "View":
+    def _on_mode_update(self):
+        if self.mode == "View":
             # Change EntryList Mode to "Edit" and the icon to "View"
             self.form.modeButton.setIcon(QIcon("{}/disp_button.png".format(ICONS)))
-            self.entrylist.updateMode("Edit")
-            self.entryMode = "Edit"
-        elif self.entryMode == "Edit":
+            self.entrylist.update_mode("Edit")
+            self.mode = "Edit"
+        elif self.mode == "Edit":
             self.form.modeButton.setIcon(QIcon("{}/edit_button.png".format(ICONS)))
-            self.entrylist.updateMode("View")
-            self.entrylist.updateAll()
-            self.entryMode = "View"
+            self.entrylist.update_mode("View")
+            self.entrylist.update_all()
+            self.mode = "View"
 
-
-    def onDownload(self):
+    def _on_download(self):
         # To update 'Empty entry' if a name is added to it
-        self.entrylist.updateAll()
+        self.entrylist.update_all()
         import gui.download
-        gui.download.onDownload(self)
+        gui.download.on_download(self)
 
-    def onTranslate(self):
+    def _on_translate(self):
         # To update 'Empty entry' if a name is added to it
-        self.entrylist.updateAll()
+        self.entrylist.update_all()
         import gui.translate
-        gui.translate.onTranslate(self)
+        gui.translate.on_translate(self)
 
-    def onConfigure(self):
+    def _on_tts_config(self):
         gui.dialogs.open("Preferences", self, tab="TTS")
 
-    def onCreateMp3(self):
+    def _on_audiobook(self):
         # To update 'Empty entry' if a name is added to it
-        self.entrylist.updateAll()
+        self.entrylist.update_all()
         import gui.audiodialog
-        gui.audiodialog.onMp3Dialog(self)
+        gui.audiodialog.on_audiodialog(self)
 
-    def onCreateText(self):
+    def _on_textbook(self):
         import gui.textdialog
-        gui.textdialog.onTextDialog(self)
+        gui.textdialog.on_textdialog(self)
 
-
-    def onCopy(self):
+    def _on_copy(self):
         import gui.smartcopy
-        gui.smartcopy.onCopy(self)
-
+        gui.smartcopy.on_copy(self)
 
     def center(self):
         qr = self.frameGeometry()

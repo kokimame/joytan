@@ -3,8 +3,9 @@ from gui.qt import *
 from gui.utils import showCritical
 
 
-def onCopy(mw):
+def on_copy(mw):
     gui.dialogs.open("CopyDialog", mw)
+
 
 class CopyDialog(QDialog):
     def __init__(self, mw):
@@ -12,11 +13,19 @@ class CopyDialog(QDialog):
         self.mw = mw
         self.form = gui.forms.copydialog.Ui_CopyDialog()
         self.form.setupUi(self)
-        self.setupCombo()
-        self.setupButtons()
+        self._ui()
         self.show()
 
-    def start(self):
+    def _ui(self):
+        form = self.form
+        eset = self.mw.entrylist.setting
+        form.fromBox.addItems([item for item in eset.ttsmap])
+        form.toBox.addItems([item for item in eset.ttsmap])
+        form.fromBox.setCurrentText('Name')
+        form.copyBtn.clicked.connect(self._copy)
+        form.cancelBtn.clicked.connect(self.reject)
+
+    def _copy(self):
         if self.mw.entrylist.count() == 0:
             showCritical("No entries found in your entry list.", title="Error")
             return
@@ -28,7 +37,7 @@ class CopyDialog(QDialog):
             return
 
         # Copying from and to the contents in Entry Widget
-        for ew in self.mw.entrylist.getEntries():
+        for ew in self.mw.entrylist.get_entry_all():
             try:
                 ew.editors[tbox.currentText()].setText(ew.editors[fbox.currentText()].text())
             except KeyError:
@@ -36,22 +45,9 @@ class CopyDialog(QDialog):
 
         # Change language mapping of the entrylist based on the copy
         eset = self.mw.entrylist.setting
-        eset.ttsMap[tbox.currentText()] = eset.ttsMap[fbox.currentText()]
+        eset.ttsmap[tbox.currentText()] = eset.ttsmap[fbox.currentText()]
 
-
-        self.mw.entrylist.updateAll()
-
-    def setupCombo(self):
-        form = self.form
-        eset = self.mw.entrylist.setting
-        form.fromBox.addItems([item for item in eset.ttsMap])
-        form.toBox.addItems([item for item in eset.ttsMap])
-        form.fromBox.setCurrentText('Name')
-
-    def setupButtons(self):
-        form = self.form
-        form.copyBtn.clicked.connect(self.start)
-        form.cancelBtn.clicked.connect(self.reject)
+        self.mw.entrylist.update_all()
 
     def reject(self):
         self.done(0)

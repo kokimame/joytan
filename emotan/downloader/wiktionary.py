@@ -6,8 +6,8 @@ from emotan.downloader.base import BaseDownloader
 class WiktionaryDownloader(BaseDownloader):
     def __init__(self):
         BaseDownloader.__init__(self)
-        self.sourceUrl = "https://en.wiktionary.org/wiki/"
-        self.sourceName = "Wiktionary"
+        self.source_url = "https://en.wiktionary.org/wiki/"
+        self.source_name = "Wiktionary"
 
     def run(self, data):
         # Dictionary which stores definition and example

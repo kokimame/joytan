@@ -5,7 +5,7 @@ import emotan.extractor as extractor
 from gui.utils import getFiles
 
 
-def onExtract(mw):
+def on_extract(mw):
     filter = ";;".join([x[0] for x in extractor.Extractors])
     # Fixme: Enable to select multiple files
     files = getFiles(mw, "Extract Words from File", dir=mw.setting['worddir'], filter=filter)
@@ -19,8 +19,7 @@ def onExtract(mw):
         words = extract(file)
     # Add word to the EntryList
     for word in words:
-        mw.entrylist.addEntry(word, mw.entryMode)
-
+        mw.entrylist.add_entry(word, mw.mode)
 
 
 def extract(file):

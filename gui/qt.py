@@ -1,6 +1,3 @@
-# Copyright: Koki Mametani <kokimametani@gmail.com>
-
-
 import sip
 import os
 
@@ -11,6 +8,7 @@ from PyQt5.Qt import *
 from PyQt5.QtMultimedia import QMediaPlayer
 # trigger explicit message in case of missing libraries
 # insted of silently failing to import
+
 
 def debug():
     from PyQt5.QtCore import pyqtRemoveInputHook

@@ -5,8 +5,8 @@ class BaseDownloader:
         # without HTML data to donwload from. Every HTML will be passed in run method.
 
         # Every downloader has its own source. e.g, Online dictionaries
-        self.sourceUrl = None
-        self.sourceName = None
+        self.source_url = None
+        self.source_name = None
 
     def run(self, data):
         """

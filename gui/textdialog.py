@@ -3,8 +3,10 @@ from gui.qt import *
 from gui.widgets.groupbtn import GroupButton
 from gui.widgets.imgpanel import *
 
-def onTextDialog(mw):
+
+def on_textdialog(mw):
     gui.dialogs.open("TextDialog", mw)
+
 
 # Not in use
 class TxtThread(QThread):
@@ -28,6 +30,7 @@ class TxtThread(QThread):
             ftxt.write('\n')
         ftxt.close()
 
+
 # Not in use
 class HtmlThread(QThread):
     def __init__(self, mw, dest):
@@ -36,7 +39,7 @@ class HtmlThread(QThread):
         self.dest = dest
 
     def run(self):
-        datas = [ew.data() for ew in self.mw.entrylist.getEntries()]
+        datas = [ew.data() for ew in self.mw.entrylist.get_entry_all()]
 
         from jinja2 import Environment, FileSystemLoader
         env = Environment(loader=FileSystemLoader('templates/html'))
@@ -46,51 +49,53 @@ class HtmlThread(QThread):
         with open('{dest}/{title}.html'.format(dest=self.dest, title=self.mw.setting['title']), 'w') as f:
             f.write(rendered_temp)
 
+
 class BookInfo(QWidget):
     pass
+
 
 class TextDialog(QDialog):
     def __init__(self, mw):
         QDialog.__init__(self, mw, Qt.Window)
         self.mw = mw
-        self.textDir = os.path.join(mw.getProjectPath(), "text")
+        self.destdir = os.path.join(mw.basepath(), "text")
         self.form = gui.forms.textdialog.Ui_TextDialog()
         self.form.setupUi(self)
-        self.setupList()
-        self.form.startBtn.clicked.connect(self.onCreate)
+        self.form.startBtn.clicked.connect(self._on_create)
+        self._setup_list()
         self.show()
 
-    def setupList(self):
-        imgList = self.form.imgList
-        # FIXME: maxImg is not in use.
+    def _setup_list(self):
+        _list = self.form.imgList
+        # FIXME: maximg is not in use.
         # Look for the solution to tell DLer how many images are in short
         # according to the value of imgSpin
-        maxImg = 4
+        maximg = 4
 
-        for i, ew in enumerate(self.mw.entrylist.getEntries()):
+        for i, ew in enumerate(self.mw.entrylist.get_entry_all()):
             group = ew.editors['atop'].text()
             index = 2 * i + 1
-            destDir = os.path.join(self.textDir, ew.stringIndex())
+            destdir = os.path.join(self.destdir, ew.str_index())
             if group == '':
                 # TODO: Change 'pass' to 'continue' on commit
                 pass
             lwi1 = QListWidgetItem()
             gb = GroupButton(self.mw, group, filter="Images (*.jpg *.jpeg *.png)",
                              idx=index,
-                             dir=self.mw.getProjectPath(), msg="Select an Image")
-            gb.sig.connect(self.onAddImage)
+                             dir=self.mw.basepath(), msg="Select an Image")
+            gb.sig.connect(self._on_image_upload)
             lwi1.setSizeHint(gb.sizeHint())
-            lwi2, ip = QListWidgetItem(), ImagePanel(group, destDir, maxImg)
+            lwi2, ip = QListWidgetItem(), ImagePanel(group, destdir, maximg)
             lwi2.setSizeHint(ip.size())
 
-            imgList.addItem(lwi1)
-            imgList.setItemWidget(lwi1, gb)
-            imgList.addItem(lwi2)
-            imgList.setItemWidget(lwi2, ip)
+            _list.addItem(lwi1)
+            _list.setItemWidget(lwi1, gb)
+            _list.addItem(lwi2)
+            _list.setItemWidget(lwi2, ip)
 
-    def onAddImage(self, imgpath, group, idx):
-        imgList = self.form.imgList
-        panel = imgList.itemWidget(imgList.item(idx))
+    def _on_image_upload(self, imgpath, group, idx):
+        _list = self.form.imgList
+        panel = _list.itemWidget(_list.item(idx))
 
         pixmap = QPixmap(imgpath).scaled(128, 128)
         img = QLabel()
@@ -102,27 +107,25 @@ class TextDialog(QDialog):
         panel.setItemWidget(lwi, img)
         panel.images.append(imgpath)
 
-    def getPanel(self, i):
+    def _get_panel(self, i):
         form = self.form
         return form.imgList.itemWidget(form.imgList.item(2 * i + 1))
 
-
-    def onCreate(self):
+    def _on_create(self):
         datas = []
-        for i, ew in enumerate(self.mw.entrylist.getEntries()):
+        for i, ew in enumerate(self.mw.entrylist.get_entry_all()):
             data = ew.data()
-            panel = self.getPanel(i)
+            panel = self._get_panel(i)
             for j, img in enumerate(panel.images):
                 data['img-%d' % (j + 1)] = img
             datas.append(data)
-
 
         from jinja2 import Environment, FileSystemLoader
         env = Environment(loader=FileSystemLoader('templates/html'))
         temp = env.get_template('words.html')
         rendered_temp = temp.render(entries=datas)
 
-        with open('{dest}.html'.format(dest=self.textDir), 'w', encoding='utf-8') as f:
+        with open('{dest}.html'.format(dest=self.destdir), 'w', encoding='utf-8') as f:
             f.write(rendered_temp)
 
     def reject(self):

@@ -6,8 +6,8 @@ from emotan.downloader.base import BaseDownloader
 class DictionaryComDownloader(BaseDownloader):
     def __init__(self):
         BaseDownloader.__init__(self)
-        self.sourceUrl = "http://dictionary.com/browse/"
-        self.sourceName = "Dicitionary.com"
+        self.source_url = "http://dictionary.com/browse/"
+        self.source_name = "Dicitionary.com"
 
     def run(self, data):
         items = {}

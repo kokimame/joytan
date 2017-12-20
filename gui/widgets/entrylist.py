@@ -1,14 +1,14 @@
 from gui.qt import *
 
+
 class EntryList(QListWidget):
 
     class Setting:
         def __init__(self):
-            # Fixme: ...................
-            self.lv1 = 0 # This will be expanded soon at the 'reshape()' below!
-            self.lv2 = 0 # Same here. The method is a little bit dumb.
+            self.lv1 = 0  # This will be expanded soon at the 'reshape()' below!
+            self.lv2 = 0  # Same here. The method is a little bit dumb.
             # Maps given Entry editor section to TTS service for dictation
-            self.ttsMap = {'atop': None}
+            self.ttsmap = {'atop': None}
 
             self.reshape(lv1=1, lv2=1)
 
@@ -21,35 +21,27 @@ class EntryList(QListWidget):
                 self._reshape()
 
         def _reshape(self):
-            # Expand ttsMap and tags with default value
+            # Expand ttsmap and tags with default value
             for i in range(1, self.lv1 + 1):
-                if 'def-%d' % i not in self.ttsMap:
-                    self.ttsMap['def-%d' % i] = None
+                if 'def-%d' % i not in self.ttsmap:
+                    self.ttsmap['def-%d' % i] = None
                 for j in range(1, self.lv2 + 1):
-                    if 'ex-%d-%d' % (i, j) not in self.ttsMap:
-                        self.ttsMap['ex-%d-%d' % (i, j)] = None
+                    if 'ex-%d-%d' % (i, j) not in self.ttsmap:
+                        self.ttsmap['ex-%d-%d' % (i, j)] = None
 
-        def isVoiceless(self):
-            for key, val in self.ttsMap.items():
+        def is_voiceless(self):
+            for key, val in self.ttsmap.items():
                 # if TTS is not allocated
                 if not val:
                     return True
             else:
                 return False
 
-        # Returns EntryList properties in a dictionary. Will be called on saving the list.
+        # Returns a dictionary of EntryList properties. Will be called on saving the list.
         def data(self):
             data = {'lv1': self.lv1,
                     'lv2': self.lv2,
-                    'ttsMap': None}
-            ttsMap = {'atop': self.ttsMap['atop']}
-
-            for i in range(1, self.lv1 + 1):
-                ttsMap['def-%d' % i] = self.ttsMap['def-%d' % i]
-                for j in range(1, self.lv2 + 1):
-                    ttsMap['ex-%d-%d' % (i, j)] = self.ttsMap['ex-%d-%d' % (i, j)]
-
-            data['ttsMap'] = ttsMap
+                    'ttsmap': self.ttsmap}
             return data
 
     def __init__(self, parent=None):
@@ -61,11 +53,11 @@ class EntryList(QListWidget):
                            """)
         self.setting = self.Setting()
 
-    def initEntry(self, index, name, mode, setting):
+    def _new_entry(self, index, name, mode, setting):
         from gui.widgets.entry import EntryWidget
         eui, ew = QListWidgetItem(), EntryWidget(self, index, name, mode, setting)
         ew.move.connect(self._move_entry)
-        ew.delete.connect(self.delete_at)
+        ew.delete.connect(self._remove_at)
         eui.setSizeHint(ew.sizeHint())
         return eui, ew
 
@@ -76,7 +68,6 @@ class EntryList(QListWidget):
         ============
         Move EntryWidget by taking it from and inserting it to the list
         """
-
         old_ew = self.get_entry_at(now)
         eui = QListWidgetItem()
         eui.setSizeHint(old_ew.sizeHint())
@@ -93,82 +84,65 @@ class EntryList(QListWidget):
         self.insertItem(to_insert, eui)
         self.setItemWidget(eui, old_ew)
         self.takeItem(to_take)
-        self.updateAll()
-        #self._debug()
+        self.update_all()
 
-    def _debug(self):
-        print("count: %d" % self.count())
-        for i in range(self.count()):
-            eui = self.item(i)
-            ew = self.itemWidget(eui)
-            print("Type (eui/ew): ", type(eui), type(ew))
-            print("ew atop/index:", ew.atop, ew.row + 1)
-
-
-    def updateEntry(self, row, items):
+    def update_entry(self, row, items):
         ew = self.get_entry_at(row)
-        ew.updateEditors(items)
+        ew.update_editor(items)
 
-    def addEntry(self, name, mode):
+    def add_entry(self, name, mode):
         if name == '':
             pass
-        elif name in [ew.editors['atop'] for ew in self.getEntries()]:
+        elif name in [ew.editors['atop'] for ew in self.get_entry_all()]:
             print("Entry with atop %s already exists." % name)
             return
 
-        eui, ew = self.initEntry(self.count(), name, mode, self.setting.data())
+        eui, ew = self._new_entry(self.count(), name, mode, self.setting.data())
 
         self.addItem(eui)
         self.setItemWidget(eui, ew)
+        # Convenient to modify ew after adding it
+        return ew
 
-    def delete_at(self, row):
+    def _remove_at(self, row):
         self.takeItem(row)
-        self.updateAll()
+        self.update_all()
 
-    def deleteSelected(self):
+    def remove_selected(self):
         for eui in self.selectedItems():
             ew = self.itemWidget(eui)
             self.takeItem(ew.row)
-            self.updateIndex()
-        self.updateAll()
+            self._indexing()
+        self.update_all()
 
-    def deleteAll(self):
+    def remove_all(self):
         for _ in range(self.count()):
             self.takeItem(0)
 
-    def updateIndex(self):
+    def _indexing(self):
         # Update index of Entries after Nth Entry
         for i in range(self.count()):
             ew = self.get_entry_at(i)
             ew.update_index(i)
 
-    def updateAll(self):
+    def update_all(self):
         # Update the inside of the Entries
         for i in range(self.count()):
             eui = self.item(i)
             ew = self.itemWidget(eui)
             ew.update_index(i)
-            ew.updateView()
+            ew.update_view()
             eui.setSizeHint(ew.sizeHint())
             ew.repaint()
 
         self.repaint()
 
-    def updateMode(self, newMode):
-        for ew in self.getEntries():
-            ew.setMode(newMode)
+    def update_mode(self, newMode):
+        for ew in self.get_entry_all():
+            ew.set_mode(newMode)
 
-    def getEntries(self):
+    def get_entry_all(self):
         return [self.get_entry_at(i) for i in range(self.count())]
 
-    # FIXME: To remove. Only get entries by index
-    def getByName(self, name):
-        for ew in self.getEntries():
-            if ew.editors['atop'].text() == name:
-                return ew
-        raise Exception("Error: Entry with atop '%s' is not found in the list" % name)
-
-    # FIXME: Function name is unclear about what to get, i.e, EntryWidget.
-    # Like entry_at(int)
     def get_entry_at(self, row):
         return self.itemWidget(self.item(row))

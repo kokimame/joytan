@@ -3,29 +3,28 @@ from gui.qt import *
 from emotan.downloader.gimage import GimageThread
 
 
-
 class ImagePanel(QListWidget):
 
     class DlButton(QPushButton):
         def __init__(self, panel):
             super().__init__('Click to Download')
             self.panel = panel
-            self.dlThread = GimageThread(panel.group, panel.destDir)
-            self.clicked.connect(self.startThread)
-            self.dlThread.finished.connect(self.threadFinished)
+            self.dl_thread = GimageThread(panel.group, panel.destdir)
+            self.clicked.connect(self._on_threading)
+            self.dl_thread.finished.connect(self._on_thread_end)
 
-        def startThread(self):
+        def _on_threading(self):
             panel = self.panel
-            capa = panel.getCapacity()
+            capa = panel.get_capacity()
             if capa >= 1:
                 print(capa)
-                self.dlThread.sig.connect(self.uploadImage)
-                self.dlThread.setImgNumber(capa)
-                self.dlThread.start()
+                self.dl_thread.sig.connect(self._on_image_upload)
+                self.dl_thread.set_total(capa)
+                self.dl_thread.start()
                 self.setText("Downloading")
                 self.setEnabled(False)
 
-        def uploadImage(self, imgfile):
+        def _on_image_upload(self, imgfile):
             pixmap = QPixmap(imgfile).scaled(128, 128)
             img = QLabel()
             img.setPixmap(pixmap)
@@ -35,16 +34,15 @@ class ImagePanel(QListWidget):
             self.panel.setItemWidget(lwi, img)
             self.panel.images.append(imgfile)
 
-        def threadFinished(self):
+        def _on_thread_end(self):
             self.setText('Click to Download')
             self.setEnabled(True)
 
-
-    def __init__(self, group, destDir, maxImg):
+    def __init__(self, group, destdir, maximg):
         super(ImagePanel, self).__init__()
         self.group = group
-        self.destDir = destDir
-        self.maxImg = maxImg
+        self.destdir = destdir
+        self.maximg = maximg
         # Because QPixmap doesn't store the path of image they have,
         # all imgpathes in the panel are stored in this list.
         self.images = []
@@ -53,11 +51,11 @@ class ImagePanel(QListWidget):
         self.setFixedHeight(150)
 
         lwi = QListWidgetItem()
-        dlBtn = self.DlButton(self)
-        lwi.setSizeHint(dlBtn.sizeHint())
+        dlbtn = self.DlButton(self)
+        lwi.setSizeHint(dlbtn.sizeHint())
         self.addItem(lwi)
-        self.setItemWidget(lwi, dlBtn)
+        self.setItemWidget(lwi, dlbtn)
 
-    def getCapacity(self):
-        print(self.maxImg, self.count())
-        return self.maxImg - self.count() + 1
+    def get_capacity(self):
+        print(self.maximg, self.count())
+        return self.maximg - self.count() + 1

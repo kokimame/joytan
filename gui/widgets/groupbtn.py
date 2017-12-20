@@ -14,20 +14,20 @@ class GroupButton(QPushButton):
         self.filter = filter
         self.dir = dir
         self.msg = msg
-        self.initUi()
+        self._ui()
 
-    def initUi(self):
+    def _ui(self):
         self.setStyleSheet("QPushButton { background-color: rgb(200,200,200); "
-                             "Text-align: left; }")
+                           "Text-align: left; }")
 
         self.setText("+ {group}".format(group=self.group))
-        self.clicked.connect(self.selectFile)
+        self.clicked.connect(self._on_file_select)
 
-    def selectFile(self):
+    def _on_file_select(self):
         try:
             file = getFile(self.mw, self.msg,
-                        dir=self.dir, filter=self.filter)
-            assert os.path.isdir(file) != True
+                           dir=self.dir, filter=self.filter)
+            assert os.path.isdir(file) is not True
 
             self.sig.emit(file, self.group, self.idx)
         except (IndexError, AssertionError, TypeError):

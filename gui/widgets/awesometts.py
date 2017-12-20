@@ -182,9 +182,9 @@ class AwesomeTTS(QWidget):
                             QListWidget::item:selected { background: rgba(0,255,255,30); }
                            """)
         overview.setObjectName('overview')
-        for i, key in enumerate(sorted(self.eset.ttsMap)):
+        for i, key in enumerate(sorted(self.eset.ttsmap)):
             quo = ServiceQuo(key)
-            svc_values = self.eset.ttsMap[key]
+            svc_values = self.eset.ttsmap[key]
             if svc_values:
                 quo.idx = svc_values[0]
                 # Pass svc_id & options
@@ -252,7 +252,7 @@ class AwesomeTTS(QWidget):
         iw.idx = idx
         iw.set_desc(svc_id, options)
         item.setSizeHint(iw.sizeHint())
-        self.eset.ttsMap[iw.lineKey] = (idx, svc_id, options)
+        self.eset.ttsmap[iw.lineKey] = (idx, svc_id, options)
         overview.repaint()
 
 

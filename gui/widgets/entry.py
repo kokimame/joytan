@@ -1,18 +1,34 @@
 from gui.qt import *
 
+class Indexer(QSpinBox):
+    def __init__(self, val):
+        super(Indexer, self).__init__()
+        self.setObjectName("index")
+        self.setValue(val)
+        self.setFixedWidth(40)
+        self.setFocusPolicy(Qt.StrongFocus)
+
+    def stepBy(self, stepBy):
+        super().stepBy(-stepBy)
+
 
 class EntryWidget(QWidget):
     # Design of QLabel shown on 'View' mode
     _ENTRY_VIEW = '<html><head/><body>{content}</body></html>'
-    _FONT_TOP = '<p><span style=" font-size:16pt; font-weight:600;">{num}. {atop}</span></p>'
+    _FONT_TOP = '<p><span style=" font-size:16pt; font-weight:600;">{atop}</span></p>'
     _FONT_DEF = '<p>{num}. {define}</p>'
     _FONT_EX = '<p><span style="color:#8d8d8d;">&quot;{ex}&quot;</span></p>'
 
-    def __init__(self, index, atop, mode, eset, parent=None):
+    move = pyqtSignal(int, int)
+    delete = pyqtSignal(int)
+
+    def __init__(self, parent, row, atop, mode, eset):
         super(EntryWidget, self).__init__(parent)
         self.initFont()
+        # the EntryList this entry belongs to
         self.parent = parent
-        self.index = index
+        # Row at EntryList takes from 0 to list.count()-1
+        self.row = row
         self.mode = mode
         # Entry setting
         self.lv1 = eset['lv1']
@@ -20,42 +36,83 @@ class EntryWidget(QWidget):
         # External sources where the items of an entry came
         self.sources = []
 
-        # QLineEdit dictionary.
+        # Dictionary of QLineEdit.
         # The keys, referenced as 'lineKey', come in 'atop', 'def-n', 'ex-n-n' where 0 < n < 10
         # The name of keys must not be modified because we alphabetically sort them out in a process
         # Text stored in the editors will be the actual contents of printed or audio output
         self.editors = {}
 
-        self.stackedLayout = QStackedLayout()
+        self.layout = QStackedLayout()
         self.setupUi(atop)
+
+    def _control(self):
+        """
+        :return: QVBoxLayout
+        ========
+        Returns the left side of the layout of EntryWidget on View Mode,
+        which contains delete button and spin box to move up and down the widget.
+        """
+        delete = QPushButton("X")
+        delete.setFixedWidth(30)
+        delete.clicked.connect(lambda: self.delete.emit(self.row))
+        index = Indexer(self.row + 1)
+        index.valueChanged.connect(self._move_to)
+
+        layout = QVBoxLayout()
+        layout.addWidget(delete, 0, Qt.AlignTop)
+        layout.addWidget(index)
+        layout.addItem(QSpacerItem(0, 0, QSizePolicy.Minimum, QSizePolicy.Expanding))
+
+        return layout
+
+    def _move_to(self, next):
+        next -= 1 # Converts index to row of list.count()
+        if next == self.row:
+            # When spin.setValue triggers this method
+            return
+
+        if not 0 <= next < self.parent.count():
+            spin = self.findChild(QSpinBox, "index")
+            spin.setValue(self.row + 1)
+        else:
+            self.move.emit(self.row, next)
+
+    def update_index(self, row):
+        index = self.findChild(QSpinBox, "index")
+        index.valueChanged.disconnect()
+        index.setValue(row + 1)
+        index.valueChanged.connect(self._move_to)
+        self.row = row
 
     def setupUi(self, atop):
         self.setupView(atop)
         self.setupEditors(atop)
-        self.setLayout(self.stackedLayout)
+        self.setLayout(self.layout)
         if self.mode == "View":
-            self.stackedLayout.setCurrentIndex(0)
+            self.layout.setCurrentIndex(0)
         if self.mode == "Edit":
-            self.stackedLayout.setCurrentIndex(1)
+            self.layout.setCurrentIndex(1)
 
     def stringIndex(self):
         # Return string number from 00000 to 99999 based on the index
-        snum = (5 - len(str(self.index))) * '0' + str(self.index)
+        index = self.row + 1
+        snum = (5 - len(str(index))) * '0' + str(index)
         return snum
 
     def setMode(self, newMode):
         if newMode == self.mode: return
 
         if newMode == "View":
-            self.stackedLayout.setCurrentIndex(0)
+            self.layout.setCurrentIndex(0)
             self.mode = newMode
         if newMode == "Edit":
-            self.stackedLayout.setCurrentIndex(1)
+            self.layout.setCurrentIndex(1)
             self.mode = newMode
 
     def setupView(self, atop):
         viewWidget = QWidget()
-        viewLayout = QVBoxLayout()
+        viewLayout = QHBoxLayout()
+        viewLayout.addLayout(self._control())
         self.viewLabel = QLabel()
         self.viewLabel.setWordWrap(True)
 
@@ -63,10 +120,10 @@ class EntryWidget(QWidget):
             atop = "Empty entry"
 
         self.viewLabel.setText(self._ENTRY_VIEW.format
-                           (content=self._FONT_TOP.format(num=self.index, atop=atop)))
+                           (content=self._FONT_TOP.format(atop=atop)))
         viewLayout.addWidget(self.viewLabel)
         viewWidget.setLayout(viewLayout)
-        self.stackedLayout.addWidget(viewWidget)
+        self.layout.addWidget(viewWidget)
 
     def setupEditors(self, atop):
         # Definitions per entry and Examples per definition
@@ -103,7 +160,7 @@ class EntryWidget(QWidget):
 
         editWidget.setLayout(editLayout)
 
-        self.stackedLayout.addWidget(editWidget)
+        self.layout.addWidget(editWidget)
 
     def initFont(self):
         self.boldFont = QFont()
@@ -117,7 +174,7 @@ class EntryWidget(QWidget):
             atop = "Empty entry"
         else:
             atop = self.atop
-        content = self._FONT_TOP.format(num=self.index, atop=atop)
+        content = self._FONT_TOP.format(num=self.row+1, atop=atop)
 
         for i in range(1, self.lv1 + 1):
             if self.editors['def-%d' % i].text() != '':

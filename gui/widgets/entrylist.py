@@ -61,35 +61,74 @@ class EntryList(QListWidget):
                            """)
         self.setting = self.Setting()
 
-    def initEntry(self, index, name, mode, setting, parent=None):
+    def initEntry(self, index, name, mode, setting):
         from gui.widgets.entry import EntryWidget
-        eui, ew = QListWidgetItem(), EntryWidget(index, name, mode, setting, parent=parent)
+        eui, ew = QListWidgetItem(), EntryWidget(self, index, name, mode, setting)
+        ew.move.connect(self._move_entry)
+        ew.delete.connect(self.delete_at)
         eui.setSizeHint(ew.sizeHint())
         return eui, ew
 
-    def updateEntry(self, index, items):
-        ew = self.getByIndex(index)
+    def _move_entry(self, now, next):
+        """
+        :param now: Row of the entry to move
+        :param next: Row to which the entry moves
+        ============
+        Move EntryWidget by taking it from and inserting it to the list
+        """
+
+        old_ew = self.get_entry_at(now)
+        eui = QListWidgetItem()
+        eui.setSizeHint(old_ew.sizeHint())
+
+        # Entry goes up
+        if next > old_ew.row:
+            to_insert = next + 1
+            to_take = old_ew.row
+        # Entry goes down
+        else:
+            to_insert = next
+            to_take = old_ew.row + 1
+
+        self.insertItem(to_insert, eui)
+        self.setItemWidget(eui, old_ew)
+        self.takeItem(to_take)
+        self.updateAll()
+        #self._debug()
+
+    def _debug(self):
+        print("count: %d" % self.count())
+        for i in range(self.count()):
+            eui = self.item(i)
+            ew = self.itemWidget(eui)
+            print("Type (eui/ew): ", type(eui), type(ew))
+            print("ew atop/index:", ew.atop, ew.row + 1)
+
+
+    def updateEntry(self, row, items):
+        ew = self.get_entry_at(row)
         ew.updateEditors(items)
 
-    def addEntry(self, name, mode, setting=None):
-        if not setting:
-            setting = self.setting.data()
-
+    def addEntry(self, name, mode):
         if name == '':
             pass
         elif name in [ew.editors['atop'] for ew in self.getEntries()]:
             print("Entry with atop %s already exists." % name)
             return
 
-        eui, ew = self.initEntry(self.count() + 1, name, mode, setting, parent=self)
+        eui, ew = self.initEntry(self.count(), name, mode, self.setting.data())
 
         self.addItem(eui)
         self.setItemWidget(eui, ew)
 
+    def delete_at(self, row):
+        self.takeItem(row)
+        self.updateAll()
+
     def deleteSelected(self):
         for eui in self.selectedItems():
             ew = self.itemWidget(eui)
-            self.takeItem(ew.index - 1)
+            self.takeItem(ew.row)
             self.updateIndex()
         self.updateAll()
 
@@ -100,17 +139,18 @@ class EntryList(QListWidget):
     def updateIndex(self):
         # Update index of Entries after Nth Entry
         for i in range(self.count()):
-            ew = self.getByIndex(i + 1)
-            ew.index = i + 1
+            ew = self.get_entry_at(i)
+            ew.update_index(i)
 
     def updateAll(self):
-        # Update the inside of the Entries in the
+        # Update the inside of the Entries
         for i in range(self.count()):
             eui = self.item(i)
             ew = self.itemWidget(eui)
-            ew.index = i + 1
+            ew.update_index(i)
             ew.updateView()
             eui.setSizeHint(ew.sizeHint())
+            ew.repaint()
 
         self.repaint()
 
@@ -119,13 +159,16 @@ class EntryList(QListWidget):
             ew.setMode(newMode)
 
     def getEntries(self):
-        return [self.getByIndex(i + 1) for i in range(self.count())]
+        return [self.get_entry_at(i) for i in range(self.count())]
 
+    # FIXME: To remove. Only get entries by index
     def getByName(self, name):
         for ew in self.getEntries():
             if ew.editors['atop'].text() == name:
                 return ew
         raise Exception("Error: Entry with atop '%s' is not found in the list" % name)
 
-    def getByIndex(self, index):
-        return self.itemWidget(self.item(index - 1))
+    # FIXME: Function name is unclear about what to get, i.e, EntryWidget.
+    # Like entry_at(int)
+    def get_entry_at(self, row):
+        return self.itemWidget(self.item(row))

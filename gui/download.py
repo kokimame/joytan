@@ -39,7 +39,7 @@ class DownloadDialog(QDialog):
 def simpleDownload(mw, dler):
     mw.progress.start(min=0, max=mw.entrylist.count(), label="Start downloading", immediate=True, cancellable=True)
     for i in range(mw.entrylist.count()):
-        ew = mw.entrylist.getByIndex(i + 1)
+        ew = mw.entrylist.get_entry_at(i)
         # Don't forget to turn off 'maybeShow'. That breaks the sync of the bar and the actual progress
         mw.progress.update(label="Downloading %s from %s" %
                                  (ew.atop, dler.sourceName), maybeShow=False)
@@ -49,7 +49,7 @@ def simpleDownload(mw, dler):
         r = requests.get(dler.sourceUrl + ew.atop)
         items = dler.run(r.text)
 
-        mw.entrylist.updateEntry(ew.index, items)
+        mw.entrylist.updateEntry(ew.row, items)
         ew.sources.append(dler.sourceName)
     mw.progress.finish()
 

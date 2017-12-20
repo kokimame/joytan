@@ -39,7 +39,7 @@ class TranslateThread(QThread):
                     if 'example' in self.group and examp != '':
                         items['ex-%d-%d' % (i, j)] = translate(examp)
 
-            self.transed.emit(ew.index, items)
+            self.transed.emit(ew.row, items)
 
         self.quit()
 

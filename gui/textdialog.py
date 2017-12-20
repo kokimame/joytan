@@ -16,9 +16,9 @@ class TxtThread(QThread):
     def run(self):
         ftxt = open("{dest}/{title}.txt".format(dest=self.dest, title=self.mw.setting['title']), 'w')
         for i in range(self.mw.entrylist.count()):
-            ew = self.mw.entrylist.getByIndex(i + 1)
+            ew = self.mw.entrylist.get_entry_at(i)
             ftxt.write("{index}. {name}\n".format(
-                index=ew.index, name=ew.editors['atop'].text()))
+                index=ew.row+1, name=ew.editors['atop'].text()))
             for j in range(0, ew.lv1):
                 if ew.editors['def-%d' % (j + 1)].text() != '':
                     ftxt.write(ew.editors['def-%d' % (j + 1)].text() + '\n')

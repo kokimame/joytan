@@ -131,7 +131,7 @@ class AudioDialog(QDialog):
                 self.sig.emit("Setting up aufio files. This takes a few minutes")
                 self.handler.setupAudio()
                 for i in range(self.mw.entrylist.count()):
-                    ew = self.mw.entrylist.getByIndex(i + 1)
+                    ew = self.mw.entrylist.get_entry_at(i)
                     self.sig.emit("Creating audio file of %s." % ew.editors['atop'].text())
                     os.makedirs(os.path.join(audioDir, ew.stringIndex()), exist_ok=True)
                     self.handler.runSpeaker(ew)

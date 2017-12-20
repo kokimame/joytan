@@ -203,6 +203,7 @@ class EntryWidget(QWidget):
     # Returns the class' properties in a dictionary. Will be called on saving.
     def data(self):
         data = {}
+        data['idx'] = self.row + 1
         data['atop'] = self.editors['atop'].text()
         data['lv1'] = self.lv1
         data['lv2'] = self.lv2

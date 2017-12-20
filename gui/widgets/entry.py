@@ -9,6 +9,7 @@ class Indexer(QSpinBox):
         self.setFocusPolicy(Qt.StrongFocus)
 
     def stepBy(self, stepBy):
+        # Change default down-button to increase the number and vice versa.
         super().stepBy(-stepBy)
 
 
@@ -52,8 +53,10 @@ class EntryWidget(QWidget):
         Returns the left side of the layout of EntryWidget on View Mode,
         which contains delete button and spin box to move up and down the widget.
         """
-        delete = QPushButton("X")
-        delete.setFixedWidth(30)
+        delete = QPushButton("x")
+        delete.setFixedWidth(23)
+        delete.setFixedHeight(23)
+        delete.setStyleSheet("QPushButton { background-color: rgb(180,180,180); }")
         delete.clicked.connect(lambda: self.delete.emit(self.row))
         index = Indexer(self.row + 1)
         index.valueChanged.connect(self._move_to)

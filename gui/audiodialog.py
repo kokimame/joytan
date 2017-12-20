@@ -91,6 +91,8 @@ class AudioDialog(QDialog):
 
         # Check if LRC file needs to be created
         setting['lrc'] = self.form.lrcCheck.isChecked()
+        # Check if row number needs to be read in the output
+        setting['idx'] = self.form.idxCheck.isChecked()
 
         sfxdir = {}
         # Key for Entry's dictionary of QLineEdit
@@ -113,9 +115,6 @@ class AudioDialog(QDialog):
                             "volume": iw.mp.volume()})
         setting['loop'] = bgmloop
 
-
-
-
         finalMp3 = os.path.join(setting['dest'], setting['title'] + ".mp3")
         finalLrc = os.path.join(setting['dest'], setting['title'] + ".lrc")
 
@@ -134,7 +133,7 @@ class AudioDialog(QDialog):
                     ew = self.mw.entrylist.get_entry_at(i)
                     self.sig.emit("Creating audio file of %s." % ew.editors['atop'].text())
                     os.makedirs(os.path.join(audioDir, ew.stringIndex()), exist_ok=True)
-                    self.handler.runSpeaker(ew)
+                    self.handler.onepass(ew)
 
                 self.sig.emit("Mixing with BGM. This takes a few minutes.")
                 acapella = sum(self.handler.acapList)

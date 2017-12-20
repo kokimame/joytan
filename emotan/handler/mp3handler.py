@@ -13,7 +13,6 @@ class Mp3Handler:
         # Every element is a set of (AudioSegment, QLineEdit.text())
         self.acapList = []
         self.currentTime = 0
-        self.needsLrc = self.setting['lrc']
         self.lrcFormat = []
         self.routers = self.getRouters()
 
@@ -32,8 +31,7 @@ class Mp3Handler:
                                                svc_id=svc_id,
                                                options=options,
                                                path=path,
-                                               text=text,
-                                               )
+                                               text=text)
             print(self.setting['ttsMap'][key][2])
             print(key)
         print(routers)
@@ -72,13 +70,20 @@ class Mp3Handler:
         return int(abs(minDbfs - dBFS) * percent)
 
 
-    def runSpeaker(self, ew):
+    def onepass(self, ew):
         # TODO: Create Final.mp3 without generating intermediate mp3files
         # Create complete MP3 contents for an Entry
         # including 3 section; 'atop', 'def-x' and 'ex-x-x'
         asegList = []
         curdir = os.path.join(self.setting['dest'], ew.stringIndex())
         assert os.path.exists(curdir)
+
+        # If it needs to dictate the index of ew
+        if self.setting['idx']:
+            idx_file = os.path.join(curdir, "%d") + ".mp3"
+            index = "%d " % (ew.row + 1)
+            self.routers['atop'](path=idx_file, text=index)
+            asegList.append((Aseg.from_mp3(idx_file), index))
 
         # Atop section
         if "atop" in self.sfxMap:
@@ -112,7 +117,7 @@ class Mp3Handler:
                     asegList.append((Aseg.from_mp3(toEx), exText))
 
         acapella = sum(set[0] for set in asegList)
-        if self.needsLrc:
+        if self.setting['lrc']:
             self.addLyrics(asegList)
         acapella.export(curdir + ".mp3")
         self.acapList.append(acapella)

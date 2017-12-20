@@ -80,14 +80,28 @@
       </layout>
      </item>
      <item>
-      <widget class="QCheckBox" name="lrcCheck">
-       <property name="text">
-        <string>Create Lyrics file</string>
-       </property>
-       <property name="checked">
-        <bool>true</bool>
-       </property>
-      </widget>
+      <layout class="QHBoxLayout" name="horizontalLayout_6">
+       <item>
+        <widget class="QCheckBox" name="lrcCheck">
+         <property name="text">
+          <string>Create Lyrics file</string>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="idxCheck">
+         <property name="text">
+          <string>Read index</string>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </item>
      <item>
       <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -103,13 +117,6 @@
          <property name="styleSheet">
           <string notr="true">QListWidget::item { border-bottom: 1px solid black; }
 QListWidget::item { background-color: rgb(211,208,204);}</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLabel" name="label_4">
-         <property name="text">
-          <string>&gt;&gt;&gt; Preview Coming &lt;&lt;&lt;</string>
          </property>
         </widget>
        </item>

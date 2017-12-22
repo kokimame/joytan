@@ -2,6 +2,7 @@ import gui
 from gui.qt import *
 from gui.widgets.groupbtn import GroupButton
 from gui.widgets.imgpanel import *
+from gui.utils import path2filename
 
 
 def on_textdialog(mw):
@@ -50,28 +51,45 @@ class HtmlThread(QThread):
             f.write(rendered_temp)
 
 
-class BookInfo(QWidget):
-    pass
+class BookDesign:
+    def __init__(self, path):
+        self.path = path
+        self.name = path2filename(path)
+        self.maximg = self._parse_maximg(path)
+        self.info = "%s / image:%d" % (self.name, self.maximg)
+
+    def _parse_maximg(self, path):
+        import re
+
+        with open(path, 'r') as f:
+            vimg = re.compile(r'<!---maximg:(\d*)--->')
+            res = vimg.search(f.readline())
+            assert res
+
+        return int(res.group(1))
 
 
 class TextDialog(QDialog):
     def __init__(self, mw):
         QDialog.__init__(self, mw, Qt.Window)
         self.mw = mw
+        self.book = None
         self.destdir = os.path.join(mw.basepath(), "text")
         self.form = gui.forms.textdialog.Ui_TextDialog()
         self.form.setupUi(self)
         self.form.startBtn.clicked.connect(self._on_create)
-        self._setup_list()
+        self._ui()
         self.show()
 
-    def _setup_list(self):
-        _list = self.form.imgList
-        # FIXME: maximg is not in use.
-        # Look for the solution to tell DLer how many images are in short
-        # according to the value of imgSpin
-        maximg = 4
+    def _ui(self):
+        dlbl = self.form.designLbl
+        dlbl.selectionChanged.connect(dlbl.deselect)
+        self.form.designBtn.clicked.connect(self._on_design_select)
 
+    def _activate_imglist(self):
+        assert self.book, "Book design is not defined"
+
+        _list = self.form.imgList
         for i, ew in enumerate(self.mw.entrylist.get_entry_all()):
             group = ew.editors['atop'].text()
             index = 2 * i + 1
@@ -81,11 +99,10 @@ class TextDialog(QDialog):
                 pass
             lwi1 = QListWidgetItem()
             gb = GroupButton(self.mw, group, filter="Images (*.jpg *.jpeg *.png)",
-                             idx=index,
-                             dir=self.mw.basepath(), msg="Select an Image")
+                             idx=index, dir=self.mw.basepath(), msg="Select an Image")
             gb.sig.connect(self._on_image_upload)
             lwi1.setSizeHint(gb.sizeHint())
-            lwi2, ip = QListWidgetItem(), ImagePanel(group, destdir, maximg)
+            lwi2, ip = QListWidgetItem(), ImagePanel(group, destdir, self.book.maximg)
             lwi2.setSizeHint(ip.size())
 
             _list.addItem(lwi1)
@@ -106,6 +123,21 @@ class TextDialog(QDialog):
         panel.insertItem(panel.count() - 1, lwi)
         panel.setItemWidget(lwi, img)
         panel.images.append(imgpath)
+
+    def _on_design_select(self):
+        from gui.utils import getFile, path2filename
+        path = getFile(self, "Select book design", dir=self.mw.basepath(),
+                       filter="Jinja template HTML file (*.html)")
+        if path:
+            try:
+                bd = BookDesign(path)
+                self.book = bd
+                self._activate_imglist()
+                self.form.designLbl.setText(bd.info)
+            except Exception as e:
+                print("Invalid book design", e)
+
+
 
     def _get_panel(self, i):
         form = self.form
@@ -130,4 +162,4 @@ class TextDialog(QDialog):
 
     def reject(self):
         self.done(0)
-        gui.dialogs.close("TextDialog")
+        gui.dialogs.close("TextDialog", save=True)

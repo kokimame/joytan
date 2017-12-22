@@ -11,8 +11,7 @@ def on_save(mw):
     filter = "Emotan EntryList format (*.eel)"
     newfile = getFileToSave(mw, "Save Wordlist", dir=mw.setting['workspace'], filter=filter)
 
-    # Ignore if selected file is a directory by accident
-    if os.path.isdir(newfile):
+    if not newfile:
         return
 
     saving_data = []

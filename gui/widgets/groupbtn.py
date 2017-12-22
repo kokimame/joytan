@@ -24,12 +24,7 @@ class GroupButton(QPushButton):
         self.clicked.connect(self._on_file_select)
 
     def _on_file_select(self):
-        try:
-            file = getFile(self.mw, self.msg,
-                           dir=self.dir, filter=self.filter)
-            assert os.path.isdir(file) is not True
-
+        file = getFile(self.mw, self.msg, dir=self.dir, filter=self.filter)
+        if file:
             self.sig.emit(file, self.group, self.idx)
-        except (IndexError, AssertionError, TypeError):
-            print("Error: Invalid file is selected.")
-            pass
+

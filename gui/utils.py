@@ -27,9 +27,12 @@ def getFileToSave(parent, title, filter="*.*", dir=None, suf='eel'):
     fd.exec_()
 
     try:
-        return fd.selectedFiles()[0]
-    except:
-        return
+        file = fd.selectedFiles()[0]
+        assert os.path.isdir(file) is not True
+        return file
+    except (IndexError, AssertionError, TypeError):
+        print("Error: Invalid file is selected.")
+        return None
 
 class GetTextDialog(QDialog):
 
@@ -86,6 +89,7 @@ def getText(prompt, parent=None, help=None, edit=None, default="",
         print("Should save Geom")
     return (str(d.l.text()), ret)
 
+
 def getFiles(parent, title, filter="*.*", dir=None):
     opts = QFileDialog.Options()
     opts |= QFileDialog.DontUseNativeDialog
@@ -98,7 +102,14 @@ def getFiles(parent, title, filter="*.*", dir=None):
     fd.setWindowTitle(title)
     fd.setNameFilter(filter)
     fd.exec_()
-    return list(fd.selectedFiles())
+
+    try:
+        files = fd.selectedFiles()
+        assert os.path.isdir(files) is not True
+        return files
+    except (AssertionError, TypeError):
+        print("Error: Invalid file is selected.")
+        return None
 
 def getFile(parent, title, filter="*.*", dir=None):
     opts = QFileDialog.Options()
@@ -114,9 +125,12 @@ def getFile(parent, title, filter="*.*", dir=None):
     fd.exec_()
 
     try:
-        return fd.selectedFiles()[0]
-    except:
-        return
+        file = fd.selectedFiles()[0]
+        assert os.path.isdir(file) is not True
+        return file
+    except (IndexError, AssertionError, TypeError):
+        print("Error: Invalid file is selected.")
+        return None
 
 def getFileNameFromPath(longpath):
     return os.path.basename(os.path.normpath(longpath))

@@ -74,7 +74,7 @@ class AwesomeTTS(QWidget):
     _INPUT_WIDGETS = _OPTIONS_WIDGETS + (QAbstractButton,
                                          QLineEdit, QTextEdit)
 
-    def __init__(self, eset, alerts, ask, *args, **kargs):
+    def __init__(self, ttsmap, alerts, ask, *args, **kargs):
         super(AwesomeTTS, self).__init__()
 
         from emotan.speaker import router, config, logger
@@ -89,7 +89,7 @@ class AwesomeTTS(QWidget):
         self._alerts = alerts
         self._ask = ask
         # Update mw.entrylist settings
-        self.eset = eset
+        self.ttsmap = ttsmap
 
         vbox = QVBoxLayout()
         # vbox.addLayout(self._banner())
@@ -122,12 +122,18 @@ class AwesomeTTS(QWidget):
             dropdown.insertSeparator(dropdown.count())
             for group in sorted(groups):
                 dropdown.addItem(group, 'group:' + group)
-        idx = max(dropdown.findData(self.config['last_service']), 0)
 
-        # FIXME: Temporally espeak as fixed default
-        idx = 4 # espeak
+        # If voice for 'atop' item in the EntryList is already defined
+        # such as the case you load it from .eel file or
+        # you open TTS preference second time.
+        if self.ttsmap['atop']:
+            idx, options = self.ttsmap['atop'][0], self.ttsmap['atop'][2]
+            self._on_service_activated(idx, initial=True, use_options=options)
+        else:
+            idx = max(dropdown.findData(self.config['last_service']), 0)
+            self._on_service_activated(idx, initial=True)
         dropdown.setCurrentIndex(idx)
-        self._on_service_activated(idx, initial=True)
+
         self._on_preset_refresh(select=True)
 
         text = self.findChild(QWidget, 'text')
@@ -183,9 +189,9 @@ class AwesomeTTS(QWidget):
                             QListWidget::item:selected { background: rgba(0,255,255,30); }
                            """)
         overview.setObjectName('overview')
-        for i, key in enumerate(sorted(self.eset.ttsmap)):
-            quo = ServiceQuo(key)
-            svc_values = self.eset.ttsmap[key]
+        for i, _key in enumerate(sorted(self.ttsmap)):
+            quo = ServiceQuo(_key)
+            svc_values = self.ttsmap[_key]
             if svc_values:
                 quo.idx = svc_values[0]
                 # Pass svc_id & options
@@ -212,7 +218,7 @@ class AwesomeTTS(QWidget):
 
     def _on_overview_changed(self):
         """
-        Called when selected item in the Overview list changed,
+        Called when users clicked other items in the Overview list,
         rebuild the service panel based on options the newly selected item stores,
         or initialize it for undefined new item using previously selected one.
         """
@@ -253,7 +259,7 @@ class AwesomeTTS(QWidget):
         iw.idx = idx
         iw.set_desc(svc_id, options)
         item.setSizeHint(iw.sizeHint())
-        self.eset.ttsmap[iw._key] = (idx, svc_id, options)
+        self.ttsmap[iw._key] = (idx, svc_id, options)
         overview.repaint()
 
 

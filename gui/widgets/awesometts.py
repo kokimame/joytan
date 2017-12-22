@@ -28,10 +28,10 @@ class ServiceQuo(QLabel):
     _UNINIT = '<p><span style="color:#ff0000;">TTS undefined</span></p>'
     _OPTIONS = '<p>{options}</p>'
 
-    def __init__(self, lineKey):
+    def __init__(self, _key):
         super(ServiceQuo, self).__init__()
         self.setWordWrap(True)
-        self.lineKey = lineKey
+        self._key = _key
         self.idx = None
         self.options = None
 
@@ -39,10 +39,10 @@ class ServiceQuo(QLabel):
 
     def set_desc(self, svc_id, options):
         if not options:
-            content = self._BODY.format(body=self.lineKey, svc="")
+            content = self._BODY.format(body=self._key, svc="")
             content += self._UNINIT
         else:
-            content = self._BODY.format(body=self.lineKey, svc=svc_id)
+            content = self._BODY.format(body=self._key, svc=svc_id)
             # desc = self.summarizer(option)
             content += self._OPTIONS.format(options=str(sorted(options.items())))
             self.options = options
@@ -113,6 +113,7 @@ class AwesomeTTS(QWidget):
         activate its panel, populate presets, and then clear the input
         text box.
         """
+        print("ATTS INITIALIZED")
         # refresh the list of groups
         while dropdown.count() > self._svc_count:
             dropdown.removeItem(dropdown.count() - 1)
@@ -252,7 +253,7 @@ class AwesomeTTS(QWidget):
         iw.idx = idx
         iw.set_desc(svc_id, options)
         item.setSizeHint(iw.sizeHint())
-        self.eset.ttsmap[iw.lineKey] = (idx, svc_id, options)
+        self.eset.ttsmap[iw._key] = (idx, svc_id, options)
         overview.repaint()
 
 

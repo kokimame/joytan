@@ -91,23 +91,23 @@ class Mp3Handler:
 
         # Def-x and ex-x-x section
         for i in range(1, ew.lv1 + 1):
-            lineKey = 'def-%d' % i
-            defText = ew.editors[lineKey].text()
+            _key = 'def-%d' % i
+            defText = ew.editors[_key].text()
             if defText != '':
-                if lineKey in self.sfxmap:
-                    asegments.append((self.sfxmap[lineKey], None))
-                toDef = os.path.join(curdir, lineKey) + ".mp3"
+                if _key in self.sfxmap:
+                    asegments.append((self.sfxmap[_key], None))
+                toDef = os.path.join(curdir, _key) + ".mp3"
                 self.routers['def-%d' % i](path=toDef, text=defText)
                 asegments.append((Aseg.from_mp3(toDef), defText))
 
 
             for j in range(1, ew.lv2 + 1):
-                lineKey = 'ex-%d-%d' % (i, j)
-                exText = ew.editors[lineKey].text()
+                _key = 'ex-%d-%d' % (i, j)
+                exText = ew.editors[_key].text()
                 if exText != '':
-                    if lineKey in self.sfxmap:
-                        asegments.append((self.sfxmap[lineKey], None))
-                    toEx = os.path.join(curdir, lineKey)
+                    if _key in self.sfxmap:
+                        asegments.append((self.sfxmap[_key], None))
+                    toEx = os.path.join(curdir, _key)
                     self.routers['ex-%d-%d' % (i, j)](path=toEx, text=exText)
                     asegments.append((Aseg.from_mp3(toEx), exText))
 

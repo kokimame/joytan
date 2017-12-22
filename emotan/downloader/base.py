@@ -17,6 +17,6 @@ class BaseDownloader:
         # Entry preference modified after the downloading session.
         #
         # FIXME: Child classes are using ugly way of passing downloded contents to each entry.
-        # Save all downloaded contents tagging with lineKey and overwrite entry's editors.
+        # Save all downloaded contents tagging with _key and overwrite entry's editors.
         """
         raise NotImplementedError

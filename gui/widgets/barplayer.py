@@ -1,7 +1,7 @@
 import gui
 from gui.qt import *
 from emotan.handler import mp3handler
-from gui.utils import getFileNameFromPath
+from gui.utils import path2filename
 
 
 class MediaPlayer(QMediaPlayer):
@@ -27,7 +27,7 @@ class BarPlayer(QWidget):
         self.mp3path = mp3path
         self.group = group
         self.lwi = lwi      # ListWidgetItem that contains this widget
-        self.filename = getFileNameFromPath(mp3path)
+        self.filename = path2filename(mp3path)
         self.hhmmss = mp3handler.get_duration(mp3path)
         self.content = QMediaContent(QUrl.fromLocalFile(mp3path))
 

@@ -76,7 +76,7 @@ class GetTextDialog(QDialog):
 
 
 def getText(prompt, parent=None, help=None, edit=None, default="",
-            title="Anki", geomKey=None, **kwargs):
+            title="Emotan", geomKey=None, **kwargs):
     if not parent:
         parent = gui.mw.app.activeWindow() or gui.mw
     d = GetTextDialog(parent, prompt, help=help, edit=edit,
@@ -132,7 +132,7 @@ def getFile(parent, title, filter="*.*", dir=None):
         print("Error: Invalid file is selected.")
         return None
 
-def getFileNameFromPath(longpath):
+def path2filename(longpath):
     return os.path.basename(os.path.normpath(longpath))
 
 def showWarning(text, parent=None, help="", title="Emotan"):

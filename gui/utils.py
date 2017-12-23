@@ -105,7 +105,8 @@ def getFiles(parent, title, filter="*.*", dir=None):
 
     try:
         files = fd.selectedFiles()
-        assert os.path.isdir(files) is not True
+        for file in files:
+            assert os.path.isdir(file) is not True
         return files
     except (AssertionError, TypeError):
         print("Error: Invalid file is selected.")

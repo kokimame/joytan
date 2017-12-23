@@ -1,8 +1,8 @@
 import gui
 from gui.qt import *
 from gui.widgets.groupbtn import GroupButton
-from gui.widgets.imgpanel import *
-from gui.utils import path2filename
+from gui.widgets.panellane import *
+from gui.utils import path2filename, showCritical
 
 
 def on_textdialog(mw):
@@ -82,27 +82,60 @@ class TextDialog(QDialog):
         self.show()
 
     def _ui(self):
-        dlbl = self.form.designLbl
-        dlbl.selectionChanged.connect(dlbl.deselect)
+        # Use QLineEdit as QLabel with disabling selection
+        label = self.form.designLbl
+        label.selectionChanged.connect(label.deselect)
         self.form.designBtn.clicked.connect(self._on_design_select)
+        self.form.dlall.clicked.connect(self._autodownload)
+
+    def _autodownload(self):
+        if not self.book:
+            showCritical("Please select book design.")
+            return
+
+        for i in range(self.mw.entrylist.count()):
+            lane = self._get_lane(i)
+            lane.on_wait()
+
+        # The actual class to be run in the following pool
+        class Worker(QRunnable):
+            def __init__(self, lane):
+                QRunnable.__init__(self)
+                self.lane = lane
+
+            def run(self):
+                self.lane.set_working()
+                self.lane.thread.run()
+
+        self.pool = QThreadPool()
+        # Only 4 threads working at the same time
+        self.pool.setMaxThreadCount(4)
+
+        for i in range(self.mw.entrylist.count()):
+            lane = self._get_lane(i)
+            waiting = lane.is_waiting()
+            if waiting:
+                lane.thread.set_total(waiting)
+                self.pool.start(Worker(lane))
 
     def _activate_imglist(self):
         assert self.book, "Book design is not defined"
 
         _list = self.form.imgList
         for i, ew in enumerate(self.mw.entrylist.get_entry_all()):
+            if ew.editors['atop'].text() == '':
+                # if ew is empty, ignore it
+                # FIXME: Change 'pass' to 'continue' at the end
+                pass
             group = ew.editors['atop'].text()
             index = 2 * i + 1
             destdir = os.path.join(self.destdir, ew.str_index())
-            if group == '':
-                # TODO: Change 'pass' to 'continue' on commit
-                pass
             lwi1 = QListWidgetItem()
             gb = GroupButton(self.mw, group, filter="Images (*.jpg *.jpeg *.png)",
                              idx=index, dir=self.mw.basepath(), msg="Select an Image")
             gb.sig.connect(self._on_image_upload)
             lwi1.setSizeHint(gb.sizeHint())
-            lwi2, ip = QListWidgetItem(), ImagePanel(group, destdir, self.book.maximg)
+            lwi2, ip = QListWidgetItem(), PanelLane(group, destdir, self.book.maximg)
             lwi2.setSizeHint(ip.size())
 
             _list.addItem(lwi1)
@@ -112,21 +145,12 @@ class TextDialog(QDialog):
 
     def _on_image_upload(self, imgpath, group, idx):
         _list = self.form.imgList
-        panel = _list.itemWidget(_list.item(idx))
-
-        pixmap = QPixmap(imgpath).scaled(128, 128)
-        img = QLabel()
-        img.setPixmap(pixmap)
-        lwi = QListWidgetItem()
-        lwi.setSizeHint(img.sizeHint())
-        # Insert item in front of DL button
-        panel.insertItem(panel.count() - 1, lwi)
-        panel.setItemWidget(lwi, img)
-        panel.images.append(imgpath)
+        lane = _list.itemWidget(_list.item(idx))
+        lane.on_set_image(imgpath)
 
     def _on_design_select(self):
         from gui.utils import getFile, path2filename
-        path = getFile(self, "Select book design", dir=self.mw.basepath(),
+        path = getFile(self, "Select book design", dir=os.getcwd(),
                        filter="Jinja template HTML file (*.html)")
         if path:
             try:
@@ -134,20 +158,21 @@ class TextDialog(QDialog):
                 self.book = bd
                 self._activate_imglist()
                 self.form.designLbl.setText(bd.info)
-            except Exception as e:
-                print("Invalid book design", e)
+            except AssertionError:
+                showCritical("Invalid book design (Image number not found)")
 
-
-
-    def _get_panel(self, i):
-        form = self.form
-        return form.imgList.itemWidget(form.imgList.item(2 * i + 1))
+    def _get_lane(self, i):
+        _list = self.form.imgList
+        return _list.itemWidget(_list.item(2 * i + 1))
 
     def _on_create(self):
+        if not self.book:
+            showCritical("Book design is not selected.")
+            return
         datas = []
         for i, ew in enumerate(self.mw.entrylist.get_entry_all()):
             data = ew.data()
-            panel = self._get_panel(i)
+            panel = self._get_lane(i)
             for j, img in enumerate(panel.images):
                 data['img-%d' % (j + 1)] = img
             datas.append(data)
@@ -162,4 +187,4 @@ class TextDialog(QDialog):
 
     def reject(self):
         self.done(0)
-        gui.dialogs.close("TextDialog", save=True)
+        gui.dialogs.close("TextDialog")

@@ -149,7 +149,7 @@ class TextDialog(QDialog):
         lane.on_set_image(imgpath)
 
     def _on_design_select(self):
-        from gui.utils import getFile, path2filename
+        from gui.utils import getFile
         path = getFile(self, "Select book design", dir=os.getcwd(),
                        filter="Jinja template HTML file (*.html)")
         if path:

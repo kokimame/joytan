@@ -60,7 +60,7 @@ class Editor(QWidget):
 class EntryWidget(QWidget):
     # Design of QLabel shown on 'View' mode
     _ENTRY_VIEW = '<html><head/><body>{content}</body></html>'
-    _FONT_TOP = '<p><span style=" font-size:16pt; font-weight:600;">{atop}</span></p>'
+    _FONT_TOP = '<p><span style=" font-size:16pt; font-weight:520;">{atop}</span></p>'
     _FONT_DEF = '<p>{num}. {define}</p>'
     _FONT_EX = '<p><span style="color:#8d8d8d;">&quot;{ex}&quot;</span></p>'
 

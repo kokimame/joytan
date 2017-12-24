@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'design/textdialog.ui'
 #
-# Created by: PyQt5 UI code generator 5.9
+# Created by: PyQt5 UI code generator 5.9.2
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -13,6 +13,8 @@ class Ui_TextDialog(object):
         TextDialog.setObjectName("TextDialog")
         TextDialog.resize(507, 653)
         self.verticalLayout = QtWidgets.QVBoxLayout(TextDialog)
+        self.verticalLayout.setContentsMargins(3, 5, 3, 5)
+        self.verticalLayout.setSpacing(3)
         self.verticalLayout.setObjectName("verticalLayout")
         self.horizontalLayout_3 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_3.setSpacing(0)
@@ -47,32 +49,16 @@ class Ui_TextDialog(object):
         self.imgList.setObjectName("imgList")
         self.verticalLayout.addWidget(self.imgList)
         self.line = QtWidgets.QFrame(TextDialog)
-        self.line.setLineWidth(10)
-        self.line.setMidLineWidth(10)
+        self.line.setLineWidth(5)
+        self.line.setMidLineWidth(7)
         self.line.setFrameShape(QtWidgets.QFrame.HLine)
         self.line.setFrameShadow(QtWidgets.QFrame.Sunken)
         self.line.setObjectName("line")
         self.verticalLayout.addWidget(self.line)
-        self.horizontalLayout_4 = QtWidgets.QHBoxLayout()
-        self.horizontalLayout_4.setObjectName("horizontalLayout_4")
-        self.label_3 = QtWidgets.QLabel(TextDialog)
-        self.label_3.setObjectName("label_3")
-        self.horizontalLayout_4.addWidget(self.label_3)
-        self.pgMsg = QtWidgets.QLabel(TextDialog)
-        self.pgMsg.setText("")
-        self.pgMsg.setObjectName("pgMsg")
-        self.horizontalLayout_4.addWidget(self.pgMsg)
-        spacerItem1 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_4.addItem(spacerItem1)
-        self.verticalLayout.addLayout(self.horizontalLayout_4)
-        self.progressBar = QtWidgets.QProgressBar(TextDialog)
-        self.progressBar.setProperty("value", 0)
-        self.progressBar.setObjectName("progressBar")
-        self.verticalLayout.addWidget(self.progressBar)
         self.horizontalLayout = QtWidgets.QHBoxLayout()
         self.horizontalLayout.setObjectName("horizontalLayout")
-        spacerItem2 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout.addItem(spacerItem2)
+        spacerItem1 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout.addItem(spacerItem1)
         self.cancelBtn = QtWidgets.QPushButton(TextDialog)
         self.cancelBtn.setObjectName("cancelBtn")
         self.horizontalLayout.addWidget(self.cancelBtn)
@@ -80,8 +66,8 @@ class Ui_TextDialog(object):
         self.startBtn.setDefault(True)
         self.startBtn.setObjectName("startBtn")
         self.horizontalLayout.addWidget(self.startBtn)
-        spacerItem3 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout.addItem(spacerItem3)
+        spacerItem2 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout.addItem(spacerItem2)
         self.verticalLayout.addLayout(self.horizontalLayout)
 
         self.retranslateUi(TextDialog)
@@ -94,7 +80,6 @@ class Ui_TextDialog(object):
         self.designBtn.setText(_translate("TextDialog", "..."))
         self.label.setText(_translate("TextDialog", "Images to embed in your book:"))
         self.dlall.setText(_translate("TextDialog", "Download All"))
-        self.label_3.setText(_translate("TextDialog", "Progress:"))
         self.cancelBtn.setText(_translate("TextDialog", "Stop"))
         self.startBtn.setText(_translate("TextDialog", "Start"))
 

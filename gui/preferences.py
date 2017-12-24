@@ -55,7 +55,6 @@ class Preferences(QDialog):
             self.form.tabWidget.setCurrentIndex(1)
 
     def on_ok(self):
-        # FIXME: Switching TTS service may break LvMapping.
         self._update()
         self.reject()
 

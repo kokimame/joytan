@@ -1,6 +1,7 @@
 # Copyright: Koki Mametani <kokimametani@gmail.com>
 
 from gui.qt import *
+from gui.utils import isMac, isLin, isWin
 
 if sys.version_info[0] < 3:
     raise Exception("Emotan requires Python 3.x")
@@ -81,7 +82,11 @@ def _run():
     print("Run the GUI")
 
     app = EmotanApp(sys.argv)
-    QCoreApplication.setApplicationName("Emotan")
+    QCoreApplication.setApplicationName("Emotan えも単")
+
+    # disable icons on mac; this must be done before window created
+    if isMac:
+        app.setAttribute(Qt.AA_DontShowIconsInMenus)
 
     import gui.main
     mw = gui.main.EmotanMW(app, sys.argv)

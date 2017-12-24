@@ -35,30 +35,28 @@ class EmotanMW(QMainWindow):
         QMainWindow.__init__(self)
         gui.mw = self
         self.app = app
-
         self.setting = default_setting()
-        print(self.setting)
-
         self._ui()
         self.mode = "View"
-
         self.center()
         self.show()
 
     def _ui(self):
         self.form = gui.forms.main.Ui_MainWindow()
         self.form.setupUi(self)
+        if not isMac:
+            # TODO: Check if menubar is clickable on bundled version on Mac
+            # cf: http://python.6.x6.nabble.com/Bug-PyQt5-version-5-7-0-
+            # OS-X-11-4-El-Capitan-MenuBar-requires-defocus-refocus-of-
+            # app-to-work-Davi-td5200429.html
+            self.form.menubar.setNativeMenuBar(False)
         self._ui_menu()
         self._ui_entrylist()
         self._ui_button()
         self._ui_progress()
 
-    def basepath(self):
-        return os.path.join(self.setting['workspace'], self.setting['title'])
-
     def _ui_menu(self):
         form = self.form
-        # Fixme: Failed to use the original name 'actionExtract' on Qt Designer
         form.actionExtract_2.triggered.connect(self._on_extract)
         form.actionPreferences.triggered.connect(self._on_preferences)
         form.actionCopy.triggered.connect(self._on_copy)
@@ -90,6 +88,9 @@ class EmotanMW(QMainWindow):
     def _ui_progress(self):
         import gui.progress
         self.progress = gui.progress.ProgressManager(self)
+
+    def basepath(self):
+        return os.path.join(self.setting['workspace'], self.setting['title'])
 
     def _on_preferences(self):
         gui.dialogs.open("Preferences", self)

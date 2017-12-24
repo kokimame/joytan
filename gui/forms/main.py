@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'design/main.ui'
 #
-# Created by: PyQt5 UI code generator 5.9
+# Created by: PyQt5 UI code generator 5.7
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -61,8 +61,8 @@ class Ui_MainWindow(object):
         self.verticalLayout_2.addLayout(self.verticalLayout)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 536, 25))
-        self.menubar.setNativeMenuBar(False)
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 536, 22))
+        self.menubar.setNativeMenuBar(True)
         self.menubar.setObjectName("menubar")
         self.menuFile = QtWidgets.QMenu(self.menubar)
         self.menuFile.setObjectName("menuFile")
@@ -98,8 +98,10 @@ class Ui_MainWindow(object):
         self.actionCopy = QtWidgets.QAction(MainWindow)
         self.actionCopy.setObjectName("actionCopy")
         self.actionSave = QtWidgets.QAction(MainWindow)
+        self.actionSave.setShortcutContext(QtCore.Qt.WindowShortcut)
         self.actionSave.setObjectName("actionSave")
         self.actionOpen = QtWidgets.QAction(MainWindow)
+        self.actionOpen.setShortcutContext(QtCore.Qt.WindowShortcut)
         self.actionOpen.setObjectName("actionOpen")
         self.actionExtract_2 = QtWidgets.QAction(MainWindow)
         self.actionExtract_2.setObjectName("actionExtract_2")

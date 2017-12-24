@@ -37,6 +37,10 @@ class EntryList(QListWidget):
             else:
                 return False
 
+        def _keys(self):
+            # Sort and return keys to access the text of Entry's QLineEditor
+            return sorted(self.ttsmap)
+
         # Returns a dictionary of EntryList properties. Will be called on saving the list.
         def data(self):
             data = {'lv1': self.lv1,

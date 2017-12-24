@@ -33,28 +33,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QCheckBox" name="nameCheck_2">
-         <property name="text">
-          <string>Name</string>
-         </property>
-         <property name="checked">
-          <bool>false</bool>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QCheckBox" name="defCheck_2">
-         <property name="text">
-          <string>Definition</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QCheckBox" name="exCheck_2">
-         <property name="text">
-          <string>Example</string>
-         </property>
-        </widget>
+        <widget class="QListWidget" name="keyList"/>
        </item>
       </layout>
      </item>

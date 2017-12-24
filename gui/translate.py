@@ -37,13 +37,15 @@ class TranslateThread(QThread):
                 items['atop'] = self.translate(ew.editors['atop'].text())
 
             for i in range(1, ew.lv1 + 1):
-                define = ew.editors['def-%d' % i].text()
-                if 'definition' in self.group and define != '':
+                _key = 'def-%d' % i
+                define = ew.editors[_key].text()
+                if _key in self.group and define != '':
                     items['def-%d' % i] = self.translate(define)
 
                 for j in range(1, ew.lv2 + 1):
-                    examp = ew.editors['ex-%d-%d' % (i, j)].text()
-                    if 'example' in self.group and examp != '':
+                    _key = 'ex-%d-%d' % (i, j)
+                    examp = ew.editors[_key].text()
+                    if _key in self.group and examp != '':
                         items['ex-%d-%d' % (i, j)] = self.translate(examp)
 
             self.transed.emit(ew.row, items)
@@ -67,6 +69,16 @@ class TranslateDialog(QDialog):
         form.langCombo.setCurrentText("Japanese")
         form.startButton.clicked.connect(self._translate)
 
+        _list = form.keyList
+        # Add checkbox corresponding to each _key of Entry
+        for _key in self.mw.entrylist.setting._keys():
+            check = QCheckBox(_key)
+            lwi = QListWidgetItem()
+            lwi.setSizeHint(check.sizeHint())
+            _list.addItem(lwi)
+            _list.setItemWidget(lwi, check)
+
+
     # Start translation
     def _translate(self):
         if self.mw.entrylist.count() == 0:
@@ -78,13 +90,12 @@ class TranslateDialog(QDialog):
         # Get language code of target language to translate to from the library
         destcode = LANGCODES[form.langCombo.currentText().lower()]
         # Check which section to translate
-        # TODO: Trailing number comes from qt5designer loding error
-        if form.nameCheck_2.isChecked():
-            group.append('atop')
-        if form.defCheck_2.isChecked():
-            group.append('definition')
-        if form.exCheck_2.isChecked():
-            group.append('example')
+        _list = form.keyList
+        for i in range(_list.count()):
+            ch = _list.itemWidget(_list.item(i))
+            if ch.isChecked():
+                group.append(ch.text())
+
 
         def _on_progress(name):
             self.form.pgMsg.setText("Translating %s." % name)

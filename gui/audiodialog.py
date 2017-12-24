@@ -228,4 +228,4 @@ class AudioDialog(QDialog):
         self.form.pgMsg.setText("")
         self.stop_all_audio()
         self.done(0)
-        gui.dialogs.close("AudioDialog", save=True)
+        gui.dialogs.close("AudioDialog")

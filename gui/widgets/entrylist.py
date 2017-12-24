@@ -13,10 +13,10 @@ class EntryList(QListWidget):
             self.lv2 = 0  # Same here. The method is a little bit dumb.
             # Maps given Entry editor section to TTS service for dictation
             self.ttsmap = {'atop': None}
-            self.reshape(lv1=1, lv2=1)
+            self.reshape(lv1=1, lv2=0)
 
         def reshape(self, lv1=None, lv2=None):
-            if (lv1 and (self.lv1 != lv1)) or (lv2 and (self.lv2 != lv2)):
+            if self.lv1 != (lv1 or None) or self.lv2 != (lv2 or None):
                 self.lv1 = lv1
                 self.lv2 = lv2
                 self._reshape()

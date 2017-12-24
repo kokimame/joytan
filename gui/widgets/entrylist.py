@@ -109,8 +109,7 @@ class EntryList(QListWidget):
         self.update_all()
 
     def remove_selected(self):
-        for eui in self.selectedItems():
-            ew = self.itemWidget(eui)
+        for ew in self.get_entry_selected():
             self.takeItem(ew.row)
             self._indexing()
         self.update_all()
@@ -140,6 +139,9 @@ class EntryList(QListWidget):
     def update_mode(self, newMode):
         for ew in self.get_entry_all():
             ew.set_mode(newMode)
+
+    def get_entry_selected(self):
+        return [self.itemWidget(eui) for eui in self.selectedItems()]
 
     def get_entry_all(self):
         return [self.get_entry_at(i) for i in range(self.count())]

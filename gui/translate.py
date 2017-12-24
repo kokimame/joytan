@@ -15,15 +15,22 @@ class TranslateThread(QThread):
     prog = pyqtSignal(str)
     transed = pyqtSignal(int, dict)
 
-    def __init__(self, mw, group, destcode):
+    def __init__(self, mw, group, destcode, is_only):
         QThread.__init__(self)
         self.mw = mw
         self.group = group
         # Destination language to translate into
         self.translate = lambda text: Translator().translate(text, dest=destcode).text
 
+        if is_only:
+            self.targets = self.mw.entrylist.get_entry_selected()
+        else:
+            self.targets = self.mw.entrylist.get_entry_all()
+
     def run(self):
-        for ew in self.mw.entrylist.get_entry_all():
+        assert self.targets
+
+        for ew in self.targets:
             items = {}
             self.prog.emit(ew.editors['atop'].text())
             if 'atop' in self.group:
@@ -71,11 +78,12 @@ class TranslateDialog(QDialog):
         # Get language code of target language to translate to from the library
         destcode = LANGCODES[form.langCombo.currentText().lower()]
         # Check which section to translate
-        if form.nameCheck.isChecked():
+        # TODO: Trailing number comes from qt5designer loding error
+        if form.nameCheck_2.isChecked():
             group.append('atop')
-        if form.defCheck.isChecked():
+        if form.defCheck_2.isChecked():
             group.append('definition')
-        if form.exCheck.isChecked():
+        if form.exCheck_2.isChecked():
             group.append('example')
 
         def _on_progress(name):
@@ -84,8 +92,9 @@ class TranslateDialog(QDialog):
             self.form.progressBar.setValue(val+1)
 
         # This causes a warning from PyQt about seting a parent on other thread.
-        self.tt = TranslateThread(self.mw, group, destcode)
-        self.form.progressBar.setRange(0, self.mw.entrylist.count())
+        is_only = self.form.onlyCheck.isChecked()
+        self.tt = TranslateThread(self.mw, group, destcode, is_only)
+        self.form.progressBar.setRange(0, len(self.tt.targets))
         self.tt.prog.connect(_on_progress)
         self.tt.transed.connect(self.mw.entrylist.update_entry)
         self.tt.start()

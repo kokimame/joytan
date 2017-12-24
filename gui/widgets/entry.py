@@ -15,6 +15,48 @@ class Indexer(QSpinBox):
         super().stepBy(-step)
 
 
+class Editor(QWidget):
+    _ITALIC = QFont()
+    _ITALIC.setItalic(True)
+
+    _COLOR = {'atop': "QLabel { background-color : rgb(255, 255, 180); }",
+              'def': "QLabel { background-color : rgb(255, 180, 230); }",
+              'ex': "QLabel { background-color : rgb(180, 230, 255); }"}
+
+    def __init__(self, _key, text=""):
+        super(Editor, self).__init__()
+        self._key = _key
+        self.label = QLabel(_key)
+        self.label.setFixedWidth(40)
+        self.label.setFont(self._ITALIC)
+        self.label.setStyleSheet(self.color(_key))
+        self.editor = QLineEdit(text)
+        layout = QHBoxLayout()
+        layout.setContentsMargins(0, 0, 0, 0)
+        layout.addWidget(self.label)
+        layout.addWidget(self.editor)
+        self.setLayout(layout)
+
+    def color(self, _key):
+        sk = _key.split('-')
+        if 'atop' in sk:
+            return self._COLOR['atop']
+        elif 'def' in sk:
+            return self._COLOR['def']
+        elif 'ex' in sk:
+            return self._COLOR['ex']
+        else:
+            raise Exception("Wrong _key")
+
+    # The function name is camel case as the class had to overwrite QLineEdit
+    # otherwise too many rename were required.
+    def setText(self, text):
+        self.editor.setText(text)
+
+    def text(self):
+        return self.editor.text()
+
+
 class EntryWidget(QWidget):
     # Design of QLabel shown on 'View' mode
     _ENTRY_VIEW = '<html><head/><body>{content}</body></html>'
@@ -35,6 +77,7 @@ class EntryWidget(QWidget):
         self.parent = parent
         # Row at EntryList takes from 0 to list.count()-1
         self.row = row
+        # FIXME: No need to store atop under self
         self.atop = atop
         self.mode = mode
         # Entry setting
@@ -56,22 +99,17 @@ class EntryWidget(QWidget):
 
         # Building UI
         layout = QStackedLayout()
-        layout.setObjectName("layout")
         layout.addWidget(self._ui_view(atop))
-        layout.addWidget(self._ui_editor(atop))
-        self.set_mode(mode)
+        layout.addWidget(self._ui_editor(atop=atop))
         self.setLayout(layout)
+        self.set_mode(mode)
 
     def set_mode(self, new_mode):
-        if new_mode == self.mode:
-            return
-
-        layout = self.findChild(QStackedLayout, "layout")
         if new_mode == "View":
-            layout.setCurrentIndex(0)
+            self.layout().setCurrentIndex(0)
             self.mode = new_mode
         if new_mode == "Edit":
-            layout.setCurrentIndex(1)
+            self.layout().setCurrentIndex(1)
             self.mode = new_mode
 
     def _ui_view(self, atop):
@@ -94,40 +132,48 @@ class EntryWidget(QWidget):
         base.setLayout(layout)
         return base
 
-    def _ui_editor(self, atop):
-        # Definitions per entry and Examples per definition
-        a_lbl = QLabel('atop')
-        a_lbl.setFont(self._ITALIC)
-        a_lbl.setStyleSheet("QLabel { background-color : rgb(255, 255, 180); }")
-        a_edit = QLineEdit(atop)
-        self.editors["atop"] = a_edit
+    def _ui_editor(self, atop=None):
+        # Widget shown on Editor mode of EntryList
+        layout = QVBoxLayout()
 
-        layout = QGridLayout()
-        layout.addWidget(a_lbl, 0, 0)
-        layout.addWidget(a_edit, 0, 1)
+        if atop != None:
+            self.editors['atop'] = Editor('atop', text=atop)
+        layout.addWidget(self.editors['atop'])
         row = 1
         for i in range(1, self.lv1 + 1):
-            d_lbl = QLabel('def-%d' % i)
-            d_lbl.setFont(self._ITALIC)
-            d_lbl.setStyleSheet("QLabel { background-color : rgb(255, 180, 230); }")
-            d_edit = QLineEdit()
-            layout.addWidget(d_lbl, row, 0)
-            layout.addWidget(d_edit, row, 1)
-            self.editors["def-%d" % i] = d_edit
+            _key = 'def-%d' % i
+            if _key not in self.editors:
+                self.editors[_key] = Editor(_key)
+            layout.addWidget(self.editors[_key])
             for j in range(1, self.lv2 + 1):
-                e_lbl = QLabel('ex-%d-%d' % (i, j))
-                e_lbl.setFont(self._ITALIC)
-                e_lbl.setStyleSheet("QLabel { background-color : rgb(180, 230, 255); }")
-                e_edit = QLineEdit()
-                layout.addWidget(e_lbl, row+1, 0)
-                layout.addWidget(e_edit, row+1, 1)
-                self.editors["ex-%d-%d" % (i, j)] = e_edit
+                _key = "ex-%d-%d" % (i, j)
+                if _key not in self.editors:
+                    self.editors[_key] = Editor(_key)
+                layout.addWidget(self.editors[_key])
                 row += 1
             row += 1
 
         base = QWidget()
         base.setLayout(layout)
         return base
+
+    def reshape(self, lv1, lv2):
+        self.lv1, self.lv2 = lv1, lv2
+        print("RESHAPED!!")
+        stacked = self.layout()
+        assert stacked
+        print("Before; ", stacked.currentIndex(), stacked.count(),)
+        # Old editor widget
+        wig = stacked.widget(1)
+        stacked.removeWidget(wig)
+        print("Middle; ", stacked.currentIndex(), stacked.count(),)
+        stacked.addWidget(self._ui_editor())
+        print("After; ", stacked.currentIndex(), stacked.count(),)
+        print("lv1 2", self.lv1, self.lv2)
+        stacked.widget(0).repaint()
+        stacked.widget(1).repaint()
+        self.set_mode(self.mode)
+
 
     def update_index(self, row):
         index = self.findChild(QSpinBox, "index")

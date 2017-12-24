@@ -70,8 +70,7 @@ class Preferences(QDialog):
         self.mw.setting['worddir'] = form.wordEdit.text()
         self.mw.setting['bgmdir'] = form.bgmEdit.text()
         self.mw.setting['sfxdir'] = form.sfxEdit.text()
-        self.eset.reshape(lv1=self.form.dpwSpin.value())
-        self.eset.reshape(lv2=self.form.epdSpin.value())
+        self.eset.reshape(lv1=self.form.dpwSpin.value(), lv2=self.form.epdSpin.value())
 
     def reject(self):
         self.done(0)

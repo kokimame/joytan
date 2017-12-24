@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'design/preferences.ui'
 #
-# Created by: PyQt5 UI code generator 5.9
+# Created by: PyQt5 UI code generator 5.9.2
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -95,6 +95,8 @@ class Ui_Preferences(object):
         self.label_7.setObjectName("label_7")
         self.gridLayout.addWidget(self.label_7, 4, 0, 1, 1)
         self.verticalLayout_3.addLayout(self.gridLayout)
+        spacerItem3 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        self.verticalLayout_3.addItem(spacerItem3)
         self.tabWidget.addTab(self.tabGeneral, "")
         self.tabAtts = QtWidgets.QWidget()
         self.tabAtts.setObjectName("tabAtts")
@@ -102,8 +104,8 @@ class Ui_Preferences(object):
         self.verticalLayout_2.addWidget(self.tabWidget)
         self.horizontalLayout_11 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_11.setObjectName("horizontalLayout_11")
-        spacerItem3 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_11.addItem(spacerItem3)
+        spacerItem4 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_11.addItem(spacerItem4)
         self.cancelBtn = QtWidgets.QPushButton(Preferences)
         self.cancelBtn.setStyleSheet("")
         self.cancelBtn.setObjectName("cancelBtn")
@@ -116,8 +118,8 @@ class Ui_Preferences(object):
         self.okBtn.setDefault(True)
         self.okBtn.setObjectName("okBtn")
         self.horizontalLayout_11.addWidget(self.okBtn)
-        spacerItem4 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_11.addItem(spacerItem4)
+        spacerItem5 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_11.addItem(spacerItem5)
         self.verticalLayout_2.addLayout(self.horizontalLayout_11)
 
         self.retranslateUi(Preferences)
@@ -128,8 +130,8 @@ class Ui_Preferences(object):
         _translate = QtCore.QCoreApplication.translate
         Preferences.setWindowTitle(_translate("Preferences", "Preferences"))
         self.label_4.setText(_translate("Preferences", "Title"))
-        self.label.setText(_translate("Preferences", "Main part per Entry"))
-        self.label_2.setText(_translate("Preferences", "Sub Part per Main part"))
+        self.label.setText(_translate("Preferences", "Definition per Entry"))
+        self.label_2.setText(_translate("Preferences", "Example per Definition"))
         self.label_6.setText(_translate("Preferences", "BGM Directory"))
         self.label_5.setText(_translate("Preferences", "SFX Directory"))
         self.label_3.setText(_translate("Preferences", "Working Directory"))

@@ -18,8 +18,7 @@ def on_open(mw):
 
     eset = jd[0]
     mw.entrylist.remove_all()
-    mw.entrylist.setting.reshape(lv1=eset['lv1'])
-    mw.entrylist.setting.reshape(lv2=eset['lv2'])
+    mw.entrylist.setting.reshape(lv1=eset['lv1'], lv2=eset['lv2'])
     mw.entrylist.setting.ttsmap = eset['ttsmap']
 
     setting = mw.entrylist.setting.data()

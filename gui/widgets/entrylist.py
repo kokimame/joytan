@@ -3,22 +3,24 @@ from gui.qt import *
 
 class EntryList(QListWidget):
 
-    class Setting:
+    class Setting(QWidget):
+
+        shape = pyqtSignal()
+
         def __init__(self):
+            super().__init__()
             self.lv1 = 0  # This will be expanded soon at the 'reshape()' below!
             self.lv2 = 0  # Same here. The method is a little bit dumb.
             # Maps given Entry editor section to TTS service for dictation
             self.ttsmap = {'atop': None}
-
             self.reshape(lv1=1, lv2=1)
 
         def reshape(self, lv1=None, lv2=None):
-            if lv1 and (self.lv1 != lv1):
+            if (lv1 and (self.lv1 != lv1)) or (lv2 and (self.lv2 != lv2)):
                 self.lv1 = lv1
-                self._reshape()
-            if lv2 and (self.lv2 != lv2):
                 self.lv2 = lv2
                 self._reshape()
+                self.shape.emit()
 
         def _reshape(self):
             # Expand ttsmap and tags with default value
@@ -51,11 +53,14 @@ class EntryList(QListWidget):
     def __init__(self, parent=None):
         super(EntryList, self).__init__(parent)
         self.setSelectionMode(QAbstractItemView.ExtendedSelection)
+        self.setVerticalScrollMode(QAbstractItemView.ScrollPerPixel)
+        self.scrollToItem(self.currentItem())
         self.setStyleSheet("""
                             QListWidget::item { border-bottom: 1px solid black; }
                             QListWidget::item:selected { background: rgba(0,255,255,30); }
                            """)
         self.setting = self.Setting()
+        self.setting.shape.connect(lambda: self.update_all(reshape=True))
 
     def _new_entry(self, index, name, mode, setting):
         from gui.widgets.entry import EntryWidget
@@ -64,6 +69,47 @@ class EntryList(QListWidget):
         ew.delete.connect(self._remove_at)
         eui.setSizeHint(ew.sizeHint())
         return eui, ew
+
+    def add_entry(self, name, mode):
+        if name == '':
+            pass
+        elif name in [ew.editors['atop'] for ew in self.get_entry_all()]:
+            print("Entry with atop %s already exists." % name)
+            return
+
+        eui, ew = self._new_entry(self.count(), name, mode, self.setting.data())
+
+        self.addItem(eui)
+        self.setItemWidget(eui, ew)
+        # Convenient to modify ew after adding it
+        return ew
+
+    def update_all(self, reshape=False):
+        # Update the inside of the Entries
+        for i in range(self.count()):
+            eui = self.item(i)
+            ew = self.itemWidget(eui)
+            ew.update_index(i)
+            if reshape:
+                ew.reshape(self.setting.lv1, self.setting.lv2)
+            ew.update_view()
+            eui.setSizeHint(ew.sizeHint())
+            ew.repaint()
+        self.repaint()
+
+    def update_entry(self, row, items):
+        ew = self.get_entry_at(row)
+        ew.update_editor(items)
+
+    def update_mode(self, newMode):
+        for ew in self.get_entry_all():
+            ew.set_mode(newMode)
+
+    def _indexing(self):
+        # Update index of Entries after Nth Entry
+        for i in range(self.count()):
+            ew = self.get_entry_at(i)
+            ew.update_index(i)
 
     def _move_entry(self, now, next):
         """
@@ -90,65 +136,25 @@ class EntryList(QListWidget):
         self.takeItem(to_take)
         self.update_all()
 
-    def update_entry(self, row, items):
-        ew = self.get_entry_at(row)
-        ew.update_editor(items)
+    def get_entry_at(self, row):
+        return self.itemWidget(self.item(row))
 
-    def add_entry(self, name, mode):
-        if name == '':
-            pass
-        elif name in [ew.editors['atop'] for ew in self.get_entry_all()]:
-            print("Entry with atop %s already exists." % name)
-            return
+    def get_entry_all(self):
+        return [self.get_entry_at(i) for i in range(self.count())]
 
-        eui, ew = self._new_entry(self.count(), name, mode, self.setting.data())
-
-        self.addItem(eui)
-        self.setItemWidget(eui, ew)
-        # Convenient to modify ew after adding it
-        return ew
+    def get_entry_selected(self):
+        return [self.itemWidget(eui) for eui in self.selectedItems()]
 
     def _remove_at(self, row):
         self.takeItem(row)
-        self.update_all()
-
-    def remove_selected(self):
-        for ew in self.get_entry_selected():
-            self.takeItem(ew.row)
-            self._indexing()
         self.update_all()
 
     def remove_all(self):
         for _ in range(self.count()):
             self.takeItem(0)
 
-    def _indexing(self):
-        # Update index of Entries after Nth Entry
-        for i in range(self.count()):
-            ew = self.get_entry_at(i)
-            ew.update_index(i)
-
-    def update_all(self):
-        # Update the inside of the Entries
-        for i in range(self.count()):
-            eui = self.item(i)
-            ew = self.itemWidget(eui)
-            ew.update_index(i)
-            ew.update_view()
-            eui.setSizeHint(ew.sizeHint())
-            ew.repaint()
-
-        self.repaint()
-
-    def update_mode(self, newMode):
-        for ew in self.get_entry_all():
-            ew.set_mode(newMode)
-
-    def get_entry_selected(self):
-        return [self.itemWidget(eui) for eui in self.selectedItems()]
-
-    def get_entry_all(self):
-        return [self.get_entry_at(i) for i in range(self.count())]
-
-    def get_entry_at(self, row):
-        return self.itemWidget(self.item(row))
+    def remove_selected(self):
+        for ew in self.get_entry_selected():
+            self.takeItem(ew.row)
+            self._indexing()
+        self.update_all()

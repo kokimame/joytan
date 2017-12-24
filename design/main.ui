@@ -242,6 +242,9 @@
    <property name="text">
     <string>Extract words from file</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+E</string>
+   </property>
   </action>
  </widget>
  <resources/>

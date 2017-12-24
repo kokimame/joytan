@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'design/main.ui'
 #
-# Created by: PyQt5 UI code generator 5.7
+# Created by: PyQt5 UI code generator 5.9
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -152,4 +152,5 @@ class Ui_MainWindow(object):
         self.actionOpen.setText(_translate("MainWindow", "Open..."))
         self.actionOpen.setShortcut(_translate("MainWindow", "Ctrl+O"))
         self.actionExtract_2.setText(_translate("MainWindow", "Extract words from file"))
+        self.actionExtract_2.setShortcut(_translate("MainWindow", "Ctrl+E"))
 

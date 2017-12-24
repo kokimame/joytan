@@ -5,8 +5,9 @@ class Indexer(QSpinBox):
     def __init__(self, val):
         super(Indexer, self).__init__()
         self.setObjectName("index")
+        self.setMaximum(99999)
         self.setValue(val)
-        self.setFixedWidth(40)
+        self.setFixedWidth(42)
         self.setFocusPolicy(Qt.StrongFocus)
 
     def stepBy(self, step):
@@ -73,27 +74,6 @@ class EntryWidget(QWidget):
             layout.setCurrentIndex(1)
             self.mode = new_mode
 
-    def _control(self):
-        """
-        :return: QVBoxLayout
-        ========
-        Returns the left side of the layout of EntryWidget on View Mode,
-        which contains delete button and spin box to move up and down the widget.
-        """
-        delete = QPushButton("x")
-        delete.setFixedWidth(23)
-        delete.setFixedHeight(23)
-        delete.setStyleSheet("QPushButton { background-color: rgb(180,180,180); }")
-        delete.clicked.connect(lambda: self.delete.emit(self.row))
-        index = Indexer(self.row + 1)
-        index.valueChanged.connect(self._move_to)
-
-        layout = QVBoxLayout()
-        layout.addWidget(delete, 0, Qt.AlignTop)
-        layout.addWidget(index)
-        layout.addItem(QSpacerItem(0, 0, QSizePolicy.Minimum, QSizePolicy.Expanding))
-        return layout
-
     def _ui_view(self, atop):
         view = QLabel()
         view.setWordWrap(True)
@@ -104,9 +84,11 @@ class EntryWidget(QWidget):
 
         view.setText(self._ENTRY_VIEW.format
                      (content=self._FONT_TOP.format(atop=atop)))
+        index = Indexer(self.row + 1)
+        index.valueChanged.connect(self._move_to)
 
         layout = QHBoxLayout()
-        layout.addLayout(self._control())
+        layout.addWidget(index)
         layout.addWidget(view)
         base = QWidget()
         base.setLayout(layout)

@@ -11,20 +11,19 @@ class CopyDialog(QDialog):
     def __init__(self, mw):
         QDialog.__init__(self, mw, Qt.Window)
         self.mw = mw
-        self.form = gui.forms.copydialog.Ui_CopyDialog()
-        self.form.setupUi(self)
         self._ui()
         self.show()
 
     def _ui(self):
-        form = self.form
+        self.form = gui.forms.copydialog.Ui_CopyDialog()
+        self.form.setupUi(self)
         eset = self.mw.entrylist.setting
 
-        form.fromBox.addItems([item for item in eset.ttsmap])
-        form.toBox.addItems([item for item in eset.ttsmap])
-        form.fromBox.setCurrentText('atop')
-        form.copyBtn.clicked.connect(self._copy)
-        form.cancelBtn.clicked.connect(self.reject)
+        self.form.fromBox.addItems([item for item in sorted(eset.ttsmap)])
+        self.form.toBox.addItems([item for item in sorted(eset.ttsmap)])
+        self.form.fromBox.setCurrentText('atop')
+        self.form.copyBtn.clicked.connect(self._copy)
+        self.form.cancelBtn.clicked.connect(self.reject)
 
     def _copy(self):
         if self.mw.entrylist.count() == 0:

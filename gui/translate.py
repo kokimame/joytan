@@ -57,19 +57,18 @@ class TranslateDialog(QDialog):
     def __init__(self, mw):
         QDialog.__init__(self, mw, Qt.Window)
         self.mw = mw
-        self.form = gui.forms.translate.Ui_TranslateDialog()
-        self.form.setupUi(self)
         self._ui()
         self.show()
 
     def _ui(self):
-        form = self.form
+        self.form = gui.forms.translate.Ui_TranslateDialog()
+        self.form.setupUi(self)
         # Setup combo box for languages
-        form.langCombo.addItems(sorted([lang.title() for lang in LANGCODES.keys()]))
-        form.langCombo.setCurrentText("Japanese")
-        form.startButton.clicked.connect(self._translate)
+        self.form.langCombo.addItems(sorted([lang.title() for lang in LANGCODES.keys()]))
+        self.form.langCombo.setCurrentText("Japanese")
+        self.form.startButton.clicked.connect(self._translate)
 
-        _list = form.keyList
+        _list = self.form.keyList
         # Add checkbox corresponding to each _key of Entry
         for _key in self.mw.entrylist.setting._keys():
             check = QCheckBox(_key)
@@ -86,7 +85,7 @@ class TranslateDialog(QDialog):
             return
 
         form = self.form
-        group = []
+        _keys = []
         # Get language code of target language to translate to from the library
         destcode = LANGCODES[form.langCombo.currentText().lower()]
         # Check which section to translate
@@ -94,7 +93,7 @@ class TranslateDialog(QDialog):
         for i in range(_list.count()):
             ch = _list.itemWidget(_list.item(i))
             if ch.isChecked():
-                group.append(ch.text())
+                _keys.append(ch.text())
 
 
         def _on_progress(name):
@@ -104,7 +103,7 @@ class TranslateDialog(QDialog):
 
         # This causes a warning from PyQt about seting a parent on other thread.
         is_only = self.form.onlyCheck.isChecked()
-        self.tt = TranslateThread(self.mw, group, destcode, is_only)
+        self.tt = TranslateThread(self.mw, _keys, destcode, is_only)
         self.form.progressBar.setRange(0, len(self.tt.targets))
         self.tt.prog.connect(_on_progress)
         self.tt.transed.connect(self.mw.entrylist.update_entry)

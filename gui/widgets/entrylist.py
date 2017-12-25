@@ -23,13 +23,25 @@ class EntryList(QListWidget):
                 self.shape.emit()
 
         def _reshape(self):
+            avail_keys = ['atop']
+
             # Expand ttsmap and tags with default value
             for i in range(1, self.lv1 + 1):
-                if 'def-%d' % i not in self.ttsmap:
-                    self.ttsmap['def-%d' % i] = None
+                _key = 'def-%d' % i
+                avail_keys.append(_key)
+                if _key not in self.ttsmap:
+                    self.ttsmap[_key] = None
                 for j in range(1, self.lv2 + 1):
-                    if 'ex-%d-%d' % (i, j) not in self.ttsmap:
-                        self.ttsmap['ex-%d-%d' % (i, j)] = None
+                    _key = 'ex-%d-%d' % (i, j)
+                    avail_keys.append(_key)
+                    if _key not in self.ttsmap:
+                        self.ttsmap[_key] = None
+            # Exclude keys out of size of levels from ttsmap
+            keys = list(self.ttsmap.keys())
+            for _key in keys:
+                if _key not in avail_keys:
+                    self.ttsmap.pop(_key, None)
+
 
         def is_voiceless(self):
             for key, val in self.ttsmap.items():

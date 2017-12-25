@@ -19,9 +19,10 @@ class CopyDialog(QDialog):
     def _ui(self):
         form = self.form
         eset = self.mw.entrylist.setting
+
         form.fromBox.addItems([item for item in eset.ttsmap])
         form.toBox.addItems([item for item in eset.ttsmap])
-        form.fromBox.setCurrentText('Name')
+        form.fromBox.setCurrentText('atop')
         form.copyBtn.clicked.connect(self._copy)
         form.cancelBtn.clicked.connect(self.reject)
 

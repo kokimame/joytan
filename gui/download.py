@@ -45,11 +45,11 @@ def _simple_dl(mw, dler):
         ew = mw.entrylist.get_entry_at(i)
         # Don't forget to turn off 'maybeShow'. That breaks the sync of the bar and the actual progress
         mw.progress.update(label="Downloading %s from %s" %
-                                 (ew.atop, dler.source_name), maybeShow=False)
+                                 (ew.editors['atop'].text(), dler.source_name), maybeShow=False)
         # Don't download contents from the source you already had.
         if dler.source_name in ew.sources:
             continue
-        r = requests.get(dler.source_url + ew.atop)
+        r = requests.get(dler.source_url + ew.editors['atop'].text())
         items = dler.run(r.text)
 
         mw.entrylist.update_entry(ew.row, items)

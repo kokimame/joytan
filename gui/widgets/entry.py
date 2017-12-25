@@ -77,8 +77,6 @@ class EntryWidget(QWidget):
         self.parent = parent
         # Row at EntryList takes from 0 to list.count()-1
         self.row = row
-        # FIXME: No need to store atop under self
-        self.atop = atop
         self.mode = mode
         # Entry setting
         self.lv1 = eset['lv1']
@@ -118,7 +116,7 @@ class EntryWidget(QWidget):
         view.setObjectName("view")
 
         if atop == '':
-            atop = "Empty entry"
+            atop = "Unnamed Entry"
 
         view.setText(self._ENTRY_VIEW.format
                      (content=self._FONT_TOP.format(atop=atop)))
@@ -159,21 +157,15 @@ class EntryWidget(QWidget):
 
     def reshape(self, lv1, lv2):
         self.lv1, self.lv2 = lv1, lv2
-        print("RESHAPED!!")
         stacked = self.layout()
         assert stacked
-        print("Before; ", stacked.currentIndex(), stacked.count(),)
         # Old editor widget
         wig = stacked.widget(1)
         stacked.removeWidget(wig)
-        print("Middle; ", stacked.currentIndex(), stacked.count(),)
         stacked.addWidget(self._ui_editor())
-        print("After; ", stacked.currentIndex(), stacked.count(),)
-        print("lv1 2", self.lv1, self.lv2)
         stacked.widget(0).repaint()
         stacked.widget(1).repaint()
         self.set_mode(self.mode)
-
 
     def update_index(self, row):
         index = self.findChild(QSpinBox, "index")
@@ -183,11 +175,10 @@ class EntryWidget(QWidget):
         self.row = row
 
     def update_view(self):
-        self.atop = self.editors['atop'].text()
-        if self.atop == '':
-            atop = "Empty entry"
+        if self.editors['atop'] == '':
+            atop = "Unnamed entry"
         else:
-            atop = self.atop
+            atop = self.editors['atop'].text()
         content = self._FONT_TOP.format(num=self.row+1, atop=atop)
 
         for i in range(1, self.lv1 + 1):

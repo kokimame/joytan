@@ -32,7 +32,7 @@ def getFileToSave(parent, title, filter="*.*", dir=None, suf='eel'):
         return file
     except (IndexError, AssertionError, TypeError):
         print("Error: Invalid file is selected.")
-        return None
+        raise
 
 class GetTextDialog(QDialog):
 
@@ -110,7 +110,7 @@ def getFiles(parent, title, filter="*.*", dir=None):
         return files
     except (AssertionError, TypeError):
         print("Error: Invalid file is selected.")
-        return None
+        raise
 
 def getFile(parent, title, filter="*.*", dir=None):
     opts = QFileDialog.Options()
@@ -131,7 +131,7 @@ def getFile(parent, title, filter="*.*", dir=None):
         return file
     except (IndexError, AssertionError, TypeError):
         print("Error: Invalid file is selected.")
-        return None
+        raise
 
 def path2filename(longpath):
     return os.path.basename(os.path.normpath(longpath))

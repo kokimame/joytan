@@ -24,7 +24,7 @@ except ImportError as e:
     raise
 
 ICONS = 'design/icons'
-from gui import preferences, audiodialog, textdialog, download, translate, smartcopy
+from gui import preferences, audiodialog, textdialog, download, translate, smartcopy, extract
 
 
 class DialogManager:
@@ -34,7 +34,8 @@ class DialogManager:
         "TextDialog": [textdialog.TextDialog, None],
         "DownloadDialog": [download.DownloadDialog, None],
         "TranslateDialog": [translate.TranslateDialog, None],
-        "CopyDialog": [smartcopy.CopyDialog, None]
+        "CopyDialog": [smartcopy.CopyDialog, None],
+        "ExtractDialog": [extract.ExtractDialog, None]
     }
 
     def open(self, name, *args, **kargs):

@@ -9,9 +9,9 @@ from gui.utils import getFileToSave
 def on_save(mw):
     # Save contents of entrylist as a file, temporally whose extension is original '.eel'.
     filter = "Emotan EntryList format (*.eel)"
-    newfile = getFileToSave(mw, "Save Wordlist", dir=mw.setting['workspace'], filter=filter)
-
-    if not newfile:
+    try:
+        newfile = getFileToSave(mw, "Save Wordlist", dir=mw.setting['workspace'], filter=filter)
+    except:
         return
 
     saving_data = []

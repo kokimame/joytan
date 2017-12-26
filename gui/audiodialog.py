@@ -2,9 +2,8 @@ import shutil
 
 import gui
 from gui.qt import *
-from gui.utils import showCritical
-from gui.widgets.groupbtn import GroupButton
-from gui.widgets.barplayer import BarPlayer
+from gui.utils import showCritical, getFile
+from gui.widgets.flowitem import FlowItem, Mp3Object, _KeyObject, Silence
 
 
 def on_audiodialog(mw):
@@ -17,37 +16,99 @@ class AudioDialog(QDialog):
         self.mw = mw
         self.mset = mw.setting
         self.eset = mw.entrylist.setting
-        self.form = gui.forms.audiodialog.Ui_AudioDialog()
         self.thread = None
+        self.form = gui.forms.audiodialog.Ui_AudioDialog()
         self.form.setupUi(self)
         self._ui_button()
-        self._ui_sfxlist()
-        self._ui_bgmlist()
+        self._ui_flow()
+        self._ui_bgmloop()
         self._ui_progress()
         self.show()
 
-    def _ui_sfxlist(self):
-        sfxs = self.form.sfxList
-        keys = [key for key in sorted(self.eset.ttsmap)]
-        self._sfx_cnt = [1] * len(keys)
-        for i, key in enumerate(keys):
-            lwi = QListWidgetItem()
-            gb = GroupButton(self.mw, key, self.mset['sfxdir'], idx=i,
-                             msg="Add sound effect to %s" % key)
-            gb.sig.connect(self._on_new_player)
-            lwi.setSizeHint(gb.sizeHint())
-            sfxs.addItem(lwi)
-            sfxs.setItemWidget(lwi, gb)
+    def _ui_flow(self):
+        fadd = self.form.flowAdd
+        fadd.clicked.connect(self._flow_tool)
+        fadd.setToolButtonStyle(Qt.ToolButtonTextBesideIcon)
+        fadd.setArrowType(Qt.DownArrow)
 
-    def _ui_bgmlist(self):
-        bgms = self.form.bgmList
+        for _key in self.eset._keys():
+            self._add_flow_item(_key)
+
+    def _flow_tool(self):
+        m = QMenu(self.mw)
+        a = m.addAction("Add Sound effect")
+        a.triggered.connect(lambda: self._add_flow_item("MP3"))
+        a = m.addAction("Add Silence")
+        a.triggered.connect(lambda: self._add_flow_item("SIL"))
+        for _key in self.eset._keys():
+            a = m.addAction("Add %s" % _key)
+            a.triggered.connect(lambda ignore, type=_key: self._add_flow_item(type))
+        m.exec_(QCursor.pos())
+
+    def _ui_bgmloop(self):
+        badd = self.form.bgmAdd
+        badd.clicked.connect(self._bgm_tool)
+        badd.setToolButtonStyle(Qt.ToolButtonTextBesideIcon)
+        badd.setArrowType(Qt.DownArrow)
+
+    def _bgm_tool(self):
+        m = QMenu(self.mw)
+        a = m.addAction("Add Song")
+        a.triggered.connect(lambda: self._add_bgm("MP3"))
+        a = m.addAction("Add Silence")
+        a.triggered.connect(lambda: self._add_bgm("SIL"))
+        m.exec_(QCursor.pos())
+
+    def _add_flow_item(self, type):
         lwi = QListWidgetItem()
-        gb = GroupButton(self.mw, "BGM", self.mset['bgmdir'],
-                         msg="Add song to BGM Loop")
-        gb.sig.connect(self._on_new_player)
-        lwi.setSizeHint(gb.sizeHint())
-        bgms.addItem(lwi)
-        bgms.setItemWidget(lwi, gb)
+        fi = None
+
+        if type == 'MP3':
+            try:
+                file = getFile(self.mw, "Select sound effect", dir=self.mset['sfxdir'], filter="*.mp3")
+                fi = Mp3Object(lwi, file)
+            except:
+                return
+        elif type == 'SIL':
+            fi = Silence(lwi)
+        else:
+            assert type in self.eset._keys()
+            fi = _KeyObject(lwi, type)
+
+        lwi.setSizeHint(fi.sizeHint())
+        fi.delete.connect(self._remove_flow_item)
+        self.form.flowList.addItem(lwi)
+        self.form.flowList.setItemWidget(lwi, fi)
+
+    def _add_bgm(self, type):
+        lwi = QListWidgetItem()
+        fi = None
+
+        if type == 'MP3':
+            try:
+                file = getFile(self.mw, "Select a song for BGM", dir=self.mset['bgmdir'], filter="*.mp3")
+                fi = Mp3Object(lwi, file)
+            except:
+                return
+        elif type == 'SIL':
+            fi = Silence(lwi)
+
+        lwi.setSizeHint(fi.sizeHint())
+        fi.delete.connect(self._remove_bgm)
+        self.form.bgmList.addItem(lwi)
+        self.form.bgmList.setItemWidget(lwi, fi)
+
+    def _remove_flow_item(self, lwi):
+        _list = self.form.flowList
+        for i in range(_list.count()):
+            if lwi == _list.item(i):
+                _list.takeItem(i)
+
+    def _remove_bgm(self, lwi):
+        _list = self.form.bgmList
+        for i in range(_list.count()):
+            if lwi == _list.item(i):
+                _list.takeItem(i)
 
     def _ui_button(self):
         form = self.form
@@ -76,7 +137,6 @@ class AudioDialog(QDialog):
 
         setting = {}
         setting['title'] = self.mset['title']
-        setting['repeat'] = self.form.wordSpin.value()
         setting['ttsmap'] = self.eset.ttsmap
 
         destdir = os.path.join(self.mw.basepath(), "audio")
@@ -84,37 +144,43 @@ class AudioDialog(QDialog):
             shutil.rmtree(destdir)
         setting['dest'] = destdir
 
-        sfxs = self.form.sfxList
-        bgms = self.form.bgmList
-
         # Check if LRC file needs to be created
         setting['lrc'] = self.form.lrcCheck.isChecked()
         # Check if row number needs to be read in the output
         setting['idx'] = self.form.idxCheck.isChecked()
 
-        sfxdir = {}
-        # Key for Entry's dictionary of QLineEdit
-        _key = None
-        for i in range(sfxs.count()):
-            iw = sfxs.itemWidget(sfxs.item(i))
-            if isinstance(iw, GroupButton):
-                _key = iw.group
-                sfxdir[_key] = []
-                continue
+        flow = self.form.flowList
+        flowlist = []
+        for i in range(flow.count()):
+            fi = flow.itemWidget(flow.item(i))
+            assert isinstance(fi, FlowItem)
+            if isinstance(fi, Mp3Object):
+                flowlist.append({"type": "MP3",
+                                 "path": fi.mp3path,
+                                 "volume": fi.mp.volume()})
+            elif isinstance(fi, Silence):
+                flowlist.append({"type": "SIL",
+                                 "duration": fi.get_duration()})
+            elif isinstance(fi, _KeyObject):
+                flowlist.append({"type": fi._key})
+        setting['flow'] = flowlist
 
-            sfxdir[_key].append({"path": iw.mp3path,
-                                 "volume": iw.mp.volume()})
-        setting['sfx'] = sfxdir
-
+        bgms = self.form.bgmList
         bgmloop = []
-        for i in range(1, bgms.count()):
-            iw = bgms.itemWidget(bgms.item(i))
-            bgmloop.append({"path": iw.mp3path,
-                            "volume": iw.mp.volume()})
+
+        for i in range(bgms.count()):
+            fi = bgms.itemWidget(bgms.item(i))
+            assert isinstance(fi, FlowItem)
+            if isinstance(fi, Mp3Object):
+                bgmloop.append({"type": "MP3",
+                                "path": fi.mp3path,
+                                "volume": fi.mp.volume()})
+            elif isinstance(fi, Silence):
+                bgmloop.append({"type": "SIL",
+                                "duration": fi.get_duration()})
         setting['loop'] = bgmloop
 
-        fin_mp3 = os.path.join(setting['dest'], setting['title'] + ".mp3")
-        fin_lrc = os.path.join(setting['dest'], setting['title'] + ".lrc")
+        finalpath = os.path.join(setting['dest'], setting['title'])
 
         class Mp3HandlerThread(QThread):
             prog = pyqtSignal(str)
@@ -135,15 +201,14 @@ class AudioDialog(QDialog):
 
                 self.prog.emit("Mixing with BGM. This takes a few minutes.")
                 acapella = sum(self.handler.acapellas)
-                print("Acap")
                 if len(setting['loop']) != 0:
-                    final = acapella.overlay(self.handler.get_bgmloop(len(acapella)))
-                    final.export(fin_mp3)
+                    finalmp3 = acapella.overlay(self.handler.get_bgmloop(len(acapella)))
+                    finalmp3.export(finalpath + ".mp3")
                 else:
-                    acapella.export(fin_mp3)
+                    acapella.export(finalpath + ".mp3")
 
                 if setting['lrc']:
-                    self.handler.write_lyrics(fin_lrc)
+                    self.handler.write_lyrics(finalpath + ".lrc")
 
                 self.quit()
 
@@ -174,52 +239,12 @@ class AudioDialog(QDialog):
         self.form.stopBtn.setEnabled(False)
         self.form.createBtn.setEnabled(True)
 
-    def _on_new_player(self, mp3path, group, idx):
-        lwi = QListWidgetItem()
-        wig = BarPlayer(mp3path, group, lwi)
-        wig.sig.connect(self._on_kill_player)
-        lwi.setSizeHint(wig.sizeHint())
-
-        if group == "BGM":
-            _list = self.form.bgmList
-            _list.addItem(lwi)
-        else:
-            _list = self.form.sfxList
-            row = sum(self._sfx_cnt[0:idx + 1])
-            self._sfx_cnt[idx] += 1
-            _list.insertItem(row, lwi)
-
-        _list.setItemWidget(lwi, wig)
-
-    def _on_kill_player(self, group, lwi):
-        # Update counter of SFX
-        def _re_sfxcounter(i):
-            sum = 0
-            for j, cnt in enumerate(self._sfx_cnt):
-                sum += cnt
-                if sum > i:
-                    self._sfx_cnt[j] -= 1
-                    break
-
-        if group == "BGM":
-            _list = self.form.bgmList
-        else:
-            _list = self.form.sfxList
-
-        for i in range(_list.count()):
-            if lwi == _list.item(i):
-                _list.takeItem(i)
-                if group != "BGM":
-                    _re_sfxcounter(i)
-
     def stop_all_audio(self):
-        bgms = self.form.bgmList
-        if bgms.count() <= 0:
-            return
-
-        for i in range(1, bgms.count()):
-            w = bgms.itemWidget(bgms.item(i))
-            w.force_stop()
+        for _list in [self.form.flowList, self.form.bgmList]:
+            for i in range(_list.count()):
+                iw = _list.itemWidget(_list.item(i))
+                if isinstance(iw, Mp3Object):
+                    iw.force_stop()
 
     def reject(self):
         self.form.stopBtn.setEnabled(False)

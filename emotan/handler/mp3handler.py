@@ -6,8 +6,7 @@ from pydub import AudioSegment as Aseg
 class Mp3Handler:
     def __init__(self, setting):
         self.setting = setting
-        # Setting Text-to-speech
-        self.sfxmap = {}
+        self.flowlist = []
         self.bgmloop = []
         # List of acapella mp3file (no BGM but with SFX) for each entry
         # Every element is a set of (AudioSegment, QLineEdit.text())
@@ -36,23 +35,29 @@ class Mp3Handler:
         return routers
 
     def setup_audio(self):
-        # Setup SFX and BGM by organizing them into groups and adjusting volume.
-        for key, sfxinfos in self.setting['sfx'].items():
-            if len(sfxinfos) == 0:
-                continue
-            sfxs = []
-            for sfxinfo in sfxinfos:
-                sfx = Aseg.from_mp3(sfxinfo['path'])
-                vol = self.volume(sfx.dBFS, (1 - sfxinfo['volume'] / 100))
-                sfxs.append(sfx - vol)
-            self.sfxmap[key] = sum(sfxs)
+        # Setup SFX and BGM by converting them in AudioSegement and adjusting volume.
+        for fi in self.setting['flow']:
+            if fi['type'] == "MP3":
+                sfx = Aseg.from_mp3(fi['path'])
+                volume = self._volume(sfx.dBFS, (1 - fi['volume']/100))
+                self.flowlist.append(sfx - volume)
+            elif fi['type'] == "SIL":
+                silence = Aseg.silent(int(fi['duration'] * 1000))
+                self.flowlist.append(silence)
+            else:
+                # Write a signal of _key object to be dictated on onepass process
+                self.flowlist.append(fi['type'])
 
-        for bgminfo in self.setting['loop']:
-            bgm = Aseg.from_mp3(bgminfo['path'])
-            vol = self.volume(bgm.dBFS, (1 - bgminfo['volume'] / 100))
-            self.bgmloop.append(bgm - vol)
+        for fi in self.setting['loop']:
+            if fi['type'] == "MP3":
+                bgm = Aseg.from_mp3(fi['path'])
+                volume = self._volume(bgm.dBFS, (1 - fi['volume']/100))
+                self.bgmloop.append(bgm - volume)
+            elif fi['type'] == "SIL":
+                silence = Aseg.silent(int(fi['duration'] * 1000))
+                self.bgmloop.append(silence)
 
-    def volume(self, dbfs, percent):
+    def _volume(self, dbfs, percent):
         # Takes dbfs (db relative to full scale, 0 as upper bounds) of the mp3file for volume reducing
         # and the percentage of volume to reduce from the dbfs.
         # The percent is defined by sliders on BarPlayer.
@@ -66,50 +71,30 @@ class Mp3Handler:
 
 
     def onepass(self, ew):
-        # TODO: Create Final.mp3 without generating intermediate mp3files
-        # Create complete MP3 contents for an Entry
-        # including 3 section; 'atop', 'def-x' and 'ex-x-x'
+        # Create an entire MP3 material for an Entry
         asegments = []
         curdir = os.path.join(self.setting['dest'], ew.str_index())
         assert os.path.exists(curdir)
 
         # If it needs to dictate the index of ew
         if self.setting['idx']:
-            idx_file = os.path.join(curdir, "%d") + ".mp3"
             index = "%d " % (ew.row + 1)
+            idx_file = os.path.join(curdir, "index") + ".mp3"
             self.routers['atop'](path=idx_file, text=index)
             asegments.append((Aseg.from_mp3(idx_file), index))
 
-        # Atop section
-        if "atop" in self.sfxmap:
-            asegments.append((self.sfxmap['atop'], None))
-        atopText = ew.editors['atop'].text()
-        toAtop = os.path.join(curdir, "atop") + ".mp3"
+        for fi in self.flowlist:
+            if isinstance(fi, Aseg):
+                asegments.append((fi, ''))
+                continue
 
-        self.routers['atop'](path=toAtop, text=atopText)
-        asegments.append((Aseg.from_mp3(toAtop) * self.setting['repeat'], atopText))
-
-        # Def-x and ex-x-x section
-        for i in range(1, ew.lv1 + 1):
-            _key = 'def-%d' % i
-            defText = ew.editors[_key].text()
-            if defText != '':
-                if _key in self.sfxmap:
-                    asegments.append((self.sfxmap[_key], None))
-                toDef = os.path.join(curdir, _key) + ".mp3"
-                self.routers['def-%d' % i](path=toDef, text=defText)
-                asegments.append((Aseg.from_mp3(toDef), defText))
-
-
-            for j in range(1, ew.lv2 + 1):
-                _key = 'ex-%d-%d' % (i, j)
-                exText = ew.editors[_key].text()
-                if exText != '':
-                    if _key in self.sfxmap:
-                        asegments.append((self.sfxmap[_key], None))
-                    toEx = os.path.join(curdir, _key)
-                    self.routers['ex-%d-%d' % (i, j)](path=toEx, text=exText)
-                    asegments.append((Aseg.from_mp3(toEx), exText))
+            assert isinstance(fi, str)
+            _key = fi
+            path = os.path.join(curdir, _key) + ".mp3"
+            text = ew.editors[_key].text()
+            if text != '':
+                self.routers[_key](path=path, text=text)
+                asegments.append((Aseg.from_mp3(path), text))
 
         acapella = sum(set[0] for set in asegments)
         if self.setting['lrc']:
@@ -128,7 +113,6 @@ class Mp3Handler:
             self.currentTime += len(aseg)
 
     def write_lyrics(self, output):
-        # TODO: WARNING!! May cause encoding bug while handling multi-byte characters
         with open(output, 'w', encoding='utf-8') as lrc:
             for set in self.lyrics:
                 mmss = msec2hhmmss(set[0], lrc=True)

@@ -23,8 +23,8 @@ class ExtractDialog(QDialog):
         self.form.setupUi(self)
 
         _list = self.form.keyList
-        for _key in self.mw.entrylist.setting._keys():
-            check = QCheckBox(_key)
+        for ewkey in self.mw.entrylist.setting.ewkeys():
+            check = QCheckBox(ewkey)
             lwi = QListWidgetItem()
             lwi.setSizeHint(check.sizeHint())
             _list.addItem(lwi)
@@ -54,20 +54,20 @@ class ExtractDialog(QDialog):
     def _on_ok(self):
         words = self._extract()
 
-        _keys = []
+        ewkeys = []
         _list = self.form.keyList
         for i in range(_list.count()):
             ch = _list.itemWidget(_list.item(i))
             if ch.isChecked():
-                _keys.append(ch.text())
+                ewkeys.append(ch.text())
 
-        if len(_keys) == 0:
+        if len(ewkeys) == 0:
             showCritical("No destination selected", title="Error")
             return
 
         if self.form.overCheck.isChecked():
             for i in range(len(words)):
-                new_item = dict((_key, words[i]) for _key in _keys)
+                new_item = dict((ewkey, words[i]) for ewkey in ewkeys)
                 # Existing entry to be overwritten
                 if i + 1 <= self.mw.entrylist.count():
                     ew = self.mw.entrylist.get_entry_at(i)
@@ -77,7 +77,7 @@ class ExtractDialog(QDialog):
                     ew.update_editor(new_item)
         else:
             for word in words:
-                new_item = dict((_key, word) for _key in _keys)
+                new_item = dict((ewkey, word) for ewkey in ewkeys)
                 ew = self.mw.entrylist.add_entry('', self.mw.mode)
                 ew.update_editor(new_item)
 

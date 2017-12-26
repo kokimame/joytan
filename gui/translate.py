@@ -37,15 +37,15 @@ class TranslateThread(QThread):
                 items['atop'] = self.translate(ew.editors['atop'].text())
 
             for i in range(1, ew.lv1 + 1):
-                _key = 'def-%d' % i
-                define = ew.editors[_key].text()
-                if _key in self.group and define != '':
+                ewkey = 'def-%d' % i
+                define = ew.editors[ewkey].text()
+                if ewkey in self.group and define != '':
                     items['def-%d' % i] = self.translate(define)
 
                 for j in range(1, ew.lv2 + 1):
-                    _key = 'ex-%d-%d' % (i, j)
-                    examp = ew.editors[_key].text()
-                    if _key in self.group and examp != '':
+                    ewkey = 'ex-%d-%d' % (i, j)
+                    examp = ew.editors[ewkey].text()
+                    if ewkey in self.group and examp != '':
                         items['ex-%d-%d' % (i, j)] = self.translate(examp)
 
             self.transed.emit(ew.row, items)
@@ -69,9 +69,9 @@ class TranslateDialog(QDialog):
         self.form.startButton.clicked.connect(self._translate)
 
         _list = self.form.keyList
-        # Add checkbox corresponding to each _key of Entry
-        for _key in self.mw.entrylist.setting._keys():
-            check = QCheckBox(_key)
+        # Add checkbox corresponding to each ewkey of Entry
+        for ewkey in self.mw.entrylist.setting.ewkeys():
+            check = QCheckBox(ewkey)
             lwi = QListWidgetItem()
             lwi.setSizeHint(check.sizeHint())
             _list.addItem(lwi)
@@ -85,7 +85,7 @@ class TranslateDialog(QDialog):
             return
 
         form = self.form
-        _keys = []
+        ewkeys = []
         # Get language code of target language to translate to from the library
         destcode = LANGCODES[form.langCombo.currentText().lower()]
         # Check which section to translate
@@ -93,7 +93,7 @@ class TranslateDialog(QDialog):
         for i in range(_list.count()):
             ch = _list.itemWidget(_list.item(i))
             if ch.isChecked():
-                _keys.append(ch.text())
+                ewkeys.append(ch.text())
 
 
         def _on_progress(name):
@@ -103,7 +103,7 @@ class TranslateDialog(QDialog):
 
         # This causes a warning from PyQt about seting a parent on other thread.
         is_only = self.form.onlyCheck.isChecked()
-        self.tt = TranslateThread(self.mw, _keys, destcode, is_only)
+        self.tt = TranslateThread(self.mw, ewkeys, destcode, is_only)
         self.form.progressBar.setRange(0, len(self.tt.targets))
         self.tt.prog.connect(_on_progress)
         self.tt.transed.connect(self.mw.entrylist.update_entry)

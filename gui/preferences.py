@@ -41,7 +41,7 @@ class Preferences(QDialog):
         tab = self.form.tabAtts
         if not tab.layout():
             from gui.utils import showCritical, getText
-            atts = AwesomeTTS(self.eset.ttsmap, showCritical, getText)
+            atts = AwesomeTTS(self.eset, showCritical, getText)
             atts.setObjectName("AwesomeTTS")
             hbox = QHBoxLayout()
             hbox.addWidget(atts)

@@ -28,10 +28,10 @@ class ServiceQuo(QLabel):
     _UNINIT = '<p><span style="color:#ff0000;">TTS undefined</span></p>'
     _OPTIONS = '<p>{options}</p>'
 
-    def __init__(self, _key):
+    def __init__(self, ewkey):
         super(ServiceQuo, self).__init__()
         self.setWordWrap(True)
-        self._key = _key
+        self.ewkey = ewkey
         self.idx = None
         self.options = None
 
@@ -39,10 +39,10 @@ class ServiceQuo(QLabel):
 
     def set_desc(self, svc_id, options):
         if not options:
-            content = self._BODY.format(body=self._key, svc="")
+            content = self._BODY.format(body=self.ewkey, svc="")
             content += self._UNINIT
         else:
-            content = self._BODY.format(body=self._key, svc=svc_id)
+            content = self._BODY.format(body=self.ewkey, svc=svc_id)
             # desc = self.summarizer(option)
             content += self._OPTIONS.format(options=str(sorted(options.items())))
             self.options = options
@@ -74,7 +74,7 @@ class AwesomeTTS(QWidget):
     _INPUT_WIDGETS = _OPTIONS_WIDGETS + (QAbstractButton,
                                          QLineEdit, QTextEdit)
 
-    def __init__(self, ttsmap, alerts, ask, *args, **kargs):
+    def __init__(self, eset, alerts, ask, *args, **kargs):
         super(AwesomeTTS, self).__init__()
 
         from emotan.speaker import router, config, logger
@@ -89,7 +89,8 @@ class AwesomeTTS(QWidget):
         self._alerts = alerts
         self._ask = ask
         # Update mw.entrylist settings
-        self.ttsmap = ttsmap
+        self.eset = eset
+        self.ttsmap = eset.ttsmap
 
         vbox = QVBoxLayout()
         # vbox.addLayout(self._banner())
@@ -189,9 +190,9 @@ class AwesomeTTS(QWidget):
                             QListWidget::item:selected { background: rgba(0,255,255,30); }
                            """)
         overview.setObjectName('overview')
-        for i, _key in enumerate(sorted(self.ttsmap)):
-            quo = ServiceQuo(_key)
-            svc_values = self.ttsmap[_key]
+        for i, ewkey in enumerate(self.eset.ewkeys()):
+            quo = ServiceQuo(ewkey)
+            svc_values = self.ttsmap[ewkey]
             if svc_values:
                 quo.idx = svc_values[0]
                 # Pass svc_id & options
@@ -259,7 +260,7 @@ class AwesomeTTS(QWidget):
         iw.idx = idx
         iw.set_desc(svc_id, options)
         item.setSizeHint(iw.sizeHint())
-        self.ttsmap[iw._key] = (idx, svc_id, options)
+        self.ttsmap[iw.ewkey] = (idx, svc_id, options)
         overview.repaint()
 
 

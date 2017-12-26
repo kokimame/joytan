@@ -27,20 +27,20 @@ class EntryList(QListWidget):
 
             # Expand ttsmap and tags with default value
             for i in range(1, self.lv1 + 1):
-                _key = 'def-%d' % i
-                avail_keys.append(_key)
-                if _key not in self.ttsmap:
-                    self.ttsmap[_key] = None
+                ewkey = 'def-%d' % i
+                avail_keys.append(ewkey)
+                if ewkey not in self.ttsmap:
+                    self.ttsmap[ewkey] = None
                 for j in range(1, self.lv2 + 1):
-                    _key = 'ex-%d-%d' % (i, j)
-                    avail_keys.append(_key)
-                    if _key not in self.ttsmap:
-                        self.ttsmap[_key] = None
+                    ewkey = 'ex-%d-%d' % (i, j)
+                    avail_keys.append(ewkey)
+                    if ewkey not in self.ttsmap:
+                        self.ttsmap[ewkey] = None
             # Exclude keys out of size of levels from ttsmap
             keys = list(self.ttsmap.keys())
-            for _key in keys:
-                if _key not in avail_keys:
-                    self.ttsmap.pop(_key, None)
+            for ewkey in keys:
+                if ewkey not in avail_keys:
+                    self.ttsmap.pop(ewkey, None)
 
 
         def is_voiceless(self):
@@ -51,9 +51,15 @@ class EntryList(QListWidget):
             else:
                 return False
 
-        def _keys(self):
-            # Sort and return keys to access the text of Entry's QLineEditor
-            return sorted(self.ttsmap)
+        def ewkeys(self):
+            # Sort ewkeys in the same order shown in Edit mode on EntryWidget
+            ewkeys = ['atop']
+            for i in range(1, self.lv1 + 1):
+                ewkeys.append('def-%d' % i)
+                for j in range(1, self.lv2 + 1):
+                    ewkeys.append("ex-%d-%d" % (i, j))
+
+            return ewkeys
 
         # Returns a dictionary of EntryList properties. Will be called on saving the list.
         def data(self):

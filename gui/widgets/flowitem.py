@@ -107,21 +107,20 @@ class Mp3Object(FlowItem):
         self.mp.stop()
 
 
-# An object corresponds to _key in EntryWidget
-# TODO: _key may look weird, rename this to ewkey, ekey or enkey
-class _KeyObject(FlowItem):
+# An object corresponds to ewkey in EntryWidget
+class EwkeyObject(FlowItem):
 
-    def __init__(self, lwi, _key):
-        self._key = _key
-        super(_KeyObject, self).__init__(lwi)
+    def __init__(self, lwi, ewkey):
+        self.ewkey = ewkey
+        super(EwkeyObject, self).__init__(lwi)
 
     def _ui(self):
-        layout = super(_KeyObject, self)._ui()
+        layout = super(EwkeyObject, self)._ui()
         title = layout.itemAt(1).widget()
         volume = layout.itemAt(2).widget()
 
-        title.setText(self._key)
-        ks = self._key.split('-')
+        title.setText(self.ewkey)
+        ks = self.ewkey.split('-')
         if 'atop' in ks:
             title.setStyleSheet(Editor.COLOR['atop'])
         elif 'def' in ks:
@@ -129,5 +128,5 @@ class _KeyObject(FlowItem):
         elif 'ex' in ks:
             title.setStyleSheet(Editor.COLOR['ex'])
         else:
-            raise Exception("Wrong _key")
+            raise Exception("Wrong ewkey")
         return layout

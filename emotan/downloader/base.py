@@ -15,8 +15,5 @@ class BaseDownloader:
         # Each class implements a run method specific to their source.
         # Download only once for an entry even if 
         # Entry preference modified after the downloading session.
-        #
-        # FIXME: Child classes are using ugly way of passing downloded contents to each entry.
-        # Save all downloaded contents tagging with _key and overwrite entry's editors.
         """
         raise NotImplementedError

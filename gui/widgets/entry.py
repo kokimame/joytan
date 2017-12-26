@@ -23,13 +23,13 @@ class Editor(QWidget):
              'def': "background-color : rgb(%d,%d,%d)" % (255,180,230),
              'ex': "background-color : rgb(%d,%d,%d)" % (180,230,255),}
 
-    def __init__(self, _key, text=""):
+    def __init__(self, ewkey, text=""):
         super(Editor, self).__init__()
-        self._key = _key
-        self.label = QLabel(_key)
+        self.ewkey = ewkey
+        self.label = QLabel(ewkey)
         self.label.setFixedWidth(40)
         self.label.setFont(self._ITALIC)
-        self.label.setStyleSheet(self._color(_key))
+        self.label.setStyleSheet(self._color(ewkey))
         self.editor = QLineEdit(text)
         layout = QHBoxLayout()
         layout.setContentsMargins(0, 0, 0, 0)
@@ -37,8 +37,8 @@ class Editor(QWidget):
         layout.addWidget(self.editor)
         self.setLayout(layout)
 
-    def _color(self, _key):
-        sk = _key.split('-')
+    def _color(self, ewkey):
+        sk = ewkey.split('-')
         if 'atop' in sk:
             return self.COLOR['atop']
         elif 'def' in sk:
@@ -46,7 +46,7 @@ class Editor(QWidget):
         elif 'ex' in sk:
             return self.COLOR['ex']
         else:
-            raise Exception("Wrong _key")
+            raise Exception("Wrong ewkey")
 
     # The function name is camel case as the class had to overwrite QLineEdit
     # otherwise too many rename were required.
@@ -86,7 +86,7 @@ class EntryWidget(QWidget):
 
         # Dictionary of QLineEdit.
         # Text stored in the editors will be the actual learning materials.
-        # The keys, referenced as '_key' (with underscode), come in 'atop', 'def-n', 'ex-n-n' where 0 < n < 10
+        # The keys, referenced as 'ewkey' (with underscode), come in 'atop', 'def-n', 'ex-n-n' where 0 < n < 10
         # ===
         # 'atop' : The name of Entry. Should be identical in the parent.
         # 'def-x' : Main part of an Entry. Each entry has upto 9 of this section.
@@ -139,15 +139,15 @@ class EntryWidget(QWidget):
         layout.addWidget(self.editors['atop'])
         row = 1
         for i in range(1, self.lv1 + 1):
-            _key = 'def-%d' % i
-            if _key not in self.editors:
-                self.editors[_key] = Editor(_key)
-            layout.addWidget(self.editors[_key])
+            ewkey = 'def-%d' % i
+            if ewkey not in self.editors:
+                self.editors[ewkey] = Editor(ewkey)
+            layout.addWidget(self.editors[ewkey])
             for j in range(1, self.lv2 + 1):
-                _key = "ex-%d-%d" % (i, j)
-                if _key not in self.editors:
-                    self.editors[_key] = Editor(_key)
-                layout.addWidget(self.editors[_key])
+                ewkey = "ex-%d-%d" % (i, j)
+                if ewkey not in self.editors:
+                    self.editors[ewkey] = Editor(ewkey)
+                layout.addWidget(self.editors[ewkey])
                 row += 1
             row += 1
 

@@ -45,7 +45,7 @@ class Mp3Handler:
                 silence = Aseg.silent(int(fi['duration'] * 1000))
                 self.flowlist.append(silence)
             else:
-                # Write a signal of _key object to be dictated on onepass process
+                # Write a signal of ewkey object to be dictated on onepass process
                 self.flowlist.append(fi['type'])
 
         for fi in self.setting['loop']:
@@ -89,11 +89,11 @@ class Mp3Handler:
                 continue
 
             assert isinstance(fi, str)
-            _key = fi
-            path = os.path.join(curdir, _key) + ".mp3"
-            text = ew.editors[_key].text()
+            ewkey = fi
+            path = os.path.join(curdir, ewkey) + ".mp3"
+            text = ew.editors[ewkey].text()
             if text != '':
-                self.routers[_key](path=path, text=text)
+                self.routers[ewkey](path=path, text=text)
                 asegments.append((Aseg.from_mp3(path), text))
 
         acapella = sum(set[0] for set in asegments)

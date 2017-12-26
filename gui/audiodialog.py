@@ -3,7 +3,7 @@ import shutil
 import gui
 from gui.qt import *
 from gui.utils import showCritical, getFile
-from gui.widgets.flowitem import FlowItem, Mp3Object, _KeyObject, Silence
+from gui.widgets.flowitem import FlowItem, Mp3Object, EwkeyObject, Silence
 
 
 def on_audiodialog(mw):
@@ -31,8 +31,8 @@ class AudioDialog(QDialog):
         fadd.setToolButtonStyle(Qt.ToolButtonTextBesideIcon)
         fadd.setArrowType(Qt.DownArrow)
 
-        for _key in self.eset._keys():
-            self._add_flow_item(_key)
+        for ewkey in self.eset.ewkeys():
+            self._add_flow_item(ewkey)
 
     def _flow_tool(self):
         m = QMenu(self.mw)
@@ -40,9 +40,9 @@ class AudioDialog(QDialog):
         a.triggered.connect(lambda: self._add_flow_item("MP3"))
         a = m.addAction("Add Silence")
         a.triggered.connect(lambda: self._add_flow_item("SIL"))
-        for _key in self.eset._keys():
-            a = m.addAction("Add %s" % _key)
-            a.triggered.connect(lambda ignore, type=_key: self._add_flow_item(type))
+        for ewkey in self.eset.ewkeys():
+            a = m.addAction("Add %s" % ewkey)
+            a.triggered.connect(lambda ignore, type=ewkey: self._add_flow_item(type))
         m.exec_(QCursor.pos())
 
     def _ui_bgmloop(self):
@@ -72,8 +72,8 @@ class AudioDialog(QDialog):
         elif type == 'SIL':
             fi = Silence(lwi)
         else:
-            assert type in self.eset._keys()
-            fi = _KeyObject(lwi, type)
+            assert type in self.eset.ewkeys()
+            fi = EwkeyObject(lwi, type)
 
         lwi.setSizeHint(fi.sizeHint())
         fi.delete.connect(self._remove_flow_item)
@@ -161,8 +161,8 @@ class AudioDialog(QDialog):
             elif isinstance(fi, Silence):
                 flowlist.append({"type": "SIL",
                                  "duration": fi.get_duration()})
-            elif isinstance(fi, _KeyObject):
-                flowlist.append({"type": fi._key})
+            elif isinstance(fi, EwkeyObject):
+                flowlist.append({"type": fi.ewkey})
         setting['flow'] = flowlist
 
         bgms = self.form.bgmList

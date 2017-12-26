@@ -60,9 +60,9 @@ class Editor(QWidget):
 class EntryWidget(QWidget):
     # Design of QLabel shown on 'View' mode
     _ENTRY_VIEW = '<html><head/><body>{content}</body></html>'
-    _FONT_TOP = '<p><span style=" font-size:16pt; font-weight:520;">{atop}</span></p>'
-    _FONT_DEF = '<p>{num}. {define}</p>'
-    _FONT_EX = '<p><span style="color:#8d8d8d;">&quot;{ex}&quot;</span></p>'
+    _FONT_ATOP = '<p><span style=" font-size:16pt; font-weight:520;">{text}</span></p>'
+    _FONT_DEF = '<p>{num}. {text}</p>'
+    _FONT_EX = '<p><span style="color:#8d8d8d;">&quot;{text}&quot;</span></p>'
 
     _BOLD, _ITALIC = QFont(), QFont()
     _BOLD.setBold(True)
@@ -119,7 +119,7 @@ class EntryWidget(QWidget):
             atop = "Unnamed Entry"
 
         view.setText(self._ENTRY_VIEW.format
-                     (content=self._FONT_TOP.format(atop=atop)))
+                     (content=self._FONT_ATOP.format(text=atop)))
         index = Indexer(self.row + 1)
         index.valueChanged.connect(self._move_to)
 
@@ -175,18 +175,18 @@ class EntryWidget(QWidget):
         self.row = row
 
     def update_view(self):
-        if self.editors['atop'] == '':
+        if self.editors['atop'].text() == '':
             atop = "Unnamed entry"
         else:
             atop = self.editors['atop'].text()
-        content = self._FONT_TOP.format(num=self.row+1, atop=atop)
+        content = self._FONT_ATOP.format(num=self.row + 1, text=atop)
 
         for i in range(1, self.lv1 + 1):
             if self.editors['def-%d' % i].text() != '':
-                content += self._FONT_DEF.format(num=i, define=self.editors['def-%d' % i].text())
+                content += self._FONT_DEF.format(num=i, text=self.editors['def-%d' % i].text())
             for j in range(1, self.lv2 + 1):
                 if self.editors['ex-%d-%d' % (i, j)].text() != '':
-                    content += self._FONT_EX.format(ex=self.editors['ex-%d-%d' % (i, j)].text())
+                    content += self._FONT_EX.format(text=self.editors['ex-%d-%d' % (i, j)].text())
 
         view = self.findChild(QLabel, "view")
         view.setText(self._ENTRY_VIEW.format(content=content))

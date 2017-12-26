@@ -60,9 +60,8 @@ class Ui_AudioDialog(object):
         self.horizontalLayout_7.addItem(spacerItem2)
         self.verticalLayout_3.addLayout(self.horizontalLayout_7)
         self.flowList = QtWidgets.QListWidget(AudioDialog)
-        self.flowList.setStyleSheet("QListWidget::item { border-bottom: 1px solid black; }\n"
-"QListWidget::item { background-color: rgb(211,208,204);}")
-        self.flowList.setDragDropMode(QtWidgets.QAbstractItemView.DragDrop)
+        self.flowList.setStyleSheet("QListWidget::item { background: rgb(180, 180, 180); }")
+        self.flowList.setDragDropMode(QtWidgets.QAbstractItemView.InternalMove)
         self.flowList.setDefaultDropAction(QtCore.Qt.MoveAction)
         self.flowList.setObjectName("flowList")
         self.verticalLayout_3.addWidget(self.flowList)
@@ -83,9 +82,8 @@ class Ui_AudioDialog(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.bgmList.sizePolicy().hasHeightForWidth())
         self.bgmList.setSizePolicy(sizePolicy)
-        self.bgmList.setStyleSheet("QListWidget::item { border-bottom: 1px solid black; }\n"
-"QListWidget::item { background-color: rgb(211,208,204); }")
-        self.bgmList.setDragDropMode(QtWidgets.QAbstractItemView.DragDrop)
+        self.bgmList.setStyleSheet("QListWidget::item { background: rgb(150, 150, 150); }")
+        self.bgmList.setDragDropMode(QtWidgets.QAbstractItemView.InternalMove)
         self.bgmList.setDefaultDropAction(QtCore.Qt.MoveAction)
         self.bgmList.setObjectName("bgmList")
         self.verticalLayout_3.addWidget(self.bgmList)

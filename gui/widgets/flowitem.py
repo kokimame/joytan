@@ -1,7 +1,7 @@
 import gui
 from gui.qt import *
-from emotan.handler import mp3handler
 from gui.utils import path2filename
+from gui.widgets.entry import Editor
 
 
 class MediaPlayer(QMediaPlayer):
@@ -32,7 +32,9 @@ class FlowItem(QWidget):
         del_btn.setIcon(QIcon("design/icons/delete_button.png"))
         del_btn.clicked.connect(lambda: self.delete.emit(self.lwi))
         del_btn.setFixedWidth(20)
+        del_btn.setFixedHeight(20)
         title = QLabel()
+        title.setMinimumHeight(30)
         volume = QSlider(Qt.Horizontal)
         volume.setObjectName("volume")
         volume.setFixedWidth(90)
@@ -40,6 +42,7 @@ class FlowItem(QWidget):
         volume.setValue(100)
 
         hbox = QHBoxLayout()
+        hbox.setContentsMargins(0, 0, 0, 0)
         hbox.addWidget(del_btn)
         hbox.addWidget(title)
         hbox.addWidget(volume)
@@ -85,6 +88,7 @@ class Mp3Object(FlowItem):
         volume = layout.itemAt(2).widget()
 
         title.setText(path2filename(self.mp3path))
+        title.setStyleSheet("background-color : rgb(90,255,130)")
         volume.valueChanged.connect(self.mp.setVolume)
         play_btn = QPushButton("Play")
         play_btn.clicked.connect(lambda: self.mp.play_content(self.content))
@@ -115,5 +119,15 @@ class _KeyObject(FlowItem):
         layout = super(_KeyObject, self)._ui()
         title = layout.itemAt(1).widget()
         volume = layout.itemAt(2).widget()
+
         title.setText(self._key)
+        ks = self._key.split('-')
+        if 'atop' in ks:
+            title.setStyleSheet(Editor.COLOR['atop'])
+        elif 'def' in ks:
+            title.setStyleSheet(Editor.COLOR['def'])
+        elif 'ex' in ks:
+            title.setStyleSheet(Editor.COLOR['ex'])
+        else:
+            raise Exception("Wrong _key")
         return layout

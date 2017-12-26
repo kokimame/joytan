@@ -139,11 +139,10 @@
        <item>
         <widget class="QListWidget" name="flowList">
          <property name="styleSheet">
-          <string notr="true">QListWidget::item { border-bottom: 1px solid black; }
-QListWidget::item { background-color: rgb(211,208,204);}</string>
+          <string notr="true">QListWidget::item { background: rgb(180, 180, 180); }</string>
          </property>
          <property name="dragDropMode">
-          <enum>QAbstractItemView::DragDrop</enum>
+          <enum>QAbstractItemView::InternalMove</enum>
          </property>
          <property name="defaultDropAction">
           <enum>Qt::MoveAction</enum>
@@ -190,11 +189,10 @@ QListWidget::item { background-color: rgb(211,208,204);}</string>
           </sizepolicy>
          </property>
          <property name="styleSheet">
-          <string notr="true">QListWidget::item { border-bottom: 1px solid black; }
-QListWidget::item { background-color: rgb(211,208,204); }</string>
+          <string notr="true">QListWidget::item { background: rgb(150, 150, 150); }</string>
          </property>
          <property name="dragDropMode">
-          <enum>QAbstractItemView::DragDrop</enum>
+          <enum>QAbstractItemView::InternalMove</enum>
          </property>
          <property name="defaultDropAction">
           <enum>Qt::MoveAction</enum>

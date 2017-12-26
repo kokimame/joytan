@@ -19,9 +19,9 @@ class Editor(QWidget):
     _ITALIC = QFont()
     _ITALIC.setItalic(True)
 
-    _COLOR = {'atop': "QLabel { background-color : rgb(255, 255, 180); }",
-              'def': "QLabel { background-color : rgb(255, 180, 230); }",
-              'ex': "QLabel { background-color : rgb(180, 230, 255); }"}
+    COLOR = {'atop': "background-color : rgb(%d,%d,%d)" % (255,255,180),
+             'def': "background-color : rgb(%d,%d,%d)" % (255,180,230),
+             'ex': "background-color : rgb(%d,%d,%d)" % (180,230,255),}
 
     def __init__(self, _key, text=""):
         super(Editor, self).__init__()
@@ -29,7 +29,7 @@ class Editor(QWidget):
         self.label = QLabel(_key)
         self.label.setFixedWidth(40)
         self.label.setFont(self._ITALIC)
-        self.label.setStyleSheet(self.color(_key))
+        self.label.setStyleSheet(self._color(_key))
         self.editor = QLineEdit(text)
         layout = QHBoxLayout()
         layout.setContentsMargins(0, 0, 0, 0)
@@ -37,14 +37,14 @@ class Editor(QWidget):
         layout.addWidget(self.editor)
         self.setLayout(layout)
 
-    def color(self, _key):
+    def _color(self, _key):
         sk = _key.split('-')
         if 'atop' in sk:
-            return self._COLOR['atop']
+            return self.COLOR['atop']
         elif 'def' in sk:
-            return self._COLOR['def']
+            return self.COLOR['def']
         elif 'ex' in sk:
-            return self._COLOR['ex']
+            return self.COLOR['ex']
         else:
             raise Exception("Wrong _key")
 

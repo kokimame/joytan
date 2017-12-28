@@ -91,6 +91,7 @@ class TextDialog(QDialog):
         label.selectionChanged.connect(label.deselect)
         self.form.designBtn.clicked.connect(self._on_design_select)
         self.form.dlall.clicked.connect(self._autodownload)
+        self.form.clearAll.clicked.connect(self._clear_all_images)
 
         # FIXME: Temporal default setting
         path  = os.path.abspath('./templates/html/words.html')
@@ -107,7 +108,7 @@ class TextDialog(QDialog):
 
         for i in range(self.mw.entrylist.count()):
             lane = self._get_lane(i)
-            lane.all_wait()
+            lane.wait_all()
 
         # The actual class to be run in the following pool
         class Worker(QRunnable):
@@ -169,6 +170,13 @@ class TextDialog(QDialog):
             self.form.designLbl.setText(bd.info)
         except AssertionError:
             showCritical("Invalid book design (Image number not found)")
+
+    @pyqtSlot()
+    def _clear_all_images(self):
+        for i in range(self.mw.entrylist.count()):
+            lane = self._get_lane(i)
+            lane.clear_all()
+
 
     def _get_lane(self, i):
         _list = self.form.imgList

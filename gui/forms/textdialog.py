@@ -48,6 +48,9 @@ class Ui_TextDialog(object):
         self.dlall = QtWidgets.QPushButton(TextDialog)
         self.dlall.setObjectName("dlall")
         self.horizontalLayout_5.addWidget(self.dlall)
+        self.clearAll = QtWidgets.QPushButton(TextDialog)
+        self.clearAll.setObjectName("clearAll")
+        self.horizontalLayout_5.addWidget(self.clearAll)
         spacerItem1 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout_5.addItem(spacerItem1)
         self.verticalLayout.addLayout(self.horizontalLayout_5)
@@ -90,6 +93,7 @@ class Ui_TextDialog(object):
         self.followEdit.setPlaceholderText(_translate("TextDialog", "Following text to search with"))
         self.label.setText(_translate("TextDialog", "Images to embed in your book"))
         self.dlall.setText(_translate("TextDialog", "Download All"))
+        self.clearAll.setText(_translate("TextDialog", "Clear All"))
         self.cancelBtn.setText(_translate("TextDialog", "Stop"))
         self.startBtn.setText(_translate("TextDialog", "Start"))
 

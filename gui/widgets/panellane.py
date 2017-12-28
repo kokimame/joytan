@@ -140,12 +140,16 @@ class PanelLane(QListWidget):
                 self.imglist[i] = (imgpath, link)
                 break
 
-    def all_wait(self):
+    def wait_all(self):
         # Make everything but 'DONE' panel waiting
         for i in range(self.count()):
             p = self._get_panel(i)
             if p.state != 'DONE':
                 p.state_manager('WAIT')
+
+    def clear_all(self):
+        for i in range(self.count()):
+            self.on_image_delete(i)
 
     @pyqtSlot(str)
     def on_update_following(self, following):

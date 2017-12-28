@@ -75,6 +75,10 @@ class TextDialog(QDialog):
         self.mw = mw
         self.book = None
         self.destdir = os.path.join(mw.basepath(), "text")
+        if os.path.isdir(self.destdir):
+            import shutil
+            shutil.rmtree(self.destdir)
+        os.makedirs(self.destdir)
         self.form = gui.forms.textdialog.Ui_TextDialog()
         self.form.setupUi(self)
         self.form.startBtn.clicked.connect(self._on_create)
@@ -103,7 +107,7 @@ class TextDialog(QDialog):
 
         for i in range(self.mw.entrylist.count()):
             lane = self._get_lane(i)
-            lane.on_wait()
+            lane.all_wait()
 
         # The actual class to be run in the following pool
         class Worker(QRunnable):
@@ -136,27 +140,20 @@ class TextDialog(QDialog):
                 # FIXME: Change 'pass' to 'continue' on final version
                 pass
             group = ew.editors['atop'].text()
-            index = 2 * i + 1
             destdir = os.path.join(self.destdir, ew.str_index())
             lwi1 = QListWidgetItem()
-            fs = FileSelector(self.mw, group, filter="Images (*.jpg *.jpeg *.png)",
-                              idx=index, dir=self.mw.basepath(), msg="Select an Image")
-            fs.select.connect(self._on_image_upload)
-            lwi1.setSizeHint(fs.sizeHint())
-            lwi2, ip = QListWidgetItem(), PanelLane(group, self.form.followEdit.text(), destdir, self.book.maximg)
+            lwi2 = QListWidgetItem()
+            pb = QPushButton('+ Download %s' % group)
+            ip = PanelLane(group, self.form.followEdit.text(), destdir, self.book.maximg)
+            pb.clicked.connect(ip.on_download)
+            lwi1.setSizeHint(pb.sizeHint())
             self.form.followEdit.textChanged.connect(ip.on_update_following)
             lwi2.setSizeHint(ip.size())
 
             _list.addItem(lwi1)
-            _list.setItemWidget(lwi1, fs)
+            _list.setItemWidget(lwi1, pb)
             _list.addItem(lwi2)
             _list.setItemWidget(lwi2, ip)
-
-    @pyqtSlot(str, int)
-    def _on_image_upload(self, imgpath, idx):
-        _list = self.form.imgList
-        lane = _list.itemWidget(_list.item(idx))
-        lane.on_set_image(imgpath, '')
 
     def _on_design_select(self):
         from gui.utils import getFile
@@ -185,10 +182,11 @@ class TextDialog(QDialog):
         for i, ew in enumerate(self.mw.entrylist.get_entry_all()):
             data = ew.data()
             panel = self._get_lane(i)
-            for j, img in enumerate(panel.images):
-                data['img-%d' % (j + 1)] = img
-                data['cite-%d' % (j + 1)] = panel.imgcites[j]
+            for j, tup in enumerate(panel.imglist):
+                data['img-%d' % (j + 1)] = tup[0]
+                data['cite-%d' % (j + 1)] = tup[1]
             datas.append(data)
+            print(panel.imglist)
 
         from jinja2 import Environment, FileSystemLoader
         env = Environment(loader=FileSystemLoader('/'))

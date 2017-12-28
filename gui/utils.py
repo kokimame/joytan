@@ -136,6 +136,27 @@ def getFile(parent, title, filter="*.*", dir=None):
 def path2filename(longpath):
     return os.path.basename(os.path.normpath(longpath))
 
+def path_temp(_temp_dir):
+    """
+    Returns a path using the given extension that may be used for
+    writing out a temporary file.
+    """
+
+    from string import ascii_lowercase, digits
+    alphanumerics = ascii_lowercase + digits
+
+    from os.path import join
+    from random import choice
+    from time import time
+    return join(
+        _temp_dir,
+        '%x-%s' % (
+            int(time()),
+            ''.join(choice(alphanumerics) for i in range(30))
+        ),
+    )
+
+
 def showWarning(text, parent=None, help="", title="Emotan"):
     "Show a small warning with an OK button."
     return showInfo(text, parent, help, "warning", title=title)

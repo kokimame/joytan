@@ -5,6 +5,7 @@ import requests
 import re
 
 from gui.qt import *
+from gui.utils import path_temp
 
 SIZE = {'medium': '&tbs=islt:vga,isz:m',
         'icon': '&tbs=isz:i'}
@@ -32,23 +33,24 @@ class GimageThread(QThread):
 
     def update_keyword(self, keyword):
         self.keyword = keyword
+        self.url = None
 
     def run(self):
-        self.url = URL.format(keyword=self.keyword)
-        raw_html = (download_page(self.url))
-        self.links += (_get_all_links(raw_html, max=15))
+        if not self.url:
+            self.url = URL.format(keyword=self.keyword)
+            raw_html = (download_page(self.url))
+            self.links  = _get_all_links(raw_html, max=15)
 
-        if os.path.isdir(self.destdir):
-            import shutil
-            shutil.rmtree(self.destdir)
-        os.makedirs(self.destdir)
+        if not os.path.exists(self.destdir):
+            os.makedirs(self.destdir)
 
         i, uploads = 0, 0
         while i < len(self.links):
             link = self.links[i]
-            imgfile = download_image(link, os.path.join(self.destdir, str(i)))
+            imgfile = download_image(link, os.path.join(path_temp(self.destdir)))
             if imgfile:
                 self.upload.emit(imgfile, link)
+                self.links.remove(link)
                 uploads += 1
             if uploads >= self.img_total:
                 break

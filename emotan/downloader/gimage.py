@@ -19,7 +19,8 @@ IMG_SUPPORTED = ['jpeg', 'jpg', 'png']
 
 
 class GimageThread(QThread):
-    done = pyqtSignal(str, str)
+
+    upload = pyqtSignal(str, str)
 
     def __init__(self, keyword, destdir):
         QThread.__init__(self)
@@ -29,23 +30,25 @@ class GimageThread(QThread):
         self.url = None
         self.links = []
 
-    def run(self):
-        if not self.url:
-            self.url = URL.format(keyword=self.keyword)
-            raw_html = (download_page(self.url))
-            self.links += (_get_all_links(raw_html, max=15))
+    def update_keyword(self, keyword):
+        self.keyword = keyword
 
-            if os.path.isdir(self.destdir):
-                import shutil
-                shutil.rmtree(self.destdir)
-            os.makedirs(self.destdir)
+    def run(self):
+        self.url = URL.format(keyword=self.keyword)
+        raw_html = (download_page(self.url))
+        self.links += (_get_all_links(raw_html, max=15))
+
+        if os.path.isdir(self.destdir):
+            import shutil
+            shutil.rmtree(self.destdir)
+        os.makedirs(self.destdir)
 
         i, uploads = 0, 0
-        while True:
+        while i < len(self.links):
             link = self.links[i]
             imgfile = download_image(link, os.path.join(self.destdir, str(i)))
             if imgfile:
-                self.done.emit(imgfile, link)
+                self.upload.emit(imgfile, link)
                 uploads += 1
             if uploads >= self.img_total:
                 break
@@ -108,7 +111,6 @@ def download_image(link, piwoe):
             if chunk in IMG_SUPPORTED:
                 ff = chunk
                 break
-        print(ff)
         if not ff:
             return None
 

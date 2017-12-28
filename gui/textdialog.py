@@ -88,6 +88,13 @@ class TextDialog(QDialog):
         self.form.designBtn.clicked.connect(self._on_design_select)
         self.form.dlall.clicked.connect(self._autodownload)
 
+        # FIXME: Temporal default setting
+        path  = './templates/html/words.html'
+        bd = BookDesign(path)
+        self.book = bd
+        self._activate_imglist()
+        self.form.designLbl.setText(bd.info)
+
     def _autodownload(self):
         if not self.book:
             showCritical("Please select book design.")
@@ -104,7 +111,7 @@ class TextDialog(QDialog):
                 self.lane = lane
 
             def run(self):
-                self.lane.set_working()
+                self.lane.start_working()
                 self.lane.thread.run()
 
         self.pool = QThreadPool()
@@ -125,7 +132,7 @@ class TextDialog(QDialog):
         for i, ew in enumerate(self.mw.entrylist.get_entry_all()):
             if ew.editors['atop'].text() == '':
                 # if ew is empty, ignore it
-                # FIXME: Change 'pass' to 'continue' at the end
+                # FIXME: Change 'pass' to 'continue' on final version
                 pass
             group = ew.editors['atop'].text()
             index = 2 * i + 1
@@ -135,7 +142,8 @@ class TextDialog(QDialog):
                              idx=index, dir=self.mw.basepath(), msg="Select an Image")
             gb.sig.connect(self._on_image_upload)
             lwi1.setSizeHint(gb.sizeHint())
-            lwi2, ip = QListWidgetItem(), PanelLane(group, destdir, self.book.maximg)
+            lwi2, ip = QListWidgetItem(), PanelLane(group, self.form.followEdit.text(), destdir, self.book.maximg)
+            self.form.followEdit.textChanged.connect(ip.on_update_following)
             lwi2.setSizeHint(ip.size())
 
             _list.addItem(lwi1)
@@ -143,6 +151,7 @@ class TextDialog(QDialog):
             _list.addItem(lwi2)
             _list.setItemWidget(lwi2, ip)
 
+    @pyqtSlot(str, str, int)
     def _on_image_upload(self, imgpath, group, idx):
         _list = self.form.imgList
         lane = _list.itemWidget(_list.item(idx))
@@ -190,4 +199,5 @@ class TextDialog(QDialog):
 
     def reject(self):
         self.done(0)
+
         gui.dialogs.close("TextDialog")

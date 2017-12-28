@@ -61,11 +61,45 @@
     </layout>
    </item>
    <item>
+    <layout class="QHBoxLayout" name="searchOptionLayout">
+     <property name="spacing">
+      <number>0</number>
+     </property>
+     <item>
+      <widget class="QLineEdit" name="followEdit">
+       <property name="placeholderText">
+        <string>Following text to search with</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer_3">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+    </layout>
+   </item>
+   <item>
     <layout class="QHBoxLayout" name="horizontalLayout_5">
      <item>
       <widget class="QLabel" name="label">
        <property name="text">
-        <string>Images to embed in your book:</string>
+        <string>Images to embed in your book</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="dlall">
+       <property name="text">
+        <string>Download All</string>
        </property>
       </widget>
      </item>
@@ -81,13 +115,6 @@
         </size>
        </property>
       </spacer>
-     </item>
-     <item>
-      <widget class="QPushButton" name="dlall">
-       <property name="text">
-        <string>Download All</string>
-       </property>
-      </widget>
      </item>
     </layout>
    </item>

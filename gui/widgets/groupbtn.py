@@ -24,7 +24,9 @@ class GroupButton(QPushButton):
         self.clicked.connect(self._on_file_select)
 
     def _on_file_select(self):
-        file = getFile(self.mw, self.msg, dir=self.dir, filter=self.filter)
-        if file:
+        try:
+            file = getFile(self.mw, self.msg, dir=self.dir, filter=self.filter)
             self.sig.emit(file, self.group, self.idx)
+        except:
+            return
 

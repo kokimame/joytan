@@ -63,11 +63,12 @@ class PanelLane(QListWidget):
         self.destdir = destdir
         self.maximg = maximg
         self.thread = GimageThread(group, destdir)
-        self.thread.sig.connect(self.on_set_image)
+        self.thread.done.connect(self.on_set_image)
 
         # Because QPixmap doesn't store the path of image they have,
         # all imgpathes in the panel are stored in this list.
         self.images = []
+        self.imgcites = []
 
         self.setFlow(QListView.LeftToRight)
         self.setFixedHeight(150)
@@ -96,7 +97,7 @@ class PanelLane(QListWidget):
             self.thread.set_total(waiting)
             self.thread.start()
 
-    def on_set_image(self, imgpath):
+    def on_set_image(self, imgpath, link):
         # Check from left to right among panels,
         # set the new image at anything not done yet
         for i in range(self.count()):
@@ -104,6 +105,7 @@ class PanelLane(QListWidget):
             if p.state != 'DONE':
                 p.set_image(imgpath)
                 self.images.append(imgpath)
+                self.imgcites.append(link)
                 break
 
         # Make the most left panel in inital state ready

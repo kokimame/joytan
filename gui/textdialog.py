@@ -89,7 +89,8 @@ class TextDialog(QDialog):
         self.form.dlall.clicked.connect(self._autodownload)
 
         # FIXME: Temporal default setting
-        path  = './templates/html/words.html'
+        path  = os.path.abspath('./templates/html/words.html')
+        os.path.abspath(path)
         bd = BookDesign(path)
         self.book = bd
         self._activate_imglist()

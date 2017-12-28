@@ -19,7 +19,7 @@ class ExtractDialog(QDialog):
         self.show()
 
     def _ui(self):
-        self.form = gui.forms.extractdialog.Ui_ExtractDialog()
+        self.form = gui.forms.extract.Ui_ExtractDialog()
         self.form.setupUi(self)
 
         _list = self.form.keyList

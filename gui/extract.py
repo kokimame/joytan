@@ -52,7 +52,8 @@ class ExtractDialog(QDialog):
         return exttr(self.path).run()
 
     def _on_ok(self):
-        words = self._extract()
+        if not self.path:
+            showCritical("No file to extract selected.", title="Error")
 
         ewkeys = []
         _list = self.form.keyList
@@ -62,8 +63,10 @@ class ExtractDialog(QDialog):
                 ewkeys.append(ch.text())
 
         if len(ewkeys) == 0:
-            showCritical("No destination selected", title="Error")
+            showCritical("No destination selected.", title="Error")
             return
+
+        words = self._extract()
 
         if self.form.overCheck.isChecked():
             for i in range(len(words)):

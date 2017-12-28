@@ -160,7 +160,7 @@ class PanelLane(QListWidget):
         for i in range(self.count()):
             p = self._get_panel(i)
             if p.state  == 'WORK':
-                p.state('INIT')
+                p.state_manager('INIT')
             elif p.state == 'WAIT':
                 raise Exception("Thread finishes in invalid time. (Some of panel is still waiting)")
 

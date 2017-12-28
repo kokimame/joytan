@@ -2,7 +2,7 @@ import shutil
 
 import gui
 from gui.qt import *
-from gui.utils import showCritical, getFile
+from gui.utils import showCritical, getFiles
 from gui.widgets.flowitem import FlowItem, Mp3Object, EwkeyObject, Silence
 
 
@@ -60,19 +60,32 @@ class AudioDialog(QDialog):
         m.exec_(QCursor.pos())
 
     def _add_flow_item(self, type):
-        lwi = QListWidgetItem()
+        lwi = None
         fi = None
 
+        # Type may spawn multiple flow item
         if type == 'MP3':
             try:
-                file = getFile(self.mw, "Select sound effect", dir=self.mset['sfxdir'], filter="*.mp3")
-                fi = Mp3Object(lwi, file)
+                files = getFiles(self.mw, "Select sound effect", dir=self.mset['sfxdir'], filter="*.mp3")
             except:
                 return
+
+            for file in files:
+                lwi = QListWidgetItem()
+                fi = Mp3Object(lwi, file)
+                lwi.setSizeHint(fi.sizeHint())
+                fi.delete.connect(self._remove_flow_item)
+                self.form.flowList.addItem(lwi)
+                self.form.flowList.setItemWidget(lwi, fi)
+            return
+
+        # Types for single flow item
         elif type == 'SIL':
+            lwi = QListWidgetItem()
             fi = Silence(lwi)
         else:
             assert type in self.eset.ewkeys()
+            lwi = QListWidgetItem()
             fi = EwkeyObject(lwi, type)
 
         lwi.setSizeHint(fi.sizeHint())
@@ -81,22 +94,33 @@ class AudioDialog(QDialog):
         self.form.flowList.setItemWidget(lwi, fi)
 
     def _add_bgm(self, type):
-        lwi = QListWidgetItem()
+        lwi = None
         fi = None
-
+        # Type may spawn multiple flow item
         if type == 'MP3':
             try:
-                file = getFile(self.mw, "Select a song for BGM", dir=self.mset['bgmdir'], filter="*.mp3")
-                fi = Mp3Object(lwi, file)
-            except:
+                files = getFiles(self.mw, "Select sound effect", dir=self.mset['sfxdir'], filter="*.mp3")
+                print(files)
+            except Exception as e:
+                print(e)
                 return
-        elif type == 'SIL':
-            fi = Silence(lwi)
+            for file in files:
+                lwi = QListWidgetItem()
+                fi = Mp3Object(lwi, file)
+                lwi.setSizeHint(fi.sizeHint())
+                fi.delete.connect(self._remove_flow_item)
+                self.form.flowList.addItem(lwi)
+                self.form.flowList.setItemWidget(lwi, fi)
+            return
 
-        lwi.setSizeHint(fi.sizeHint())
-        fi.delete.connect(self._remove_bgm)
-        self.form.bgmList.addItem(lwi)
-        self.form.bgmList.setItemWidget(lwi, fi)
+        # Type for single flow item
+        elif type == 'SIL':
+            lwi = QListWidgetItem()
+            fi = Silence(lwi)
+            lwi.setSizeHint(fi.sizeHint())
+            fi.delete.connect(self._remove_bgm)
+            self.form.bgmList.addItem(lwi)
+            self.form.bgmList.setItemWidget(lwi, fi)
 
     def _remove_flow_item(self, lwi):
         _list = self.form.flowList

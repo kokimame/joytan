@@ -98,7 +98,7 @@ def getFiles(parent, title, filter="*.*", dir=None):
     if os.path.exists(dir):
         fd.setDirectory(dir)
     fd.setOptions(opts)
-    fd.setFileMode(QFileDialog.ExistingFile)
+    fd.setFileMode(QFileDialog.ExistingFiles)
     fd.setWindowTitle(title)
     fd.setNameFilter(filter)
     fd.exec_()
@@ -106,9 +106,10 @@ def getFiles(parent, title, filter="*.*", dir=None):
     try:
         files = fd.selectedFiles()
         for file in files:
-            assert os.path.isdir(file) is not True
+            if os.path.isdir(file):
+                files.remove(file)
         return files
-    except (AssertionError, TypeError):
+    except (TypeError):
         print("Error: Invalid file is selected.")
         raise
 
@@ -155,7 +156,6 @@ def path_temp(_temp_dir):
             ''.join(choice(alphanumerics) for i in range(30))
         ),
     )
-
 
 def showWarning(text, parent=None, help="", title="Emotan"):
     "Show a small warning with an OK button."

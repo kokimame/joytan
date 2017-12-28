@@ -8,16 +8,18 @@ from gui.qt import *
 
 SIZE = {'medium': '&tbs=islt:vga,isz:m',
         'icon': '&tbs=isz:i'}
-HEADERS = {"User-Agent": "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) "
+HEADERS = {"User-Agent": "Mozilla/5.0 (Windows NT 6.1) "
+                         "AppleWebKit/537.36 (KHTML, like Gecko) "
                          "Chrome/41.0.2228.0 Safari/537.36"}
-URL = 'https://www.google.com/search?q={keyword}&espv=2&biw=1366&bih=667&site=webhp&source=lnms'\
+URL = 'https://www.google.com/search?q={keyword}' \
+      '&espv=2&biw=1366&bih=667&site=webhp&source=lnms'\
       + SIZE['medium'] + '&tbm=isch&sa=X&ei=XosDVaCXD8TasATItgE&ved=0CAcQ_AUoAg'
 
 IMG_SUPPORTED = ['jpeg', 'jpg', 'png']
 
 
 class GimageThread(QThread):
-    sig = pyqtSignal(str)
+    done = pyqtSignal(str, str)
 
     def __init__(self, keyword, destdir):
         QThread.__init__(self)
@@ -43,7 +45,7 @@ class GimageThread(QThread):
             link = self.links[i]
             imgfile = download_image(link, os.path.join(self.destdir, str(i)))
             if imgfile:
-                self.sig.emit(imgfile)
+                self.done.emit(imgfile, link)
                 uploads += 1
             if uploads >= self.img_total:
                 break
@@ -116,9 +118,15 @@ def download_image(link, piwoe):
 
         # Save the actual image
         output_file.write(req.content)
-        print("completed ====> " + imgfile + " (%.3fMB)" % float(len(req.content) / 1000000))
+        print("completed ====> " +
+              imgfile + " (%.3fMB)" % float(len(req.content) / 1000000))
+
+        output_file.close()
         return imgfile
 
-    except (IOError, requests.HTTPError, requests.ConnectionError) as e:
+    except Exception as e:
+        # Like (IOError, requests.HTTPError,
+        # requests.ConnectionError, UnicodeError)
+        print("The following error occurs on downloading %s" % link)
         print(e)
 

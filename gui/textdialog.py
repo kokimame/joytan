@@ -146,20 +146,22 @@ class TextDialog(QDialog):
     def _on_image_upload(self, imgpath, group, idx):
         _list = self.form.imgList
         lane = _list.itemWidget(_list.item(idx))
-        lane.on_set_image(imgpath)
+        lane.on_set_image(imgpath, '')
 
     def _on_design_select(self):
         from gui.utils import getFile
-        path = getFile(self, "Select book design", dir=os.getcwd(),
-                       filter="Jinja template HTML file (*.html)")
-        if path:
-            try:
-                bd = BookDesign(path)
-                self.book = bd
-                self._activate_imglist()
-                self.form.designLbl.setText(bd.info)
-            except AssertionError:
-                showCritical("Invalid book design (Image number not found)")
+        try:
+            path = getFile(self, "Select book design", dir=os.getcwd(),
+                           filter="Jinja template HTML file (*.html)")
+        except:
+            return
+        try:
+            bd = BookDesign(path)
+            self.book = bd
+            self._activate_imglist()
+            self.form.designLbl.setText(bd.info)
+        except AssertionError:
+            showCritical("Invalid book design (Image number not found)")
 
     def _get_lane(self, i):
         _list = self.form.imgList
@@ -175,11 +177,12 @@ class TextDialog(QDialog):
             panel = self._get_lane(i)
             for j, img in enumerate(panel.images):
                 data['img-%d' % (j + 1)] = img
+                data['cite-%d' % (j + 1)] = panel.imgcites[j]
             datas.append(data)
 
         from jinja2 import Environment, FileSystemLoader
-        env = Environment(loader=FileSystemLoader('templates/html'))
-        temp = env.get_template('words.html')
+        env = Environment(loader=FileSystemLoader('/'))
+        temp = env.get_template(self.book.path)
         rendered_temp = temp.render(entries=datas)
 
         with open('{dest}.html'.format(dest=self.destdir), 'w', encoding='utf-8') as f:

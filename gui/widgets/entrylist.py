@@ -1,3 +1,4 @@
+import re
 from gui.qt import *
 
 
@@ -68,10 +69,12 @@ class EntryList(QListWidget):
                     'ttsmap': self.ttsmap}
             return data
 
-    def __init__(self, parent=None):
-        super(EntryList, self).__init__(parent)
+    def __init__(self, mw):
+        super(EntryList, self).__init__()
+        self.mw = mw
         self.setSelectionMode(QAbstractItemView.ExtendedSelection)
         self.setVerticalScrollMode(QAbstractItemView.ScrollPerPixel)
+        self.setAcceptDrops(True)
         self.scrollToItem(self.currentItem())
         self.setStyleSheet("""
                             QListWidget::item { border-bottom: 1px solid black; }
@@ -79,6 +82,28 @@ class EntryList(QListWidget):
                            """)
         self.setting = self.Setting()
         self.setting.shape.connect(lambda: self.update_all(reshape=True))
+        self.initial_help = True
+        self.addItem(QListWidgetItem("\nDrag text (only available for English) \n"
+                                     "or Use Tools/Extract...\n"
+                                     "or push (+) button bellow\n"))
+
+    def dragEnterEvent(self, event):
+        if event.mimeData().hasFormat('text/plain'):
+            event.accept()
+
+    def dragMoveEvent(self, event):
+        # dropEvent doesn't get called without this overwritten method for some reason
+        pass
+
+    def dropEvent(self, event):
+        # TODO
+        # Very simple word extraction from English text only.
+        # Later, extract dialog will get upgraded and called from here
+        # for detailed option, such as language detection and char limits
+        for word in re.compile('\w+').findall(event.mimeData().text()):
+            if len(word) <= 2:
+                continue
+            self.add_entry(word, self.mw.mode)
 
     def _new_entry(self, index, name, mode, setting):
         from gui.widgets.entry import EntryWidget
@@ -89,6 +114,9 @@ class EntryList(QListWidget):
         return eui, ew
 
     def add_entry(self, name, mode):
+        if self.initial_help:
+            self.takeItem(0)
+            self.initial_help = False
         if name == '':
             pass
         elif name in [ew.editors['atop'] for ew in self.get_entry_all()]:

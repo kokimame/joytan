@@ -82,7 +82,7 @@ class EmotanMW(QMainWindow):
 
     def _ui_entrylist(self):
         import gui.widgets.entrylist
-        self.entrylist = gui.widgets.entrylist.EntryList()
+        self.entrylist = gui.widgets.entrylist.EntryList(self)
         self.form.verticalLayout.insertWidget(0, self.entrylist)
 
     def _ui_progress(self):

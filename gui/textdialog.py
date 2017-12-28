@@ -1,6 +1,5 @@
 import gui
 from gui.qt import *
-from gui.widgets.fileselector import FileSelector
 from gui.widgets.panellane import *
 from gui.utils import path2filename, showCritical
 
@@ -138,13 +137,13 @@ class TextDialog(QDialog):
         for i, ew in enumerate(self.mw.entrylist.get_entry_all()):
             if ew.editors['atop'].text() == '':
                 # if ew is empty, ignore it
-                # FIXME: Change 'pass' to 'continue' on final version
-                pass
+                continue
             group = ew.editors['atop'].text()
             destdir = os.path.join(self.destdir, ew.str_index())
             lwi1 = QListWidgetItem()
             lwi2 = QListWidgetItem()
             pb = QPushButton('+ Download %s' % group)
+            pb.setStyleSheet("Text-align: left")
             ip = PanelLane(group, self.form.followEdit.text(), destdir, self.book.maximg)
             pb.clicked.connect(ip.on_download)
             lwi1.setSizeHint(pb.sizeHint())

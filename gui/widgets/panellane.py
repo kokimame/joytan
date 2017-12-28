@@ -115,11 +115,11 @@ class PanelLane(QListWidget):
                 self.imgcites.append(link)
                 break
 
-        # Make the most left panel in inital state ready
+        # Make the most left panel of initial state state ready
         for i in range(self.count()):
             p = self._get_panel(i)
             if p.state == 'INIT':
-                p.get_ready()
+                p.state_manager('READY')
                 break
 
     def on_wait(self):

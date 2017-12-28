@@ -1,6 +1,6 @@
 import gui
 from gui.qt import *
-from gui.widgets.groupbtn import GroupButton
+from gui.widgets.fileselector import FileSelector
 from gui.widgets.panellane import *
 from gui.utils import path2filename, showCritical
 
@@ -138,21 +138,21 @@ class TextDialog(QDialog):
             index = 2 * i + 1
             destdir = os.path.join(self.destdir, ew.str_index())
             lwi1 = QListWidgetItem()
-            gb = GroupButton(self.mw, group, filter="Images (*.jpg *.jpeg *.png)",
-                             idx=index, dir=self.mw.basepath(), msg="Select an Image")
-            gb.sig.connect(self._on_image_upload)
-            lwi1.setSizeHint(gb.sizeHint())
+            fs = FileSelector(self.mw, group, filter="Images (*.jpg *.jpeg *.png)",
+                              idx=index, dir=self.mw.basepath(), msg="Select an Image")
+            fs.select.connect(self._on_image_upload)
+            lwi1.setSizeHint(fs.sizeHint())
             lwi2, ip = QListWidgetItem(), PanelLane(group, self.form.followEdit.text(), destdir, self.book.maximg)
             self.form.followEdit.textChanged.connect(ip.on_update_following)
             lwi2.setSizeHint(ip.size())
 
             _list.addItem(lwi1)
-            _list.setItemWidget(lwi1, gb)
+            _list.setItemWidget(lwi1, fs)
             _list.addItem(lwi2)
             _list.setItemWidget(lwi2, ip)
 
-    @pyqtSlot(str, str, int)
-    def _on_image_upload(self, imgpath, group, idx):
+    @pyqtSlot(str, int)
+    def _on_image_upload(self, imgpath, idx):
         _list = self.form.imgList
         lane = _list.itemWidget(_list.item(idx))
         lane.on_set_image(imgpath, '')

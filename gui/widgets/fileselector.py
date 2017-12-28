@@ -3,11 +3,11 @@ from gui.qt import *
 from gui.utils import getFile
 
 
-class GroupButton(QPushButton):
-    sig = pyqtSignal(str, str, int)
+class FileSelector(QPushButton):
+    select = pyqtSignal(str, int)
 
     def __init__(self, mw, group, dir, idx=0, filter="*.mp3", msg='Select a file'):
-        super(GroupButton, self).__init__()
+        super(FileSelector, self).__init__()
         self.mw = mw
         self.group = group
         self.idx = idx
@@ -26,7 +26,7 @@ class GroupButton(QPushButton):
     def _on_file_select(self):
         try:
             file = getFile(self.mw, self.msg, dir=self.dir, filter=self.filter)
-            self.sig.emit(file, self.group, self.idx)
+            self.select.emit(file, self.idx)
         except:
             return
 

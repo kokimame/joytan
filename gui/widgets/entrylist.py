@@ -91,6 +91,9 @@ class EntryList(QListWidget):
         if event.mimeData().hasFormat('text/plain'):
             event.accept()
 
+    def mouseDoubleClickEvent(self, event):
+        self.clearSelection()
+
     def dragMoveEvent(self, event):
         # dropEvent doesn't get called without this overwritten method for some reason
         pass

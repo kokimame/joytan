@@ -56,6 +56,7 @@ class ExtractDialog(QDialog):
     def _on_ok(self):
         if not self.path:
             showCritical("No file to extract selected.", title="Error")
+            return
 
         ewkeys = []
         _list = self.form.keyList

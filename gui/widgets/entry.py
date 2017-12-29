@@ -1,20 +1,6 @@
 from gui.qt import *
 
 
-class Indexer(QSpinBox):
-    def __init__(self, val):
-        super(Indexer, self).__init__()
-        self.setObjectName("index")
-        self.setMaximum(99999)
-        self.setValue(val)
-        self.setFixedWidth(42)
-        self.setFocusPolicy(Qt.StrongFocus)
-
-    def stepBy(self, step):
-        # Change default down-button to increase the number and vice versa.
-        super().stepBy(-step)
-
-
 class Editor(QWidget):
     _ITALIC = QFont()
     _ITALIC.setItalic(True)
@@ -60,7 +46,7 @@ class Editor(QWidget):
 class EntryWidget(QWidget):
     # Design of QLabel shown on 'View' mode
     _ENTRY_VIEW = '<html><head/><body>{content}</body></html>'
-    _FONT_ATOP = '<p><span style=" font-size:16pt; font-weight:520;">{text}</span></p>'
+    _FONT_ATOP = '<p><span style=" font-size:16pt; font-weight:520;">{index}. {text}</span></p>'
     _FONT_DEF = '<p>{num}. {text}</p>'
     _FONT_EX = '<p><span style="color:#8d8d8d;">&quot;{text}&quot;</span></p>'
 
@@ -119,12 +105,8 @@ class EntryWidget(QWidget):
             atop = "Unnamed Entry"
 
         view.setText(self._ENTRY_VIEW.format
-                     (content=self._FONT_ATOP.format(text=atop)))
-        index = Indexer(self.row + 1)
-        index.valueChanged.connect(self.move_to)
-
+                     (content=self._FONT_ATOP.format(index=self.row + 1, text=atop)))
         layout = QHBoxLayout()
-        layout.addWidget(index)
         layout.addWidget(view)
         base = QWidget()
         base.setLayout(layout)
@@ -167,19 +149,12 @@ class EntryWidget(QWidget):
         stacked.widget(1).repaint()
         self.set_mode(self.mode)
 
-    def update_index(self, row):
-        index = self.findChild(QSpinBox, "index")
-        index.valueChanged.disconnect()
-        index.setValue(row + 1)
-        index.valueChanged.connect(self.move_to)
-        self.row = row
-
     def update_view(self):
         if self.editors['atop'].text() == '':
-            atop = "Unnamed entry"
+            atop = "Unnamed Entry"
         else:
             atop = self.editors['atop'].text()
-        content = self._FONT_ATOP.format(num=self.row + 1, text=atop)
+        content = self._FONT_ATOP.format(index=self.row + 1, text=atop)
 
         for i in range(1, self.lv1 + 1):
             if self.editors['def-%d' % i].text() != '':
@@ -204,16 +179,7 @@ class EntryWidget(QWidget):
                     self.editors['ex-%d-%d' % (i, j)].setText(items['ex-%d-%d' % (i, j)])
 
     def move_to(self, next):
-        # Converts index to row of list.count()
-        next -= 1
-        if next == self.row:
-            # When spin.setValue triggers this method
-            return
-
-        if not 0 <= next < self.parent.count():
-            spin = self.findChild(QSpinBox, "index")
-            spin.setValue(self.row + 1)
-        else:
+        if 0 <= next < self.parent.count():
             self.move.emit(self.row, next)
 
     def str_index(self):

@@ -56,7 +56,7 @@ class SortDialog(QDialog):
                 # FIXME: Move entry by row count not index (= row + 1)
                 # Index was introduced with indexer spin box
                 # but it should be replaced by drag/drop model for moving around entries
-                top, bottom = targets[i].row + 1, targets[-i - 1].row + 1
+                top, bottom = targets[i].row, targets[-i - 1].row
                 targets[-i - 1].move_to(top)
                 targets[i].move_to(bottom)
     def reject(self):

@@ -75,6 +75,8 @@ class EntryList(QListWidget):
         self.setSelectionMode(QAbstractItemView.ExtendedSelection)
         self.setVerticalScrollMode(QAbstractItemView.ScrollPerPixel)
         self.setAcceptDrops(True)
+        self.setDragDropMode(QAbstractItemView.InternalMove)
+        self.setDropIndicatorShown(True)
         self.scrollToItem(self.currentItem())
         self.setStyleSheet("""
                             QListWidget::item { border-bottom: 1px solid black; }
@@ -91,6 +93,9 @@ class EntryList(QListWidget):
         if event.mimeData().hasFormat('text/plain'):
             event.accept()
 
+        if event.mimeData().hasFormat('application/x-qabstractitemmodeldatalist'):
+            event.accept()
+
     def mouseDoubleClickEvent(self, event):
         self.clearSelection()
 
@@ -99,14 +104,19 @@ class EntryList(QListWidget):
         pass
 
     def dropEvent(self, event):
-        # TODO
-        # Very simple word extraction from English text only.
-        # Later, extract dialog will get upgraded and called from here
-        # for detailed option, such as language detection and char limits
-        for word in re.compile('\w+').findall(event.mimeData().text()):
-            if len(word) <= 2:
-                continue
-            self.add_entry(word, self.mw.mode)
+        if event.mimeData().hasFormat('text/plain'):
+            # TODO
+            # Very simple word extraction from English text only.
+            # Later, extract dialog will get upgraded and called from here
+            # for detailed option, such as language detection and char limits
+            for word in re.compile('\w+').findall(event.mimeData().text()):
+                if len(word) <= 2:
+                    continue
+                self.add_entry(word, self.mw.mode)
+        elif event.mimeData().hasFormat('application/x-qabstractitemmodeldatalist'):
+            # Call internal move
+            super().dropEvent(event)
+            self._indexing()
 
     def count(self):
         if self.initial_help:
@@ -144,7 +154,7 @@ class EntryList(QListWidget):
         for i in range(self.count()):
             eui = self.item(i)
             ew = self.itemWidget(eui)
-            ew.update_index(i)
+            ew.row = i
             if reshape:
                 ew.reshape(self.setting.lv1, self.setting.lv2)
             ew.update_view()
@@ -164,7 +174,8 @@ class EntryList(QListWidget):
         # Update index of Entries after Nth Entry
         for i in range(self.count()):
             ew = self.get_entry_at(i)
-            ew.update_index(i)
+            ew.row = i
+            ew.update_view()
 
     def _move_entry(self, now, next):
         """

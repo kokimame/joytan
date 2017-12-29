@@ -43,7 +43,7 @@ class HtmlThread(QThread):
 
         from jinja2 import Environment, FileSystemLoader
         env = Environment(loader=FileSystemLoader('templates/html'))
-        temp = env.get_template('words.html')
+        temp = env.get_template('simple.html')
         rendered_temp = temp.render(entries=datas)
 
         with open('{dest}/{title}.html'.format(dest=self.dest, title=self.mw.setting['title']), 'w') as f:
@@ -93,7 +93,7 @@ class TextDialog(QDialog):
         self.form.clearAll.clicked.connect(self._clear_all_images)
 
         # FIXME: Temporal default setting
-        path  = os.path.abspath('./templates/html/words.html')
+        path  = os.path.abspath('./templates/html/simple.html')
         os.path.abspath(path)
         bd = BookDesign(path)
         self.book = bd
@@ -193,7 +193,6 @@ class TextDialog(QDialog):
                 data['img-%d' % (j + 1)] = tup[0]
                 data['cite-%d' % (j + 1)] = tup[1]
             datas.append(data)
-            print(panel.imglist)
 
         from jinja2 import Environment, FileSystemLoader
         env = Environment(loader=FileSystemLoader('/'))

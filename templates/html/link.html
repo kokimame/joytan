@@ -1,0 +1,41 @@
+<!---maximg:4--->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sample Texbook design</title>
+</head>
+<body>
+    <!--- index of textbook --->
+    <font size="5">Table of Contents</font><br>
+    {% for ew in entries %}
+        <a href="#{{ ew['atop'] }}">
+            <font size="3">{{ ew['idx'] }} ... {{ ew['atop'] }}</font></a>  /
+        {% if loop.index % 5 == 0 %}
+            <br>
+        {% endif %}
+    {% endfor %}
+    <br><br>
+    <hr>
+    <br>
+
+    <!--- each entry --->
+    {% for ew in entries %}
+        <a name="{{ ew['atop'] }}"></a>
+        <font size="5" color="blue">{{ ew['idx'] }}.  {{  ew['atop'] }}</font>
+        <font size="4"><b>{{ ew['def-1'] }}</b></font><br>
+        <font size="4">"{{ ew['ex-1-1'] }}"</font><br>
+        <img src="{{ ew['img-1'] }}" width="160" height="100" />
+        <img src="{{ ew['img-2'] }}" width="160" height="100" />
+        <img src="{{ ew['img-3'] }}" width="160" height="100" />
+        <img src="{{ ew['img-4'] }}" width="160" height="100" /><br>
+
+        <font size="1" color="gray">Image links from left to right:</font><br>
+        <font size="1" color="gray">[1] {{ ew['cite-1'] }}</font><br>
+        <font size="1" color="gray">[2] {{ ew['cite-2'] }}</font><br>
+        <font size="1" color="gray">[3] {{ ew['cite-3'] }}</font><br>
+        <font size="1" color="gray">[4] {{ ew['cite-4'] }}</font><br>
+        <br><br>
+
+    {% endfor %}
+</body>
+</html>

@@ -85,9 +85,14 @@ class EntryList(QListWidget):
         self.setting = self.Setting()
         self.setting.shape.connect(lambda: self.update_all(reshape=True))
         self.initial_help = True
-        self.addItem(QListWidgetItem("\nDrag text (only available for English) \n"
-                                     "or Use Tools/Extract...\n"
-                                     "or push (+) button bellow\n"))
+        instruction = QLabel("\nDrag text (only available for English) \n"
+                       "or Use Tools/Extract...\n"
+                       "or push (+) button bellow\n")
+        instruction.setStyleSheet("QLabel { color : gray; }")
+        lwi = QListWidgetItem()
+        lwi.setSizeHint(instruction.sizeHint())
+        self.addItem(lwi)
+        self.setItemWidget(lwi, instruction)
 
     def mouseDoubleClickEvent(self, event):
         self.clearSelection()

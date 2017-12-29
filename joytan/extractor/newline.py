@@ -1,4 +1,4 @@
-from emotan.extractor.base import Extractor
+from joytan.extractor.base import Extractor
 
 
 class NewlineExtractor(Extractor):

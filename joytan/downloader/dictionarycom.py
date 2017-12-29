@@ -1,7 +1,7 @@
 import re
 
 from bs4 import BeautifulSoup
-from emotan.downloader.base import BaseDownloader
+from joytan.downloader.base import BaseDownloader
 
 class DictionaryComDownloader(BaseDownloader):
     def __init__(self):

@@ -10,7 +10,7 @@ isMac = sys.platform.startswith("darwin")
 isWin = sys.platform.startswith("win32")
 isLin = not isMac and not isWin
 
-def getFileToSave(parent, title, filter="*.*", dir=None, suf='eel'):
+def getFileToSave(parent, title, filter="*.*", dir=None, suf='jel'):
     opts = QFileDialog.Options()
     opts |= QFileDialog.DontUseNativeDialog
     fd = QFileDialog()
@@ -76,7 +76,7 @@ class GetTextDialog(QDialog):
 
 
 def getText(prompt, parent=None, help=None, edit=None, default="",
-            title="Emotan", geomKey=None, **kwargs):
+            title="Joytan", geomKey=None, **kwargs):
     if not parent:
         parent = gui.mw.app.activeWindow() or gui.mw
     d = GetTextDialog(parent, prompt, help=help, edit=edit,
@@ -157,15 +157,15 @@ def path_temp(_temp_dir):
         ),
     )
 
-def showWarning(text, parent=None, help="", title="Emotan"):
+def showWarning(text, parent=None, help="", title="Joytan"):
     "Show a small warning with an OK button."
     return showInfo(text, parent, help, "warning", title=title)
 
-def showCritical(text, parent=None, help="", title="Emotan"):
+def showCritical(text, parent=None, help="", title="Joytan"):
     "Show a small critical error with an OK button."
     return showInfo(text, parent, help, "critical", title=title)
 
-def showInfo(text, parent=False, help="", type="info", title="Emotan"):
+def showInfo(text, parent=False, help="", type="info", title="Joytan"):
     "Show a small info window with an OK button."
     if parent is False:
         parent = gui.mw.app.activeWindow() or gui.mw

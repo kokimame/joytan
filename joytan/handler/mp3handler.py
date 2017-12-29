@@ -22,7 +22,7 @@ class Mp3Handler:
         These functions are only compatible with offline TTS service such as
         Say on Mac, espeak on Linux.
         """
-        from emotan.speaker import router
+        from joytan.speaker import router
         routers = {}
         for key in self.setting['ttsmap']:
             routers[key] = lambda path, text, svc_id=self.setting['ttsmap'][key][1],\

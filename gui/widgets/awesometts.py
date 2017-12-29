@@ -77,7 +77,7 @@ class AwesomeTTS(QWidget):
     def __init__(self, eset, alerts, ask, *args, **kargs):
         super(AwesomeTTS, self).__init__()
 
-        from emotan.speaker import router, config, logger
+        from joytan.speaker import router, config, logger
         self.router = router
         self.config = config
         self.logger = logger
@@ -114,7 +114,6 @@ class AwesomeTTS(QWidget):
         activate its panel, populate presets, and then clear the input
         text box.
         """
-        print("ATTS INITIALIZED")
         # refresh the list of groups
         while dropdown.count() > self._svc_count:
             dropdown.removeItem(dropdown.count() - 1)
@@ -125,7 +124,7 @@ class AwesomeTTS(QWidget):
                 dropdown.addItem(group, 'group:' + group)
 
         # If voice for 'atop' item in the EntryList is already defined
-        # such as the case you load it from .eel file or
+        # such as the case you load it from .jel file or
         # you open TTS preference second time.
         if self.ttsmap['atop']:
             idx, options = self.ttsmap['atop'][0], self.ttsmap['atop'][2]
@@ -213,8 +212,6 @@ class AwesomeTTS(QWidget):
         layout = QVBoxLayout()
         layout.addWidget(header)
         layout.addWidget(overview)
-        print(overview.currentItem())
-        print("OVERVIEW CREATED")
         return layout
 
     def _on_overview_changed(self):
@@ -223,7 +220,6 @@ class AwesomeTTS(QWidget):
         rebuild the service panel based on options the newly selected item stores,
         or initialize it for undefined new item using previously selected one.
         """
-        print("OVERVIEW CHANGED")
         overview = self.findChild(QListWidget, 'overview')
         item = overview.currentItem()
         iw = overview.itemWidget(item)
@@ -245,11 +241,9 @@ class AwesomeTTS(QWidget):
         overview = self.findChild(QListWidget, 'overview')
         try:
             svc_id, options = self._get_service_values()
-            print(svc_id, options)
         except AssertionError:
-            print("TOO EARLY TO UPDATE OVERVIEW")
+            # TOO EARLY TO UPDATE OVERVIEW
             return
-        print("UPDATE OVERVIEW")
 
         dropdown = self.findChild(QComboBox, 'service')
         idx = dropdown.currentIndex()
@@ -325,7 +319,6 @@ class AwesomeTTS(QWidget):
         recall the last-used values for the options, and then switch the
         stack to it.
         """
-        print("SERVICE ACTIVATED")
         combo = self.findChild(QComboBox, 'service')
         svc_id = combo.itemData(idx)
         stack = self.findChild(QStackedWidget, 'panels')
@@ -383,8 +376,6 @@ class AwesomeTTS(QWidget):
 
     def _ui_services_presets(self):
         """Returns the preset controls as a horizontal layout."""
-        print("UI SERVICE PRESETS")
-
         label = Label("Quickly access this service later?")
         label.setObjectName('presets_label')
 
@@ -424,8 +415,6 @@ class AwesomeTTS(QWidget):
         Based on the list of options, build a grid of labels and input
         controls.
         """
-
-        print("SERVICE ACTIVATED BUILD")
         self.logger.debug("Constructing panel for %s", svc_id)
 
         row = 1
@@ -514,7 +503,6 @@ class AwesomeTTS(QWidget):
         Based on the list of options and the user's last known options,
         restore the values of all input controls.
         """
-        print("SERVICE ACTIVATED")
         self.logger.debug("Restoring options for %s", svc_id)
 
 
@@ -563,7 +551,6 @@ class AwesomeTTS(QWidget):
 
     def _on_preset_reset(self):
         """Sets preset dropdown back and disables delete button."""
-        print("PRESET RESET")
         self._update_overview()
 
         if next((True
@@ -578,8 +565,6 @@ class AwesomeTTS(QWidget):
 
     def _on_preset_refresh(self, select=None):
         """Updates the view of the preset controls."""
-        print("PRESET REFRESH")
-
         label = self.findChild(Label, 'presets_label')
         dropdown = self.findChild(QComboBox, 'presets_dropdown')
         delete = self.findChild(QPushButton, 'presets_delete')
@@ -630,7 +615,7 @@ class AwesomeTTS(QWidget):
         """Saves the current service state back as a preset."""
 
         svc_id, options = self._get_service_values()
-        print("PRESET SAVE", svc_id, options)
+
         assert "bad get_service_values() value", \
                not svc_id.startswith('group:') and options
         svc_name = self.findChild(QComboBox, 'service').currentText()
@@ -720,7 +705,6 @@ class AwesomeTTS(QWidget):
             def __init__(self):
                 self.mp = QMediaPlayer()
             def playMp3(self, path):
-                print("Called", path)
                 content = QMediaContent(QUrl.fromLocalFile(path))
                 self.mp.setMedia(content)
                 self.mp.play()
@@ -836,7 +820,7 @@ class AwesomeTTS(QWidget):
     def _banner(self):
         title = Label('AwesomeTTS Interface')
         title.setFont(self._FONT_TITLE)
-        version = Label("Emotan version x.x.x")
+        version = Label("Joytan version x.x.x")
         version.setFont(self._FONT_INFO)
 
         layout = QHBoxLayout()

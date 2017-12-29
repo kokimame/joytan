@@ -1,11 +1,12 @@
 from gui.qt import *
 from gui.utils import isMac, isLin, isWin
 
+# TODO: Deploy with confident. Very obscure right now
 if sys.version_info[0] < 3:
-    raise Exception("Emotan requires Python 3.x")
+    raise Exception("Joytan requires Python 3.x")
 
 if sys.getfilesystemencoding().lower() in ("ascii", "ansi_x3.4-1968"):
-    raise Exception("Emotan requires a UTF-8 locale.")
+    raise Exception("Joytan requires a UTF-8 locale.")
 
 # build scripts grep this line, so keep this format
 appVersion = "0.0.1beta1"
@@ -61,7 +62,7 @@ class DialogManager:
 dialogs = DialogManager()
 
 
-class EmotanApp(QApplication):
+class JoytanApp(QApplication):
     def __init___(self, argv):
         QApplication.__init__(self, argv)
         self._argv = argv
@@ -82,13 +83,13 @@ def _run():
     global mw, app
     print("Run the GUI")
 
-    app = EmotanApp(sys.argv)
-    QCoreApplication.setApplicationName("Emotan えも単")
+    app = JoytanApp(sys.argv)
+    QCoreApplication.setApplicationName("Joytan ジョイ単")
 
     # disable icons on mac; this must be done before window created
     if isMac:
         app.setAttribute(Qt.AA_DontShowIconsInMenus)
 
     import gui.main
-    mw = gui.main.EmotanMW(app, sys.argv)
+    mw = gui.main.JoytanMW(app, sys.argv)
     app.exec_()

@@ -30,7 +30,7 @@ def default_setting():
     }
 
 
-class EmotanMW(QMainWindow):
+class JoytanMW(QMainWindow):
     def __init__(self, app, args):
         QMainWindow.__init__(self)
         gui.mw = self

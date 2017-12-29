@@ -2,7 +2,7 @@ import re
 
 import gui
 from gui.qt import *
-import emotan.extractor as extractor
+import joytan.extractor as extractor
 from gui.utils import getFile, path2filename, showCritical
 
 

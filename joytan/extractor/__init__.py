@@ -1,4 +1,4 @@
-from emotan.extractor.newline import NewlineExtractor
+from joytan.extractor.newline import NewlineExtractor
 
 Extractors = (
     ("DSV format - Words separated by newline (*.dsv *.txt)", NewlineExtractor),

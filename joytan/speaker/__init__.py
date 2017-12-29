@@ -27,11 +27,11 @@ from time import time
 from PyQt5.QtCore import PYQT_VERSION_STR, Qt
 from PyQt5.QtGui import QKeySequence
 
-import emotan
+import joytan
 from . import paths, service
-from emotan import conversion as to
-from emotan.bundle import Bundle
-from emotan.config import Config
+from joytan import conversion as to
+from joytan.bundle import Bundle
+from joytan.config import Config
 from .router import Router
 
 __all__ = ['browser_menus', 'cards_button', 'config_menu', 'editor_button',
@@ -71,7 +71,7 @@ VERSION = '1.13.0-dev'
 
 WEB = 'https://ankiatts.appspot.com'
 
-AGENT = 'AwesomeTTS/%s (Anki %s; PyQt %s; %s)' % (VERSION, 'Emotan version',
+AGENT = 'AwesomeTTS/%s (%s; PyQt %s; %s)' % (VERSION, 'Joytan',
                                                   PYQT_VERSION_STR,
                                                   get_platform_info())
 
@@ -89,7 +89,7 @@ sequences = {key: QKeySequence()
                          'configurator', 'editor_generator', 'templater']}
 
 config = Config(
-    db=Bundle(path=emotan.CONFIG,
+    db=Bundle(path=joytan.CONFIG,
               table='general',
               normalize=to.normalized_ascii),
     cols=[

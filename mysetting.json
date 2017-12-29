@@ -1,15 +1,15 @@
 {
   "linux": {
-    "workspace": ["/home", "kokimame", "Emotan", "workspace"]
+    "workspace": ["/home", "kokimame", "Joytan", "workspace"]
   },
 
   "mac": {
-    "workspace": ["/Users", "Koki", "Emotan", "workspace"]
+    "workspace": ["/Users", "Koki", "Joytan", "workspace"]
   },
 
   "windows": {
-    "workspace": ["C:", "\\Users", "Koki", "Documents", "Emotan", "workspace"]
+    "workspace": ["C:", "\\Users", "Koki", "Documents", "Joytan", "workspace"]
   },
-  "title": "emotan-sample"
+  "title": "joytan-sample"
 
 }

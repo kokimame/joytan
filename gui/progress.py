@@ -44,7 +44,7 @@ class ProgressManager:
             cls = self.ProgressNoCancel
 
         self._win = cls(label, "", min, max, parent)
-        self._win.setWindowTitle("Emotan")
+        self._win.setWindowTitle("Joytan")
         self._win.setCancelButton(None)
         self._win.setAutoClose(False)
         self._win.setAutoReset(False)

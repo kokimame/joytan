@@ -1,7 +1,7 @@
 import gui
 from gui.qt import *
 from gui.utils import getFile
-from emotan.downloader.gimage import GimageThread
+from joytan.downloader.gimage import GimageThread
 
 
 class Panel(QPushButton):

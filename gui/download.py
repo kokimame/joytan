@@ -3,7 +3,7 @@ import requests
 import gui
 from gui.qt import *
 from gui.utils import showCritical
-from emotan.downloader import Downloaders
+from joytan.downloader import Downloaders
 
 
 def on_download(mw):

@@ -1,4 +1,4 @@
-from emotan.downloader.base import BaseDownloader
+from joytan.downloader.base import BaseDownloader
 
 class CambridgeDownloader(BaseDownloader):
     def __init__(self):

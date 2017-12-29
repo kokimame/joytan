@@ -139,7 +139,7 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "Emotan えも単"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "Joytan ジョイ単"))
         self.audioButton.setText(_translate("MainWindow", "→Audio"))
         self.textButton.setText(_translate("MainWindow", "→Text"))
         self.menuFile.setTitle(_translate("MainWindow", "&File"))

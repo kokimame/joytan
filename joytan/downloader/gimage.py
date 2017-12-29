@@ -122,8 +122,8 @@ def download_image(link, piwoe):
 
         # Save the actual image
         output_file.write(req.content)
-        print("completed ====> " +
-              imgfile + " (%.3fMB)" % float(len(req.content) / 1000000))
+        #print("completed ====> " +
+        #      imgfile + " (%.3fMB)" % float(len(req.content) / 1000000))
 
         output_file.close()
         return imgfile
@@ -131,6 +131,7 @@ def download_image(link, piwoe):
     except Exception as e:
         # Like (IOError, requests.HTTPError,
         # requests.ConnectionError, UnicodeError)
-        print("The following error occurs on downloading %s" % link)
-        print(e)
+        # Exception while downloading is ok to be ignored and just proceed to next session
+        #
+        pass
 

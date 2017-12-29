@@ -45,9 +45,6 @@ class SortDialog(QDialog):
             ew.move_to(random.choice(targets).row)
 
     def _on_reverse(self, targets):
-        for ew in targets:
-            print(ew.editors['atop'].text())
-
         length = len(targets)
         for i in range(0, length):
             if i == length - i - 1 or i == length / 2:

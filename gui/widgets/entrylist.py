@@ -89,15 +89,15 @@ class EntryList(QListWidget):
                                      "or Use Tools/Extract...\n"
                                      "or push (+) button bellow\n"))
 
+    def mouseDoubleClickEvent(self, event):
+        self.clearSelection()
+
     def dragEnterEvent(self, event):
         if event.mimeData().hasFormat('text/plain'):
             event.accept()
 
         if event.mimeData().hasFormat('application/x-qabstractitemmodeldatalist'):
             event.accept()
-
-    def mouseDoubleClickEvent(self, event):
-        self.clearSelection()
 
     def dragMoveEvent(self, event):
         # dropEvent doesn't get called without this overwritten method for some reason

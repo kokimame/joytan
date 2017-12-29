@@ -121,7 +121,7 @@ class EntryWidget(QWidget):
         view.setText(self._ENTRY_VIEW.format
                      (content=self._FONT_ATOP.format(text=atop)))
         index = Indexer(self.row + 1)
-        index.valueChanged.connect(self._move_to)
+        index.valueChanged.connect(self.move_to)
 
         layout = QHBoxLayout()
         layout.addWidget(index)
@@ -171,7 +171,7 @@ class EntryWidget(QWidget):
         index = self.findChild(QSpinBox, "index")
         index.valueChanged.disconnect()
         index.setValue(row + 1)
-        index.valueChanged.connect(self._move_to)
+        index.valueChanged.connect(self.move_to)
         self.row = row
 
     def update_view(self):
@@ -203,7 +203,7 @@ class EntryWidget(QWidget):
                 if 'ex-%d-%d' % (i, j) in items:
                     self.editors['ex-%d-%d' % (i, j)].setText(items['ex-%d-%d' % (i, j)])
 
-    def _move_to(self, next):
+    def move_to(self, next):
         # Converts index to row of list.count()
         next -= 1
         if next == self.row:

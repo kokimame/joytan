@@ -62,6 +62,7 @@ class EmotanMW(QMainWindow):
         form.actionCopy.triggered.connect(self._on_copy)
         form.actionSave.triggered.connect(self._on_save)
         form.actionOpen.triggered.connect(self._on_open)
+        form.actionSort.triggered.connect(self._on_sort)
 
     def _ui_button(self):
         form = self.form
@@ -102,6 +103,10 @@ class EmotanMW(QMainWindow):
     def _on_save(self):
         import gui.save
         gui.save.on_save(self)
+
+    def _on_sort(self):
+        import gui.sort
+        gui.sort.on_sort(self)
 
     def _on_extract(self):
         import gui.extract
@@ -145,8 +150,8 @@ class EmotanMW(QMainWindow):
         gui.textdialog.on_textdialog(self)
 
     def _on_copy(self):
-        import gui.smartcopy
-        gui.smartcopy.on_copy(self)
+        import gui.copy
+        gui.copy.on_copy(self)
 
     def center(self):
         qr = self.frameGeometry()

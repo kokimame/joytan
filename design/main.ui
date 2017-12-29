@@ -26,6 +26,18 @@
          <string notr="true">background-color: rgb(200,200,200)</string>
         </property>
         <layout class="QHBoxLayout" name="horizontalLayout">
+         <property name="leftMargin">
+          <number>0</number>
+         </property>
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <property name="rightMargin">
+          <number>0</number>
+         </property>
+         <property name="bottomMargin">
+          <number>0</number>
+         </property>
          <item>
           <widget class="QPushButton" name="addButton">
            <property name="text">
@@ -108,7 +120,7 @@
      <x>0</x>
      <y>0</y>
      <width>536</width>
-     <height>22</height>
+     <height>25</height>
     </rect>
    </property>
    <property name="nativeMenuBar">
@@ -137,6 +149,7 @@
      <string>&amp;Tools</string>
     </property>
     <addaction name="actionExtract_2"/>
+    <addaction name="actionSort"/>
     <addaction name="actionWav2Mp3"/>
     <addaction name="actionMp3Volume"/>
     <addaction name="actionNewSfx"/>
@@ -244,6 +257,31 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+E</string>
+   </property>
+  </action>
+  <action name="actionShuffle">
+   <property name="text">
+    <string>Shuffle</string>
+   </property>
+  </action>
+  <action name="actionReverse">
+   <property name="text">
+    <string>Reverse</string>
+   </property>
+  </action>
+  <action name="actionAlphabetically">
+   <property name="text">
+    <string>Alphabetically</string>
+   </property>
+  </action>
+  <action name="actionWord_length">
+   <property name="text">
+    <string>Word length</string>
+   </property>
+  </action>
+  <action name="actionSort">
+   <property name="text">
+    <string>Sort Entrylist</string>
    </property>
   </action>
  </widget>

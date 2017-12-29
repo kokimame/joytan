@@ -6,6 +6,7 @@ __all__ = [
  "extract",
  "main",
  "preferences",
+ "sortdialog",
  "textdialog",
  "translate",
 ]
@@ -15,5 +16,6 @@ from . import download
 from . import extract
 from . import main
 from . import preferences
+from . import sortdialog
 from . import textdialog
 from . import translate

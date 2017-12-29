@@ -105,6 +105,12 @@ class EntryList(QListWidget):
                 continue
             self.add_entry(word, self.mw.mode)
 
+    def count(self):
+        if self.initial_help:
+            return super().count() - 1
+        else:
+            return super().count()
+
     def _new_entry(self, index, name, mode, setting):
         from gui.widgets.entry import EntryWidget
         eui, ew = QListWidgetItem(), EntryWidget(self, index, name, mode, setting)

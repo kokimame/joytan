@@ -25,6 +25,8 @@ class ExtractDialog(QDialog):
         _list = self.form.keyList
         for ewkey in self.mw.entrylist.setting.ewkeys():
             check = QCheckBox(ewkey)
+            if ewkey == 'atop':
+                check.setChecked(True)
             lwi = QListWidgetItem()
             lwi.setSizeHint(check.sizeHint())
             _list.addItem(lwi)

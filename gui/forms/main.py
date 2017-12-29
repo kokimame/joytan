@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'design/main.ui'
 #
-# Created by: PyQt5 UI code generator 5.9
+# Created by: PyQt5 UI code generator 5.9.2
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -61,7 +61,7 @@ class Ui_MainWindow(object):
         self.verticalLayout_2.addLayout(self.verticalLayout)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 536, 22))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 536, 25))
         self.menubar.setNativeMenuBar(True)
         self.menubar.setObjectName("menubar")
         self.menuFile = QtWidgets.QMenu(self.menubar)
@@ -105,6 +105,16 @@ class Ui_MainWindow(object):
         self.actionOpen.setObjectName("actionOpen")
         self.actionExtract_2 = QtWidgets.QAction(MainWindow)
         self.actionExtract_2.setObjectName("actionExtract_2")
+        self.actionShuffle = QtWidgets.QAction(MainWindow)
+        self.actionShuffle.setObjectName("actionShuffle")
+        self.actionReverse = QtWidgets.QAction(MainWindow)
+        self.actionReverse.setObjectName("actionReverse")
+        self.actionAlphabetically = QtWidgets.QAction(MainWindow)
+        self.actionAlphabetically.setObjectName("actionAlphabetically")
+        self.actionWord_length = QtWidgets.QAction(MainWindow)
+        self.actionWord_length.setObjectName("actionWord_length")
+        self.actionSort = QtWidgets.QAction(MainWindow)
+        self.actionSort.setObjectName("actionSort")
         self.menuFile.addAction(self.actionOpen)
         self.menuFile.addAction(self.actionSave)
         self.menuFile.addSeparator()
@@ -114,6 +124,7 @@ class Ui_MainWindow(object):
         self.menuEdit.addSeparator()
         self.menuEdit.addAction(self.actionPreferences)
         self.menuTools.addAction(self.actionExtract_2)
+        self.menuTools.addAction(self.actionSort)
         self.menuTools.addAction(self.actionWav2Mp3)
         self.menuTools.addAction(self.actionMp3Volume)
         self.menuTools.addAction(self.actionNewSfx)
@@ -153,4 +164,9 @@ class Ui_MainWindow(object):
         self.actionOpen.setShortcut(_translate("MainWindow", "Ctrl+O"))
         self.actionExtract_2.setText(_translate("MainWindow", "Extract words from file"))
         self.actionExtract_2.setShortcut(_translate("MainWindow", "Ctrl+E"))
+        self.actionShuffle.setText(_translate("MainWindow", "Shuffle"))
+        self.actionReverse.setText(_translate("MainWindow", "Reverse"))
+        self.actionAlphabetically.setText(_translate("MainWindow", "Alphabetically"))
+        self.actionWord_length.setText(_translate("MainWindow", "Word length"))
+        self.actionSort.setText(_translate("MainWindow", "Sort Entrylist"))
 

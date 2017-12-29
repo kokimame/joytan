@@ -1,5 +1,3 @@
-# Copyright: Koki Mametani <kokimametani@gmail.com>
-
 from gui.qt import *
 from gui.utils import isMac, isLin, isWin
 

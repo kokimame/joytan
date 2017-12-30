@@ -99,7 +99,7 @@ class AudioDialog(QDialog):
         # Type may spawn multiple flow item
         if type == 'MP3':
             try:
-                files = getFiles(self.mw, "Select sound effect", dir=self.mset['sfxdir'], filter="*.mp3")
+                files = getFiles(self.mw, "Select sound effect", dir=self.mset['bgmdir'], filter="*.mp3")
                 print(files)
             except Exception as e:
                 print(e)
@@ -109,8 +109,8 @@ class AudioDialog(QDialog):
                 fi = Mp3Object(lwi, file)
                 lwi.setSizeHint(fi.sizeHint())
                 fi.delete.connect(self._remove_flow_item)
-                self.form.flowList.addItem(lwi)
-                self.form.flowList.setItemWidget(lwi, fi)
+                self.form.bgmList.addItem(lwi)
+                self.form.bgmList.setItemWidget(lwi, fi)
             return
 
         # Type for single flow item

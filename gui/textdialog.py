@@ -195,8 +195,9 @@ class TextDialog(QDialog):
             datas.append(data)
 
         from jinja2 import Environment, FileSystemLoader
-        env = Environment(loader=FileSystemLoader('/'))
-        temp = env.get_template(self.book.path)
+        path, filename = os.path.split(self.book.path)
+        env = Environment(loader=FileSystemLoader(path or './'))
+        temp = env.get_template(filename)
         rendered_temp = temp.render(entries=datas)
 
         with open('{dest}.html'.format(dest=self.destdir), 'w', encoding='utf-8') as f:

@@ -50,12 +50,10 @@ class SortDialog(QDialog):
             if i == length - i - 1 or i == length / 2:
                 break
             else:
-                # FIXME: Move entry by row count not index (= row + 1)
-                # Index was introduced with indexer spin box
-                # but it should be replaced by drag/drop model for moving around entries
                 top, bottom = targets[i].row, targets[-i - 1].row
                 targets[-i - 1].move_to(top)
                 targets[i].move_to(bottom)
+
     def reject(self):
         self.done(0)
         gui.dialogs.close("CopyDialog")

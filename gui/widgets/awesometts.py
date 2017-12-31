@@ -74,7 +74,7 @@ class AwesomeTTS(QWidget):
     _INPUT_WIDGETS = _OPTIONS_WIDGETS + (QAbstractButton,
                                          QLineEdit, QTextEdit)
 
-    def __init__(self, eset, alerts, ask, *args, **kargs):
+    def __init__(self, el_conf, alerts, ask, *args, **kargs):
         super(AwesomeTTS, self).__init__()
 
         from joytan.speaker import router, config, logger
@@ -88,9 +88,10 @@ class AwesomeTTS(QWidget):
         self._svc_count = 0
         self._alerts = alerts
         self._ask = ask
-        # Update mw.entrylist settings
-        self.eset = eset
-        self.ttsmap = eset.ttsmap
+        # Access to mw.entrylist
+        # el_conf[0]: el.get_config('ewkey')
+        # el_conf[1]: el_set_config('ewkey', new_config)
+        self.el_conf = el_conf
 
         vbox = QVBoxLayout()
         # vbox.addLayout(self._banner())
@@ -126,8 +127,8 @@ class AwesomeTTS(QWidget):
         # If voice for 'atop' item in the EntryList is already defined
         # such as the case you load it from .jel file or
         # you open TTS preference second time.
-        if self.ttsmap['atop']:
-            idx, options = self.ttsmap['atop'][0], self.ttsmap['atop'][2]
+        if self.el_conf[0]('atop'):
+            idx, options = self.el_conf[0]('atop')[0], self.el_conf[0]('atop')[2]
             self._on_service_activated(idx, initial=True, use_options=options)
         else:
             idx = max(dropdown.findData(self.config['last_service']), 0)
@@ -189,9 +190,9 @@ class AwesomeTTS(QWidget):
                             QListWidget::item:selected { background: rgba(0,255,255,30); }
                            """)
         overview.setObjectName('overview')
-        for i, ewkey in enumerate(self.eset.ewkeys()):
+        for i, ewkey in enumerate(self.el_conf[0]('ewkeys')):
             quo = ServiceQuo(ewkey)
-            svc_values = self.ttsmap[ewkey]
+            svc_values = self.el_conf[0](ewkey)
             if svc_values:
                 quo.idx = svc_values[0]
                 # Pass svc_id & options
@@ -254,7 +255,7 @@ class AwesomeTTS(QWidget):
         iw.idx = idx
         iw.set_desc(svc_id, options)
         item.setSizeHint(iw.sizeHint())
-        self.ttsmap[iw.ewkey] = (idx, svc_id, options)
+        self.el_conf[1](iw.ewkey, (idx, svc_id, options))
         overview.repaint()
 
 

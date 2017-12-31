@@ -11,7 +11,6 @@ class Preferences(QDialog):
     def __init__(self, mw, tab="General"):
         QDialog.__init__(self, mw, Qt.Window)
         self.mw = mw
-        self.eset = mw.entrylist.setting
         self.form = gui.forms.preferences.Ui_Preferences()
         self.form.setupUi(self)
         self._ui()
@@ -21,12 +20,13 @@ class Preferences(QDialog):
 
     def _ui(self):
         form = self.form
+        el = self.mw.entrylist
         # Buttons
         form.okBtn.clicked.connect(self.on_ok)
         form.applyBtn.clicked.connect(self.on_apply)
         # Spins
-        form.dpwSpin.setValue(self.eset.lv1)
-        form.epdSpin.setValue(self.eset.lv2)
+        form.dpwSpin.setValue(el.get_config('lv1'))
+        form.epdSpin.setValue(el.get_config('lv2'))
         # Editors
         form.titleEdit.setText(self.mw.setting['title'])
         form.workingEdit.setText(self.mw.setting['workspace'])
@@ -41,7 +41,8 @@ class Preferences(QDialog):
         tab = self.form.tabAtts
         if not tab.layout():
             from gui.utils import showCritical, getText
-            atts = AwesomeTTS(self.eset, showCritical, getText)
+            el = self.mw.entrylist
+            atts = AwesomeTTS((el.get_config, el.set_config), showCritical, getText)
             atts.setObjectName("AwesomeTTS")
             hbox = QHBoxLayout()
             hbox.addWidget(atts)
@@ -69,7 +70,8 @@ class Preferences(QDialog):
         self.mw.setting['worddir'] = form.wordEdit.text()
         self.mw.setting['bgmdir'] = form.bgmEdit.text()
         self.mw.setting['sfxdir'] = form.sfxEdit.text()
-        self.eset.reshape(lv1=self.form.dpwSpin.value(), lv2=self.form.epdSpin.value())
+        self.mw.entrylist.set_config('reshape',
+                                     dict(lv1=self.form.dpwSpin.value(), lv2=self.form.epdSpin.value()))
 
     def reject(self):
         self.done(0)

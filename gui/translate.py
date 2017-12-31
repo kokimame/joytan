@@ -70,7 +70,7 @@ class TranslateDialog(QDialog):
 
         _list = self.form.keyList
         # Add checkbox corresponding to each ewkey of Entry
-        for ewkey in self.mw.entrylist.setting.ewkeys():
+        for ewkey in self.mw.entrylist.get_config('ewkeys'):
             check = QCheckBox(ewkey)
             lwi = QListWidgetItem()
             lwi.setSizeHint(check.sizeHint())

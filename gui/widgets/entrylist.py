@@ -4,7 +4,7 @@ from gui.qt import *
 
 class EntryList(QListWidget):
 
-    class Setting(QWidget):
+    class _Configuration(QWidget):
 
         shape = pyqtSignal()
 
@@ -43,7 +43,6 @@ class EntryList(QListWidget):
                 if ewkey not in avail_keys:
                     self.ttsmap.pop(ewkey, None)
 
-
         def is_voiceless(self):
             for key, val in self.ttsmap.items():
                 # if TTS is not allocated
@@ -53,7 +52,7 @@ class EntryList(QListWidget):
                 return False
 
         def ewkeys(self):
-            # Sort ewkeys in the same order shown in Edit mode on EntryWidget
+            # Sort and return ewkeys in the same order shown in Edit mode of EntryWidget
             ewkeys = ['atop']
             for i in range(1, self.lv1 + 1):
                 ewkeys.append('def-%d' % i)
@@ -82,8 +81,8 @@ class EntryList(QListWidget):
                             QListWidget::item { border-bottom: 1px solid black; }
                             QListWidget::item:selected { background: rgba(0,255,255,30); }
                            """)
-        self.setting = self.Setting()
-        self.setting.shape.connect(lambda: self.update_all(reshape=True))
+        self.config = self._Configuration()
+        self.config.shape.connect(lambda: self.update_all(reshape=True))
         self.initial_help = True
         instruction = QLabel("\nDrag text (only available for English) \n"
                        "or Use Tools/Extract...\n"
@@ -147,7 +146,7 @@ class EntryList(QListWidget):
             print("Entry with atop %s already exists." % name)
             return
 
-        eui, ew = self._new_entry(self.count(), name, mode, self.setting.data())
+        eui, ew = self._new_entry(self.count(), name, mode, self.config.data())
 
         self.addItem(eui)
         self.setItemWidget(eui, ew)
@@ -161,7 +160,7 @@ class EntryList(QListWidget):
             ew = self.itemWidget(eui)
             ew.row = i
             if reshape:
-                ew.reshape(self.setting.lv1, self.setting.lv2)
+                ew.reshape(self.config.lv1, self.config.lv2)
             ew.update_view()
             eui.setSizeHint(ew.sizeHint())
             ew.repaint()
@@ -223,6 +222,40 @@ class EntryList(QListWidget):
     def remove_all(self):
         for _ in range(self.count()):
             self.takeItem(0)
+
+    def get_config(self, key):
+        if key == 'ewkeys':
+            return self.config.ewkeys()
+        if key == 'voiceless':
+            return self.config.is_voiceless()
+        if key == 'ttsmap':
+            return self.config.ttsmap
+        if key == 'lv1':
+            return self.config.lv1
+        if key == 'lv2':
+            return self.config.lv2
+        if key == 'data':
+            return self.config.data()
+
+        try:
+            tts = self.config.ttsmap[key]
+            return tts
+        except KeyError:
+            raise Exception("Unknown key: %s" % key)
+
+
+    def set_config(self, key, new):
+        if key == 'reshape':
+            self.config.reshape(**new)
+            return
+        if key == 'ttsmap':
+            self.config.ttsmap = new
+            return
+
+        try:
+            self.config.ttsmap[key] = new
+        except KeyError:
+            raise Exception("Unknown key: %s" % key)
 
     def remove_selected(self):
         for ew in self.get_entry_selected():

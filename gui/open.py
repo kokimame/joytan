@@ -19,15 +19,12 @@ def on_open(mw):
     with open(file, 'r') as f:
         jd = json.loads(f.read())
 
-    eset = jd[0]
+    config = jd[0]
     mw.entrylist.remove_all()
-    mw.entrylist.setting.reshape(lv1=eset['lv1'], lv2=eset['lv2'])
-    mw.entrylist.setting.ttsmap = eset['ttsmap']
+    mw.entrylist.set_config('reshape', dict(lv1=config['lv1'], lv2=config['lv2']))
+    mw.entrylist.set_config('ttsmap', config['ttsmap'])
 
-    setting = mw.entrylist.setting.data()
     for data in jd[1:]:
-        setting['lv1'] = data['lv1']
-        setting['lv2'] = data['lv2']
         ew = mw.entrylist.add_entry(data['atop'], mw.mode)
         for i in range(0, ew.lv1):
             ew.editors['def-%d' % (i+1)].setText(data['def-%d' % (i+1)])

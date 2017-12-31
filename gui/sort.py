@@ -18,7 +18,7 @@ class SortDialog(QDialog):
     def _ui(self):
         self.form = gui.forms.sortdialog.Ui_SortDialog()
         self.form.setupUi(self)
-        self.form.ewkeyBox.addItems([key for key in self.el.setting.ewkeys()])
+        self.form.ewkeyBox.addItems([key for key in self.el.get_config('ewkeys')])
         self.form.okBtn.clicked.connect(self._on_ok)
 
     def _on_ok(self):

@@ -14,8 +14,6 @@ class AudioDialog(QDialog):
     def __init__(self, mw):
         QDialog.__init__(self, mw, Qt.Window)
         self.mw = mw
-        self.mset = mw.setting
-        self.eset = mw.entrylist.setting
         self.thread = None
         self.form = gui.forms.audiodialog.Ui_AudioDialog()
         self.form.setupUi(self)
@@ -31,7 +29,7 @@ class AudioDialog(QDialog):
         fadd.setToolButtonStyle(Qt.ToolButtonTextBesideIcon)
         fadd.setArrowType(Qt.DownArrow)
 
-        for ewkey in self.eset.ewkeys():
+        for ewkey in self.mw.entrylist.get_config('ewkeys'):
             self._add_flow_item(ewkey)
 
     def _flow_tool(self):
@@ -40,7 +38,7 @@ class AudioDialog(QDialog):
         a.triggered.connect(lambda: self._add_flow_item("MP3"))
         a = m.addAction("Add Silence")
         a.triggered.connect(lambda: self._add_flow_item("SIL"))
-        for ewkey in self.eset.ewkeys():
+        for ewkey in self.mw.entrylist.get_config('ewkeys'):
             a = m.addAction("Add %s" % ewkey)
             a.triggered.connect(lambda ignore, type=ewkey: self._add_flow_item(type))
         m.exec_(QCursor.pos())
@@ -66,7 +64,8 @@ class AudioDialog(QDialog):
         # Type may spawn multiple flow item
         if type == 'MP3':
             try:
-                files = getFiles(self.mw, "Select sound effect", dir=self.mset['sfxdir'], filter="*.mp3")
+                files = getFiles(self.mw, "Select sound effect",
+                                 dir=self.mw.setting['sfxdir'], filter="*.mp3")
             except:
                 return
 
@@ -84,7 +83,7 @@ class AudioDialog(QDialog):
             lwi = QListWidgetItem()
             fi = Silence(lwi)
         else:
-            assert type in self.eset.ewkeys()
+            assert type in self.mw.entrylist.get_config('ewkeys')
             lwi = QListWidgetItem()
             fi = EwkeyObject(lwi, type)
 
@@ -99,7 +98,8 @@ class AudioDialog(QDialog):
         # Type may spawn multiple flow item
         if type == 'MP3':
             try:
-                files = getFiles(self.mw, "Select sound effect", dir=self.mset['bgmdir'], filter="*.mp3")
+                files = getFiles(self.mw, "Select sound effect",
+                                 dir=self.mw.setting['bgmdir'], filter="*.mp3")
                 print(files)
             except Exception as e:
                 print(e)
@@ -147,21 +147,22 @@ class AudioDialog(QDialog):
         form.progressBar.setValue(0)
 
     def _on_create(self):
-        if self.mw.entrylist.count() == 0:
+        el = self.mw.entrylist
+        if el.count() == 0:
             showCritical("No entries found in your entry list.", title="Error")
             return
 
         # Open Preferences and set up voice id.
         # This is called only the first time audio popup opens
         # and set a voice id if it's None.
-        if self.eset.is_voiceless():
+        if el.get_config('voiceless'):
             showCritical("Please set TTS voice to all section", title="Error")
             gui.dialogs.open("Preferences", self.mw, tab="ATTS")
             return
 
         setting = {}
-        setting['title'] = self.mset['title']
-        setting['ttsmap'] = self.eset.ttsmap
+        setting['title'] = self.mw.setting['title']
+        setting['ttsmap'] = el.get_config('ttsmap')
 
         destdir = os.path.join(self.mw.basepath(), "audio")
         if os.path.isdir(destdir):
@@ -217,8 +218,8 @@ class AudioDialog(QDialog):
             def run(self):
                 self.prog.emit("Setting up aufio files. This takes a few minutes")
                 self.handler.setup_audio()
-                for i in range(self.mw.entrylist.count()):
-                    ew = self.mw.entrylist.get_entry_at(i)
+                for i in range(el.count()):
+                    ew = el.get_entry_at(i)
                     self.prog.emit("Creating audio file of %s." % ew.editors['atop'].text())
                     os.makedirs(os.path.join(destdir, ew.str_index()), exist_ok=True)
                     self.handler.onepass(ew)
@@ -237,9 +238,8 @@ class AudioDialog(QDialog):
                 self.quit()
 
         from joytan.handler.mp3handler import Mp3Handler
-        print("Audio setting: ", setting)
         handler = Mp3Handler(setting)
-        self.form.progressBar.setRange(0, self.mw.entrylist.count()+3)
+        self.form.progressBar.setRange(0, el.count()+3)
 
         def _on_progress(msg):
             self.form.pgMsg.setText(msg)

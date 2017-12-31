@@ -16,7 +16,7 @@ def on_save(mw):
 
     saving_data = []
     with open(newfile, "w") as f:
-        saving_data.append(mw.entrylist.setting.data())
+        saving_data.append(mw.entrylist.get_config('data'))
 
         for ew in mw.entrylist.get_entry_all():
             saving_data.append(ew.data())

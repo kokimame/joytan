@@ -23,7 +23,7 @@ class ExtractDialog(QDialog):
         self.form.setupUi(self)
 
         _list = self.form.keyList
-        for ewkey in self.mw.entrylist.setting.ewkeys():
+        for ewkey in self.mw.entrylist.get_config('ewkeys'):
             check = QCheckBox(ewkey)
             if ewkey == 'atop':
                 check.setChecked(True)

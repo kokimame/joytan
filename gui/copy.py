@@ -1,6 +1,6 @@
 import gui
 from gui.qt import *
-from gui.utils import showCritical
+from gui.utils import showCritical, showWarning
 
 
 def on_copy(mw):
@@ -17,37 +17,38 @@ class CopyDialog(QDialog):
     def _ui(self):
         self.form = gui.forms.copydialog.Ui_CopyDialog()
         self.form.setupUi(self)
-        eset = self.mw.entrylist.setting
+        el = self.mw.entrylist
 
-        self.form.fromBox.addItems([item for item in eset.ewkeys()])
-        self.form.toBox.addItems([item for item in eset.ewkeys()])
+        self.form.fromBox.addItems([key for key in el.get_config('ewkeys')])
+        self.form.toBox.addItems([key for key in el.get_config('ewkeys')])
         self.form.fromBox.setCurrentText('atop')
         self.form.copyBtn.clicked.connect(self._copy)
         self.form.cancelBtn.clicked.connect(self.reject)
 
     def _copy(self):
-        if self.mw.entrylist.count() == 0:
-            showCritical("No entries found in your entry list.", title="Error")
+        el = self.mw.entrylist
+        from_ewkey = self.form.fromBox.currentText()
+        to_ewkey = self.form.toBox.currentText()
+
+        if el.count() == 0:
+            showWarning("No entries found in your entry list.", title="Warnig")
             return
 
-        form = self.form
-        fbox, tbox = form.fromBox, form.toBox
-        if fbox.currentText() == tbox.currentText():
-            print("Choose different contents for copying")
+        if from_ewkey == to_ewkey:
+            showWarning("Cannot copy the same section", title="Warning")
             return
 
         # Copying from and to the contents in Entry Widget
-        for ew in self.mw.entrylist.get_entry_all():
+        for ew in el.get_entry_all():
             try:
-                ew.editors[tbox.currentText()].setText(ew.editors[fbox.currentText()].text())
+                ew.editors[to_ewkey].setText(ew.editors[from_ewkey].text())
             except KeyError:
                 pass
 
         # Change language mapping of the entrylist based on the copy
-        eset = self.mw.entrylist.setting
-        eset.ttsmap[tbox.currentText()] = eset.ttsmap[fbox.currentText()]
+        el.set_config(to_ewkey, el.get_config(from_ewkey))
 
-        self.mw.entrylist.update_all()
+        el.update_all()
 
     def reject(self):
         self.done(0)

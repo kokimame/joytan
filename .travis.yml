@@ -6,4 +6,4 @@ install:
   - pip install nose
   - pip install coveralls
 
-script: noseteset ./tests --with-coverage --cover-package=./joytan
+script: nosetest ./tests --with-coverage --cover-package=./joytan

@@ -1,7 +1,13 @@
+sudo: required
+dist: trusty
 language: python
 
 python:
   - "3.5"
+
+before_install:
+  - sudo add-apt-repository ppa:mc3man/trusty-media -y
+  - sudo apt-get update --fix-missing
 
 install:
   - sudo apt-get install -y ffmpeg

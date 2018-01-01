@@ -7,7 +7,7 @@ python:
   - "3.5"
 
 before_install:
-  - sudo apt-get-repository -y ppa:mc3mac/trusty-media
+  - sudo add-get-repository -y ppa:mc3mac/trusty-media
   - sudo apt-get update --fix-missing
 
 install:

@@ -13,8 +13,6 @@ before_install:
 install:
   - sudo apt-get install -y ffmpeg
   - sudo apt-get install -y libpulse-dev
-  - pip install -r requirements.txt
-  - pip install nose
-  - pip install coveralls
+  - pip install -r requirements-dev.txt
 
-script: nosetests ./tests --with-coverage --cover-package=./joytan
+script: py.test

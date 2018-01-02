@@ -1,7 +1,8 @@
 """
 
-Building and initializing GUI of Joytan
-The entire Qt programming is mainly based on Anki　(https://github.com/dae/anki/aqt)
+Building and initializing GUI of .
+The entire PyQt programming pattern is learned from Anki project
+(https://github.com/dae/anki)
 
 """
 import optparse

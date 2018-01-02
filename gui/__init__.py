@@ -99,7 +99,7 @@ def run():
                              traceback.format_exc())
 
 
-def _run(argv=None, exec=None):
+def _run(argv=None, exec=True):
     """
     Start JoytanApp application or reuse an exisiting instance if one exits.
     

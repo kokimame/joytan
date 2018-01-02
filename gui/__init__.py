@@ -1,3 +1,12 @@
+"""
+
+Building and initializing GUI of Joytan
+The entire Qt programming is mainly based on Anki　(https://github.com/dae/anki/aqt)
+
+"""
+import optparse
+import tempfile
+
 from gui.qt import *
 from gui.utils import isMac, isLin, isWin
 
@@ -69,19 +78,40 @@ class JoytanApp(QApplication):
 
 
 def parse_args(argv):
-    pass
+    """Returns (opts, args)"""
+    if isMac and len(argv) > 1 and argv[1].startswith("-psn"):
+        argv = [argv[0]]
+    parser = optparse.OptionParser(version="%prog " + appVersion)
+    parser.usage = "%prog [OPTIONS] [file to import]"
+    parser.add_option("-b", "--base", help="path to base folder")
+    parser.add_option("-l", "--lang", help="interface language (en, de, etc)")
+    return parser.parse_args(argv[1:])
+
 
 
 def run():
     try:
         _run()
     except Exception as e:
-        QMessageBox.critical(None, "Startup Error")
+        QMessageBox.critical(None, "Startup Error",
+                             "Please notify support of this error:\n\n"+
+                             traceback.format_exc())
 
 
-def _run():
+def _run(argv=None, exec=None):
+    """
+    Start JoytanApp application or reuse an exisiting instance if one exits.
+    
+    If the function isi invoked with exec=False, the JoytanApp will not enter
+    the main event loop, instead the application object will be returned
+    
+    The 'exec' and 'argv' is useful for testing purposes
+    """
     global mw, app
-    print("Run the GUI")
+
+    opts, args = parse_args(sys.argv)
+    opts.base = opts.base or ""
+
 
     app = JoytanApp(sys.argv)
     QCoreApplication.setApplicationName("Joytan ジョイ単")
@@ -90,6 +120,24 @@ def _run():
     if isMac:
         app.setAttribute(Qt.AA_DontShowIconsInMenus)
 
+    # work around pyqt loading wrong GL library
+    if isLin:
+        import ctypes
+        ctypes.CDLL('libGL.so.1', ctypes.RTLD_GLOBAL)
+
+    # we must have a usable temp dir
+    try:
+        tempfile.gettempdir()
+    except:
+        QMessageBox.critical(
+            None, "Error", """\
+        No usable temporary folder found. Make sure C:\\temp exists or TEMP in your \
+        environment points to a valid, writable folder.""")
+        return
+
     import gui.main
     mw = gui.main.JoytanMW(app, sys.argv)
-    app.exec_()
+    if exec:
+        app.exec_()
+    else:
+        return app

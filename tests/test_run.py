@@ -58,3 +58,17 @@ def test_open():
         # Number of ewkeys: atop + def-n * (ex-n-m + 1)
         n_keys = 1 + lv1 * (lv2 + 1)
         assert n_keys == len(mw.entrylist.get_config('ewkeys'))
+
+
+def test_audiodialog():
+    # Sample Joytan EntryList file to open
+    test_jel = 'tests/assets/en_en.jel'
+    assert os.path.exists(test_jel), 'Test file %s not found' % test_jel
+
+    with joytan_running() as mw:
+        from gui.open import on_open
+        on_open(mw, file=test_jel)
+
+        from gui import audiodialog
+        ad = audiodialog.AudioDialog(mw)
+        ad._on_create()

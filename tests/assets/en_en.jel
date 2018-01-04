@@ -1,0 +1,73 @@
+[
+    {
+        "lv1": 1,
+        "lv2": 1,
+        "ttsmap": {
+            "atop": [
+                1,
+                "sapi5com",
+                {
+                    "voice": "Microsoft Zira Desktop",
+                    "speed": 0,
+                    "volume": 100,
+                    "quality": 39,
+                    "xml": 0
+                }
+            ],
+            "def-1": [
+                1,
+                "sapi5com",
+                {
+                    "voice": "Microsoft Zira Desktop",
+                    "speed": 0,
+                    "volume": 100,
+                    "quality": 39,
+                    "xml": 0
+                }
+            ],
+            "ex-1-1": [
+                1,
+                "sapi5com",
+                {
+                    "voice": "Microsoft Zira Desktop",
+                    "speed": 0,
+                    "volume": 100,
+                    "quality": 39,
+                    "xml": 0
+                }
+            ]
+        }
+    },
+    {
+        "idx": 1,
+        "atop": "unbelievable",
+        "lv1": 1,
+        "lv2": 1,
+        "def-1": "too dubious or improbable to be believed",
+        "ex-1-1": "an unbelievable excuse."
+    },
+    {
+        "idx": 2,
+        "atop": "incredible",
+        "lv1": 1,
+        "lv2": 1,
+        "def-1": "so extraordinary as to seem impossible",
+        "ex-1-1": "incredible speed."
+    },
+    {
+        "idx": 3,
+        "atop": "audacious",
+        "lv1": 1,
+        "lv2": 1,
+        "def-1": "extremely bold or daring; recklessly brave; fearless",
+        "ex-1-1": "an audacious explorer."
+    },
+    {
+        "idx": 4,
+        "atop": "universal",
+        "lv1": 1,
+        "lv2": 1,
+        "def-1": "of, relating to, or characteristic of all or the whole",
+        "ex-1-1": "universal experience."
+    }
+]

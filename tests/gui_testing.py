@@ -13,5 +13,5 @@ from gui import _run
 
 @contextmanager
 def joytan_running():
-    app = _run(exec=False)
-    yield app
+    mw = _run(exec=False)
+    yield mw

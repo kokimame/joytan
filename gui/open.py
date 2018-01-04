@@ -4,13 +4,15 @@ import gui
 from gui.utils import getFile
 
 
-def on_open(mw):
+def on_open(mw, file=None):
     filter = "Joytan EntryList format (*.jel)"
     # Fixme: Read multiple files and adding their contents one by one to the list.
-    try:
-        file = getFile(mw, "Open exising Joytan EntryList", dir=mw.setting['workspace'], filter=filter)
-    except:
-        return
+    if not file:
+        try:
+            file = getFile(mw, "Open exising Joytan EntryList",
+                           dir=mw.setting['workspace'], filter=filter)
+        except:
+            return
 
     if not file:
         print("Exception: File not found")

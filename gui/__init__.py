@@ -141,4 +141,4 @@ def _run(argv=None, exec=True):
     if exec:
         app.exec_()
     else:
-        return app
+        return mw

@@ -149,14 +149,13 @@ class AudioDialog(QDialog):
     def _on_create(self):
         el = self.mw.entrylist
         if el.count() == 0:
-            showCritical("No entries found in your entry list.", title="Error")
+            showCritical("No entries found in your entry list.")
             return
 
-        # Open Preferences and set up voice id.
-        # This is called only the first time audio popup opens
-        # and set a voice id if it's None.
+        # Open TTS setting dialog if TTS is not allocated to
+        # all of EntryWidget's text editor
         if el.get_config('voiceless'):
-            showCritical("Please set TTS voice to all section", title="Error")
+            showCritical("Please set TTS voice to all section")
             gui.dialogs.open("Preferences", self.mw, tab="ATTS")
             return
 
@@ -171,7 +170,7 @@ class AudioDialog(QDialog):
 
         # Check if LRC file needs to be created
         setting['lrc'] = self.form.lrcCheck.isChecked()
-        # Check if row number needs to be read in the output
+        # Check if index needs to be read in the output
         setting['idx'] = self.form.idxCheck.isChecked()
 
         flow = self.form.flowList
@@ -216,7 +215,7 @@ class AudioDialog(QDialog):
                 self.handler = handler
 
             def run(self):
-                self.prog.emit("Setting up aufio files. This takes a few minutes")
+                self.prog.emit("Setting up aufio files. This may take a few minutes")
                 self.handler.setup_audio()
                 for i in range(el.count()):
                     ew = el.get_entry_at(i)
@@ -224,7 +223,7 @@ class AudioDialog(QDialog):
                     os.makedirs(os.path.join(destdir, ew.str_index()), exist_ok=True)
                     self.handler.onepass(ew)
 
-                self.prog.emit("Mixing with BGM. This takes a few minutes.")
+                self.prog.emit("Mixing with BGM. This may take a few minutes.")
                 acapella = sum(self.handler.acapellas)
                 if len(setting['loop']) != 0:
                     finalmp3 = acapella.overlay(self.handler.get_bgmloop(len(acapella)))

@@ -24,6 +24,7 @@ Storage and management of add-on configuration
 #      AnkiWeb, e.g. by moving them into the collections database?
 #      See also <https://anki.tenderapp.com/discussions/add-ons/8512>.
 
+import os
 import sqlite3
 
 __all__ = ['Config']
@@ -82,7 +83,6 @@ class Config(object):
 
         The database specification should be a bundle, with:
 
-            - path: full path to database
             - table: table name
             - normalize: sanitization function for normalizing columns
 
@@ -105,6 +105,7 @@ class Config(object):
         """
 
         self._db = db
+        self._set_base_folder()
 
         self._cols = {
             self._db.normalize(col[0]): col
@@ -115,12 +116,37 @@ class Config(object):
         self._events = {}
         if events:
             for triggers, callback in events:
-                self.bind(triggers, callback)
+                self._bind(triggers, callback)
 
         self._cache = {}
         self._load()
 
-    def bind(self, triggers, callback):
+    def _set_base_folder(self):
+        # If base is specified from CLI startup
+        if self._db.base:
+            self._db.base = os.path.abspath(self._db.base)
+        elif os.environ.get("JOYTAN_BASE"):
+            self._db.base = os.path.abspath(os.environ("JOYTAN_BASE"))
+        else:
+            from gui.utils import defaultBase
+            self._db.base = defaultBase()
+        self._ensure_base_exists()
+
+    def _ensure_base_exists(self):
+        try:
+            self._ensure_exists(self._db.base)
+        except:
+            from gui.utils import showCritical
+            showCritical("""\
+Joytan could not create the folder %s. Please ensure that location is not \
+read-only and you have permission to write to it.""" % self._db.base, title="Error")
+
+    def _ensure_exists(self, path):
+        if not os.path.exists(path):
+            os.makedirs(path)
+        return path
+
+    def _bind(self, triggers, callback):
         """
         Registers a callable to be called with the current state of the
         configuration instance whenever a column in the triggers list is
@@ -150,6 +176,8 @@ class Config(object):
         added, the already-existing table will be migrated to support
         the new column(s) using the default value(s).
         """
+
+        self._db.path = os.path.join(self._db.base, "config.db")
 
         # open database connection
         connection = sqlite3.connect(self._db.path, isolation_level=None)

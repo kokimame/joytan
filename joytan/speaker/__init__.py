@@ -21,12 +21,40 @@ from time import time
 
 from PyQt5.QtCore import PYQT_VERSION_STR
 
-from joytan import config, logger, get_platform_info
+from gui import config, logger
 from joytan import conversion as to
 from joytan.bundle import Bundle
 from .router import Router
 from . import service
 from . import paths
+
+def get_platform_info():
+    """Exception-tolerant platform information for use with AGENT."""
+
+    implementation = system_description = "???"
+    python_version = "?.?.?"
+
+    try:
+        import platform
+    except:  # catch-all, pylint:disable=bare-except
+        pass
+    else:
+        try:
+            implementation = platform.python_implementation()
+        except:  # catch-all, pylint:disable=bare-except
+            pass
+
+        try:
+            python_version = platform.python_version()
+        except:  # catch-all, pylint:disable=bare-except
+            pass
+
+        try:
+            system_description = platform.platform().replace('-', ' ')
+        except:  # catch-all, pylint:disable=bare-except
+            pass
+
+    return "%s %s; %s" % (implementation, python_version, system_description)
 
 VERSION = '1.13.0-dev'
 
@@ -35,7 +63,6 @@ WEB = 'https://ankiatts.appspot.com'
 AGENT = 'AwesomeTTS/%s (%s; PyQt %s; %s)' % (VERSION, 'Joytan',
                                                   PYQT_VERSION_STR,
                                                   get_platform_info())
-
 
 router = Router(
     services=Bundle(

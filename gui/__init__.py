@@ -11,6 +11,10 @@ import tempfile
 from gui.qt import *
 from gui.utils import isMac, isLin, isWin
 
+from joytan.bundle import Bundle
+from joytan.config import Config
+from joytan import conversion as to
+
 # TODO: Deploy with confident. Very obscure right now
 if sys.version_info[0] < 3:
     raise Exception("Joytan requires Python 3.x")
@@ -19,11 +23,12 @@ if sys.getfilesystemencoding().lower() in ("ascii", "ansi_x3.4-1968"):
     raise Exception("Joytan requires a UTF-8 locale.")
 
 # build scripts grep this line, so keep this format
-appVersion = "0.0.1beta1"
+app_version = "0.0.1beta1"
 # Main window set in runtime
 mw = None
-
-moduleDir = os.path.split(os.path.dirname(os.path.abspath(__file__)))[0]
+logger = None
+config = None
+ICONS = 'design/icons'
 
 try:
     import gui.forms
@@ -32,7 +37,6 @@ except ImportError as e:
         print("Error: Build UI first by running build_ui.sh from the project root.\n")
     raise
 
-ICONS = 'design/icons'
 from gui import preferences, audiodialog, textdialog, \
     download, translate, copy, extract, sort
 
@@ -82,7 +86,7 @@ def parse_args(argv):
     """Returns (opts, args)"""
     if isMac and len(argv) > 1 and argv[1].startswith("-psn"):
         argv = [argv[0]]
-    parser = optparse.OptionParser(version="%prog " + appVersion)
+    parser = optparse.OptionParser(version="%prog " + app_version)
     parser.usage = "%prog [OPTIONS] [file to import]"
     parser.add_option("-b", "--base", help="path to base folder")
     parser.add_option("-l", "--lang", help="interface language (en, de, etc)")
@@ -112,7 +116,6 @@ def _run(argv=None, exec=True):
     opts, args = parse_args(sys.argv)
     opts.base = opts.base or ""
 
-
     app = JoytanApp(sys.argv)
     QCoreApplication.setApplicationName("Joytan ジョイ単")
 
@@ -134,6 +137,33 @@ def _run(argv=None, exec=True):
         No usable temporary folder found. Make sure C:\\temp exists or TEMP in your \
         environment points to a valid, writable folder.""")
         return
+
+    global logger, config
+
+    logger = Bundle(debug=lambda *a, **k: None, error=lambda *a, **k: None,
+                    info=lambda *a, **k: None, warn=lambda *a, **k: None)
+
+    config = Config(
+        db=Bundle(base=opts.base,
+                  table='general',
+                  normalize=to.normalized_ascii),
+        cols=[
+            ('extras', 'text', {}, to.deserialized_dict, to.compact_json),
+            ('filenames', 'text', 'hash', str, str),
+            ('filenames_human', 'text',
+             '{{text}} ({{service}} {{voice}})', str, str),
+            ('groups', 'text', {}, to.deserialized_dict, to.compact_json),
+            ('lame_flags', 'text', '--quiet -q 2', str, str),
+            ('last_options', 'text', {}, to.deserialized_dict, to.compact_json),
+            ('last_service', 'text', ('sapi5js' if 'win32' in sys.platform
+                                      else 'say' if 'darwin' in sys.platform
+            else 'espeak'), str, str),
+            ('presets', 'text', {}, to.deserialized_dict, to.compact_json),
+        ],
+        logger=logger,
+        events=[
+        ],
+    )
 
     import gui.main
     mw = gui.main.JoytanMW(app, sys.argv)

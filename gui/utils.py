@@ -13,6 +13,22 @@ isMac = sys.platform.startswith("darwin")
 isWin = sys.platform.startswith("win32")
 isLin = not isMac and not isWin
 
+# Learned from anki/aqt/profile ... _defaultBase
+def defaultBase():
+    if isWin:
+        loc = QStandardPaths.writableLocation(QStandardPaths.AppDataLocation)
+        assert loc.endswith("/Joytan")
+        return loc
+    elif isMac:
+        return os.path.expanduser("~/Library/Application Support/Joytan")
+    else:
+        dataDir = os.environ.get(
+            "XDG_DATA_HOME", os.path.expanduser("~/.local/share"))
+        if not os.path.expanduser(dataDir):
+            os.makedirs(dataDir)
+        return os.path.join(dataDir, "Joytan")
+
+
 def getFileToSave(parent, title, filter="*.*", dir=None, suf='jel'):
     opts = QFileDialog.Options()
     opts |= QFileDialog.DontUseNativeDialog

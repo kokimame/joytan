@@ -15,3 +15,5 @@ from gui import _run
 def joytan_running():
     mw = _run(exec=False)
     yield mw
+    # If there's nothing to do after yield gets called,
+    # is yield equivalent to return?

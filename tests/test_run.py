@@ -6,6 +6,11 @@ from .gui_testing import joytan_running
 
 def test_entrylist():
     with joytan_running() as mw:
+        # Initially entrylist shows one helper list item telling basic usages
+        assert super(EntryList, mw.entrylist).count() == 1
+        # But it's ignored on application level
+        assert mw.entrylist.count() == 0
+
         ew1 = mw.entrylist.add_entry('test1', mw.mode)
         ew2 = mw.entrylist.add_entry('test2', mw.mode)
         ew3 = mw.entrylist.add_entry('test3', mw.mode)

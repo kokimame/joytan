@@ -8,9 +8,15 @@ class Preferences(QDialog):
     _INDEX_GENERAL = 0
     _INDEX_ATTS = 2
 
-    def __init__(self, mw, tab="General"):
+    def __init__(self, mw, tab="General", back_to=None):
         QDialog.__init__(self, mw, Qt.Window)
         self.mw = mw
+        # Specify the dialog that regains focus after closing Preference,
+        # the MainWindow does so by default.
+        # The variable only gets called on reject for activateWindow and raise_
+        # FIXME: This may be done natively by configuring instanciation or modality of dialogs.
+        # FIXME: How can it be tested that the right dialog regains focus after some event
+        self.back_to = back_to or None
         self.form = gui.forms.preferences.Ui_Preferences()
         self.form.setupUi(self)
         self._ui()
@@ -74,5 +80,8 @@ class Preferences(QDialog):
                                      dict(lv1=self.form.dpwSpin.value(), lv2=self.form.epdSpin.value()))
 
     def reject(self):
+        if self.back_to:
+            self.back_to.activateWindow()
+            self.back_to.raise_()
         self.done(0)
         gui.dialogs.close("Preferences")

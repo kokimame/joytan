@@ -139,7 +139,7 @@ class AudioDialog(QDialog):
         form.stopBtn.setEnabled(False)
         form.stopBtn.clicked.connect(self._on_stop_thread)
         form.settingBtn.clicked.connect(
-            lambda: gui.dialogs.open("Preferences", self.mw, tab="TTS"))
+            lambda: gui.dialogs.open("Preferences", self.mw, back_to=self, tab="TTS"))
 
     def _ui_progress(self):
         form = self.form

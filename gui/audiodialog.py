@@ -100,7 +100,6 @@ class AudioDialog(QDialog):
             try:
                 files = getFiles(self.mw, "Select sound effect",
                                  dir=self.mw.config['bgmdir'], filter="*.mp3")
-                print(files)
             except Exception as e:
                 print(e)
                 return
@@ -108,7 +107,7 @@ class AudioDialog(QDialog):
                 lwi = QListWidgetItem()
                 fi = Mp3Object(lwi, file)
                 lwi.setSizeHint(fi.sizeHint())
-                fi.delete.connect(self._remove_flow_item)
+                fi.delete.connect(self._remove_bgm)
                 self.form.bgmList.addItem(lwi)
                 self.form.bgmList.setItemWidget(lwi, fi)
             return

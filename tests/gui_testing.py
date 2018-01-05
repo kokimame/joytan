@@ -1,3 +1,4 @@
+import os
 import shutil
 import tempfile
 from contextlib import contextmanager
@@ -13,7 +14,9 @@ from gui import _run
 
 @contextmanager
 def joytan_running():
-    mw = _run(exec=False)
+    # Configure output directory for testing
+    test_argv = ["-t", "--test", os.path.join(os.getcwd(), 'tests')]
+    mw = _run(argv=test_argv, exec=False)
     yield mw
     # If there's nothing to do after yield gets called,
     # is yield equivalent to return?

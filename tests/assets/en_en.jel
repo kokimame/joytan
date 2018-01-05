@@ -1,73 +1,60 @@
 [
     {
-        "lv1": 1,
-        "lv2": 1,
         "ttsmap": {
-            "atop": [
-                1,
-                "sapi5com",
+            "ex-1-1": [
+                0,
+                "espeak",
                 {
-                    "voice": "Microsoft Zira Desktop",
-                    "speed": 0,
+                    "voice": "default",
+                    "variant": "normal",
+                    "pitch": 50,
+                    "gap": 0.0,
                     "volume": 100,
-                    "quality": 39,
-                    "xml": 0
+                    "speed": 175
+                }
+            ],
+            "atop": [
+                0,
+                "espeak",
+                {
+                    "voice": "default",
+                    "variant": "normal",
+                    "pitch": 50,
+                    "gap": 0.0,
+                    "volume": 100,
+                    "speed": 175
                 }
             ],
             "def-1": [
-                1,
-                "sapi5com",
+                0,
+                "espeak",
                 {
-                    "voice": "Microsoft Zira Desktop",
-                    "speed": 0,
+                    "voice": "default",
+                    "variant": "normal",
+                    "pitch": 50,
+                    "gap": 0.0,
                     "volume": 100,
-                    "quality": 39,
-                    "xml": 0
-                }
-            ],
-            "ex-1-1": [
-                1,
-                "sapi5com",
-                {
-                    "voice": "Microsoft Zira Desktop",
-                    "speed": 0,
-                    "volume": 100,
-                    "quality": 39,
-                    "xml": 0
+                    "speed": 175
                 }
             ]
-        }
+        },
+        "lv1": 1,
+        "lv2": 1
     },
     {
         "idx": 1,
         "atop": "unbelievable",
-        "lv1": 1,
-        "lv2": 1,
         "def-1": "too dubious or improbable to be believed",
-        "ex-1-1": "an unbelievable excuse."
+        "lv1": 1,
+        "ex-1-1": "an unbelievable excuse.",
+        "lv2": 1
     },
     {
         "idx": 2,
         "atop": "incredible",
-        "lv1": 1,
-        "lv2": 1,
         "def-1": "so extraordinary as to seem impossible",
-        "ex-1-1": "incredible speed."
-    },
-    {
-        "idx": 3,
-        "atop": "audacious",
         "lv1": 1,
-        "lv2": 1,
-        "def-1": "extremely bold or daring; recklessly brave; fearless",
-        "ex-1-1": "an audacious explorer."
-    },
-    {
-        "idx": 4,
-        "atop": "universal",
-        "lv1": 1,
-        "lv2": 1,
-        "def-1": "of, relating to, or characteristic of all or the whole",
-        "ex-1-1": "universal experience."
+        "ex-1-1": "incredible speed.",
+        "lv2": 1
     }
 ]

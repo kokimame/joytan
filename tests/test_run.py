@@ -1,4 +1,5 @@
 import os
+import shutil
 import json
 
 from gui.widgets.entrylist import EntryList
@@ -47,7 +48,7 @@ def test_open():
         from gui.open import on_open
         on_open(mw, file=test_jel)
 
-        assert mw.entrylist.count() == 4
+        assert mw.entrylist.count() == 2
         assert not mw.entrylist.get_config('voiceless')
 
         # Atop key is in ewkeys
@@ -71,4 +72,10 @@ def test_audiodialog():
 
         from gui import audiodialog
         ad = audiodialog.AudioDialog(mw)
+
+        destdir = os.path.join(mw.projectbase(), "audio")
+        if os.path.isdir(destdir):
+            shutil.rmtree(destdir)
+
         ad._on_create()
+        ad.thread.wait()

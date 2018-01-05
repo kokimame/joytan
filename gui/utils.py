@@ -28,6 +28,37 @@ def defaultBase():
             os.makedirs(dataDir)
         return os.path.join(dataDir, "Joytan")
 
+# Learned from anki/aqt/profile ... _oldFolderLocation
+def defaultWorkspace():
+    if isMac:
+        return os.path.expanduser("~/Documents/Joytan")
+    elif isWin:
+        loc = QStandardPaths.writableLocation(QStandardPaths.DocumentsLocation)
+        return os.path.join(loc, "Joytan")
+    else:
+        p = os.path.expanduser("~/Joytan")
+        if os.path.exists(p):
+            return p
+        else:
+            loc = QStandardPaths.writableLocation(QStandardPaths.DocumentsLocation)
+            if loc[:-1] == QStandardPaths.writableLocation(
+                    QStandardPaths.HomeLocation):
+                # occasionally "documentsLocation" will return the home
+                # folder because the Documents folder isn't configured
+                # properly; fall back to an English path
+                return os.path.expanduser("~/Documents/Joytan")
+            else:
+                return os.path.join(loc, "Joytan")
+
+def defaultMusic():
+    loc = QStandardPaths.writableLocation(QStandardPaths.MusicLocation)
+    return loc
+
+def defaultDocument():
+    loc = QStandardPaths.writableLocation(QStandardPaths.DocumentsLocation)
+    return loc
+
+
 
 def getFileToSave(parent, title, filter="*.*", dir=None, suf='jel'):
     opts = QFileDialog.Options()

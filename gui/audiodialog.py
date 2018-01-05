@@ -65,7 +65,7 @@ class AudioDialog(QDialog):
         if type == 'MP3':
             try:
                 files = getFiles(self.mw, "Select sound effect",
-                                 dir=self.mw.setting['sfxdir'], filter="*.mp3")
+                                 dir=self.mw.config['sfxdir'], filter="*.mp3")
             except:
                 return
 
@@ -99,7 +99,7 @@ class AudioDialog(QDialog):
         if type == 'MP3':
             try:
                 files = getFiles(self.mw, "Select sound effect",
-                                 dir=self.mw.setting['bgmdir'], filter="*.mp3")
+                                 dir=self.mw.config['bgmdir'], filter="*.mp3")
                 print(files)
             except Exception as e:
                 print(e)
@@ -160,10 +160,10 @@ class AudioDialog(QDialog):
             return
 
         setting = {}
-        setting['title'] = self.mw.setting['title']
+        setting['title'] = self.mw.config['title']
         setting['ttsmap'] = el.get_config('ttsmap')
 
-        destdir = os.path.join(self.mw.basepath(), "audio")
+        destdir = os.path.join(self.mw.projectbase(), "audio")
         if os.path.isdir(destdir):
             shutil.rmtree(destdir)
         setting['dest'] = destdir
@@ -255,7 +255,7 @@ class AudioDialog(QDialog):
     def _on_stop_thread(self):
         if self.thread:
             self.thread.terminate()
-            destdir = os.path.join(self.mw.basepath(), "audio")
+            destdir = os.path.join(self.mw.projectbase(), "audio")
             shutil.rmtree(destdir)
             self.form.progressBar.reset()
             self.form.pgMsg.setText("")

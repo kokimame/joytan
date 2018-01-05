@@ -28,11 +28,11 @@ class Preferences(QDialog):
         form.dpwSpin.setValue(el.get_config('lv1'))
         form.epdSpin.setValue(el.get_config('lv2'))
         # Editors
-        form.titleEdit.setText(self.mw.setting['title'])
-        form.workingEdit.setText(self.mw.setting['workspace'])
-        form.wordEdit.setText(self.mw.setting['worddir'])
-        form.bgmEdit.setText(self.mw.setting['bgmdir'])
-        form.sfxEdit.setText(self.mw.setting['sfxdir'])
+        form.titleEdit.setText(self.mw.config['title'])
+        form.workingEdit.setText(self.mw.config['workspace'])
+        form.wordEdit.setText(self.mw.config['worddir'])
+        form.bgmEdit.setText(self.mw.config['bgmdir'])
+        form.sfxEdit.setText(self.mw.config['sfxdir'])
 
     def _ui_atts(self):
         """
@@ -65,11 +65,11 @@ class Preferences(QDialog):
 
     def _update(self):
         form = self.form
-        self.mw.setting['title'] = form.titleEdit.text()
-        self.mw.setting['workspace'] = form.workingEdit.text()
-        self.mw.setting['worddir'] = form.wordEdit.text()
-        self.mw.setting['bgmdir'] = form.bgmEdit.text()
-        self.mw.setting['sfxdir'] = form.sfxEdit.text()
+        self.mw.config['title'] = form.titleEdit.text()
+        self.mw.config['workspace'] = form.workingEdit.text()
+        self.mw.config['worddir'] = form.wordEdit.text()
+        self.mw.config['bgmdir'] = form.bgmEdit.text()
+        self.mw.config['sfxdir'] = form.sfxEdit.text()
         self.mw.entrylist.set_config('reshape',
                                      dict(lv1=self.form.dpwSpin.value(), lv2=self.form.epdSpin.value()))
 

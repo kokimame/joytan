@@ -16,7 +16,7 @@ class TxtThread(QThread):
         self.dest = dest
 
     def run(self):
-        ftxt = open("{dest}/{title}.txt".format(dest=self.dest, title=self.mw.setting['title']), 'w')
+        ftxt = open("{dest}/{title}.txt".format(dest=self.dest, title=self.mw.config['title']), 'w')
         for i in range(self.mw.entrylist.count()):
             ew = self.mw.entrylist.get_entry_at(i)
             ftxt.write("{index}. {name}\n".format(
@@ -46,7 +46,7 @@ class HtmlThread(QThread):
         temp = env.get_template('simple.html')
         rendered_temp = temp.render(entries=datas)
 
-        with open('{dest}/{title}.html'.format(dest=self.dest, title=self.mw.setting['title']), 'w') as f:
+        with open('{dest}/{title}.html'.format(dest=self.dest, title=self.mw.config['title']), 'w') as f:
             f.write(rendered_temp)
 
 
@@ -73,7 +73,7 @@ class TextDialog(QDialog):
         QDialog.__init__(self, mw, Qt.Window)
         self.mw = mw
         self.book = None
-        self.destdir = os.path.join(mw.basepath(), "text")
+        self.destdir = os.path.join(mw.projectbase(), "text")
         if os.path.isdir(self.destdir):
             import shutil
             shutil.rmtree(self.destdir)

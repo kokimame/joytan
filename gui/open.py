@@ -10,7 +10,7 @@ def on_open(mw, file=None):
     if not file:
         try:
             file = getFile(mw, "Open exising Joytan EntryList",
-                           dir=mw.setting['workspace'], filter=filter)
+                           dir=mw.config['workspace'], filter=filter)
         except:
             return
 

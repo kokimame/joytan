@@ -9,7 +9,7 @@ import optparse
 import tempfile
 
 from gui.qt import *
-from gui.utils import isMac, isLin, isWin
+from gui.utils import isMac, isLin, isWin, defaultWorkspace, defaultMusic, defaultDocument
 
 from joytan.bundle import Bundle
 from joytan.config import Config
@@ -90,6 +90,7 @@ def parse_args(argv):
     parser.usage = "%prog [OPTIONS] [file to import]"
     parser.add_option("-b", "--base", help="path to base folder")
     parser.add_option("-l", "--lang", help="interface language (en, de, etc)")
+    parser.add_option("-t", "--test", help="output directory for (py)testing")
     return parser.parse_args(argv[1:])
 
 
@@ -111,9 +112,13 @@ def _run(argv=None, exec=True):
     
     The 'exec' and 'argv' is useful for testing purposes
     """
-    global mw, app
+    global app
 
-    opts, args = parse_args(sys.argv)
+    if argv is None:
+        argv = sys.argv
+
+    # Parse args
+    opts, args = parse_args(argv)
     opts.base = opts.base or ""
 
     app = JoytanApp(sys.argv)
@@ -148,6 +153,15 @@ def _run(argv=None, exec=True):
                   table='general',
                   normalize=to.normalized_ascii),
         cols=[
+            ('title', 'text', 'joytan-sample', str, str),
+            ('workspace', 'text', defaultWorkspace(), str, str),
+            ('bgmdir', 'text', defaultMusic(), str, str),
+            ('sfxdir', 'text', defaultMusic(), str, str),
+            ('worddir', 'text', defaultDocument(), str, str),
+            ('last_workspace', 'text', defaultWorkspace(), str, str),
+            ('last_bgmdir', 'text', defaultMusic(), str, str),
+            ('last_sfxdir', 'text', defaultMusic(), str, str),
+            ('last_worddir', 'text', defaultDocument(), str, str),
             ('extras', 'text', {}, to.deserialized_dict, to.compact_json),
             ('filenames', 'text', 'hash', str, str),
             ('filenames_human', 'text',
@@ -155,9 +169,9 @@ def _run(argv=None, exec=True):
             ('groups', 'text', {}, to.deserialized_dict, to.compact_json),
             ('lame_flags', 'text', '--quiet -q 2', str, str),
             ('last_options', 'text', {}, to.deserialized_dict, to.compact_json),
-            ('last_service', 'text', ('sapi5js' if 'win32' in sys.platform
+            ('last_service', 'text', ('sapi5com' if 'win32' in sys.platform
                                       else 'say' if 'darwin' in sys.platform
-            else 'espeak'), str, str),
+                                      else 'espeak'), str, str),
             ('presets', 'text', {}, to.deserialized_dict, to.compact_json),
         ],
         logger=logger,
@@ -165,8 +179,17 @@ def _run(argv=None, exec=True):
         ],
     )
 
+    # TODO: Separate config.db for testing and running
+    if opts.test:
+        config['workspace'] = opts.test
+    else:
+        config['workspace'] = defaultWorkspace()
+
+
+    global mw
     import gui.main
-    mw = gui.main.JoytanMW(app, sys.argv)
+
+    mw = gui.main.JoytanMW(app, config, sys.argv)
     if exec:
         app.exec_()
     else:

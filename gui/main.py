@@ -7,35 +7,12 @@ from gui.qt import *
 from gui.utils import isMac, isLin, isWin
 
 
-def default_setting():
-    cwd = os.getcwd()
-    setting = None
-
-    with open(os.path.join(cwd, "mysetting.json"), 'r') as f:
-        js_setting = json.loads(f.read())
-
-    if isLin:
-        setting = js_setting['linux']
-    elif isMac:
-        setting = js_setting['mac']
-    elif isWin:
-        setting = js_setting['windows']
-
-    return {
-        "workspace": os.path.join(*setting['workspace']),
-        "title": js_setting['title'],
-        "sfxdir": os.path.join(cwd, "templates", "sfx"),
-        "worddir": os.path.join(cwd, "templates", "wordlist"),
-        "bgmdir": os.path.join(cwd, "templates", "song"),
-    }
-
-
 class JoytanMW(QMainWindow):
-    def __init__(self, app, args):
+    def __init__(self, app, config, args):
         QMainWindow.__init__(self)
         gui.mw = self
         self.app = app
-        self.setting = default_setting()
+        self.config = config
         self._ui()
         self.mode = "View"
         self.center()
@@ -90,8 +67,8 @@ class JoytanMW(QMainWindow):
         import gui.progress
         self.progress = gui.progress.ProgressManager(self)
 
-    def basepath(self):
-        return os.path.join(self.setting['workspace'], self.setting['title'])
+    def projectbase(self):
+        return os.path.join(self.config['workspace'], self.config['title'])
 
     def _on_preferences(self):
         gui.dialogs.open("Preferences", self)

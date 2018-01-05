@@ -10,7 +10,7 @@ def on_save(mw):
     # Save contents of entrylist as a file, temporally whose extension is original '.jel'.
     filter = "Joytan EntryList format (*.jel)"
     try:
-        newfile = getFileToSave(mw, "Save Wordlist", dir=mw.setting['workspace'], filter=filter)
+        newfile = getFileToSave(mw, "Save Wordlist", dir=mw.config['workspace'], filter=filter)
     except:
         return
 

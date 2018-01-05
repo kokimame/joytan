@@ -93,7 +93,7 @@ class ExtractDialog(QDialog):
         filter = ";;".join([x[0] for x in extractor.Extractors])
         try:
             file = getFile(self.mw, "Extract Words from File",
-                             dir=self.mw.setting['worddir'], filter=filter)
+                             dir=self.mw.config['worddir'], filter=filter)
             self.path = file
             self.form.nameLbl.setText(path2filename(file))
         except:

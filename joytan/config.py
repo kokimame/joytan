@@ -82,7 +82,7 @@ class Config(object):
         logger, and optional event list, loads the configuration state.
 
         The database specification should be a bundle, with:
-
+            - base: base directory of 'config.db'. full path to db depends on platforms.
             - table: table name
             - normalize: sanitization function for normalizing columns
 
@@ -104,8 +104,7 @@ class Config(object):
             - 1th: callable when this value is loaded or updated
         """
 
-        self._db = db
-        self._set_base_folder()
+        self._db = self._setup_base(db)
 
         self._cols = {
             self._db.normalize(col[0]): col
@@ -121,25 +120,26 @@ class Config(object):
         self._cache = {}
         self._load()
 
-    def _set_base_folder(self):
+    def _setup_base(self, db):
         # If base is specified from CLI startup
-        if self._db.base:
-            self._db.base = os.path.abspath(self._db.base)
+        if db.base:
+            db.base = os.path.abspath(self._db.base)
         elif os.environ.get("JOYTAN_BASE"):
-            self._db.base = os.path.abspath(os.environ("JOYTAN_BASE"))
+            db.base = os.path.abspath(os.environ("JOYTAN_BASE"))
         else:
             from gui.utils import defaultBase
-            self._db.base = defaultBase()
-        self._ensure_base_exists()
+            db.base = defaultBase()
+        self._ensure_base_exists(db.base)
+        return db
 
-    def _ensure_base_exists(self):
+    def _ensure_base_exists(self, base):
         try:
-            self._ensure_exists(self._db.base)
+            self._ensure_exists(base)
         except:
             from gui.utils import showCritical
             showCritical("""\
 Joytan could not create the folder %s. Please ensure that location is not \
-read-only and you have permission to write to it.""" % self._db.base, title="Error")
+read-only and you have permission to write to it.""" % base, title="Error")
 
     def _ensure_exists(self, path):
         if not os.path.exists(path):

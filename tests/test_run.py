@@ -78,25 +78,25 @@ def test_open():
     print("Done test_open")
 
 
-def test_audiodialog():
-    print("Now on test_audiodialog")
-
-    # Sample Joytan EntryList file to open
-    test_jel = 'tests/assets/en_en.jel'
-    assert os.path.exists(test_jel), 'Test file %s not found' % test_jel
-
-    with joytan_running() as mw:
-        from gui.open import on_open
-        on_open(mw, file=test_jel)
-
-        from gui import audiodialog
-        ad = audiodialog.AudioDialog(mw)
-
-        destdir = os.path.join(mw.projectbase(), "audio")
-        if os.path.isdir(destdir):
-            run_with_message(shutil.rmtree, destdir, before_msg='delete destdir')
-
-        run_with_message(ad._on_create, before_msg='create audiobook', after_msg='audiobook created')
-        ad.thread.wait()
-
-    print("Done test_audiodialog")
+# def test_audiodialog():
+#     print("Now on test_audiodialog")
+#
+#     # Sample Joytan EntryList file to open
+#     test_jel = 'tests/assets/en_en.jel'
+#     assert os.path.exists(test_jel), 'Test file %s not found' % test_jel
+#
+#     with joytan_running() as mw:
+#         from gui.open import on_open
+#         on_open(mw, file=test_jel)
+#
+#         from gui import audiodialog
+#         ad = audiodialog.AudioDialog(mw)
+#
+#         destdir = os.path.join(mw.projectbase(), "audio")
+#         if os.path.isdir(destdir):
+#             run_with_message(shutil.rmtree, destdir, before_msg='delete destdir')
+#
+#         run_with_message(ad._on_create, before_msg='create audiobook', after_msg='audiobook created')
+#         ad.thread.wait()
+#
+#     print("Done test_audiodialog")

@@ -15,6 +15,16 @@ from joytan.bundle import Bundle
 from joytan.config import Config
 from joytan import conversion as to
 
+
+
+print("os.getcwd() = ",os.getcwd())
+print("__file__ = ", __file__)
+print("__path__ = ", __path__)
+print("os.path.abspath(__file__) = ", os.path.abspath(__file__))
+print("os.curdir = ", os.curdir)
+print("os.path.abspath(os.curdir) = ", os.path.abspath(os.curdir))
+
+
 # TODO: Deploy with confident. Very obscure right now
 if sys.version_info[0] < 3:
     raise Exception("Joytan requires Python 3.x")

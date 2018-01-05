@@ -580,11 +580,16 @@ class AwesomeTTS(QWidget):
         """Sets preset dropdown back and disables delete button."""
         self._update_overview()
 
-        if next((True
-                 for frame in inspect.stack()
-                 if frame[3] == '_on_preset_activated'),
-                False):
-            return  # ignore value change events triggered by preset loads
+        # FIXME: The usage of inspect module on bundled version makes the app freeze.
+        # So we don't use the original if-statement below.
+        # It seemes there's no big difference even if we catch the value change events,
+        # but we may recover the original behavior by passing the flag of value change
+        # --------------
+        # if next((True
+        #          for frame in inspect.stack()
+        #          if frame[3] == '_on_preset_activated'),
+        #         False):
+        #     return  # ignore value change events triggered by preset loads
 
         self.findChild(QPushButton, 'presets_delete').setDisabled(True)
         self.findChild(QComboBox, 'presets_dropdown').setCurrentIndex(0)

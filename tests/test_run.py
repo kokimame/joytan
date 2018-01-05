@@ -5,7 +5,18 @@ import json
 from gui.widgets.entrylist import EntryList
 from .gui_testing import joytan_running
 
+
+def run_with_message(callback, *args, before_msg=None, after_msg=None, **kargs):
+    if before_msg:
+        print(before_msg)
+    callback(*args, **kargs)
+    if after_msg:
+        print(after_msg)
+
+
 def test_entrylist():
+    print("Now on test_entrylist")
+
     with joytan_running() as mw:
         # Initially entrylist shows one helper list item telling basic usages
         assert super(EntryList, mw.entrylist).count() == 1
@@ -38,8 +49,12 @@ def test_entrylist():
         mw.entrylist.remove_all()
         assert mw.entrylist.count() == 0
 
+    print("Done test_entrylist")
+
 
 def test_open():
+    print("Now on test_open")
+
     # Sample Joytan EntryList file to open
     test_jel = 'tests/assets/en_en.jel'
     assert os.path.exists(test_jel), 'Test file %s not found' % test_jel
@@ -60,8 +75,12 @@ def test_open():
         n_keys = 1 + lv1 * (lv2 + 1)
         assert n_keys == len(mw.entrylist.get_config('ewkeys'))
 
+    print("Done test_open")
+
 
 def test_audiodialog():
+    print("Now on test_audiodialog")
+
     # Sample Joytan EntryList file to open
     test_jel = 'tests/assets/en_en.jel'
     assert os.path.exists(test_jel), 'Test file %s not found' % test_jel
@@ -75,7 +94,9 @@ def test_audiodialog():
 
         destdir = os.path.join(mw.projectbase(), "audio")
         if os.path.isdir(destdir):
-            shutil.rmtree(destdir)
+            run_with_message(shutil.rmtree, destdir, before_msg='delete destdir')
 
-        ad._on_create()
+        run_with_message(ad._on_create, before_msg='create audiobook', after_msg='audiobook created')
         ad.thread.wait()
+
+    print("Done test_audiodialog")

@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'design/translate.ui'
 #
-# Created by: PyQt5 UI code generator 5.9
+# Created by: PyQt5 UI code generator 5.9.2
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -46,6 +46,11 @@ class Ui_TranslateDialog(object):
         self.label_3.setObjectName("label_3")
         self.horizontalLayout_3.addWidget(self.label_3)
         self.pgMsg = QtWidgets.QLabel(TranslateDialog)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.MinimumExpanding, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.pgMsg.sizePolicy().hasHeightForWidth())
+        self.pgMsg.setSizePolicy(sizePolicy)
         self.pgMsg.setText("")
         self.pgMsg.setObjectName("pgMsg")
         self.horizontalLayout_3.addWidget(self.pgMsg)
@@ -58,10 +63,13 @@ class Ui_TranslateDialog(object):
         self.horizontalLayout_4.setObjectName("horizontalLayout_4")
         spacerItem1 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout_4.addItem(spacerItem1)
-        self.startButton = QtWidgets.QPushButton(TranslateDialog)
-        self.startButton.setDefault(True)
-        self.startButton.setObjectName("startButton")
-        self.horizontalLayout_4.addWidget(self.startButton)
+        self.cancelBtn = QtWidgets.QPushButton(TranslateDialog)
+        self.cancelBtn.setObjectName("cancelBtn")
+        self.horizontalLayout_4.addWidget(self.cancelBtn)
+        self.startBtn = QtWidgets.QPushButton(TranslateDialog)
+        self.startBtn.setDefault(True)
+        self.startBtn.setObjectName("startBtn")
+        self.horizontalLayout_4.addWidget(self.startBtn)
         spacerItem2 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout_4.addItem(spacerItem2)
         self.verticalLayout_2.addLayout(self.horizontalLayout_4)
@@ -76,5 +84,6 @@ class Ui_TranslateDialog(object):
         self.label_2.setText(_translate("TranslateDialog", "Translate text of"))
         self.label_4.setText(_translate("TranslateDialog", "Translate to"))
         self.label_3.setText(_translate("TranslateDialog", "Progress:"))
-        self.startButton.setText(_translate("TranslateDialog", "Translate"))
+        self.cancelBtn.setText(_translate("TranslateDialog", "Stop"))
+        self.startBtn.setText(_translate("TranslateDialog", "Translate"))
 

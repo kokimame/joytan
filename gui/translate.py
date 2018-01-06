@@ -13,23 +13,16 @@ def on_translate(mw):
 class TranslateThread(QThread):
 
     prog = pyqtSignal(str)
-    transed = pyqtSignal(int, dict)
+    step = pyqtSignal(int, dict)
 
-    def __init__(self, mw, group, destcode, is_only):
+    def __init__(self, targets, group, destcode):
         QThread.__init__(self)
-        self.mw = mw
+        self.targets = targets
         self.group = group
         # Destination language to translate into
         self.translate = lambda text: Translator().translate(text, dest=destcode).text
 
-        if is_only:
-            self.targets = self.mw.entrylist.get_entry_selected()
-        else:
-            self.targets = self.mw.entrylist.get_entry_all()
-
     def run(self):
-        assert self.targets
-
         for ew in self.targets:
             items = {}
             self.prog.emit(ew.editors['atop'].text())
@@ -48,12 +41,13 @@ class TranslateThread(QThread):
                     if ewkey in self.group and examp != '':
                         items['ex-%d-%d' % (i, j)] = self.translate(examp)
 
-            self.transed.emit(ew.row, items)
+            self.step.emit(ew.row, items)
 
         self.quit()
 
 
 class TranslateDialog(QDialog):
+
     def __init__(self, mw):
         QDialog.__init__(self, mw, Qt.Window)
         self.mw = mw
@@ -66,7 +60,8 @@ class TranslateDialog(QDialog):
         # Setup combo box for languages
         self.form.langCombo.addItems(sorted([lang.title() for lang in LANGCODES.keys()]))
         self.form.langCombo.setCurrentText("Japanese")
-        self.form.startButton.clicked.connect(self._translate)
+        self.form.cancelBtn.clicked.connect(self._thread_stop)
+        self.form.startBtn.clicked.connect(self._translate)
 
         _list = self.form.keyList
         # Add checkbox corresponding to each ewkey of Entry
@@ -84,34 +79,45 @@ class TranslateDialog(QDialog):
             showCritical("No entries found in your entry list.", title="Error")
             return
 
-        form = self.form
         ewkeys = []
         # Get language code of target language to translate to from the library
-        destcode = LANGCODES[form.langCombo.currentText().lower()]
+        destcode = LANGCODES[self.form.langCombo.currentText().lower()]
         # Check which section to translate
-        _list = form.keyList
+        _list = self.form.keyList
         for i in range(_list.count()):
             ch = _list.itemWidget(_list.item(i))
             if ch.isChecked():
                 ewkeys.append(ch.text())
 
+        if self.form.onlyCheck.isChecked():
+            targets = self.mw.entrylist.get_entry_selected()
+        else:
+            targets = self.mw.entrylist.get_entry_all()
+        self.form.progressBar.setRange(0, len(targets))
 
         def _on_progress(name):
             self.form.pgMsg.setText("Translating %s." % name)
             val = self.form.progressBar.value()
             self.form.progressBar.setValue(val+1)
 
-        # This causes a warning from PyQt about seting a parent on other thread.
-        is_only = self.form.onlyCheck.isChecked()
-        self.tt = TranslateThread(self.mw, ewkeys, destcode, is_only)
-        self.form.progressBar.setRange(0, len(self.tt.targets))
+        self.tt = TranslateThread(targets, ewkeys, destcode)
         self.tt.prog.connect(_on_progress)
-        self.tt.transed.connect(self.mw.entrylist.update_entry)
-        self.tt.start()
-        self.tt.finished.connect(lambda: self.reject(update=True))
+        self.tt.step.connect(self.mw.entrylist.update_entry)
+        self._thread_start()
+        self.tt.finished.connect(self.reject)
 
-    def reject(self, update=False):
-        if update:
-            self.mw.entrylist.update_all()
+    def _thread_start(self):
+        self.form.startBtn.setDisabled(True)
+        self.tt.start()
+        self.form.cancelBtn.setEnabled(True)
+
+    def _thread_stop(self):
+        if self.tt:
+            self.tt.terminate()
+            self.form.startBtn.setEnabled(True)
+            self.form.cancelBtn.setDisabled(True)
+
+    def reject(self):
+        self.mw.entrylist.update_all()
         self.done(0)
         gui.dialogs.close("TranslateDialog")

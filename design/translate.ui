@@ -77,6 +77,12 @@
      </item>
      <item>
       <widget class="QLabel" name="pgMsg">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="text">
         <string/>
        </property>
@@ -107,7 +113,14 @@
       </spacer>
      </item>
      <item>
-      <widget class="QPushButton" name="startButton">
+      <widget class="QPushButton" name="cancelBtn">
+       <property name="text">
+        <string>Stop</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="startBtn">
        <property name="text">
         <string>Translate</string>
        </property>

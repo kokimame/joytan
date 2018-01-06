@@ -128,9 +128,11 @@ class EntryList(QListWidget):
         else:
             return super().count()
 
-    def _new_entry(self, index, name, mode, setting):
+    def _new_entry(self, index, name, mode):
         from gui.widgets.entry import EntryWidget
-        eui, ew = QListWidgetItem(), EntryWidget(self, index, name, mode, setting)
+
+        levels = (self.config.lv1, self.config.lv2)
+        eui, ew = QListWidgetItem(), EntryWidget(self, index, name, mode, levels)
         ew.move.connect(self._move_entry)
         ew.delete.connect(self._remove_at)
         eui.setSizeHint(ew.sizeHint())
@@ -146,7 +148,7 @@ class EntryList(QListWidget):
             print("Entry with atop %s already exists." % name)
             return
 
-        eui, ew = self._new_entry(self.count(), name, mode, self.config.data())
+        eui, ew = self._new_entry(self.count(), name, mode)
 
         self.addItem(eui)
         self.setItemWidget(eui, ew)

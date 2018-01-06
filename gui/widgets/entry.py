@@ -57,7 +57,7 @@ class EntryWidget(QWidget):
     move = pyqtSignal(int, int)
     delete = pyqtSignal(int)
 
-    def __init__(self, parent, row, atop, mode, eset):
+    def __init__(self, parent, row, atop, mode, levels):
         super(EntryWidget, self).__init__(parent)
         # the EntryList this entry belongs to
         self.parent = parent
@@ -65,10 +65,8 @@ class EntryWidget(QWidget):
         self.row = row
         self.mode = mode
         # Entry setting
-        self.lv1 = eset['lv1']
-        self.lv2 = eset['lv2']
-        # External sources where the items of an entry came
-        self.sources = []
+        self.lv1 = levels[0]
+        self.lv2 = levels[1]
 
         # Dictionary of QLineEdit.
         # Text stored in the editors will be the actual learning materials.

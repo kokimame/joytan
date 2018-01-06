@@ -22,6 +22,9 @@ Service classes for AwesomeTTS
 
 from .common import Trait
 
+# Original on Joytan
+from .amazon import Amazon
+# From AwesomeTTS
 from .abair import Abair
 from .baidu import Baidu
 from .collins import Collins
@@ -53,7 +56,10 @@ __all__ = [
     # common
     'Trait',
 
-    # services
+    # services (Original on Joytan)
+    'Amazon',
+
+    # services (From AwesomeTTS)
     'Abair',
     'Baidu',
     'Collins',

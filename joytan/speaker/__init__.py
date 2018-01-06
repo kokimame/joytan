@@ -67,6 +67,9 @@ AGENT = 'AwesomeTTS/%s (%s; PyQt %s; %s)' % (VERSION, 'Joytan',
 router = Router(
     services=Bundle(
         mappings=[
+            # ~ Original on Joytan ~
+            ('amazon', service.Amazon),
+            # ~ From AwesomeTTS ~
             #('abair', service.Abair),
             #('baidu', service.Baidu),
             #('collins', service.Collins),
@@ -75,7 +78,7 @@ router = Router(
             ('espeak', service.ESpeak),
             #('festival', service.Festival),
             #('fluencynl', service.FluencyNl),
-            #('google', service.Google),
+            ('google', service.Google),
             #('howjsay', service.Howjsay),
             #('imtranslator', service.ImTranslator),
             #('ispeech', service.ISpeech),
@@ -98,7 +101,8 @@ router = Router(
             ttsapicom="TTS-API.com has gone offline and can no longer be "
                       "used. Please switch to another service with English.",
         ),
-        aliases=[('b', 'baidu'), ('g', 'google'), ('macosx', 'say'),
+        aliases=[('aws', 'amazon'), ('polly', 'amazon'),
+                 ('b', 'baidu'), ('g', 'google'), ('macosx', 'say'),
                  ('microsoft', 'sapi5js'), ('microsoftjs', 'sapi5js'),
                  ('microsoftjscript', 'sapi5js'), ('oed', 'oxford'),
                  ('osx', 'say'), ('sapi', 'sapi5js'), ('sapi5', 'sapi5js'),

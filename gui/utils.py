@@ -31,24 +31,17 @@ def defaultBase():
 # Learned from anki/aqt/profile ... _oldFolderLocation
 def defaultWorkspace():
     if isMac:
-        return os.path.expanduser("~/Documents/Joytan")
+        return os.path.expanduser("~/Joytan")
     elif isWin:
-        loc = QStandardPaths.writableLocation(QStandardPaths.DocumentsLocation)
+        loc = QStandardPaths.writableLocation(QStandardPaths.HomeLocation)
         return os.path.join(loc, "Joytan")
     else:
         p = os.path.expanduser("~/Joytan")
         if os.path.exists(p):
             return p
         else:
-            loc = QStandardPaths.writableLocation(QStandardPaths.DocumentsLocation)
-            if loc[:-1] == QStandardPaths.writableLocation(
-                    QStandardPaths.HomeLocation):
-                # occasionally "documentsLocation" will return the home
-                # folder because the Documents folder isn't configured
-                # properly; fall back to an English path
-                return os.path.expanduser("~/Documents/Joytan")
-            else:
-                return os.path.join(loc, "Joytan")
+            loc = QStandardPaths.writableLocation(QStandardPaths.HomeLocation)
+            return os.path.join(loc, "Joytan")
 
 def defaultMusic():
     loc = QStandardPaths.writableLocation(QStandardPaths.MusicLocation)

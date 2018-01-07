@@ -27,11 +27,6 @@ class FlowItem(QWidget):
         self.setLayout(self._ui())
 
     def _ui(self):
-        del_btn = QPushButton()
-        del_btn.setIcon(QIcon("design/icons/delete_button.png"))
-        del_btn.clicked.connect(lambda: self.delete.emit())
-        del_btn.setFixedWidth(20)
-        del_btn.setFixedHeight(20)
         title = QLabel()
         title.setMinimumHeight(30)
         volume = QSlider(Qt.Horizontal)
@@ -42,10 +37,22 @@ class FlowItem(QWidget):
 
         hbox = QHBoxLayout()
         hbox.setContentsMargins(0, 0, 0, 0)
-        hbox.addWidget(del_btn)
         hbox.addWidget(title)
         hbox.addWidget(volume)
         return hbox
+
+    def mousePressEvent(self, event):
+        if event.button() == Qt.RightButton:
+            self._click_menu()
+        elif event.button() == Qt.LeftButton:
+            super().mousePressEvent(event)
+
+    def _click_menu(self):
+        m = QMenu()
+        a = m.addAction("Delete")
+        a.triggered.connect(lambda: self.delete.emit())
+
+        m.exec_(QCursor.pos())
 
 
 class Rest(FlowItem):
@@ -55,8 +62,8 @@ class Rest(FlowItem):
 
     def _ui(self):
         layout = super(Rest, self)._ui()
-        title = layout.itemAt(1).widget()
-        volume = layout.itemAt(2).widget()
+        title = layout.itemAt(0).widget()
+        volume = layout.itemAt(1).widget()
 
         title.setText("Silence")
         volume.setDisabled(True)
@@ -83,8 +90,8 @@ class Mp3Object(FlowItem):
 
     def _ui(self):
         layout = super(Mp3Object, self)._ui()
-        title = layout.itemAt(1).widget()
-        volume = layout.itemAt(2).widget()
+        title = layout.itemAt(0).widget()
+        volume = layout.itemAt(1).widget()
 
         title.setText(path2filename(self.mp3path))
         title.setStyleSheet("background-color : rgb(90,255,130)")
@@ -115,8 +122,8 @@ class EwkeyObject(FlowItem):
 
     def _ui(self):
         layout = super(EwkeyObject, self)._ui()
-        title = layout.itemAt(1).widget()
-        volume = layout.itemAt(2).widget()
+        title = layout.itemAt(0).widget()
+        volume = layout.itemAt(1).widget()
 
         title.setText(self.ewkey)
         ks = self.ewkey.split('-')

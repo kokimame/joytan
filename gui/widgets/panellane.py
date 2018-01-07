@@ -20,7 +20,10 @@ class Panel(QPushButton):
         self.state = None
         self.count = count
         self.state_manager(state)
-        self.clicked.connect(self._click_menu)
+
+    def mousePressEvent(self, event):
+        if event.button() == Qt.RightButton:
+            self._click_menu()
 
     def _click_menu(self):
         m = QMenu()

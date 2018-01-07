@@ -29,21 +29,34 @@ class FlowItem(QWidget):
     def _ui(self):
         title = QLabel()
         title.setMinimumHeight(30)
+        postrest = QDoubleSpinBox()
+        postrest.setSuffix(" sec (post-)rest")
+        postrest.setValue(0.5)
+        postrest.setSingleStep(0.5)
+        postrest.setObjectName("postrest")
         volume = QSlider(Qt.Horizontal)
-        volume.setFixedWidth(90)
+        volume.setFixedWidth(100)
         volume.setRange(0, 100)
         volume.setValue(100)
+        x_label = QLabel("x")
+        x_label.setFixedWidth(10)
         repeat = QSpinBox()
         repeat.setValue(1)
         repeat.setRange(1, 99)
         repeat.setFixedWidth(40)
         repeat.setObjectName("repeat")
+        rep_label = QLabel("repeat")
+        rep_label.setFixedWidth(50)
 
         hbox = QHBoxLayout()
         hbox.setContentsMargins(0, 0, 0, 0)
+        hbox.setSpacing(1)
         hbox.addWidget(title)
+        hbox.addWidget(postrest)
         hbox.addWidget(volume)
+        hbox.addWidget(x_label)
         hbox.addWidget(repeat)
+        hbox.addWidget(rep_label)
         return hbox
 
     def mousePressEvent(self, event):
@@ -62,6 +75,9 @@ class FlowItem(QWidget):
     def get_repeat(self):
         return self.findChild(QSpinBox, "repeat").value()
 
+    def get_postrest(self):
+        return self.findChild(QDoubleSpinBox, "postrest").value()
+
     def data(self):
         raise NotImplementedError
 
@@ -75,19 +91,16 @@ class Rest(FlowItem):
     def _ui(self):
         layout = super(Rest, self)._ui()
         title = layout.itemAt(0).widget()
-        volume = layout.itemAt(1).widget()
-        repeat = layout.itemAt(2).widget()
+        postrest = layout.itemAt(1).widget()
+        volume = layout.itemAt(2).widget()
+        repeat = layout.itemAt(4).widget()
 
         title.setText("Rest")
+        postrest.setSuffix(" sec")
+        postrest.setValue(1.0)
         volume.setDisabled(True)
         repeat.setDisabled(True)
-        duration = QDoubleSpinBox()
-        duration.setObjectName("duration")
-        duration.setSuffix(" sec")
-        duration.setValue(1.0)
-        duration.setSingleStep(0.5)
 
-        layout.addWidget(duration)
         return layout
 
     def _get_duration(self):
@@ -97,7 +110,7 @@ class Rest(FlowItem):
     def data(self):
         return dict(
             desc="REST",
-            duration=self._get_duration()
+            postrest=self.get_postrest(),
         )
 
 
@@ -112,7 +125,7 @@ class Mp3Object(FlowItem):
     def _ui(self):
         layout = super(Mp3Object, self)._ui()
         title = layout.itemAt(0).widget()
-        volume = layout.itemAt(1).widget()
+        volume = layout.itemAt(2).widget()
 
         title.setText(path2filename(self.mp3path))
         title.setStyleSheet("background-color : rgb(255,130,90)")
@@ -139,6 +152,7 @@ class Mp3Object(FlowItem):
             path=self.mp3path,
             volume=self.mp.volume(),
             repeat=self.get_repeat(),
+            postrest=self.get_postrest(),
         )
 
 
@@ -152,7 +166,7 @@ class EwkeyObject(FlowItem):
     def _ui(self):
         layout = super(EwkeyObject, self)._ui()
         title = layout.itemAt(0).widget()
-        volume = layout.itemAt(1).widget()
+        volume = layout.itemAt(2).widget()
 
         title.setText(self.ewkey)
         ks = self.ewkey.split('-')
@@ -169,7 +183,8 @@ class EwkeyObject(FlowItem):
     def data(self):
         return dict(
             desc=self.ewkey,
-            repeat=self.get_repeat()
+            repeat=self.get_repeat(),
+            postrest=self.get_postrest(),
         )
 
 
@@ -181,7 +196,7 @@ class Index(FlowItem):
     def _ui(self):
         layout = super(Index, self)._ui()
         title = layout.itemAt(0).widget()
-        volume = layout.itemAt(1).widget()
+        volume = layout.itemAt(2).widget()
 
         title.setText('Index')
         title.setStyleSheet("background-color : rgb(130,255,90)")
@@ -191,4 +206,5 @@ class Index(FlowItem):
         return dict(
             desc="INDEX",
             repeat=self.get_repeat(),
+            postrest=self.get_postrest(),
         )

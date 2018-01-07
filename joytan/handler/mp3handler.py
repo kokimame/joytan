@@ -35,27 +35,33 @@ class Mp3Handler:
         return routers
 
     def setup_audio(self):
-        # Setup SFX and BGM by converting them in AudioSegement and adjusting volume.
+        # Setup SFX and BGM by converting them in AudioSegment and adjusting volume.
         for fi in self.setting['flow']:
             if fi['desc'] == "MP3":
                 sfx = Aseg.from_mp3(fi['path'])
                 volume = self._volume(sfx.dBFS, (1 - fi['volume']/100))
-                self.flowlist.append(sfx - volume)
-            elif fi['desc'] == "REST":
-                silence = Aseg.silent(int(fi['duration'] * 1000))
-                self.flowlist.append(silence)
-            else:
-                # Write a signal of ewkey object to be dictated on onepass process
-                self.flowlist.append(fi['desc'])
+                for _ in range(fi['repeat']):
+                    self.flowlist.append((sfx - volume))
+                    if fi['postrest'] > 0:
+                        self.flowlist.append(Aseg.silent(int(fi['postrest'] * 1000)))
 
+            elif fi['desc'] == "REST" and fi['postrest'] > 0:
+                self.flowlist.append(Aseg.silent(int(fi['postrest'] * 1000)))
+            else:
+                # Audio segments for index and ewkeys are generated dynamically on onepass
+                self.flowlist.append(fi)
+
+        # FIXME: Creating BGM loop should be done after finding the acapella audio duration
         for fi in self.setting['loop']:
             if fi['desc'] == "MP3":
                 bgm = Aseg.from_mp3(fi['path'])
                 volume = self._volume(bgm.dBFS, (1 - fi['volume']/100))
-                self.bgmloop.append(bgm - volume)
-            elif fi['desc'] == "REST":
-                silence = Aseg.silent(int(fi['duration'] * 1000))
-                self.bgmloop.append(silence)
+                for _ in range(fi['repeat']):
+                    self.bgmloop.append((bgm - volume))
+                    if fi['postrest'] > 0:
+                        self.bgmloop.append(Aseg.silent(int(fi['postrest'] * 1000)))
+            elif fi['desc'] == "REST" and fi['postrest'] > 0:
+                self.bgmloop.append(Aseg.silent(int(fi['postrest'] * 1000)))
 
     def _volume(self, dbfs, percent):
         # Takes dbfs (db relative to full scale, 0 as upper bounds) of the mp3file for volume reducing
@@ -81,19 +87,25 @@ class Mp3Handler:
                 asegments.append((fi, ''))
                 continue
 
-            assert isinstance(fi, str)
-            if fi == 'INDEX':
+            if fi['desc'] == 'INDEX':
                 index = "%d " % (ew.row + 1)
                 idx_file = os.path.join(curdir, "index") + ".mp3"
                 self.routers['atop'](path=idx_file, text=index)
-                asegments.append((Aseg.from_mp3(idx_file), index))
+                for _ in range(fi['repeat']):
+                    asegments.append((Aseg.from_mp3(idx_file), index))
+                    if fi['postrest'] > 0:
+                        asegments.append((Aseg.silent(int(fi['postrest'] * 1000)), ''))
+
             else:
-                ewkey = fi
+                ewkey = fi['desc']
                 path = os.path.join(curdir, ewkey) + ".mp3"
                 text = ew.editors[ewkey].text()
                 if text != '':
                     self.routers[ewkey](path=path, text=text)
-                    asegments.append((Aseg.from_mp3(path), text))
+                    for _ in range(fi['repeat']):
+                        asegments.append((Aseg.from_mp3(path), text))
+                        if fi['postrest'] > 0:
+                            asegments.append((Aseg.silent(int(fi['postrest'] * 1000)), ''))
 
         acapella = sum(set[0] for set in asegments)
         if self.setting['lrc']:

@@ -70,6 +70,7 @@ class Rest(FlowItem):
         duration = QDoubleSpinBox()
         duration.setObjectName("duration")
         duration.setSuffix(" sec")
+        duration.setValue(1.0)
         duration.setSingleStep(0.5)
 
         layout.addWidget(duration)
@@ -94,7 +95,7 @@ class Mp3Object(FlowItem):
         volume = layout.itemAt(1).widget()
 
         title.setText(path2filename(self.mp3path))
-        title.setStyleSheet("background-color : rgb(90,255,130)")
+        title.setStyleSheet("background-color : rgb(255,130,90)")
         volume.valueChanged.connect(self.mp.setVolume)
         play_btn = QPushButton("Play")
         play_btn.clicked.connect(lambda: self.mp.play_content(self.content))
@@ -135,4 +136,19 @@ class EwkeyObject(FlowItem):
             title.setStyleSheet(Editor.COLOR['ex'])
         else:
             raise Exception("Wrong ewkey")
+        return layout
+
+
+class Index(FlowItem):
+
+    def __init__(self):
+        super(Index, self).__init__()
+
+    def _ui(self):
+        layout = super(Index, self)._ui()
+        title = layout.itemAt(0).widget()
+        volume = layout.itemAt(1).widget()
+
+        title.setText('Index')
+        title.setStyleSheet("background-color : rgb(130,255,90)")
         return layout

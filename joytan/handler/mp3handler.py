@@ -76,25 +76,24 @@ class Mp3Handler:
         curdir = os.path.join(self.setting['dest'], ew.str_index())
         assert os.path.exists(curdir)
 
-        # If it needs to dictate the index of ew
-        if self.setting['idx']:
-            index = "%d " % (ew.row + 1)
-            idx_file = os.path.join(curdir, "index") + ".mp3"
-            self.routers['atop'](path=idx_file, text=index)
-            asegments.append((Aseg.from_mp3(idx_file), index))
-
         for fi in self.flowlist:
             if isinstance(fi, Aseg):
                 asegments.append((fi, ''))
                 continue
 
             assert isinstance(fi, str)
-            ewkey = fi
-            path = os.path.join(curdir, ewkey) + ".mp3"
-            text = ew.editors[ewkey].text()
-            if text != '':
-                self.routers[ewkey](path=path, text=text)
-                asegments.append((Aseg.from_mp3(path), text))
+            if fi == 'INDEX':
+                index = "%d " % (ew.row + 1)
+                idx_file = os.path.join(curdir, "index") + ".mp3"
+                self.routers['atop'](path=idx_file, text=index)
+                asegments.append((Aseg.from_mp3(idx_file), index))
+            else:
+                ewkey = fi
+                path = os.path.join(curdir, ewkey) + ".mp3"
+                text = ew.editors[ewkey].text()
+                if text != '':
+                    self.routers[ewkey](path=path, text=text)
+                    asegments.append((Aseg.from_mp3(path), text))
 
         acapella = sum(set[0] for set in asegments)
         if self.setting['lrc']:

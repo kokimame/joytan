@@ -37,23 +37,23 @@ class Mp3Handler:
     def setup_audio(self):
         # Setup SFX and BGM by converting them in AudioSegement and adjusting volume.
         for fi in self.setting['flow']:
-            if fi['type'] == "MP3":
+            if fi['desc'] == "MP3":
                 sfx = Aseg.from_mp3(fi['path'])
                 volume = self._volume(sfx.dBFS, (1 - fi['volume']/100))
                 self.flowlist.append(sfx - volume)
-            elif fi['type'] == "REST":
+            elif fi['desc'] == "REST":
                 silence = Aseg.silent(int(fi['duration'] * 1000))
                 self.flowlist.append(silence)
             else:
                 # Write a signal of ewkey object to be dictated on onepass process
-                self.flowlist.append(fi['type'])
+                self.flowlist.append(fi['desc'])
 
         for fi in self.setting['loop']:
-            if fi['type'] == "MP3":
+            if fi['desc'] == "MP3":
                 bgm = Aseg.from_mp3(fi['path'])
                 volume = self._volume(bgm.dBFS, (1 - fi['volume']/100))
                 self.bgmloop.append(bgm - volume)
-            elif fi['type'] == "REST":
+            elif fi['desc'] == "REST":
                 silence = Aseg.silent(int(fi['duration'] * 1000))
                 self.bgmloop.append(silence)
 

@@ -114,7 +114,7 @@ class Ui_AudioDialog(object):
         self.createBtn = QtWidgets.QPushButton(AudioDialog)
         self.createBtn.setCheckable(False)
         self.createBtn.setAutoDefault(False)
-        self.createBtn.setDefault(True)
+        self.createBtn.setDefault(False)
         self.createBtn.setObjectName("createBtn")
         self.horizontalLayout_5.addWidget(self.createBtn)
         spacerItem6 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)

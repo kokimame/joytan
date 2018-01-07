@@ -30,15 +30,20 @@ class FlowItem(QWidget):
         title = QLabel()
         title.setMinimumHeight(30)
         volume = QSlider(Qt.Horizontal)
-        volume.setObjectName("volume")
         volume.setFixedWidth(90)
         volume.setRange(0, 100)
         volume.setValue(100)
+        repeat = QSpinBox()
+        repeat.setValue(1)
+        repeat.setRange(1, 99)
+        repeat.setFixedWidth(40)
+        repeat.setObjectName("repeat")
 
         hbox = QHBoxLayout()
         hbox.setContentsMargins(0, 0, 0, 0)
         hbox.addWidget(title)
         hbox.addWidget(volume)
+        hbox.addWidget(repeat)
         return hbox
 
     def mousePressEvent(self, event):
@@ -54,6 +59,13 @@ class FlowItem(QWidget):
 
         m.exec_(QCursor.pos())
 
+    def get_repeat(self):
+        return self.findChild(QSpinBox, "repeat").value()
+
+    def data(self):
+        raise NotImplementedError
+
+
 
 class Rest(FlowItem):
 
@@ -64,9 +76,11 @@ class Rest(FlowItem):
         layout = super(Rest, self)._ui()
         title = layout.itemAt(0).widget()
         volume = layout.itemAt(1).widget()
+        repeat = layout.itemAt(2).widget()
 
-        title.setText("Silence")
+        title.setText("Rest")
         volume.setDisabled(True)
+        repeat.setDisabled(True)
         duration = QDoubleSpinBox()
         duration.setObjectName("duration")
         duration.setSuffix(" sec")
@@ -76,9 +90,15 @@ class Rest(FlowItem):
         layout.addWidget(duration)
         return layout
 
-    def get_duration(self):
+    def _get_duration(self):
         duration = self.findChild(QDoubleSpinBox, "duration")
         return duration.value()
+
+    def data(self):
+        return dict(
+            desc="REST",
+            duration=self._get_duration()
+        )
 
 
 class Mp3Object(FlowItem):
@@ -113,6 +133,14 @@ class Mp3Object(FlowItem):
     def force_stop(self):
         self.mp.stop()
 
+    def data(self):
+        return dict(
+            desc="MP3",
+            path=self.mp3path,
+            volume=self.mp.volume(),
+            repeat=self.get_repeat(),
+        )
+
 
 # An object corresponds to ewkey in EntryWidget
 class EwkeyObject(FlowItem):
@@ -138,6 +166,12 @@ class EwkeyObject(FlowItem):
             raise Exception("Wrong ewkey")
         return layout
 
+    def data(self):
+        return dict(
+            desc=self.ewkey,
+            repeat=self.get_repeat()
+        )
+
 
 class Index(FlowItem):
 
@@ -152,3 +186,9 @@ class Index(FlowItem):
         title.setText('Index')
         title.setStyleSheet("background-color : rgb(130,255,90)")
         return layout
+
+    def data(self):
+        return dict(
+            desc="INDEX",
+            repeat=self.get_repeat(),
+        )

@@ -150,17 +150,8 @@ class AudioDialog(QDialog):
         for i in range(_list.count()):
             fi = _list.itemWidget(_list.item(i))
             assert isinstance(fi, FlowItem)
-            if isinstance(fi, Index):
-                flow.append({"type": "INDEX"})
-            elif isinstance(fi, Mp3Object):
-                flow.append({"type": "MP3",
-                                 "path": fi.mp3path,
-                                 "volume": fi.mp.volume()})
-            elif isinstance(fi, Rest):
-                flow.append({"type": "REST",
-                                 "duration": fi.get_duration()})
-            elif isinstance(fi, EwkeyObject):
-                flow.append({"type": fi.ewkey})
+            flow.append(fi.data())
+
         setting['flow'] = flow
 
         _list = self.form.bgmList
@@ -168,13 +159,8 @@ class AudioDialog(QDialog):
         for i in range(_list.count()):
             fi = _list.itemWidget(_list.item(i))
             assert isinstance(fi, FlowItem)
-            if isinstance(fi, Mp3Object):
-                loop.append({"type": "MP3",
-                                "path": fi.mp3path,
-                                "volume": fi.mp.volume()})
-            elif isinstance(fi, Rest):
-                loop.append({"type": "REST",
-                                "duration": fi.get_duration()})
+            loop.append(fi.data())
+
         setting['loop'] = loop
 
         finalpath = os.path.join(setting['dest'], setting['title'])

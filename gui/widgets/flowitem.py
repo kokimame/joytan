@@ -20,17 +20,16 @@ class MediaPlayer(QMediaPlayer):
 
 class FlowItem(QWidget):
 
-    delete = pyqtSignal(QListWidgetItem)
+    delete = pyqtSignal()
 
-    def __init__(self, lwi):
+    def __init__(self):
         super(FlowItem, self).__init__()
-        self.lwi = lwi
         self.setLayout(self._ui())
 
     def _ui(self):
         del_btn = QPushButton()
         del_btn.setIcon(QIcon("design/icons/delete_button.png"))
-        del_btn.clicked.connect(lambda: self.delete.emit(self.lwi))
+        del_btn.clicked.connect(lambda: self.delete.emit())
         del_btn.setFixedWidth(20)
         del_btn.setFixedHeight(20)
         title = QLabel()
@@ -49,13 +48,13 @@ class FlowItem(QWidget):
         return hbox
 
 
-class Silence(FlowItem):
+class Rest(FlowItem):
 
-    def __init__(self, lwi):
-        super(Silence, self).__init__(lwi)
+    def __init__(self):
+        super(Rest, self).__init__()
 
     def _ui(self):
-        layout = super(Silence, self)._ui()
+        layout = super(Rest, self)._ui()
         title = layout.itemAt(1).widget()
         volume = layout.itemAt(2).widget()
 
@@ -76,11 +75,11 @@ class Silence(FlowItem):
 
 class Mp3Object(FlowItem):
 
-    def __init__(self, lwi, mp3path):
+    def __init__(self, mp3path):
         self.mp3path = mp3path
         self.content = QMediaContent(QUrl.fromLocalFile(mp3path))
         self.mp = MediaPlayer(self)
-        super(Mp3Object, self).__init__(lwi)
+        super(Mp3Object, self).__init__()
 
     def _ui(self):
         layout = super(Mp3Object, self)._ui()
@@ -110,9 +109,9 @@ class Mp3Object(FlowItem):
 # An object corresponds to ewkey in EntryWidget
 class EwkeyObject(FlowItem):
 
-    def __init__(self, lwi, ewkey):
+    def __init__(self, ewkey):
         self.ewkey = ewkey
-        super(EwkeyObject, self).__init__(lwi)
+        super(EwkeyObject, self).__init__()
 
     def _ui(self):
         layout = super(EwkeyObject, self)._ui()

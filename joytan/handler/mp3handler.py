@@ -41,7 +41,7 @@ class Mp3Handler:
                 sfx = Aseg.from_mp3(fi['path'])
                 volume = self._volume(sfx.dBFS, (1 - fi['volume']/100))
                 self.flowlist.append(sfx - volume)
-            elif fi['type'] == "SIL":
+            elif fi['type'] == "REST":
                 silence = Aseg.silent(int(fi['duration'] * 1000))
                 self.flowlist.append(silence)
             else:
@@ -53,7 +53,7 @@ class Mp3Handler:
                 bgm = Aseg.from_mp3(fi['path'])
                 volume = self._volume(bgm.dBFS, (1 - fi['volume']/100))
                 self.bgmloop.append(bgm - volume)
-            elif fi['type'] == "SIL":
+            elif fi['type'] == "REST":
                 silence = Aseg.silent(int(fi['duration'] * 1000))
                 self.bgmloop.append(silence)
 

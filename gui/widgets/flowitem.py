@@ -30,7 +30,7 @@ class FlowItem(QWidget):
         title = QLabel()
         title.setMinimumHeight(30)
         postrest = QDoubleSpinBox()
-        postrest.setSuffix(" sec (post-)rest")
+        postrest.setSuffix(" sec [post-rest]")
         postrest.setValue(0.5)
         postrest.setSingleStep(0.5)
         postrest.setObjectName("postrest")

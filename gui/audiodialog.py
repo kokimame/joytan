@@ -136,8 +136,8 @@ class AudioDialog(QDialog):
         for i in range(_list.count()):
             fi = _list.itemWidget(_list.item(i))
             if isinstance(fi, EwkeyObject) and fi.ewkey in undefs:
-                showCritical("Please set TTS voice to Entry section to be read")
-                gui.dialogs.open("Preferences", self.mw, tab="ATTS")
+                showCritical("Please choose Text-to-speech voice for each of Entry section to be read.")
+                gui.dialogs.open("Preferences", self.mw, back_to=self, tab="TTS")
                 return
         # Safe to pop out ewkeys to which TTS voice is undefined but unused in audiobook
         for key in undefs:
@@ -174,6 +174,7 @@ class AudioDialog(QDialog):
 
         class Mp3HandlerThread(QThread):
             prog = pyqtSignal(str)
+            fail = pyqtSignal(str)
 
             def __init__(self, mw, handler):
                 QThread.__init__(self)
@@ -187,7 +188,12 @@ class AudioDialog(QDialog):
                     ew = el.get_entry_at(i)
                     self.prog.emit("Creating audio file of %s." % ew.editors['atop'].text())
                     os.makedirs(os.path.join(destdir, ew.str_index()), exist_ok=True)
-                    self.handler.onepass(ew)
+                    try:
+                        self.handler.onepass(ew)
+                    except Exception as e:
+                        self.fail.emit("Error occurs while processing audio files. System stops "
+                                       "at exception '%s'" % e)
+                        self.terminate()
 
                 self.prog.emit("Mixing with BGM. This may take a few minutes.")
                 acapella = sum(self.handler.acapellas)
@@ -210,9 +216,13 @@ class AudioDialog(QDialog):
             self.form.pgMsg.setText(msg)
             val = self.form.progressBar.value()
             self.form.progressBar.setValue(val+1)
+
+        def _on_fail(msg):
+            showCritical(msg)
             
         self.thread = Mp3HandlerThread(self.mw, handler)
         self.thread.prog.connect(_on_progress)
+        self.thread.fail.connect(_on_fail)
         self.thread.start()
         self.form.createBtn.setEnabled(False)
         self.form.stopBtn.setEnabled(True)

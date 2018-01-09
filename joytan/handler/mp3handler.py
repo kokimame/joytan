@@ -23,10 +23,17 @@ class Mp3Handler:
         Say on Mac, espeak on Linux.
         """
         from joytan.speaker import router
+
+        def force_run(svc_id, options, path, text):
+            try:
+                router.force_run(svc_id, options, path, text)
+            except:
+                raise
+
         routers = {}
         for key in self.setting['ttsmap']:
             routers[key] = lambda path, text, svc_id=self.setting['ttsmap'][key][1],\
-                                  options=self.setting['ttsmap'][key][2]: router.force_run(
+                                  options=self.setting['ttsmap'][key][2]: force_run(
                                                svc_id=svc_id,
                                                options=options,
                                                path=path,

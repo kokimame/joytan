@@ -351,6 +351,7 @@ class Router(object):
             # Leaving the exception here causes the app to halt
             # when it looks for the failing audio file on creating audiobook
             print("ERROR: FORCE RUN FAILED with excetion", e)
+            raise e
 
 
     def __call__(self, svc_id, text, options, callbacks,

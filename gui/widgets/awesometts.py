@@ -78,6 +78,15 @@ class ServiceQuo(QLabel):
         pass
 
 
+from gui.utils import isMac, isLin
+if isLin:
+    _AVAIL_TTS = ['espeak']
+elif isMac:
+    _AVAIL_TTS = ['say']
+else:
+    _AVAIL_TTS = ['sapijs', 'sapicom']
+_AVAIL_TTS += 'amazon'
+
 
 class AwesomeTTS(QWidget):
     _FONT_HEADER = QFont()
@@ -219,10 +228,13 @@ class AwesomeTTS(QWidget):
         for i, ewkey in enumerate(self.el_conf[0]('ewkeys')):
             quo = ServiceQuo(ewkey)
             svc_values = self.el_conf[0](ewkey)
-            if svc_values:
+            if svc_values and svc_values[1] in _AVAIL_TTS:
                 quo.idx = svc_values[0]
                 # Pass svc_id & options
                 quo.set_desc(svc_values[1], svc_values[2])
+
+            # Reinitialize ttsmap if ewkey has unavailable TTS on the platform
+            self.el_conf[1](ewkey, None)
             lwi = QListWidgetItem()
             lwi.setSizeHint(quo.sizeHint())
             overview.addItem(lwi)
@@ -245,7 +257,7 @@ class AwesomeTTS(QWidget):
         """
         Called when users clicked other items in the Overview list,
         rebuild the service panel based on options the newly selected item stores,
-        or initialize it for undefined new item using previously selected one.
+        or initialize the same panel with previously selected one.
         """
         overview = self.findChild(QListWidget, 'overview')
         item = overview.currentItem()

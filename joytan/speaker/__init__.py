@@ -78,7 +78,7 @@ router = Router(
             ('espeak', service.ESpeak),
             #('festival', service.Festival),
             #('fluencynl', service.FluencyNl),
-            ('google', service.Google),
+            #('google', service.Google),
             #('howjsay', service.Howjsay),
             #('imtranslator', service.ImTranslator),
             #('ispeech', service.ISpeech),

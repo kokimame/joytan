@@ -75,19 +75,28 @@ class EntryList(QListWidget):
         self.setVerticalScrollMode(QAbstractItemView.ScrollPerPixel)
         self.setAcceptDrops(True)
         self.setDragDropMode(QAbstractItemView.InternalMove)
+        self.setDefaultDropAction(Qt.MoveAction)
         self.setDropIndicatorShown(True)
+        self.setAutoScroll(True)
         self.scrollToItem(self.currentItem())
         self.setStyleSheet("""
-                            QListWidget::item { border-bottom: 1px solid black; }
+                            QListWidget::item { border-bottom: 1px solid gray; 
+                                                border-top: 1px solid gray;}
                             QListWidget::item:selected { background: rgba(0,255,255,30); }
                            """)
+
         self.config = self._Configuration()
         self.config.shape.connect(lambda: self.update_all(reshape=True))
+
         self.initial_help = True
-        instruction = QLabel("\nDrag text (only available for English) \n"
-                       "or Use Tools/Extract...\n"
-                       "or push (+) button bellow\n")
-        instruction.setStyleSheet("QLabel { color : gray; }")
+        instruction = QLabel("\nHi! Thank you for using Joytan!\n\n"
+                             "To start learning...\n"
+                             "Drag text here (only available for English text for now) \n"
+                             "or from files, use Tools/Extract...\n"
+                             "or push (+) button bellow and type anything!\n\n"
+                             "Tips: You can drag around entries to reorder them.\n")
+
+        instruction.setStyleSheet("QLabel { color : green; }")
         lwi = QListWidgetItem()
         lwi.setSizeHint(instruction.sizeHint())
         self.addItem(lwi)
@@ -97,22 +106,24 @@ class EntryList(QListWidget):
         self.clearSelection()
 
     def dragEnterEvent(self, event):
+        # Dragging plain text (wishing it's written in English) -> accept
         if event.mimeData().hasFormat('text/plain'):
             event.accept()
-
-        if event.mimeData().hasFormat('application/x-qabstractitemmodeldatalist'):
+        # Dragging QListWidgetItem -> accept
+        elif event.mimeData().hasFormat('application/x-qabstractitemmodeldatalist'):
             event.accept()
 
     def dragMoveEvent(self, event):
-        # dropEvent doesn't get called without this overwritten method for some reason
-        pass
+        # dropEvent gets ignored without overwriting this method for some reason
+        # The super triggers autoScrolling.
+        super().dragMoveEvent(event)
 
     def dropEvent(self, event):
         if event.mimeData().hasFormat('text/plain'):
             # TODO
-            # Very simple word extraction from English text only.
-            # Later, extract dialog will get upgraded and called from here
-            # for detailed option, such as language detection and char limits
+            # Very simple word extraction only available for  English text.
+            # Later, extract dialog will get upgraded and called from here.
+            # Then set detailed option, such as language detection and char limits
             for word in re.compile('\w+').findall(event.mimeData().text()):
                 if len(word) <= 2:
                     continue

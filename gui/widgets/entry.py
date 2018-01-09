@@ -108,6 +108,11 @@ class EntryWidget(QWidget):
         layout.addWidget(view)
         base = QWidget()
         base.setLayout(layout)
+
+        # The base widget shown in View mode is always disabled for dragging,
+        # but we want to make it look as if it's enabled, not dead-gray color!
+        base.setDisabled(True)
+        base.setStyleSheet(":disabled { color: #000000; }")
         return base
 
     def _ui_editor(self, atop=None):

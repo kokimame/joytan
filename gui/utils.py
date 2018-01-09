@@ -13,6 +13,7 @@ isMac = sys.platform.startswith("darwin")
 isWin = sys.platform.startswith("win32")
 isLin = not isMac and not isWin
 
+
 # Learned from anki/aqt/profile ... _defaultBase
 def defaultBase():
     if isWin:
@@ -27,6 +28,7 @@ def defaultBase():
         if not os.path.expanduser(dataDir):
             os.makedirs(dataDir)
         return os.path.join(dataDir, "Joytan")
+
 
 # Learned from anki/aqt/profile ... _oldFolderLocation
 def defaultWorkspace():
@@ -43,39 +45,16 @@ def defaultWorkspace():
             loc = QStandardPaths.writableLocation(QStandardPaths.HomeLocation)
             return os.path.join(loc, "Joytan")
 
+
 def defaultMusic():
     loc = QStandardPaths.writableLocation(QStandardPaths.MusicLocation)
     return loc
+
 
 def defaultDocument():
     loc = QStandardPaths.writableLocation(QStandardPaths.DocumentsLocation)
     return loc
 
-
-
-def getFileToSave(parent, title, filter="*.*", dir=None, suf='jel'):
-    opts = QFileDialog.Options()
-    opts |= QFileDialog.DontUseNativeDialog
-    fd = QFileDialog()
-
-    if os.path.exists(dir):
-        fd.setDirectory(dir)
-    fd.setOptions(opts)
-    fd.setAcceptMode(QFileDialog.AcceptSave)
-    fd.setFileMode(QFileDialog.AnyFile)
-    fd.setWindowTitle(title)
-    fd.setNameFilter(filter)
-    fd.setDefaultSuffix(suf)
-
-    fd.exec_()
-
-    try:
-        file = fd.selectedFiles()[0]
-        assert os.path.isdir(file) is not True
-        return file
-    except (IndexError, AssertionError, TypeError):
-        print("Error: Invalid file is selected.")
-        raise
 
 class GetTextDialog(QDialog):
 
@@ -133,6 +112,34 @@ def getText(prompt, parent=None, help=None, edit=None, default="",
     return (str(d.l.text()), ret)
 
 
+
+def getFileToSave(parent, title, filter="*.*", dir=None, suf='jel'):
+    opts = QFileDialog.Options()
+    opts |= QFileDialog.DontUseNativeDialog
+    fd = QFileDialog()
+
+    if os.path.exists(dir):
+        fd.setDirectory(dir)
+    fd.setOptions(opts)
+    fd.setAcceptMode(QFileDialog.AcceptSave)
+    fd.setFileMode(QFileDialog.AnyFile)
+    fd.setWindowTitle(title)
+    fd.setNameFilter(filter)
+    fd.setDefaultSuffix(suf)
+
+    fd.exec_()
+
+    if fd.accepted():
+        try:
+            # Exception handling may be too much
+            file = fd.selectedFiles()[0]
+            assert os.path.isdir(file) is not True
+            return file
+        except (IndexError, AssertionError, TypeError):
+            #print("Error: Invalid file is selected.")
+            raise
+
+
 def getFiles(parent, title, filter="*.*", dir=None):
     opts = QFileDialog.Options()
     opts |= QFileDialog.DontUseNativeDialog
@@ -146,15 +153,18 @@ def getFiles(parent, title, filter="*.*", dir=None):
     fd.setNameFilter(filter)
     fd.exec_()
 
-    try:
-        files = fd.selectedFiles()
-        for file in files:
-            if os.path.isdir(file):
-                files.remove(file)
-        return files
-    except (TypeError):
-        print("Error: Invalid file is selected.")
-        raise
+    if fd.accepted():
+        try:
+            # Exception handling may be too much
+            files = fd.selectedFiles()
+            for file in files:
+                if os.path.isdir(file):
+                    files.remove(file)
+            return files
+        except (TypeError):
+            #print("Error: Invalid file is selected.")
+            raise
+
 
 def getFile(parent, title, filter="*.*", dir=None):
     opts = QFileDialog.Options()
@@ -169,16 +179,21 @@ def getFile(parent, title, filter="*.*", dir=None):
     fd.setNameFilter(filter)
     fd.exec_()
 
-    try:
-        file = fd.selectedFiles()[0]
-        assert not os.path.isdir(file)
-        return file
-    except (IndexError, AssertionError, TypeError):
-        print("Error: Invalid file is selected.")
-        raise
+    # If user clicks "Open", neither "Cancel" nor "(x)"
+    if fd.accepted():
+        try:
+            # Exception handling may be too much
+            file = fd.selectedFiles()[0]
+            assert not os.path.isdir(file)
+            return file
+        except (IndexError, AssertionError, TypeError):
+            #print("Error: Invalid file is selected.")
+            raise
+
 
 def path2filename(longpath):
     return os.path.basename(os.path.normpath(longpath))
+
 
 def path_temp(_temp_dir):
     """
@@ -200,13 +215,16 @@ def path_temp(_temp_dir):
         ),
     )
 
+
 def showWarning(text, parent=None, help="", title="Joytan"):
     "Show a small warning with an OK button."
     return showInfo(text, parent, help, "warning", title=title)
 
+
 def showCritical(text, parent=None, help="", title="Joytan"):
     "Show a small critical error with an OK button."
     return showInfo(text, parent, help, "critical", title=title)
+
 
 def showInfo(text, parent=False, help="", type="info", title="Joytan"):
     "Show a small info window with an OK button."
@@ -230,6 +248,7 @@ def showInfo(text, parent=False, help="", type="info", title="Joytan"):
         b.clicked.connect(lambda: print("Help is under development."))
         b.setAutoDefault(False)
     return mb.exec_()
+
 
 LANGUAGES = {
     'af': 'afrikaans',
@@ -339,5 +358,6 @@ LANGUAGES = {
     'fil': 'Filipino',
     'he': 'Hebrew'
 }
+
 
 LANGCODES = dict(map(reversed, LANGUAGES.items()))

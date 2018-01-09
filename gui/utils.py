@@ -13,7 +13,6 @@ isMac = sys.platform.startswith("darwin")
 isWin = sys.platform.startswith("win32")
 isLin = not isMac and not isWin
 
-
 # Learned from anki/aqt/profile ... _defaultBase
 def defaultBase():
     if isWin:
@@ -129,15 +128,13 @@ def getFileToSave(parent, title, filter="*.*", dir=None, suf='jel'):
 
     fd.exec_()
 
-    if fd.accepted():
-        try:
-            # Exception handling may be too much
-            file = fd.selectedFiles()[0]
-            assert os.path.isdir(file) is not True
-            return file
-        except (IndexError, AssertionError, TypeError):
-            #print("Error: Invalid file is selected.")
-            raise
+    try:
+        file = fd.selectedFiles()[0]
+        assert os.path.isdir(file) is not True
+        return file
+    except (IndexError, AssertionError, TypeError):
+        print("Error: Invalid file is selected.")
+        raise
 
 
 def getFiles(parent, title, filter="*.*", dir=None):
@@ -151,20 +148,17 @@ def getFiles(parent, title, filter="*.*", dir=None):
     fd.setFileMode(QFileDialog.ExistingFiles)
     fd.setWindowTitle(title)
     fd.setNameFilter(filter)
+    ret = []
+
+    def accept():
+        files = fd.selectedFiles()
+        for file in files:
+            if os.path.isdir(file):
+                files.remove(file)
+            ret.append(file)
+    fd.accepted.connect(accept)
     fd.exec_()
-
-    if fd.accepted():
-        try:
-            # Exception handling may be too much
-            files = fd.selectedFiles()
-            for file in files:
-                if os.path.isdir(file):
-                    files.remove(file)
-            return files
-        except (TypeError):
-            #print("Error: Invalid file is selected.")
-            raise
-
+    return ret
 
 def getFile(parent, title, filter="*.*", dir=None):
     opts = QFileDialog.Options()
@@ -177,23 +171,19 @@ def getFile(parent, title, filter="*.*", dir=None):
     fd.setFileMode(QFileDialog.ExistingFile)
     fd.setWindowTitle(title)
     fd.setNameFilter(filter)
-    fd.exec_()
+    ret = []
 
-    # If user clicks "Open", neither "Cancel" nor "(x)"
-    if fd.accepted():
-        try:
-            # Exception handling may be too much
-            file = fd.selectedFiles()[0]
-            assert not os.path.isdir(file)
-            return file
-        except (IndexError, AssertionError, TypeError):
-            #print("Error: Invalid file is selected.")
-            raise
+    def accept():
+        file = str(list(fd.selectedFiles())[0])
+        ret.append(file)
+
+    fd.accepted.connect(accept)
+    fd.exec_()
+    return ret[0]
 
 
 def path2filename(longpath):
     return os.path.basename(os.path.normpath(longpath))
-
 
 def path_temp(_temp_dir):
     """
@@ -215,16 +205,13 @@ def path_temp(_temp_dir):
         ),
     )
 
-
 def showWarning(text, parent=None, help="", title="Joytan"):
     "Show a small warning with an OK button."
     return showInfo(text, parent, help, "warning", title=title)
 
-
 def showCritical(text, parent=None, help="", title="Joytan"):
     "Show a small critical error with an OK button."
     return showInfo(text, parent, help, "critical", title=title)
-
 
 def showInfo(text, parent=False, help="", type="info", title="Joytan"):
     "Show a small info window with an OK button."
@@ -248,7 +235,6 @@ def showInfo(text, parent=False, help="", type="info", title="Joytan"):
         b.clicked.connect(lambda: print("Help is under development."))
         b.setAutoDefault(False)
     return mb.exec_()
-
 
 LANGUAGES = {
     'af': 'afrikaans',
@@ -358,6 +344,5 @@ LANGUAGES = {
     'fil': 'Filipino',
     'he': 'Hebrew'
 }
-
 
 LANGCODES = dict(map(reversed, LANGUAGES.items()))

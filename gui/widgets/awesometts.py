@@ -85,7 +85,7 @@ elif isMac:
     _AVAIL_TTS = ['say']
 else:
     _AVAIL_TTS = ['sapijs', 'sapicom']
-_AVAIL_TTS += 'amazon'
+_AVAIL_TTS.append('amazon')
 
 
 class AwesomeTTS(QWidget):
@@ -228,13 +228,14 @@ class AwesomeTTS(QWidget):
         for i, ewkey in enumerate(self.el_conf[0]('ewkeys')):
             quo = ServiceQuo(ewkey)
             svc_values = self.el_conf[0](ewkey)
+            print(svc_values[1], _AVAIL_TTS)
             if svc_values and svc_values[1] in _AVAIL_TTS:
                 quo.idx = svc_values[0]
                 # Pass svc_id & options
                 quo.set_desc(svc_values[1], svc_values[2])
-
-            # Reinitialize ttsmap if ewkey has unavailable TTS on the platform
-            self.el_conf[1](ewkey, None)
+            else:
+                # Reinitialize ttsmap if ewkey has unavailable TTS on the platform
+                self.el_conf[1](ewkey, None)
             lwi = QListWidgetItem()
             lwi.setSizeHint(quo.sizeHint())
             overview.addItem(lwi)

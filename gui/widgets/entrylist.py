@@ -43,13 +43,14 @@ class EntryList(QListWidget):
                 if ewkey not in avail_keys:
                     self.ttsmap.pop(ewkey, None)
 
-        def is_voiceless(self):
+        def keys_undefined(self):
+            # Return ewkeys to which TTS service undefined
+            undefs = []
             for key, val in self.ttsmap.items():
                 # if TTS is not allocated
                 if not val:
-                    return True
-            else:
-                return False
+                    undefs.append(key)
+            return undefs
 
         def ewkeys(self):
             # Sort and return ewkeys in the same order shown in Edit mode of EntryWidget
@@ -239,8 +240,8 @@ class EntryList(QListWidget):
     def get_config(self, key):
         if key == 'ewkeys':
             return self.config.ewkeys()
-        if key == 'voiceless':
-            return self.config.is_voiceless()
+        if key == 'undefined':
+            return self.config.keys_undefined()
         if key == 'ttsmap':
             return self.config.ttsmap
         if key == 'lv1':

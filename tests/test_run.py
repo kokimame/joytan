@@ -64,7 +64,7 @@ def test_open():
         on_open(mw, file=test_jel)
 
         assert mw.entrylist.count() == 2
-        assert not mw.entrylist.get_config('voiceless')
+        assert mw.entrylist.get_config('undefined') == []
 
         # Atop key is in ewkeys
         assert 'atop' in mw.entrylist.get_config('ewkeys')

@@ -117,11 +117,13 @@ class EntryList(QListWidget):
         m = QMenu(self.mw)
         a = m.addAction("Delete Selected Items")
         a.triggered.connect(self.remove_selected)
+        if self._initial_help:
+            a.setDisabled(True)
         above = m.addAction("Insert Item Above")
         bellow = m.addAction("Insert Item Bellow")
         above.triggered.connect(lambda: self._insert_entry())
         bellow.triggered.connect(lambda: self._insert_entry(above=False))
-        if len(self.selectedItems()) != 1:
+        if len(self.selectedItems()) != 1 or self._initial_help:
             above.setDisabled(True)
             bellow.setDisabled(True)
         m.exec_(QCursor.pos())

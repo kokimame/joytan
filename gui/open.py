@@ -22,7 +22,7 @@ def on_open(mw, file=None):
         jd = json.loads(f.read())
 
     config = jd[0]
-    mw.entrylist.remove_all()
+    mw.entrylist.remove_entry_all()
     mw.entrylist.set_config('reshape', dict(lv1=config['lv1'], lv2=config['lv2']))
     mw.entrylist.set_config('ttsmap', config['ttsmap'])
 

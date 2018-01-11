@@ -31,7 +31,7 @@ def test_entrylist():
         assert mw.entrylist.count() == 3
 
         # Remove Entry with atop 'test1'
-        mw.entrylist._remove_at(0)
+        mw.entrylist._remove_entry_at(0)
         assert mw.entrylist.count() == 2
 
         # Test get_entry_at
@@ -46,7 +46,7 @@ def test_entrylist():
         assert ew_2_test.mode == 'Edit'
 
         # Test remove_all
-        mw.entrylist.remove_all()
+        mw.entrylist.remove_entry_all()
         assert mw.entrylist.count() == 0
 
     print("Done test_entrylist")

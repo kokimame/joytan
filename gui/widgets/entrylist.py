@@ -166,7 +166,7 @@ class EntryList(QListWidget):
         levels = (self.config.lv1, self.config.lv2)
         eui, ew = QListWidgetItem(), EntryWidget(name, mode, self.count(), levels)
         ew.move.connect(self._move_entry)
-        ew.delete.connect(self._remove_at)
+        ew.delete.connect(self._remove_entry_at)
         eui.setSizeHint(ew.sizeHint())
         return eui, ew
 
@@ -263,11 +263,11 @@ class EntryList(QListWidget):
     def get_entry_selected(self):
         return [self.itemWidget(eui) for eui in self.selectedItems()]
 
-    def _remove_at(self, row):
+    def _remove_entry_at(self, row):
         self.takeItem(row)
         self.update_all()
 
-    def remove_all(self):
+    def remove_entry_all(self):
         for _ in range(self.count()):
             self.takeItem(0)
 

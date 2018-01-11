@@ -115,8 +115,15 @@ class EntryList(QListWidget):
 
     def _click_menu(self):
         m = QMenu(self.mw)
-        a = m.addAction("Delete selected items")
+        a = m.addAction("Delete Selected Items")
         a.triggered.connect(self.remove_selected)
+        above = m.addAction("Insert Item Above")
+        bellow = m.addAction("Insert Item Bellow")
+        above.triggered.connect(lambda: self._insert_entry())
+        bellow.triggered.connect(lambda: self._insert_entry(above=False))
+        if len(self.selectedItems()) != 1:
+            above.setDisabled(True)
+            bellow.setDisabled(True)
         m.exec_(QCursor.pos())
 
     def dragEnterEvent(self, event):
@@ -179,6 +186,16 @@ class EntryList(QListWidget):
         self.setItemWidget(eui, ew)
         # Convenient to modify ew after adding it
         return ew
+
+    def _insert_entry(self, above=True):
+        assert len(self.selectedItems()) == 1
+        ew = self.add_entry('', self.mw.mode)
+
+        selected = self.get_entry_selected()[0]
+        if above:
+            ew.move_to(selected.row)
+        else:
+            ew.move_to(selected.row + 1)
 
     def update_all(self, reshape=False):
         # Update the inside of the Entries

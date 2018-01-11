@@ -89,7 +89,7 @@ class EntryList(QListWidget):
         self.config = self._Configuration()
         self.config.shape.connect(lambda: self.update_all(reshape=True))
 
-        self.initial_help = True
+        self._initial_help = True
         instruction = QLabel("\nHi! Thank you for using Joytan!\n\n"
                              "To start learning...\n"
                              "Drag text here (only available for English text for now) \n"
@@ -135,7 +135,7 @@ class EntryList(QListWidget):
             self._indexing()
 
     def count(self):
-        if self.initial_help:
+        if self._initial_help:
             return super().count() - 1
         else:
             return super().count()
@@ -151,9 +151,9 @@ class EntryList(QListWidget):
         return eui, ew
 
     def add_entry(self, name, mode):
-        if self.initial_help:
+        if self._initial_help:
             self.takeItem(0)
-            self.initial_help = False
+            self._initial_help = False
         if name == '':
             pass
         elif name in [ew.editors['atop'] for ew in self.get_entry_all()]:
@@ -272,6 +272,9 @@ class EntryList(QListWidget):
             raise Exception("Unknown key: %s" % key)
 
     def remove_selected(self):
+        if self._initial_help:
+            return
+
         for ew in self.get_entry_selected():
             self.takeItem(ew.row)
             self._indexing()

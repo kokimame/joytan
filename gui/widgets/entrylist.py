@@ -106,6 +106,19 @@ class EntryList(QListWidget):
     def mouseDoubleClickEvent(self, event):
         self.clearSelection()
 
+    def mousePressEvent(self, event):
+        if event.button() == Qt.RightButton:
+            super().mousePressEvent(event)
+            self._click_menu()
+        elif event.button() == Qt.LeftButton:
+            super().mousePressEvent(event)
+
+    def _click_menu(self):
+        m = QMenu(self.mw)
+        a = m.addAction("Delete selected items")
+        a.triggered.connect(self.remove_selected)
+        m.exec_(QCursor.pos())
+
     def dragEnterEvent(self, event):
         # Dragging plain text (wishing it's written in English) -> accept
         if event.mimeData().hasFormat('text/plain'):

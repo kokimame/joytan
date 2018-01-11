@@ -57,13 +57,12 @@ class EntryWidget(QWidget):
     move = pyqtSignal(int, int)
     delete = pyqtSignal(int)
 
-    def __init__(self, parent, row, atop, mode, levels):
-        super(EntryWidget, self).__init__(parent)
-        # the EntryList this entry belongs to
-        self.parent = parent
-        # Row at EntryList takes from 0 to list.count()-1
-        self.row = row
+    def __init__(self, atop, mode, index, levels):
+        super(EntryWidget, self).__init__()
+        # 'View' or 'Edit' mode
         self.mode = mode
+        # New Entry will be append to the end of the entrylist
+        self.row = index
         # Entry setting
         self.lv1 = levels[0]
         self.lv2 = levels[1]
@@ -72,7 +71,7 @@ class EntryWidget(QWidget):
         # Text stored in the editors will be the actual learning materials.
         # The keys, referenced as 'ewkey' (with underscode), come in 'atop', 'def-n', 'ex-n-n' where 0 < n < 10
         # ===
-        # 'atop' : The name of Entry. Should be identical in the parent.
+        # 'atop' : The name of Entry. Should be identical in the entrylist
         # 'def-x' : Main part of an Entry. Each entry has upto 9 of this section.
         # 'ex-x-x' : Sub part. Each 'def-x' has upto 9 of the sub section.
         # ===
@@ -182,8 +181,7 @@ class EntryWidget(QWidget):
                     self.editors['ex-%d-%d' % (i, j)].setText(items['ex-%d-%d' % (i, j)])
 
     def move_to(self, next):
-        if 0 <= next < self.parent.count():
-            self.move.emit(self.row, next)
+        self.move.emit(self.row, next)
 
     def str_index(self):
         # Return string number from 00000 to 99999 based on the index

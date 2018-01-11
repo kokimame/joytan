@@ -49,7 +49,7 @@ class JoytanMW(QMainWindow):
         form.modeButton.setIcon(QIcon('{}/edit_button.png'.format(ICONS)))
         form.transButton.setIcon(QIcon('{}/translate_button2.png'.format(ICONS)))
         form.configButton.setIcon(QIcon('{}/config_button.png'.format(ICONS)))
-        form.addButton.clicked.connect(lambda: self.entrylist.add_entry('', self.mode))
+        form.addButton.clicked.connect(lambda: self.entrylist.add_entry())
         form.delButton.clicked.connect(self.entrylist.remove_selected)
         form.dlButton.clicked.connect(self._on_download)
         form.modeButton.clicked.connect(self._on_mode_update)

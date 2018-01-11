@@ -23,9 +23,9 @@ def test_entrylist():
         # But it's ignored on application level
         assert mw.entrylist.count() == 0
 
-        ew1 = mw.entrylist.add_entry('test1', mw.mode)
-        ew2 = mw.entrylist.add_entry('test2', mw.mode)
-        ew3 = mw.entrylist.add_entry('test3', mw.mode)
+        ew1 = mw.entrylist.add_entry(atop='test1')
+        ew2 = mw.entrylist.add_entry(atop='test2')
+        ew3 = mw.entrylist.add_entry(atop='test3')
 
         # Count after adding 3 Entry
         assert mw.entrylist.count() == 3

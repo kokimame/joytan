@@ -79,12 +79,12 @@ class ExtractDialog(QDialog):
                     ew = self.mw.entrylist.get_entry_at(i)
                     ew.update_editor(new_item)
                 else:
-                    ew = self.mw.entrylist.add_entry('', self.mw.mode)
+                    ew = self.mw.entrylist.add_entry()
                     ew.update_editor(new_item)
         else:
             for word in words:
                 new_item = dict((ewkey, word) for ewkey in ewkeys)
-                ew = self.mw.entrylist.add_entry('', self.mw.mode)
+                ew = self.mw.entrylist.add_entry()
                 ew.update_editor(new_item)
 
         self.reject(update=True)

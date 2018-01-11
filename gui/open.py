@@ -27,7 +27,7 @@ def on_open(mw, file=None):
     mw.entrylist.set_config('ttsmap', config['ttsmap'])
 
     for data in jd[1:]:
-        ew = mw.entrylist.add_entry(data['atop'], mw.mode)
+        ew = mw.entrylist.add_entry(atop=data['atop'])
         for i in range(0, ew.lv1):
             ew.editors['def-%d' % (i+1)].setText(data['def-%d' % (i+1)])
             for j in range(0, ew.lv2):

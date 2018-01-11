@@ -148,7 +148,7 @@ class EntryList(QListWidget):
             for word in re.compile('\w+').findall(event.mimeData().text()):
                 if len(word) <= 2:
                     continue
-                self.add_entry(word, self.mw.mode)
+                self.add_entry(atop=word, duplicate=False)
         elif event.mimeData().hasFormat('application/x-qabstractitemmodeldatalist'):
             # Call internal move
             super().dropEvent(event)
@@ -160,27 +160,27 @@ class EntryList(QListWidget):
         else:
             return super().count()
 
-    def _new_entry(self, index, name, mode):
+    def _new_entry(self, name, mode):
         from gui.widgets.entry import EntryWidget
 
         levels = (self.config.lv1, self.config.lv2)
-        eui, ew = QListWidgetItem(), EntryWidget(self, index, name, mode, levels)
+        eui, ew = QListWidgetItem(), EntryWidget(name, mode, self.count(), levels)
         ew.move.connect(self._move_entry)
         ew.delete.connect(self._remove_at)
         eui.setSizeHint(ew.sizeHint())
         return eui, ew
 
-    def add_entry(self, name, mode):
+    def add_entry(self, atop='', duplicate=True):
         if self._initial_help:
             self.takeItem(0)
             self._initial_help = False
-        if name == '':
-            pass
-        elif name in [ew.editors['atop'] for ew in self.get_entry_all()]:
-            print("Entry with atop %s already exists." % name)
-            return
+        if not duplicate:
+            # If Entry with the new name already exists
+            for ew in self.get_entry_all():
+                if atop == ew.editors['atop']:
+                    return
 
-        eui, ew = self._new_entry(self.count(), name, mode)
+        eui, ew = self._new_entry(atop, self.mw.mode)
 
         self.addItem(eui)
         self.setItemWidget(eui, ew)
@@ -189,7 +189,7 @@ class EntryList(QListWidget):
 
     def _insert_entry(self, above=True):
         assert len(self.selectedItems()) == 1
-        ew = self.add_entry('', self.mw.mode)
+        ew = self.add_entry()
 
         selected = self.get_entry_selected()[0]
         if above:
@@ -232,6 +232,10 @@ class EntryList(QListWidget):
         ============
         Move EntryWidget by taking it from and inserting it to the list
         """
+        # Check destination in the list
+        if not 0 <= next < self.count():
+            return
+
         old_ew = self.get_entry_at(now)
         eui = QListWidgetItem()
         eui.setSizeHint(old_ew.sizeHint())

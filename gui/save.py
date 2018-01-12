@@ -1,24 +1,25 @@
 import os
-import json
+import csv
 
 import gui
 from gui.qt import *
 from gui.utils import getFileToSave
 
-
 def on_save(mw):
-    # Save contents of entrylist as a file, temporally whose extension is original '.jel'.
-    filter = "Joytan EntryList format (*.jel)"
+    # Save text stored in each of Entry as csv format (*.jel.csv).
+    filter = "Joytan EntryList format (*.csv)"
     try:
-        newfile = getFileToSave(mw, "Save Wordlist", dir=mw.config['workspace'], filter=filter)
+        newfile = getFileToSave(mw, "Save Wordlist",
+                                dir=mw.config['workspace'],
+                                filter=filter,
+                                suffix="jel.csv")
     except:
         return
 
-    saving_data = []
     with open(newfile, "w") as f:
-        saving_data.append(mw.entrylist.get_config('data'))
+        cols = mw.entrylist.get_config('ewkeys')
+        writer = csv.DictWriter(f, cols)
+        writer.writeheader()
 
         for ew in mw.entrylist.get_entry_all():
-            saving_data.append(ew.data())
-
-        json.dump(saving_data, f, indent=4)
+            writer.writerow(ew.data())

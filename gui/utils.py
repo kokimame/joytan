@@ -58,7 +58,7 @@ def defaultDocument():
 class GetTextDialog(QDialog):
 
     def __init__(self, parent, question, help=None, edit=None, default="", \
-                 title="Anki", minWidth=400):
+                 title="Joytan", minWidth=400):
         QDialog.__init__(self, parent)
         self.setWindowTitle(title)
         self.question = question
@@ -112,7 +112,7 @@ def getText(prompt, parent=None, help=None, edit=None, default="",
 
 
 
-def getFileToSave(parent, title, filter="*.*", dir=None, suf='jel'):
+def getFileToSave(parent, title, filter="*.*", dir=None, suffix='csv'):
     opts = QFileDialog.Options()
     opts |= QFileDialog.DontUseNativeDialog
     fd = QFileDialog()
@@ -124,7 +124,7 @@ def getFileToSave(parent, title, filter="*.*", dir=None, suf='jel'):
     fd.setFileMode(QFileDialog.AnyFile)
     fd.setWindowTitle(title)
     fd.setNameFilter(filter)
-    fd.setDefaultSuffix(suf)
+    fd.setDefaultSuffix(suffix)
 
     fd.exec_()
 

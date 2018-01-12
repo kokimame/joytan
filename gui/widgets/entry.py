@@ -189,10 +189,7 @@ class EntryWidget(QWidget):
     # Returns the class' properties in a dictionary. Will be called on saving.
     def data(self):
         data = {}
-        data['idx'] = self.row + 1
         data['atop'] = self['atop']
-        data['lv1'] = self.lv1
-        data['lv2'] = self.lv2
         for i in range(1, self.lv1 + 1):
             data['def-%d' % i] = self['def-%d' % i]
             for j in range(1, self.lv2 + 1):

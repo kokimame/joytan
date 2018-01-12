@@ -15,7 +15,7 @@ def run_with_message(callback, *args, before_msg=None, after_msg=None, **kargs):
 
 
 def test_entrylist():
-    print("Now on test_entrylist")
+    print("\n== Test_entrylist")
 
     with joytan_running() as mw:
         # Initially entrylist shows one helper list item telling basic usages
@@ -53,18 +53,20 @@ def test_entrylist():
 
 
 def test_open():
-    print("Now on test_open")
+    print("\n== Test_open")
 
     # Sample Joytan EntryList file to open
-    test_jel = 'tests/assets/en_en.jel'
+    test_jel = 'tests/assets/ja_en.jel.csv'
     assert os.path.exists(test_jel), 'Test file %s not found' % test_jel
 
     with joytan_running() as mw:
         from gui.open import on_open
         on_open(mw, file=test_jel)
 
-        assert mw.entrylist.count() == 2
-        assert mw.entrylist.get_config('undefined') == []
+        assert mw.entrylist.count() == 4
+        # We no longer save TTS information in .jel.csv file,
+        # but we should do so by the way like appending these info to the CSV.
+        # assert mw.entrylist.get_config('undefined') == []
 
         # Atop key is in ewkeys
         assert 'atop' in mw.entrylist.get_config('ewkeys')
@@ -77,12 +79,14 @@ def test_open():
 
     print("Done test_open")
 
-
+# This test is failing on Travis CI environment
+# possibly because we're skipping configuring eSpeak
+#
 # def test_audiodialog():
-#     print("Now on test_audiodialog")
+#     print("== Test_audiodialog")
 #
 #     # Sample Joytan EntryList file to open
-#     test_jel = 'tests/assets/en_en.jel'
+#     test_jel = 'tests/assets/ja_en.jel.csv'
 #     assert os.path.exists(test_jel), 'Test file %s not found' % test_jel
 #
 #     with joytan_running() as mw:

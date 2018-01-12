@@ -64,8 +64,8 @@ class EntryWidget(QWidget):
         # New Entry will be append to the end of the entrylist
         self.row = index
         # Entry setting
-        self.lv1 = levels[0]
-        self.lv2 = levels[1]
+        self.ndef = levels[0]
+        self.nex = levels[1]
 
         # Dictionary of QLineEdit.
         # Text stored in the editors will be the actual learning materials.
@@ -122,12 +122,12 @@ class EntryWidget(QWidget):
             self.editors['atop'] = Editor('atop', text=atop)
         layout.addWidget(self.editors['atop'])
         row = 1
-        for i in range(1, self.lv1 + 1):
+        for i in range(1, self.ndef + 1):
             ewkey = 'def-%d' % i
             if ewkey not in self.editors:
                 self.editors[ewkey] = Editor(ewkey)
             layout.addWidget(self.editors[ewkey])
-            for j in range(1, self.lv2 + 1):
+            for j in range(1, self.nex + 1):
                 ewkey = "ex-%d-%d" % (i, j)
                 if ewkey not in self.editors:
                     self.editors[ewkey] = Editor(ewkey)
@@ -139,8 +139,8 @@ class EntryWidget(QWidget):
         base.setLayout(layout)
         return base
 
-    def reshape(self, lv1, lv2):
-        self.lv1, self.lv2 = lv1, lv2
+    def reshape(self, ndef, nex):
+        self.ndef, self.nex = ndef, nex
         stacked = self.layout()
         assert stacked
         # Old editor widget
@@ -155,10 +155,10 @@ class EntryWidget(QWidget):
         atop = self['atop'] or "Unnamed Entry"
         content = self._FONT_ATOP.format(index=self.row + 1, text=atop)
 
-        for i in range(1, self.lv1 + 1):
+        for i in range(1, self.ndef + 1):
             if self['def-%d' % i] != '':
                 content += self._FONT_DEF.format(num=i, text=self['def-%d' % i])
-            for j in range(1, self.lv2 + 1):
+            for j in range(1, self.nex + 1):
                 if self['ex-%d-%d' % (i, j)] != '':
                     content += self._FONT_EX.format(text=self['ex-%d-%d' % (i, j)])
 
@@ -170,10 +170,10 @@ class EntryWidget(QWidget):
         if 'atop' in items:
             self['atop'] = items['atop']
 
-        for i in range(1, self.lv1 + 1):
+        for i in range(1, self.ndef + 1):
             if 'def-%d' % i in items:
                 self['def-%d' % i] = items['def-%d' % i]
-            for j in range(1, self.lv2 + 1):
+            for j in range(1, self.nex + 1):
                 if 'ex-%d-%d' % (i, j) in items:
                     self['ex-%d-%d' % (i, j)] = items['ex-%d-%d' % (i, j)]
 
@@ -190,9 +190,9 @@ class EntryWidget(QWidget):
     def data(self):
         data = {}
         data['atop'] = self['atop']
-        for i in range(1, self.lv1 + 1):
+        for i in range(1, self.ndef + 1):
             data['def-%d' % i] = self['def-%d' % i]
-            for j in range(1, self.lv2 + 1):
+            for j in range(1, self.nex + 1):
                 data['ex-%d-%d' % (i, j)] = self['ex-%d-%d' % (i, j)]
 
         return data

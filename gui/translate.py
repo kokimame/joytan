@@ -29,12 +29,12 @@ class TranslateThread(QThread):
             if 'atop' in self.group:
                 items['atop'] = self.translate(ew['atop'])
 
-            for i in range(1, ew.lv1 + 1):
+            for i in range(1, ew.ndef + 1):
                 ewkey = 'def-%d' % i
                 if ewkey in self.group and ew[ewkey] != '':
                     items['def-%d' % i] = self.translate(ew[ewkey])
 
-                for j in range(1, ew.lv2 + 1):
+                for j in range(1, ew.nex + 1):
                     ewkey = 'ex-%d-%d' % (i, j)
                     if ewkey in self.group and ew[ewkey] != '':
                         items['ex-%d-%d' % (i, j)] = self.translate(ew[ewkey])

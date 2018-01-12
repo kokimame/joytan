@@ -10,16 +10,16 @@ class EntryList(QListWidget):
 
         def __init__(self):
             super().__init__()
-            self.lv1 = 0  # This will be expanded soon at the 'reshape()' below!
-            self.lv2 = 0  # Same here. The method is a little bit dumb.
+            self.ndef = 0  # This will be expanded soon at the 'reshape()' below!
+            self.nex = 0  # Same here. The method is a little bit dumb.
             # Maps given Entry editor section to TTS service for dictation
             self.ttsmap = {'atop': None}
-            self.reshape(lv1=1, lv2=0)
+            self.reshape(ndef=1, nex=0)
 
-        def reshape(self, lv1=None, lv2=None):
-            if self.lv1 != (lv1 or None) or self.lv2 != (lv2 or None):
-                self.lv1 = lv1
-                self.lv2 = lv2
+        def reshape(self, ndef=None, nex=None):
+            if self.ndef != (ndef or None) or self.nex != (nex or None):
+                self.ndef = ndef
+                self.nex = nex
                 self._reshape()
                 self.shape.emit()
 
@@ -27,12 +27,12 @@ class EntryList(QListWidget):
             avail_keys = ['atop']
 
             # Expand ttsmap and tags with default value
-            for i in range(1, self.lv1 + 1):
+            for i in range(1, self.ndef + 1):
                 ewkey = 'def-%d' % i
                 avail_keys.append(ewkey)
                 if ewkey not in self.ttsmap:
                     self.ttsmap[ewkey] = None
-                for j in range(1, self.lv2 + 1):
+                for j in range(1, self.nex + 1):
                     ewkey = 'ex-%d-%d' % (i, j)
                     avail_keys.append(ewkey)
                     if ewkey not in self.ttsmap:
@@ -55,17 +55,17 @@ class EntryList(QListWidget):
         def ewkeys(self):
             # Sort and return ewkeys in the same order shown in Edit mode of EntryWidget
             ewkeys = ['atop']
-            for i in range(1, self.lv1 + 1):
+            for i in range(1, self.ndef + 1):
                 ewkeys.append('def-%d' % i)
-                for j in range(1, self.lv2 + 1):
+                for j in range(1, self.nex + 1):
                     ewkeys.append("ex-%d-%d" % (i, j))
 
             return ewkeys
 
         # Returns a dictionary of EntryList properties. Will be called on saving the list.
         def data(self):
-            data = {'lv1': self.lv1,
-                    'lv2': self.lv2,
+            data = {'ndef': self.ndef,
+                    'nex': self.nex,
                     'ttsmap': self.ttsmap}
             return data
 
@@ -165,7 +165,7 @@ class EntryList(QListWidget):
     def _new_entry(self, name, mode):
         from gui.widgets.entry import EntryWidget
 
-        levels = (self.config.lv1, self.config.lv2)
+        levels = (self.config.ndef, self.config.nex)
         eui, ew = QListWidgetItem(), EntryWidget(name, mode, self.count(), levels)
         ew.move.connect(self._move_entry)
         ew.delete.connect(self._remove_entry_at)
@@ -206,7 +206,7 @@ class EntryList(QListWidget):
             ew = self.itemWidget(eui)
             ew.row = i
             if reshape:
-                ew.reshape(self.config.lv1, self.config.lv2)
+                ew.reshape(self.config.ndef, self.config.nex)
             ew.update_view()
             eui.setSizeHint(ew.sizeHint())
             ew.repaint()
@@ -280,10 +280,10 @@ class EntryList(QListWidget):
             return self.config.keys_undefined()
         if key == 'ttsmap':
             return self.config.ttsmap
-        if key == 'lv1':
-            return self.config.lv1
-        if key == 'lv2':
-            return self.config.lv2
+        if key == 'ndef':
+            return self.config.ndef
+        if key == 'nex':
+            return self.config.nex
         if key == 'data':
             return self.config.data()
 

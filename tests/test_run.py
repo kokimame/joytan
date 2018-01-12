@@ -70,11 +70,11 @@ def test_open():
 
         # Atop key is in ewkeys
         assert 'atop' in mw.entrylist.get_config('ewkeys')
-        lv1 = mw.entrylist.get_config('lv1')
-        lv2 = mw.entrylist.get_config('lv2')
+        ndef = mw.entrylist.get_config('ndef')
+        nex = mw.entrylist.get_config('nex')
 
         # Number of ewkeys: atop + def-n * (ex-n-m + 1)
-        n_keys = 1 + lv1 * (lv2 + 1)
+        n_keys = 1 + ndef * (nex + 1)
         assert n_keys == len(mw.entrylist.get_config('ewkeys'))
 
     print("Done test_open")

@@ -31,8 +31,8 @@ class Preferences(QDialog):
         form.okBtn.clicked.connect(self.on_ok)
         form.applyBtn.clicked.connect(self.on_apply)
         # Spins
-        form.dpwSpin.setValue(el.get_config('lv1'))
-        form.epdSpin.setValue(el.get_config('lv2'))
+        form.dpwSpin.setValue(el.get_config('ndef'))
+        form.epdSpin.setValue(el.get_config('nex'))
         # Editors
         form.titleEdit.setText(self.mw.config['title'])
         form.workingEdit.setText(self.mw.config['workspace'])
@@ -77,7 +77,7 @@ class Preferences(QDialog):
         self.mw.config['bgmdir'] = form.bgmEdit.text()
         self.mw.config['sfxdir'] = form.sfxEdit.text()
         self.mw.entrylist.set_config('reshape',
-                                     dict(lv1=self.form.dpwSpin.value(), lv2=self.form.epdSpin.value()))
+                                     dict(ndef=self.form.dpwSpin.value(), nex=self.form.epdSpin.value()))
 
     def reject(self):
         if self.back_to:

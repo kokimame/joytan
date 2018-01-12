@@ -128,7 +128,8 @@ class AudioDialog(QDialog):
 
         setting = {}
         setting['title'] = self.mw.config['title']
-        setting['ttsmap'] = el.get_config('ttsmap')
+        # TODO: Is it safe to return copied object from el?
+        setting['ttsmap'] = el.get_config('ttsmap').copy()
 
         # Open TTS setting dialog if TTS is not allocated to
         _list = self.form.flowList

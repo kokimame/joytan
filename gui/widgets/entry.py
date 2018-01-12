@@ -152,10 +152,7 @@ class EntryWidget(QWidget):
         self.set_mode(self.mode)
 
     def update_view(self):
-        if self['atop'] == '':
-            atop = "Unnamed Entry"
-        else:
-            atop = self['atop']
+        atop = self['atop'] or "Unnamed Entry"
         content = self._FONT_ATOP.format(index=self.row + 1, text=atop)
 
         for i in range(1, self.lv1 + 1):

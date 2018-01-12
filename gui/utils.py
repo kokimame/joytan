@@ -54,10 +54,60 @@ def defaultDocument():
     loc = QStandardPaths.writableLocation(QStandardPaths.DocumentsLocation)
     return loc
 
+class CompletedDialog(QDialog):
+    _MSG = "Successfully created {filename}."
+    if isWin:
+        _MANAGER = "Explorer"
+    elif isMac:
+        _MANAGER = "Finder"
+    else:
+        _MANAGER = "Files"
+
+    def __init__(self, parent, path, title="Joytan", help=None, edit=None,
+                 default="", min_w=400):
+        QDialog.__init__(self, parent)
+        self.path = path
+        self.setWindowTitle(title)
+        self.setMinimumWidth(min_w)
+        label = QLabel(self._MSG.format(filename=path2filename(path)))
+        ok = QPushButton("Show in '%s'" % self._MANAGER)
+        cancel = QPushButton("Cancel")
+        ok.clicked.connect(self.accept)
+        cancel.clicked.connect(self.reject)
+        ok.setDefault(True)
+        cancel.setDefault(False)
+
+        hbox = QHBoxLayout()
+        hbox.addSpacerItem(QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum))
+        hbox.addWidget(cancel)
+        hbox.addWidget(ok)
+        hbox.addSpacerItem(QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum))
+        vbox = QVBoxLayout()
+        vbox.addWidget(label)
+        vbox.addLayout(hbox)
+        self.setLayout(vbox)
+
+    def accept(self):
+        QDesktopServices.openUrl(QUrl.fromLocalFile(os.path.dirname(self.path)))
+        return QDialog.accept(self)
+
+    def reject(self):
+        return QDialog.reject(self)
+
+
+def getCompleted(prompt, parent=None, help=None, edit=None, default="",
+            title="Joytan", **kwargs):
+    if not parent:
+        parent = gui.mw.app.activeWindow() or gui.mw
+    d = CompletedDialog(parent, prompt, help=help, edit=edit,
+                      default=default, title=title, **kwargs)
+    d.setWindowModality(Qt.WindowModal)
+    d.exec_()
+
 
 class GetTextDialog(QDialog):
 
-    def __init__(self, parent, question, help=None, edit=None, default="", \
+    def __init__(self, parent, question, help=None, edit=None, default="",
                  title="Joytan", minWidth=400):
         QDialog.__init__(self, parent)
         self.setWindowTitle(title)

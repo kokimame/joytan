@@ -1,7 +1,7 @@
 import gui
 from gui.qt import *
 from gui.widgets.panellane import *
-from gui.utils import path2filename, showCritical
+from gui.utils import path2filename, showCritical, getCompleted
 
 
 def on_textdialog(mw):
@@ -164,10 +164,12 @@ class TextDialog(QDialog):
         datas = []
         for i, ew in enumerate(self.mw.entrylist.get_entry_all()):
             data = ew.data()
+            data['idx'] = i + 1
             panel = self._get_lane(i)
-            for j, tup in enumerate(panel.imglist):
-                data['img-%d' % (j + 1)] = tup[0]
-                data['cite-%d' % (j + 1)] = tup[1]
+            if panel:
+                for j, tup in enumerate(panel.imglist):
+                    data['img-%d' % (j + 1)] = tup[0]
+                    data['cite-%d' % (j + 1)] = tup[1]
             datas.append(data)
 
         from jinja2 import Environment, FileSystemLoader
@@ -176,8 +178,13 @@ class TextDialog(QDialog):
         temp = env.get_template(filename)
         rendered_temp = temp.render(entries=datas)
 
-        with open('{dest}.html'.format(dest=self.destdir), 'w', encoding='utf-8') as f:
+        with open(self.destdir + ".html", 'w', encoding='utf-8') as f:
             f.write(rendered_temp)
+
+        self._completed(self.destdir + ".html")
+
+    def _completed(self, path):
+        getCompleted(path)
 
     def reject(self):
         self.done(0)

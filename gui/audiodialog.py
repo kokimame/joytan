@@ -2,7 +2,7 @@ import shutil
 
 import gui
 from gui.qt import *
-from gui.utils import showCritical, getFiles
+from gui.utils import showCritical, getFiles, getCompleted
 from gui.widgets.flowitem import FlowItem, Mp3Object, EwkeyObject, Rest, Index
 
 
@@ -183,6 +183,7 @@ class AudioDialog(QDialog):
                 self.handler = handler
 
             def run(self):
+                self.completed = False
                 self.prog.emit("Setting up aufio files. This may take a few minutes")
                 self.handler.setup_audio()
                 for i in range(el.count()):
@@ -207,6 +208,7 @@ class AudioDialog(QDialog):
                 if setting['lrc']:
                     self.handler.write_lyrics(finalpath + ".lrc")
 
+                self.completed = True
                 self.quit()
 
         from joytan.handler.mp3handler import Mp3Handler
@@ -227,7 +229,7 @@ class AudioDialog(QDialog):
         self.thread.start()
         self.form.createBtn.setEnabled(False)
         self.form.stopBtn.setEnabled(True)
-        self.thread.finished.connect(self._init_progress)
+        self.thread.finished.connect(lambda: self._completed(finalpath))
 
     def _on_stop_thread(self):
         if self.thread:
@@ -245,6 +247,11 @@ class AudioDialog(QDialog):
                 iw = _list.itemWidget(_list.item(i))
                 if isinstance(iw, Mp3Object):
                     iw.force_stop()
+
+    def _completed(self, path):
+        self._init_progress()
+        if self.thread.completed:
+            getCompleted(path + ".mp3")
 
     def _init_progress(self):
         self.form.stopBtn.setEnabled(False)

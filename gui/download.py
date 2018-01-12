@@ -22,8 +22,8 @@ class DownloadThread(QThread):
 
     def run(self):
         for ew in self.targets:
-            self.prog.emit(ew.editors['atop'].text())
-            r = requests.get(self.loader.source_url + ew.editors['atop'].text())
+            self.prog.emit(ew['atop'])
+            r = requests.get(self.loader.source_url + ew['atop'])
             items = self.loader.run(r.text)
             self.step.emit(ew.row, items)
         self.quit()

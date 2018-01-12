@@ -69,7 +69,7 @@ class EntryWidget(QWidget):
 
         # Dictionary of QLineEdit.
         # Text stored in the editors will be the actual learning materials.
-        # The keys, referenced as 'ewkey' (with underscode), come in 'atop', 'def-n', 'ex-n-n' where 0 < n < 10
+        # The keys, referenced as 'ewkey', come in 'atop', 'def-n', 'ex-n-n' where 0 < n < 10
         # ===
         # 'atop' : The name of Entry. Should be identical in the entrylist
         # 'def-x' : Main part of an Entry. Each entry has upto 9 of this section.
@@ -152,18 +152,18 @@ class EntryWidget(QWidget):
         self.set_mode(self.mode)
 
     def update_view(self):
-        if self.editors['atop'].text() == '':
+        if self['atop'] == '':
             atop = "Unnamed Entry"
         else:
-            atop = self.editors['atop'].text()
+            atop = self['atop']
         content = self._FONT_ATOP.format(index=self.row + 1, text=atop)
 
         for i in range(1, self.lv1 + 1):
-            if self.editors['def-%d' % i].text() != '':
-                content += self._FONT_DEF.format(num=i, text=self.editors['def-%d' % i].text())
+            if self['def-%d' % i] != '':
+                content += self._FONT_DEF.format(num=i, text=self['def-%d' % i])
             for j in range(1, self.lv2 + 1):
-                if self.editors['ex-%d-%d' % (i, j)].text() != '':
-                    content += self._FONT_EX.format(text=self.editors['ex-%d-%d' % (i, j)].text())
+                if self['ex-%d-%d' % (i, j)] != '':
+                    content += self._FONT_EX.format(text=self['ex-%d-%d' % (i, j)])
 
         view = self.findChild(QLabel, "view")
         view.setText(self._ENTRY_VIEW.format(content=content))
@@ -171,14 +171,14 @@ class EntryWidget(QWidget):
     # Set the text of downloaded contents to each of matched editors
     def update_editor(self, items):
         if 'atop' in items:
-            self.editors['atop'].setText(items['atop'])
+            self['atop'] = items['atop']
 
         for i in range(1, self.lv1 + 1):
             if 'def-%d' % i in items:
-                self.editors['def-%d' % i].setText(items['def-%d' % i])
+                self['def-%d' % i] = items['def-%d' % i]
             for j in range(1, self.lv2 + 1):
                 if 'ex-%d-%d' % (i, j) in items:
-                    self.editors['ex-%d-%d' % (i, j)].setText(items['ex-%d-%d' % (i, j)])
+                    self['ex-%d-%d' % (i, j)] = items['ex-%d-%d' % (i, j)]
 
     def move_to(self, next):
         self.move.emit(self.row, next)
@@ -193,13 +193,33 @@ class EntryWidget(QWidget):
     def data(self):
         data = {}
         data['idx'] = self.row + 1
-        data['atop'] = self.editors['atop'].text()
+        data['atop'] = self['atop']
         data['lv1'] = self.lv1
         data['lv2'] = self.lv2
         for i in range(1, self.lv1 + 1):
-            data['def-%d' % i] = self.editors['def-%d' % i].text()
+            data['def-%d' % i] = self['def-%d' % i]
             for j in range(1, self.lv2 + 1):
-                data['ex-%d-%d' % (i, j)] = self.editors['ex-%d-%d' % (i, j)].text()
+                data['ex-%d-%d' % (i, j)] = self['ex-%d-%d' % (i, j)]
 
         return data
+
+    def __getitem__(self, key):
+        """
+        Retrieve text stored in editors['ewkey'] using the ew[key] syntax 
+        """
+        try:
+            return self.editors[key].text()
+        except KeyError:
+            raise KeyError("'%s' is not a valid ewkey ('EntryWidget Key')." % key)
+
+
+    def __setitem__(self, key, text):
+        """
+        Set text to the specified editors['ewkey'] by ew[key] = text syntax
+        """
+        try:
+            self.editors[key].setText(text)
+        except KeyError:
+            raise KeyError("'%s' is not a valid ewkey ('EntryWidget Key')." % key)
+
 

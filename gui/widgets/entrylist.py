@@ -179,7 +179,7 @@ class EntryList(QListWidget):
         if not duplicate:
             # If Entry with the new name already exists
             for ew in self.get_entry_all():
-                if atop == ew.editors['atop']:
+                if atop == ew['atop']:
                     return
 
         eui, ew = self._new_entry(atop, self.mw.mode)

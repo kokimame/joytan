@@ -25,21 +25,19 @@ class TranslateThread(QThread):
     def run(self):
         for ew in self.targets:
             items = {}
-            self.prog.emit(ew.editors['atop'].text())
+            self.prog.emit(ew['atop'])
             if 'atop' in self.group:
-                items['atop'] = self.translate(ew.editors['atop'].text())
+                items['atop'] = self.translate(ew['atop'])
 
             for i in range(1, ew.lv1 + 1):
                 ewkey = 'def-%d' % i
-                define = ew.editors[ewkey].text()
-                if ewkey in self.group and define != '':
-                    items['def-%d' % i] = self.translate(define)
+                if ewkey in self.group and ew[ewkey] != '':
+                    items['def-%d' % i] = self.translate(ew[ewkey])
 
                 for j in range(1, ew.lv2 + 1):
                     ewkey = 'ex-%d-%d' % (i, j)
-                    examp = ew.editors[ewkey].text()
-                    if ewkey in self.group and examp != '':
-                        items['ex-%d-%d' % (i, j)] = self.translate(examp)
+                    if ewkey in self.group and ew[ewkey] != '':
+                        items['ex-%d-%d' % (i, j)] = self.translate(ew[ewkey])
 
             self.step.emit(ew.row, items)
 

@@ -41,7 +41,7 @@ class CopyDialog(QDialog):
         # Copying from and to the contents in Entry Widget
         for ew in el.get_entry_all():
             try:
-                ew.editors[to_ewkey].setText(ew.editors[from_ewkey].text())
+                ew[to_ewkey] = ew[from_ewkey]
             except KeyError:
                 pass
 

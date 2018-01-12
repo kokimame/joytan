@@ -106,11 +106,10 @@ class Mp3Handler:
             else:
                 ewkey = fi['desc']
                 path = os.path.join(curdir, ewkey) + ".mp3"
-                text = ew.editors[ewkey].text()
-                if text != '':
-                    self.routers[ewkey](path=path, text=text)
+                if ew[ewkey] != '':
+                    self.routers[ewkey](path=path, text=ew[ewkey])
                     for _ in range(fi['repeat']):
-                        asegments.append((Aseg.from_mp3(path), text))
+                        asegments.append((Aseg.from_mp3(path), ew[ewkey]))
                         if fi['postrest'] > 0:
                             asegments.append((Aseg.silent(int(fi['postrest'] * 1000)), ''))
 

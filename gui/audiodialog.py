@@ -187,7 +187,7 @@ class AudioDialog(QDialog):
                 self.handler.setup_audio()
                 for i in range(el.count()):
                     ew = el.get_entry_at(i)
-                    self.prog.emit("Creating audio file of %s." % ew.editors['atop'].text())
+                    self.prog.emit("Creating audio file of %s." % ew['atop'])
                     os.makedirs(os.path.join(destdir, ew.str_index()), exist_ok=True)
                     try:
                         self.handler.onepass(ew)

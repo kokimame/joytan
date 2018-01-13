@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 
-# This module is consisted of several GUI classes developed at AwesomeTTS projects,
-# and merged some of them into one big AwesomeTTS class.
+# This module consists of several GUI classes originally developed in AwesomeTTS projects,
+# and merges some of them into one big AwesomeTTS class.
+# You can find other components from the project under joytan/joytan/speaker.
+#
+# Joytan adds Overview to the GUI to show users which TTS service is allocated to
+# each of text stored in EntryWidget.
 # The original copyright notice is shown below.
-#
-# Joytan adds overview section to the GUI to show users which TTS service is allocated to
-# each of text stored in EntryWidget's QLineEdit
-#
 #
 # AwesomeTTS text-to-speech add-on for Anki
 # Copyright (C) 2010-Present  Anki AwesomeTTS Development Team

@@ -75,6 +75,7 @@ class CompletedDialog(QDialog):
         ok.clicked.connect(self.accept)
         cancel.clicked.connect(self.reject)
         ok.setDefault(True)
+        cancel.setAutoDefault(False)
         cancel.setDefault(False)
 
         hbox = QHBoxLayout()

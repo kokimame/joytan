@@ -25,12 +25,24 @@ def on_open(mw, file=None):
         # Do something
 
         column = {}
+        ndef, nex = 0, 0
         if validate_header(head):
             header = head
             for col in head:
                 column[col] = []
+            # Counting ndef & nex to reshape entrylist
+            for key in header:
+                if key == "atop":
+                    continue
+                x, n = key.split('-')
+                if x == "def":
+                    ndef = max(int(n), ndef)
+                elif x == "ex":
+                    nex = max(int(n), nex)
+                else:
+                    raise Exception("Invalid key found %s. "
+                                    "Header-validation is failing." % key)
         else:
-            ndef, nex = 0, 0
             header = []
             for i in range(1, len(head) + 1):
                 if i == 1:
@@ -44,6 +56,8 @@ def on_open(mw, file=None):
                     nex = i - 1 - ndef
                     header.append('ex-%d-%d' % (ndef, nex))
                     column['ex-%d-%d' % (ndef, nex)] = [head[i - 1]]
+
+        mw.entrylist.set_config('reshape', dict(ndef=ndef, nex=nex))
 
         for row in reader:
             for h, v in zip(header, row):

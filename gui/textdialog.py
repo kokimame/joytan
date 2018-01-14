@@ -1,7 +1,7 @@
 import gui
 from gui.qt import *
 from gui.widgets.panellane import *
-from gui.utils import path2filename, showCritical, getCompleted
+from gui.utils import path2filename, showCritical, getCompleted, getFile
 
 
 def on_textdialog(mw):
@@ -132,9 +132,8 @@ class TextDialog(QDialog):
             _list.setItemWidget(lwi2, ip)
 
     def _on_design_select(self):
-        from gui.utils import getFile
         try:
-            path = getFile(self, "Select book design", dir=os.getcwd(),
+            path = getFile(self, "Select book design", dir=self.mw.projectbase(),
                            filter="Jinja template HTML file (*.html)")
         except:
             return
@@ -151,7 +150,6 @@ class TextDialog(QDialog):
         for i in range(self.mw.entrylist.count()):
             lane = self._get_lane(i)
             lane.clear_all()
-
 
     def _get_lane(self, i):
         _list = self.form.imgList

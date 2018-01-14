@@ -181,9 +181,11 @@ class EwkeyObject(FlowItem):
         return layout
 
     def data(self):
+        volume = self.layout().itemAt(2).widget()
         return dict(
             desc=self.ewkey,
             repeat=self.get_repeat(),
+            volume=volume.value(),
             postrest=self.get_postrest(),
         )
 
@@ -203,8 +205,10 @@ class Index(FlowItem):
         return layout
 
     def data(self):
+        volume = self.layout().itemAt(2).widget()
         return dict(
             desc="INDEX",
             repeat=self.get_repeat(),
+            volume=volume.value(),
             postrest=self.get_postrest(),
         )

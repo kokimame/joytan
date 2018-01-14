@@ -99,7 +99,9 @@ class Mp3Handler:
                 idx_file = os.path.join(curdir, "index") + ".mp3"
                 self.routers['atop'](path=idx_file, text=index)
                 for _ in range(fi['repeat']):
-                    asegments.append((Aseg.from_mp3(idx_file), index))
+                    aseg = Aseg.from_mp3(idx_file)
+                    volume = self._volume(aseg.dBFS, (1 - fi['volume'] / 100))
+                    asegments.append((aseg - volume, index))
                     if fi['postrest'] > 0:
                         asegments.append((Aseg.silent(int(fi['postrest'] * 1000)), ''))
 
@@ -109,7 +111,9 @@ class Mp3Handler:
                 if ew[ewkey] != '':
                     self.routers[ewkey](path=path, text=ew[ewkey])
                     for _ in range(fi['repeat']):
-                        asegments.append((Aseg.from_mp3(path), ew[ewkey]))
+                        aseg = Aseg.from_mp3(path)
+                        volume = self._volume(aseg.dBFS, (1 - fi['volume'] / 100))
+                        asegments.append((aseg - volume, ew[ewkey]))
                         if fi['postrest'] > 0:
                             asegments.append((Aseg.silent(int(fi['postrest'] * 1000)), ''))
 

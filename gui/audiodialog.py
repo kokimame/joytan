@@ -171,8 +171,6 @@ class AudioDialog(QDialog):
 
         setting['loop'] = loop
 
-        finalpath = os.path.join(setting['dest'], setting['title'])
-
         class Mp3HandlerThread(QThread):
             prog = pyqtSignal(str)
             fail = pyqtSignal(str)
@@ -201,12 +199,12 @@ class AudioDialog(QDialog):
                 acapella = sum(self.handler.acapellas)
                 if len(setting['loop']) != 0:
                     finalmp3 = acapella.overlay(self.handler.get_bgmloop(len(acapella)))
-                    finalmp3.export(finalpath + ".mp3")
+                    finalmp3.export(setting['dest'] + ".mp3")
                 else:
-                    acapella.export(finalpath + ".mp3")
+                    acapella.export(setting['dest'] + ".mp3")
 
                 if setting['lrc']:
-                    self.handler.write_lyrics(finalpath + ".lrc")
+                    self.handler.write_lyrics(setting['dest'] + ".lrc")
 
                 self.completed = True
                 self.quit()
@@ -229,7 +227,7 @@ class AudioDialog(QDialog):
         self.thread.start()
         self.form.createBtn.setEnabled(False)
         self.form.stopBtn.setEnabled(True)
-        self.thread.finished.connect(lambda: self._completed(finalpath))
+        self.thread.finished.connect(lambda: self._completed(setting['dest']))
 
     def _on_stop_thread(self):
         if self.thread:

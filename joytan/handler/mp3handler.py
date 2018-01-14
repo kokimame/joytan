@@ -117,6 +117,10 @@ class Mp3Handler:
                         if fi['postrest'] > 0:
                             asegments.append((Aseg.silent(int(fi['postrest'] * 1000)), ''))
 
+        # '>><<' represents the end of one EntryWidget.
+        # This is useful to know the timing to switch images on making video
+        asegments.append((Aseg.silent(0), '>><<'))
+
         acapella = sum(set[0] for set in asegments)
         if self.setting['lrc']:
             self._add_lyrics(asegments)

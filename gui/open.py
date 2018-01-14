@@ -34,11 +34,11 @@ def on_open(mw, file=None):
             for key in header:
                 if key == "atop":
                     continue
-                x, n = key.split('-')
-                if x == "def":
-                    ndef = max(int(n), ndef)
-                elif x == "ex":
-                    nex = max(int(n), nex)
+                ks = key.split('-')
+                if len(ks) == 2:  # if key is def-n
+                    ndef = max(int(ks[1]), ndef)
+                elif len(ks) == 3:  # if key is ex-n-n
+                    nex = max(int(ks[2]), nex)
                 else:
                     raise Exception("Invalid key found %s. "
                                     "Header-validation is failing." % key)

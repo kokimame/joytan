@@ -6,6 +6,24 @@ from contextlib import closing
 
 __all__ = ['Amazon']
 
+# Speech Synthesis Markup Language (SSML)
+# This format specifies the timbre of speech of Amazon Polly and
+# will be passed to the service after user configuring properties at ATTS GUI.
+# Now we only edit the speed (rate) with this format in addition to the voice,
+# which is determined separately.
+# The other supported properties such as pitch and volume need another combobox
+# in ATTS GUI, but originally the GUI has only 2 combobox (voice and variant),
+# which are already taken, with some spinbox.
+# But because Amazon Polly controls properties by categories not by integer nor float,
+# we have to have more combobox in the GUI.
+SSML = """
+<speak>
+<prosody rate="{rate}">
+{text}
+</prosody>
+</speak>
+"""
+
 class Amazon(Service):
     """
     Provides a Service-compliant implementation for Amazon Polly
@@ -67,13 +85,23 @@ class Amazon(Service):
                 voice_lookup[normalized] if normalized in voice_lookup
                 else value
             )
-
+# x-slow, slow, medium, fast, x-fast
         return [
             dict(
                 key='voice',
                 label="Voice",
                 values=self._voice_list,
                 transform=transform_voice,
+            ),
+            dict(
+                key='variant',
+                label="Speed",
+                values=[
+                    (speed, speed) for speed in
+                    ['x-slow', 'slow', 'medium', 'fast', 'x-fast']
+                ],
+                transform=lambda x: x,
+                default="medium"
             )
         ]
 
@@ -83,9 +111,13 @@ class Amazon(Service):
         """
         output_file = path
 
+        text = SSML.format(text=text,
+                           rate=options['variant'])
+
         try:
             r = self.polly.synthesize_speech(VoiceId=options['voice'],
                                              Text=text,
+                                             TextType='ssml',
                                              OutputFormat='mp3')
 
             with closing(r['AudioStream']) as stream:

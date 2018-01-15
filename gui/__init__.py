@@ -132,7 +132,7 @@ def _run(argv=None, exec=True):
     opts.base = opts.base or ""
 
     app = JoytanApp(sys.argv)
-    QCoreApplication.setApplicationName("Joytan ジョイ単")
+    QCoreApplication.setApplicationName("Joytan")
 
     # disable icons on mac; this must be done before window created
     if isMac:

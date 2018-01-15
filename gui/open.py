@@ -1,3 +1,7 @@
+# -*- coding: utf-8 -*-
+# Copyright (C) 2017-Present: Koki Mametani <kokimametani@gmail.com>
+# License: GNU version 3 or later; http://www.gnu.org/licenses/gpl.html
+
 import csv
 import json
 
@@ -16,7 +20,7 @@ def on_open(mw, file=None):
         except:
             return
 
-    with open(file, 'r') as f:
+    with open(file, 'r', encoding='utf-8') as f:
         reader = csv.reader(f)
         head = next(reader)
 

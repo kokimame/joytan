@@ -1,3 +1,7 @@
+# -*- coding: utf-8 -*-
+# Copyright (C) 2017-Present: Koki Mametani <kokimametani@gmail.com>
+# License: GNU version 3 or later; http://www.gnu.org/licenses/gpl.html
+
 import os
 import csv
 
@@ -16,7 +20,7 @@ def on_save(mw):
     except:
         return
 
-    with open(newfile, "w") as f:
+    with open(newfile, "w", encoding='utf-8') as f:
         cols = mw.entrylist.get_config('ewkeys')
         writer = csv.DictWriter(f, cols)
         writer.writeheader()

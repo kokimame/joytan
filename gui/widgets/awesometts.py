@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
-
+# Copyright (C) 2017-Present: Koki Mametani <kokimametani@gmail.com>
+# License: GNU version 3 or later; http://www.gnu.org/licenses/gpl.html
+#
 # This module consists of several GUI classes originally developed in AwesomeTTS projects,
 # and merges some of them into one big AwesomeTTS class.
 # You can find other components from the project under joytan/joytan/speaker.
@@ -7,7 +9,7 @@
 # Joytan adds Overview to the GUI to show users which TTS service is allocated to
 # each of text stored in EntryWidget.
 # The original copyright notice is shown below.
-#
+# ==========================================
 # AwesomeTTS text-to-speech add-on for Anki
 # Copyright (C) 2010-Present  Anki AwesomeTTS Development Team
 #

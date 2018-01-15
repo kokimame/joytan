@@ -1,9 +1,13 @@
+# -*- coding: utf-8 -*-
+# Copyright (C) 2017-Present: Koki Mametani <kokimametani@gmail.com>
+# License: GNU version 3 or later; http://www.gnu.org/licenses/gpl.html
+
 """
+Building and initializing GUI.
 
-Building and initializing GUI of .
-The entire PyQt programming pattern is learned from Anki project
+Honor mention:
+PyQt programming pattern was learned from Anki project
 (https://github.com/dae/anki)
-
 """
 import optparse
 import tempfile
@@ -14,15 +18,6 @@ from gui.utils import isMac, isLin, isWin, defaultWorkspace, defaultMusic, defau
 from joytan.bundle import Bundle
 from joytan.config import Config
 from joytan import conversion as to
-
-
-
-print("os.getcwd() = ",os.getcwd())
-print("__file__ = ", __file__)
-print("__path__ = ", __path__)
-print("os.path.abspath(__file__) = ", os.path.abspath(__file__))
-print("os.curdir = ", os.curdir)
-print("os.path.abspath(os.curdir) = ", os.path.abspath(os.curdir))
 
 
 # TODO: Deploy with confident. Very obscure right now
@@ -115,9 +110,9 @@ def run():
 
 def _run(argv=None, exec=True):
     """
-    Start JoytanApp application or reuse an exisiting instance if one exits.
+    Start JoytanApp application or reuse an existing instance if one exits.
     
-    If the function isi invoked with exec=False, the JoytanApp will not enter
+    If the function ii invoked with exec=False, the JoytanApp will not enter
     the main event loop, instead the application object will be returned
     
     The 'exec' and 'argv' is useful for testing purposes

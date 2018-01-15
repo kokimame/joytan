@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # Copyright (C) 2017-Present: Koki Mametani <kokimametani@gmail.com>
-# License: GNU version 3 or later; http://www.gnu.org/licenses/gpl.html
+# License: GPLv3 or later; http://www.gnu.org/licenses/gpl.html
 #
 # This module consists of several GUI classes originally developed in AwesomeTTS projects,
 # and merges some of them into one big AwesomeTTS class.

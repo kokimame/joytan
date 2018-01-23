@@ -5,17 +5,24 @@
 import re
 
 from bs4 import BeautifulSoup
-from joytan.downloader.base import BaseDownloader
+from joytan.dictionary.base import BaseDownloader
 
 class DictionaryComDownloader(BaseDownloader):
+    """
+    Provides an interface to fetch dictionary entries from Dictionary.com
+    """
+
+    SOURCE_URL = "http://dictionary.com/browse/"
+    SOURCE_NAME = "Dicitionary.com"
+
     def __init__(self):
         BaseDownloader.__init__(self)
-        self.source_url = "http://dictionary.com/browse/"
-        self.source_name = "Dicitionary.com"
 
-    def run(self, data):
-        items = {}
-        soup = BeautifulSoup(data, "html.parser")
+    def get_url(self, query):
+        return self.SOURCE_URL + query
+
+    def run(self, html):
+        soup = BeautifulSoup(html, "html.parser")
         defexs = soup.find_all(attrs={"class": "def-content"})
 
         # First, remove all HTML elements with <> and escape sequences \r and \n,
@@ -23,6 +30,7 @@ class DictionaryComDownloader(BaseDownloader):
         defexs = [' '.join(re.sub('\<.*\>', '', d.text.strip()
                     .replace('\r', '').replace('\n', '')).split()) for d in defexs]
 
+        items = {}
         for i, defex in enumerate(defexs):
             try:
                 define, ex = defex.split(":")

@@ -5,18 +5,25 @@
 import re
 
 from bs4 import BeautifulSoup
-from joytan.downloader.base import BaseDownloader
+from joytan.dictionary.base import BaseDownloader
 
 class WiktionaryDownloader(BaseDownloader):
+    """
+    Provides an interface to fetch dictionary entries from Wiktionary
+    """
+
+    SOURCE_URL = "https://en.wiktionary.org/wiki/"
+    SOURCE_NAME = "Wiktionary"
+
     def __init__(self):
         BaseDownloader.__init__(self)
-        self.source_url = "https://en.wiktionary.org/wiki/"
-        self.source_name = "Wiktionary"
 
-    def run(self, data):
-        # Dictionary which stores definition and example
+    def get_url(self, query):
+        return self.SOURCE_URL + query
+
+    def run(self, html):
         items = {}
-        soup = BeautifulSoup(data, "html.parser")
+        soup = BeautifulSoup(html, "html.parser")
         table = soup.find('ol')
 
         for i, content in enumerate(table.find_all('li', recursive=False)):

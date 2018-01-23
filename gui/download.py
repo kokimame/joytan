@@ -8,7 +8,7 @@ import requests
 import gui
 from gui.qt import *
 from gui.utils import showCritical
-from joytan.downloader import Downloaders
+from joytan.dictionary import Downloaders
 
 
 def on_download(mw):
@@ -28,7 +28,7 @@ class DownloadThread(QThread):
     def run(self):
         for ew in self.targets:
             self.prog.emit(ew['atop'])
-            r = requests.get(self.loader.source_url + ew['atop'])
+            r = requests.get(self.loader.get_url(ew['atop']))
             items = self.loader.run(r.text)
             self.step.emit(ew.row, items)
         self.quit()

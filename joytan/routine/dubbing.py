@@ -7,7 +7,10 @@ import pydub
 from pydub import AudioSegment as Aseg
 
 
-class Mp3Handler:
+class DubbingWorker:
+    """
+    This class works in the process of making audiobook, providing an interface for pydub
+    """
     def __init__(self, setting):
         self.setting = setting
         self.flowlist = []
@@ -21,7 +24,7 @@ class Mp3Handler:
 
     def _get_routers(self):
         """
-        Returns a dict of function to force router to generate audio file
+        Returns a dict of function to force router of AwesomeTTS to generate audio clips
         based on given svc_id, options, path, and text.
         These functions are only compatible with offline TTS service such as
         Say on Mac, espeak on Linux.
@@ -46,13 +49,15 @@ class Mp3Handler:
         return routers
 
     def setup_audio(self):
-        # Setup SFX and BGM by converting them in AudioSegment and adjusting volume.
+        """
+        Setup SFX and BGM by converting them in AudioSegment and adjusting volume.
+        """
         for fi in self.setting['flow']:
             if fi['desc'] == "MP3":
                 sfx = Aseg.from_mp3(fi['path'])
-                volume = self._volume(sfx.dBFS, (1 - fi['volume']/100))
+                rdbfs = reduce_dbfs(sfx.dBFS, (1 - fi['volume'] / 100))
                 for _ in range(fi['repeat']):
-                    self.flowlist.append((sfx - volume))
+                    self.flowlist.append((sfx - rdbfs))
                     if fi['postrest'] > 0:
                         self.flowlist.append(Aseg.silent(int(fi['postrest'] * 1000)))
 
@@ -66,29 +71,19 @@ class Mp3Handler:
         for fi in self.setting['loop']:
             if fi['desc'] == "MP3":
                 bgm = Aseg.from_mp3(fi['path'])
-                volume = self._volume(bgm.dBFS, (1 - fi['volume']/100))
+                rdbfs = reduce_dbfs(bgm.dBFS, (1 - fi['volume'] / 100))
                 for _ in range(fi['repeat']):
-                    self.bgmloop.append((bgm - volume))
+                    self.bgmloop.append((bgm - rdbfs))
                     if fi['postrest'] > 0:
                         self.bgmloop.append(Aseg.silent(int(fi['postrest'] * 1000)))
             elif fi['desc'] == "REST" and fi['postrest'] > 0:
                 self.bgmloop.append(Aseg.silent(int(fi['postrest'] * 1000)))
 
-    def _volume(self, dbfs, percent):
-        # Takes dbfs (db relative to full scale, 0 as upper bounds) of the mp3file for volume reducing
-        # and the percentage of volume to reduce from the dbfs.
-        # The percent is defined by sliders on BarPlayer.
-
-        # Experimental minimum dbfs for human to hear,
-        # which corresponds to 0% in percentage
-        min_dbfs = -40
-        if dbfs < min_dbfs:
-            return 0
-        return int(abs(min_dbfs - dbfs) * percent)
-
-
     def onepass(self, ew):
-        # Create an entire MP3 material for an Entry
+        """
+        Create a complete audio segment for an Entry, updating lyrics.
+        """
+        # This contains a list of set(audio object from pydub, corresponding string text)
         asegments = []
         curdir = os.path.join(self.setting['dest'], ew.str_index())
         assert os.path.exists(curdir)
@@ -104,8 +99,8 @@ class Mp3Handler:
                 self.routers['atop'](path=idx_file, text=index)
                 for _ in range(fi['repeat']):
                     aseg = Aseg.from_mp3(idx_file)
-                    volume = self._volume(aseg.dBFS, (1 - fi['volume'] / 100))
-                    asegments.append((aseg - volume, index))
+                    rdbfs = reduce_dbfs(aseg.dBFS, (1 - fi['volume'] / 100))
+                    asegments.append((aseg - rdbfs, index))
                     if fi['postrest'] > 0:
                         asegments.append((Aseg.silent(int(fi['postrest'] * 1000)), ''))
 
@@ -116,39 +111,48 @@ class Mp3Handler:
                     self.routers[ewkey](path=path, text=ew[ewkey])
                     for _ in range(fi['repeat']):
                         aseg = Aseg.from_mp3(path)
-                        volume = self._volume(aseg.dBFS, (1 - fi['volume'] / 100))
-                        asegments.append((aseg - volume, ew[ewkey]))
+                        rdbfs = reduce_dbfs(aseg.dBFS, (1 - fi['volume'] / 100))
+                        asegments.append((aseg - rdbfs, ew[ewkey]))
                         if fi['postrest'] > 0:
                             asegments.append((Aseg.silent(int(fi['postrest'] * 1000)), ''))
 
         # '>><<' represents the end of one EntryWidget.
-        # This is useful to know the timing to switch images on making video
+        # This lets you know the timing to switch images on video-making
         asegments.append((Aseg.silent(0), '>><<'))
 
-        acapella = sum(set[0] for set in asegments)
+        # Concatenate all audio-segment to make audiobook without BGM
+        acapella = sum(item[0] for item in asegments)
         if self.setting['lrc']:
             self._add_lyrics(asegments)
         acapella.export(curdir + ".mp3")
         self.acapellas.append(acapella)
 
-
     def _add_lyrics(self, asegs):
-        for set in asegs:
-            aseg, text = set
+        """
+        Updates lyrics text and lyrics timer for given Entry's audio-segments
+        """
+        for item in asegs:
+            aseg, text = item
             if text:
                 self.lyrics.append((self.currentTime, text))
             else:
                 self.lyrics.append((self.currentTime, ''))
             self.currentTime += len(aseg)
 
-    def write_lyrics(self, output):
+    def make_lyrics(self, output):
+        """
+        Audio dialog calls this method to complete and output LRC file 
+        """
         with open(output, 'w', encoding='utf-8') as lrc:
-            for set in self.lyrics:
-                mmss = msec2hhmmss(set[0], lrc=True)
+            for item in self.lyrics:
+                mmss = msec2hhmmss(item[0], lrc=True)
                 lrc.write("[{time}]{line}\n".format(
-                    time=mmss, line=set[1]))
+                    time=mmss, line=item[1]))
 
     def get_bgmloop(self, msec):
+        """
+        Generate looped BGM within given millisecond with user-selected songs
+        """
         done = False
         bl = []
         while not done:
@@ -159,6 +163,27 @@ class Mp3Handler:
                 msec -= len(bgm)
                 bl.append(bgm)
         return sum(bl)
+
+
+def reduce_dbfs(dbfs, percent):
+    """
+    :param dbfs: decibel relative to full scale, 0 as upper bounds
+    :param percent: The percentage of volume to reduce from the dbfs
+    :return: Integer of dbfs after reducing volume by the percentage
+    
+    Reduce dbFS by given percentage amount.
+    """
+    # Experimental least dbfs of sounds which human can hear.
+    # This is intended to correspond to the 'volume 0% (mute)'.
+    # However, it turns out -40 is wrong to achieve this goal;
+    # even if volume slider is set to 0, you can slightly hear sounds.
+    # But coming to think of the fact if you want to mute an audio just
+    # delete it, and lacking the info of how to mute by reducing dbfs,
+    # min_dbfs is set to -40 for time being.
+    min_dbfs = -40
+    if dbfs < min_dbfs:
+        return 0
+    return int(abs(min_dbfs - dbfs) * percent)
 
 
 def get_duration(mp3path, format="hhmmss"):

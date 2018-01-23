@@ -3,10 +3,9 @@
 # License: GPLv3 or later; http://www.gnu.org/licenses/gpl.html
 
 
-import gui
 from gui.qt import *
 from gui.utils import getFile
-from joytan.downloader.gimage import GimageThread
+from joytan.routine.gimage import GimageThread
 
 
 class Panel(QPushButton):

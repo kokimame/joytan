@@ -175,47 +175,43 @@ class AudioDialog(QDialog):
 
         setting['loop'] = loop
 
-        class Mp3HandlerThread(QThread):
+        class DubbingThread(QThread):
             prog = pyqtSignal(str)
             fail = pyqtSignal(str)
 
-            def __init__(self, mw, handler):
+            def __init__(self, mw, worker):
                 QThread.__init__(self)
                 self.mw = mw
-                self.handler = handler
+                self.worker = worker
 
             def run(self):
                 self.completed = False
                 self.prog.emit("Setting up aufio files. This may take a few minutes")
-                self.handler.setup_audio()
+                self.worker.setup_audio()
                 for i in range(el.count()):
                     ew = el.get_entry_at(i)
                     self.prog.emit("Creating audio file of %s." % ew['atop'])
                     os.makedirs(os.path.join(destdir, ew.str_index()), exist_ok=True)
                     try:
-                        self.handler.onepass(ew)
+                        self.worker.onepass(ew)
                     except Exception as e:
                         self.fail.emit("Error occurs while processing audio files. System stops "
                                        "at exception '%s'" % e)
                         self.terminate()
 
                 self.prog.emit("Mixing with BGM. This may take a few minutes.")
-                acapella = sum(self.handler.acapellas)
+                acapella = sum(self.worker.acapellas)
                 if len(setting['loop']) != 0:
-                    finalmp3 = acapella.overlay(self.handler.get_bgmloop(len(acapella)))
+                    finalmp3 = acapella.overlay(self.worker.get_bgmloop(len(acapella)))
                     finalmp3.export(setting['dest'] + ".mp3")
                 else:
                     acapella.export(setting['dest'] + ".mp3")
 
                 if setting['lrc']:
-                    self.handler.write_lyrics(setting['dest'] + ".lrc")
+                    self.worker.make_lyrics(setting['dest'] + ".lrc")
 
                 self.completed = True
                 self.quit()
-
-        from joytan.handler.mp3handler import Mp3Handler
-        handler = Mp3Handler(setting)
-        self.form.progressBar.setRange(0, el.count()+3)
 
         def _on_progress(msg):
             self.form.pgMsg.setText(msg)
@@ -224,14 +220,18 @@ class AudioDialog(QDialog):
 
         def _on_fail(msg):
             showCritical(msg)
-            
-        self.thread = Mp3HandlerThread(self.mw, handler)
+
+        from joytan.routine.dubbing import DubbingWorker
+        worker = DubbingWorker(setting)
+        self.thread = DubbingThread(self.mw, worker)
         self.thread.prog.connect(_on_progress)
         self.thread.fail.connect(_on_fail)
         self.thread.start()
+        self.thread.finished.connect(lambda: self._completed(setting['dest']))
+
         self.form.createBtn.setEnabled(False)
         self.form.stopBtn.setEnabled(True)
-        self.thread.finished.connect(lambda: self._completed(setting['dest']))
+        self.form.progressBar.setRange(0, el.count()+3)
 
     def _on_stop_thread(self):
         if self.thread:

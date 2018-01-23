@@ -42,5 +42,4 @@ class DictionaryComDownloader(BaseDownloader):
             items['def-%d' % (i + 1)] = define
             items['ex-%d-1' % (i + 1)] = ex
 
-
         return items

@@ -19,25 +19,30 @@ class WiktionaryDownloader(BaseDownloader):
         BaseDownloader.__init__(self)
 
     def get_url(self, query):
+        if not query:
+            return ''
         return self.SOURCE_URL + query
 
     def run(self, html):
-        items = {}
         soup = BeautifulSoup(html, "html.parser")
-        table = soup.find('ol')
+        ols = soup.find('ol')
 
-        for i, content in enumerate(table.find_all('li', recursive=False)):
-            examples = []
-            for trash in content.find_all('ul'):
-                trash.replaceWith('')
-            for example in content.find_all('dl'):
-                examples.append(example.text)
-                # Remove stored example from definition text
-                example.replaceWith('')
-            if len(examples) == 0:
-                examples = ['']
-            items['def-%d' % (i + 1)] = content.text
-            for j, ex in enumerate(examples):
-                items['ex-%d-%d' % (i + 1, j + 1)] = ex
+        if ols:
+            items = {}
+            for i, content in enumerate(ols.find_all('li', recursive=False)):
+                examples = []
+                for trash in content.find_all('ul'):
+                    trash.replaceWith('')
+                for example in content.find_all('dl'):
+                    examples.append(example.text)
+                    # Remove stored example from definition text
+                    example.replaceWith('')
+                if len(examples) == 0:
+                    examples = ['']
+                items['def-%d' % (i + 1)] = content.text
+                for j, ex in enumerate(examples):
+                    items['ex-%d-%d' % (i + 1, j + 1)] = ex
 
-        return items
+            return items
+        else:
+            return {}

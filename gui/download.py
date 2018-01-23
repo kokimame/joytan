@@ -27,6 +27,8 @@ class DownloadThread(QThread):
 
     def run(self):
         for ew in self.targets:
+            if not ew['atop']:
+                continue
             self.prog.emit(ew['atop'])
             r = requests.get(self.loader.get_url(ew['atop']))
             items = self.loader.run(r.text)

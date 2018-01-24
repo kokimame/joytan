@@ -46,7 +46,7 @@ class AudioDialog(QDialog):
         form = self.form
         form.createBtn.clicked.connect(self._on_create)
         form.stopBtn.setEnabled(False)
-        form.stopBtn.clicked.connect(self._on_stop_thread)
+        form.stopBtn.clicked.connect(self._on_stop)
         form.settingBtn.clicked.connect(
             lambda: gui.dialogs.open("Preferences", self.mw, back_to=self, tab="TTS"))
 
@@ -195,9 +195,8 @@ class AudioDialog(QDialog):
                     try:
                         self.worker.onepass(ew)
                     except Exception as e:
-                        self.fail.emit("Error occurs while processing audio files. System stops "
-                                       "at exception '%s'" % e)
-                        self.terminate()
+                        self.fail.emit("Error occurs while creating audiobook. System stops "
+                                       "with exception '%s'" % e)
 
                 self.prog.emit("Mixing with BGM. This may take a few minutes.")
                 acapella = sum(self.worker.acapellas)
@@ -219,6 +218,12 @@ class AudioDialog(QDialog):
             self.form.progressBar.setValue(val+1)
 
         def _on_fail(msg):
+            """
+            This slot gets called if the dubbing thread encounters an exception,
+            then shows a critical error message and kills the thread.
+            """
+            if self.thread:
+                self.thread.terminate()
             showCritical(msg)
 
         from joytan.routine.dubbing import DubbingWorker
@@ -233,7 +238,7 @@ class AudioDialog(QDialog):
         self.form.stopBtn.setEnabled(True)
         self.form.progressBar.setRange(0, el.count()+3)
 
-    def _on_stop_thread(self):
+    def _on_stop(self):
         if self.thread:
             self.thread.terminate()
             destdir = os.path.join(self.mw.projectbase(), "audio")

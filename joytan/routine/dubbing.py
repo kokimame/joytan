@@ -35,6 +35,8 @@ class DubbingWorker:
             try:
                 router.force_run(svc_id, options, path, text)
             except:
+                #Any exception is thrown to the screen as a critical message,
+                #then the dubbing thread will immediately be killed.
                 raise
 
         routers = {}
@@ -81,7 +83,9 @@ class DubbingWorker:
 
     def onepass(self, ew):
         """
-        Create a complete audio segment for an Entry, updating lyrics.
+        In the process, the worker passes through the parts of each audio segment within
+        a given EntryWidget only once, immediately creates bigger chunk of audio segment and
+        appends it to the interim audiobook, acapella.
         """
         # This contains a list of set(audio object from pydub, corresponding string text)
         asegments = []

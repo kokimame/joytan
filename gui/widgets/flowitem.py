@@ -180,7 +180,7 @@ class Mp3Object(FlowItem):
         self.mp3path = mp3path
         self.content = QMediaContent(QUrl.fromLocalFile(mp3path))
         self.mp = MediaPlayer(self)
-        self.stop_icon = QIcon('{}/edit_button.png'.format(ICONS))
+        self.stop_icon = QIcon('{}/stop_button.png'.format(ICONS))
         self.play_icon = QIcon('{}/play_button.png'.format(ICONS))
         super(Mp3Object, self).__init__()
 

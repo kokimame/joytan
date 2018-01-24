@@ -37,22 +37,24 @@ class AudioDialog(QDialog):
         }
         self._ui_button()
         self._ui_progress()
+        self._ui_spin()
         self._ui_add_flow()
         self._ui_add_bgm()
 
         self.show()
 
     def _ui_button(self):
-        form = self.form
-        form.createBtn.clicked.connect(self._on_create)
-        form.stopBtn.setEnabled(False)
-        form.stopBtn.clicked.connect(self._on_stop)
-        form.settingBtn.clicked.connect(
+        self.form.createBtn.clicked.connect(self._on_create)
+        self.form.stopBtn.setEnabled(False)
+        self.form.stopBtn.clicked.connect(self._on_stop)
+        self.form.settingBtn.clicked.connect(
             lambda: gui.dialogs.open("Preferences", self.mw, back_to=self, tab="TTS"))
 
     def _ui_progress(self):
-        form = self.form
-        form.progressBar.setValue(0)
+        self.form.progressBar.setValue(0)
+
+    def _ui_spin(self):
+        pass
 
     def _ui_add_flow(self):
         fadd = self.form.flowAdd
@@ -92,9 +94,9 @@ class AudioDialog(QDialog):
         a.triggered.connect(lambda: self._add_item(self.list_lookup['bgm'], Rest))
         m.exec_(QCursor.pos())
 
-    def _add_item(self, lookup, cls, *args):
-        # Type may spawn multiple flow item
-        if cls is Mp3Object:
+    def _add_item(self, lookup, _class, *args):
+        # Maybe spawn multiple flowitems at once, such as several SFX or BGM
+        if _class is Mp3Object:
             try:
                 files = getFiles(self.mw, lookup['msg'],
                                  dir=self.mw.config[lookup['col']], filter="*.mp3")
@@ -103,16 +105,16 @@ class AudioDialog(QDialog):
 
             for file in files:
                 lwi = QListWidgetItem()
-                fi = cls(file)
+                fi = _class(file)
                 lwi.setSizeHint(fi.sizeHint())
                 fi.delete.connect(lambda base=lookup['ui'], item=lwi: self._remove_item(base, item))
                 lookup['ui'].addItem(lwi)
                 lookup['ui'].setItemWidget(lwi, fi)
             return
         # ======================
-        # Types for single flow item
+        # Otherwise, Spawn a single flowitem, such as Rest
         lwi = QListWidgetItem()
-        fi = cls(*args)
+        fi = _class(*args)
         lwi.setSizeHint(fi.sizeHint())
         fi.delete.connect(lambda base=lookup['ui'], item=lwi: self._remove_item(base, item))
 
@@ -130,12 +132,28 @@ class AudioDialog(QDialog):
             showCritical("No entries found in your entry list.")
             return
 
+        if self.form.allBtn.isChecked():
+            entries = el.get_entry_all()
+        else:
+            _from, _to = self.form.fromSpin.value(), self.form.toSpin.value()
+            if _from > _to:
+                showCritical("The value in 'to' field is out of range.")
+                self._init_spin()
+                return
+            else:
+                try:
+                    entries = el.get_entry_all()[_from-1:_to]
+                except IndexError:
+                    showCritical("Index is out of range.")
+                    self._init_spin()
+                    return
+
         setting = {}
         setting['title'] = self.mw.config['title']
         # TODO: Is it safe to return copied object from el?
         setting['ttsmap'] = el.get_config('ttsmap').copy()
 
-        # Open TTS setting dialog if TTS is not allocated to
+        # Open TTS setting dialog if there's ewkey which doesn't define TTS
         _list = self.form.flowList
         undefs = el.get_config('undefined')
         for i in range(_list.count()):
@@ -188,8 +206,7 @@ class AudioDialog(QDialog):
                 self.completed = False
                 self.prog.emit("Setting up aufio files. This may take a few minutes")
                 self.worker.setup_audio()
-                for i in range(el.count()):
-                    ew = el.get_entry_at(i)
+                for ew in entries:
                     self.prog.emit("Creating audio file of %s." % ew['atop'])
                     os.makedirs(os.path.join(destdir, ew.str_index()), exist_ok=True)
                     try:
@@ -236,7 +253,8 @@ class AudioDialog(QDialog):
 
         self.form.createBtn.setEnabled(False)
         self.form.stopBtn.setEnabled(True)
-        self.form.progressBar.setRange(0, el.count()+3)
+        # Progress contains fixed 2 step; setting up audio files, mixing with BGM
+        self.form.progressBar.setRange(0, len(entries)+3)
 
     def _on_stop(self):
         if self.thread:
@@ -265,6 +283,11 @@ class AudioDialog(QDialog):
         self.form.createBtn.setEnabled(True)
         self.form.progressBar.reset()
         self.form.pgMsg.setText("")
+
+    def _init_spin(self):
+        self.form.fromSpin.setValue(1)
+        self.form.toSpin.setValue(1)
+
 
     def reject(self):
         self._init_progress()

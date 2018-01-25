@@ -127,13 +127,12 @@ class AudioDialog(QDialog):
                 _list.takeItem(i)
 
     def _on_create(self):
-        el = self.mw.entrylist
-        if el.count() == 0:
+        if self.mw.entrylist.count() == 0:
             showCritical("No entries found in your entry list.")
             return
 
         if self.form.allBtn.isChecked():
-            entries = el.get_entry_all()
+            entries = self.mw.entrylist.get_entry_all()
         else:
             _from, _to = self.form.fromSpin.value(), self.form.toSpin.value()
             if _from > _to:
@@ -142,56 +141,13 @@ class AudioDialog(QDialog):
                 return
             else:
                 try:
-                    entries = el.get_entry_all()[_from-1:_to]
+                    entries = self.mw.entrylist.get_entry_all()[_from-1:_to]
                 except IndexError:
                     showCritical("Index is out of range.")
                     self._init_spin()
                     return
 
-        setting = {}
-        setting['title'] = self.mw.config['title']
-        # TODO: Is it safe to return copied object from el?
-        setting['ttsmap'] = el.get_config('ttsmap').copy()
-
-        # Open TTS setting dialog if there's ewkey which doesn't define TTS
-        _list = self.form.flowList
-        undefs = el.get_config('undefined')
-        for i in range(_list.count()):
-            fi = _list.itemWidget(_list.item(i))
-            if isinstance(fi, EwkeyObject) and fi.ewkey in undefs:
-                showCritical("Please choose Text-to-speech voice for each of Entry section to be read.")
-                gui.dialogs.open("Preferences", self.mw, back_to=self, tab="TTS")
-                return
-        # Safe to pop out ewkeys to which TTS voice is undefined but unused in audiobook
-        for key in undefs:
-            setting['ttsmap'].pop(key, None)
-
-
-        destdir = os.path.join(self.mw.projectbase(), "audio")
-        if os.path.isdir(destdir):
-            shutil.rmtree(destdir)
-        setting['dest'] = destdir
-
-        # Check if LRC file needs to be created
-        setting['lrc'] = self.form.lrcCheck.isChecked()
-
-        _list = self.form.flowList
-        flow = []
-        for i in range(_list.count()):
-            fi = _list.itemWidget(_list.item(i))
-            assert isinstance(fi, FlowItem)
-            flow.append(fi.data())
-
-        setting['flow'] = flow
-
-        _list = self.form.bgmList
-        loop = []
-        for i in range(_list.count()):
-            fi = _list.itemWidget(_list.item(i))
-            assert isinstance(fi, FlowItem)
-            loop.append(fi.data())
-
-        setting['loop'] = loop
+        setting = self._get_setting()
 
         class DubbingThread(QThread):
             prog = pyqtSignal(str)
@@ -208,7 +164,7 @@ class AudioDialog(QDialog):
                 self.worker.setup_audio()
                 for ew in entries:
                     self.prog.emit("Creating audio file of %s." % ew['atop'])
-                    os.makedirs(os.path.join(destdir, ew.str_index()), exist_ok=True)
+                    os.makedirs(os.path.join(setting['dest'], ew.str_index()), exist_ok=True)
                     try:
                         self.worker.onepass(ew)
                     except Exception as e:
@@ -277,6 +233,55 @@ class AudioDialog(QDialog):
         self._init_progress()
         if self.thread.completed:
             getCompleted(path + ".mp3")
+
+    def _get_setting(self):
+        el = self.mw.entrylist
+        setting = dict()
+        setting['title'] = self.mw.config['title']
+        # TODO: Is it safe to return copied object from el?
+        setting['ttsmap'] = el.get_config('ttsmap').copy()
+
+        # Open TTS setting dialog if there's ewkey which doesn't define TTS
+        _list = self.form.flowList
+        undefs = el.get_config('undefined')
+        for i in range(_list.count()):
+            fi = _list.itemWidget(_list.item(i))
+            if isinstance(fi, EwkeyObject) and fi.ewkey in undefs:
+                showCritical("Please choose Text-to-speech voice for each of Entry section to be read.")
+                gui.dialogs.open("Preferences", self.mw, back_to=self, tab="TTS")
+                return
+        # Safe to pop out ewkeys to which TTS voice is undefined but unused in audiobook
+        for key in undefs:
+            setting['ttsmap'].pop(key, None)
+
+        if os.path.isdir(self._destdir()):
+            shutil.rmtree(self._destdir())
+        setting['dest'] = self._destdir()
+
+        # Check if LRC file needs to be created
+        setting['lrc'] = self.form.lrcCheck.isChecked()
+
+        _list = self.form.flowList
+        flow = []
+        for i in range(_list.count()):
+            fi = _list.itemWidget(_list.item(i))
+            assert isinstance(fi, FlowItem)
+            flow.append(fi.data())
+
+        setting['flow'] = flow
+
+        _list = self.form.bgmList
+        loop = []
+        for i in range(_list.count()):
+            fi = _list.itemWidget(_list.item(i))
+            assert isinstance(fi, FlowItem)
+            loop.append(fi.data())
+
+        setting['loop'] = loop
+        return setting
+
+    def _destdir(self):
+        return os.path.join(self.mw.projectbase(), "audio")
 
     def _init_progress(self):
         self.form.stopBtn.setEnabled(False)

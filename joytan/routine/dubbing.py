@@ -34,10 +34,10 @@ class DubbingWorker:
         def force_run(svc_id, options, path, text):
             try:
                 router.force_run(svc_id, options, path, text)
-            except:
+            except Exception as e:
                 #Any exception is thrown to the screen as a critical message,
                 #then the dubbing thread will immediately be killed.
-                raise
+                raise e
 
         routers = {}
         for key in self.setting['ttsmap']:

@@ -347,12 +347,10 @@ class Router(object):
             service['instance'].run(text, options, path)
 
         except Exception as e:
-            """
-            This raises any kind of exception which occurs while processing 
-            Text-to-Speech services via Router and the error message directly
-            appears to users with no sugarcoat.
-            TODO: Need to have more informative error handler.            
-            """
+            #This raises any kind of exception which occurs while processing
+            #Text-to-Speech services via Router and the error message directly
+            #appears to users with no sugarcoat.
+            #TODO: Need to have more informative error handler.
             raise e
 
 

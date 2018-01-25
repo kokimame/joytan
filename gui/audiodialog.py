@@ -180,6 +180,7 @@ class AudioDialog(QDialog):
                     except Exception as e:
                         self.fail.emit("Error occurs while creating audiobook. System stops "
                                        "with exception '%s'" % e)
+                        self.sleep(10000)
 
                 self.prog.emit("Mixing with BGM. This may take a few minutes.")
                 acapella = sum(self.worker.acapellas)
@@ -209,6 +210,7 @@ class AudioDialog(QDialog):
             This slot gets called if the dubbing thread encounters an exception,
             then shows a critical error message and kills the thread.
             """
+            print("critical...")
             if self.thread:
                 self.thread.terminate()
             showCritical(msg)

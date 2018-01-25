@@ -129,6 +129,6 @@ class Amazon(Service):
                     f.write(stream.read())
 
         except Exception as e:
-            raise Exception("Amazon Polly returned Exception %s" % e)
+            raise Exception("Amazon Polly: %s while processing text (%s)" % (e, text))
 
 

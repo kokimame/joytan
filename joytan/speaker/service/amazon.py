@@ -115,12 +115,12 @@ class Amazon(Service):
         """
         output_file = path
 
-        text = SSML.format(text=text,
+        ssml = SSML.format(text=self.make_readable(text),
                            rate=options['variant'])
 
         try:
             r = self.polly.synthesize_speech(VoiceId=options['voice'],
-                                             Text=text,
+                                             Text=ssml,
                                              TextType='ssml',
                                              OutputFormat='mp3')
 
@@ -131,4 +131,11 @@ class Amazon(Service):
         except Exception as e:
             raise Exception("Amazon Polly: %s while processing text (%s)" % (e, text))
 
+    def make_readable(self, text):
+        """
+        Amazon Polly fails to read some symbol propely such as '& (and)'.
+        So we normalize input text before passing it to the service
+        """
+        text = text.replace('&', 'and')
+        return text
 

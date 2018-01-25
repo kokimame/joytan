@@ -147,6 +147,16 @@ class AudioDialog(QDialog):
                     self._init_spin()
                     return
 
+        # Open TTS setting dialog if TTS setting is incomplete.
+        _list = self.form.flowList
+        undefs = self.mw.entrylist.get_config('undefined')
+        for i in range(_list.count()):
+            fi = _list.itemWidget(_list.item(i))
+            if isinstance(fi, EwkeyObject) and fi.ewkey in undefs:
+                showCritical("Please choose Text-to-speech voice for every Entry section to be read.")
+                gui.dialogs.open("Preferences", self.mw, back_to=self, tab="TTS")
+                return
+
         setting = self._get_setting()
 
         class DubbingThread(QThread):
@@ -241,15 +251,8 @@ class AudioDialog(QDialog):
         # TODO: Is it safe to return copied object from el?
         setting['ttsmap'] = el.get_config('ttsmap').copy()
 
-        # Open TTS setting dialog if there's ewkey which doesn't define TTS
         _list = self.form.flowList
         undefs = el.get_config('undefined')
-        for i in range(_list.count()):
-            fi = _list.itemWidget(_list.item(i))
-            if isinstance(fi, EwkeyObject) and fi.ewkey in undefs:
-                showCritical("Please choose Text-to-speech voice for each of Entry section to be read.")
-                gui.dialogs.open("Preferences", self.mw, back_to=self, tab="TTS")
-                return
         # Safe to pop out ewkeys to which TTS voice is undefined but unused in audiobook
         for key in undefs:
             setting['ttsmap'].pop(key, None)

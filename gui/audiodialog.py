@@ -184,8 +184,12 @@ class AudioDialog(QDialog):
                 self.prog.emit("Mixing with BGM. This may take a few minutes.")
                 acapella = sum(self.worker.acapellas)
                 if len(setting['loop']) != 0:
-                    finalmp3 = acapella.overlay(self.worker.get_bgmloop(len(acapella)))
-                    finalmp3.export(setting['dest'] + ".mp3")
+                    try:
+                        finalmp3 = acapella.overlay(self.worker.get_bgmloop(len(acapella)))
+                        finalmp3.export(setting['dest'] + ".mp3")
+                    except Exception as e:
+                        self.fail.emit("Error occurs while making a looped BGM. System stops "
+                                       "with exception '%s'" % e)
                 else:
                     acapella.export(setting['dest'] + ".mp3")
 

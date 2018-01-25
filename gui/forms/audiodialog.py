@@ -11,7 +11,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_AudioDialog(object):
     def setupUi(self, AudioDialog):
         AudioDialog.setObjectName("AudioDialog")
-        AudioDialog.resize(540, 650)
+        AudioDialog.resize(555, 650)
         self.verticalLayout_2 = QtWidgets.QVBoxLayout(AudioDialog)
         self.verticalLayout_2.setContentsMargins(9, -1, 9, 9)
         self.verticalLayout_2.setObjectName("verticalLayout_2")
@@ -105,11 +105,6 @@ class Ui_AudioDialog(object):
         self.verticalLayout_5.addLayout(self.horizontalLayout_2)
         self.horizontalLayout_1.addLayout(self.verticalLayout_5)
         self.verticalLayout.addLayout(self.horizontalLayout_1)
-        self.line_3 = QtWidgets.QFrame(AudioDialog)
-        self.line_3.setFrameShadow(QtWidgets.QFrame.Sunken)
-        self.line_3.setFrameShape(QtWidgets.QFrame.HLine)
-        self.line_3.setObjectName("line_3")
-        self.verticalLayout.addWidget(self.line_3)
         self.verticalLayout_3 = QtWidgets.QVBoxLayout()
         self.verticalLayout_3.setSpacing(3)
         self.verticalLayout_3.setObjectName("verticalLayout_3")

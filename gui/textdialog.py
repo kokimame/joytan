@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 # Copyright (C) 2017-Present: Koki Mametani <kokimametani@gmail.com>
 # License: GPLv3 or later; http://www.gnu.org/licenses/gpl.html
+import re
 
 import gui
 from gui.qt import *
@@ -11,41 +12,38 @@ from gui.utils import path2filename, showCritical, getCompleted, getFile
 def on_textdialog(mw):
     gui.dialogs.open("TextDialog", mw)
 
-# Not in use
-class HtmlThread(QThread):
-    def __init__(self, mw, dest):
-        QThread.__init__(self)
-        self.mw = mw
-        self.dest = dest
-
-    def run(self):
-        datas = [ew.data() for ew in self.mw.entrylist.get_entry_all()]
-
-        from jinja2 import Environment, FileSystemLoader
-        env = Environment(loader=FileSystemLoader('templates/html'))
-        temp = env.get_template('simple.html')
-        rendered_temp = temp.render(entries=datas)
-
-        with open('{dest}/{title}.html'.format(dest=self.dest, title=self.mw.config['title']), 'w') as f:
-            f.write(rendered_temp)
-
 
 class BookDesign:
-    def __init__(self, path):
-        self.path = path
-        self.name = path2filename(path)
-        self.maximg = self._parse_maximg(path)
+
+    DEFAULT_DESIGN = ":/textbooks/simple.html"
+    DEFAULT_DESIGN_NAME = DEFAULT_DESIGN.split('/')[2]
+    RE_MAXIMG = re.compile(r'<!---maximg:(\d*)--->')
+
+    def __init__(self, path=None):
+        self.path = path or self.DEFAULT_DESIGN
+        if path:
+            self.name = path2filename(path)
+            self.maximg = self._parse_custom_design(path)
+        else:
+            self.name = self.DEFAULT_DESIGN_NAME
+            self.maximg = self._parse_default_design()
         self.info = "%s / image:%d" % (self.name, self.maximg)
 
-    def _parse_maximg(self, path):
-        import re
-
+    def _parse_custom_design(self, path):
         with open(path, 'r') as f:
-            vimg = re.compile(r'<!---maximg:(\d*)--->')
-            res = vimg.search(f.readline())
+            res = self.RE_MAXIMG.search(f.readline())
             assert res
 
         return int(res.group(1))
+
+    def _parse_default_design(self):
+        f = QFile(":/textbooks/simple.html")
+        f.open(QIODevice.ReadOnly)
+        res = self.RE_MAXIMG.search(QTextStream(f).readLine())
+        print(res)
+        f.close()
+        return int(res.group(1))
+
 
 
 class TextDialog(QDialog):
@@ -72,13 +70,9 @@ class TextDialog(QDialog):
         self.form.dlall.clicked.connect(self._autodownload)
         self.form.clearAll.clicked.connect(self._clear_all_images)
 
-        # FIXME: Temporal default setting
-        path  = os.path.abspath('./templates/html/simple.html')
-        os.path.abspath(path)
-        bd = BookDesign(path)
-        self.book = bd
+        self.book = BookDesign()
         self._activate_imglist()
-        self.form.designLbl.setText(bd.info)
+        self.form.designLbl.setText(self.book.info)
 
     def _autodownload(self):
         if not self.book:
@@ -142,10 +136,10 @@ class TextDialog(QDialog):
         except:
             return
         try:
-            bd = BookDesign(path)
-            self.book = bd
+            self.book = BookDesign(path)
+            self._clear_imglist()
             self._activate_imglist()
-            self.form.designLbl.setText(bd.info)
+            self.form.designLbl.setText(self.book.info)
         except AssertionError:
             showCritical("Invalid book design (Image number not found)")
 
@@ -154,6 +148,11 @@ class TextDialog(QDialog):
         for i in range(self.mw.entrylist.count()):
             lane = self._get_lane(i)
             lane.clear_all()
+
+    def _clear_imglist(self):
+        print("here comes")
+        for _ in range(self.form.imgList.count()):
+            self.form.imgList.takeItem(0)
 
     def _get_lane(self, i):
         _list = self.form.imgList

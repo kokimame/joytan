@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>textbooks/link.html</file>
+        <file>textbooks/simple.html</file>
+    </qresource>
+</RCC>

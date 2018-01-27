@@ -226,18 +226,17 @@ def reduce_dbfs(dbfs, percent):
     
     Calculate dbfs to reduce by given percentage.
     """
-    # Experimental least dbfs of sounds which human can hear.
+    # Experimental minimum dbfs of sounds which human can hear.
     # This is intended to correspond to the 'volume 0% (mute)'.
     # However, it turns out -40 is wrong to achieve this goal;
     # even if volume slider is set to 0, you can slightly hear sounds.
     # But coming to think of the fact if you want to mute an audio just
     # delete it, and lacking the info of how to mute by reducing dbfs,
-    # min_dbfs is set to -40 for time being.
-    min_dbfs = -40
-    if dbfs < min_dbfs:
-        return 0
+    # _MINIMUM_DBFS is set to -40 for time being.
+    _MINIMUM_DBFS = -40
+    diff = min(_MINIMUM_DBFS - dbfs, 0)
 
-    return int(abs(min_dbfs - dbfs) * percent)
+    return int(abs(diff) * percent)
 
 
 def msec2mmss(msec):

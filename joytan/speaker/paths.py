@@ -30,7 +30,6 @@ __all__ = [
     'CONFIG',
     'LOG',
     'TEMP',
-    'ICONS'
 ]
 
 
@@ -40,8 +39,6 @@ __all__ = [
 BASE = os.path.dirname(os.path.abspath(__file__))
 
 BASE_IS_LINKED = os.path.islink(BASE)
-
-BLANK = os.path.join(BASE, 'blank.mp3')
 
 CACHE = os.path.join(BASE, '.cache')
 

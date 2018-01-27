@@ -109,6 +109,8 @@ class EntryWidget(QWidget):
         view.setText(self._ENTRY_VIEW.format
                      (content=self._FONT_ATOP.format(index=self.row + 1, text=atop)))
         layout = QHBoxLayout()
+        # Don't give too much vertical margins, they cut the bottom of View Label
+        layout.setContentsMargins(9, 2, 9, 2)
         layout.addWidget(view)
         base = QWidget()
         base.setLayout(layout)
@@ -122,6 +124,9 @@ class EntryWidget(QWidget):
     def _ui_editor(self, atop=None):
         # Widget shown on Editor mode of EntryList
         layout = QVBoxLayout()
+        # Alternative UI setting
+        # layout.setContentsMargins(3, 3, 0, 3)
+        # layout.setSpacing(1)
 
         if atop != None:
             self.editors['atop'] = Editor('atop', text=atop)

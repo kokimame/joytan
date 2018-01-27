@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+ <mime-info xmlns='http://www.freedesktop.org/standards/shared-mime-info'>
+
+   <mime-type type="application/x-joytan">
+   <comment>Joytan 0.0 Entry</comment>
+   <glob pattern="*.joytan"/>
+   </mime-type>
+
+ </mime-info>

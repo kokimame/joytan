@@ -1,0 +1,12 @@
+[Desktop Entry]
+Name=Joytan
+Comment=Create audio/textbook in a stress-free way
+GenericName=Language App
+Exec=joytan
+TryExec=joytan
+Icon=joytan
+Categories=Education;Languages;Qt;
+Terminal=false
+Type=Application
+Version=1.0
+MimeType=application/x-joytan;

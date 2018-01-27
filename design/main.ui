@@ -13,6 +13,10 @@
   <property name="windowTitle">
    <string>Joytan ジョイ単</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="icons.qrc">
+    <normaloff>:/icons/joytan.png</normaloff>:/icons/joytan.png</iconset>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout_2">
     <item>
@@ -43,12 +47,20 @@
            <property name="text">
             <string/>
            </property>
+           <property name="icon">
+            <iconset resource="icons.qrc">
+             <normaloff>:/icons/plus_button_green.png</normaloff>:/icons/plus_button_green.png</iconset>
+           </property>
           </widget>
          </item>
          <item>
           <widget class="QPushButton" name="delButton">
            <property name="text">
             <string/>
+           </property>
+           <property name="icon">
+            <iconset resource="icons.qrc">
+             <normaloff>:/icons/minus_button_red.png</normaloff>:/icons/minus_button_red.png</iconset>
            </property>
           </widget>
          </item>
@@ -57,12 +69,20 @@
            <property name="text">
             <string/>
            </property>
+           <property name="icon">
+            <iconset resource="icons.qrc">
+             <normaloff>:/icons/edit_button.png</normaloff>:/icons/edit_button.png</iconset>
+           </property>
           </widget>
          </item>
          <item>
           <widget class="QPushButton" name="dlButton">
            <property name="text">
             <string/>
+           </property>
+           <property name="icon">
+            <iconset resource="icons.qrc">
+             <normaloff>:/icons/dl_button.png</normaloff>:/icons/dl_button.png</iconset>
            </property>
           </widget>
          </item>
@@ -71,12 +91,20 @@
            <property name="text">
             <string/>
            </property>
+           <property name="icon">
+            <iconset resource="icons.qrc">
+             <normaloff>:/icons/translate_button2.png</normaloff>:/icons/translate_button2.png</iconset>
+           </property>
           </widget>
          </item>
          <item>
           <widget class="QPushButton" name="configButton">
            <property name="text">
             <string/>
+           </property>
+           <property name="icon">
+            <iconset resource="icons.qrc">
+             <normaloff>:/icons/config_button.png</normaloff>:/icons/config_button.png</iconset>
            </property>
           </widget>
          </item>
@@ -285,6 +313,8 @@
    </property>
   </action>
  </widget>
- <resources/>
+ <resources>
+  <include location="icons.qrc"/>
+ </resources>
  <connections/>
 </ui>

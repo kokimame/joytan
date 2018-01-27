@@ -33,7 +33,6 @@ app_version = "0.0.1beta1"
 mw = None
 logger = None
 config = None
-ICONS = 'design/icons'
 
 try:
     import gui.forms

@@ -29,7 +29,6 @@
 
 import inspect
 
-from gui import ICONS
 from gui.qt import *
 
 
@@ -426,7 +425,7 @@ class AwesomeTTS(QWidget):
                                QSizePolicy.Preferred)
         dropdown.activated.connect(self._on_preset_activated)
 
-        delete = QPushButton(QIcon('{}/editdelete.png'.format(ICONS)), "")
+        delete = QPushButton(QIcon(':icons/editdelete.png'), "")
         delete.setObjectName('presets_delete')
         delete.setIconSize(QSize(16, 16))
         delete.setFixedSize(18, 18)

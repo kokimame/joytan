@@ -1,0 +1,17 @@
+<RCC>
+    <qresource prefix="/">
+        <file>icons/config_button.png</file>
+        <file>icons/delete_button.png</file>
+        <file>icons/disp_button.png</file>
+        <file>icons/dl_button.png</file>
+        <file>icons/edit_button.png</file>
+        <file>icons/editdelete.png</file>
+        <file>icons/joytan.png</file>
+        <file>icons/minus_button_red.png</file>
+        <file>icons/ok_button.png</file>
+        <file>icons/play_button.png</file>
+        <file>icons/plus_button_green.png</file>
+        <file>icons/stop_button.png</file>
+        <file>icons/translate_button2.png</file>
+    </qresource>
+</RCC>

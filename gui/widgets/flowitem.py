@@ -4,7 +4,6 @@
 
 
 import gui
-from gui import ICONS
 from gui.qt import *
 from gui.utils import path2filename
 from gui.widgets.entry import Editor
@@ -180,8 +179,8 @@ class Mp3Object(FlowItem):
         self.mp3path = mp3path
         self.content = QMediaContent(QUrl.fromLocalFile(mp3path))
         self.mp = MediaPlayer(self)
-        self.stop_icon = QIcon('{}/stop_button.png'.format(ICONS))
-        self.play_icon = QIcon('{}/play_button.png'.format(ICONS))
+        self.stop_icon = QIcon(':/icons/stop_button.png')
+        self.play_icon = QIcon(':/icons/play_button.png')
         super(Mp3Object, self).__init__()
 
     def _ui(self):

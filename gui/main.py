@@ -7,7 +7,6 @@ import os
 import json
 
 import gui
-from gui import ICONS
 from gui.qt import *
 from gui.utils import isMac, isLin, isWin
 
@@ -48,12 +47,6 @@ class JoytanMW(QMainWindow):
 
     def _ui_button(self):
         form = self.form
-        form.addButton.setIcon(QIcon('{}/plus_button_green.png'.format(ICONS)))
-        form.delButton.setIcon(QIcon('{}/minus_button_red.png'.format(ICONS)))
-        form.dlButton.setIcon(QIcon('{}/dl_button.png'.format(ICONS)))
-        form.modeButton.setIcon(QIcon('{}/edit_button.png'.format(ICONS)))
-        form.transButton.setIcon(QIcon('{}/translate_button2.png'.format(ICONS)))
-        form.configButton.setIcon(QIcon('{}/config_button.png'.format(ICONS)))
         form.addButton.clicked.connect(lambda: self.entrylist.add_entry())
         form.delButton.clicked.connect(self.entrylist.remove_selected)
         form.dlButton.clicked.connect(self._on_download)
@@ -97,11 +90,11 @@ class JoytanMW(QMainWindow):
     def _on_mode_update(self):
         if self.mode == "View":
             # Change EntryList Mode to "Edit" and the icon to "View"
-            self.form.modeButton.setIcon(QIcon("{}/disp_button.png".format(ICONS)))
+            self.form.modeButton.setIcon(QIcon(":icons/disp_button.png"))
             self.entrylist.update_mode("Edit")
             self.mode = "Edit"
         elif self.mode == "Edit":
-            self.form.modeButton.setIcon(QIcon("{}/edit_button.png".format(ICONS)))
+            self.form.modeButton.setIcon(QIcon(":icons/edit_button.png"))
             self.entrylist.update_mode("View")
             self.entrylist.update_all()
             self.mode = "View"

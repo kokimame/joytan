@@ -137,7 +137,7 @@ class DubbingWorker:
         """
         with open(output, 'w', encoding='utf-8') as lrc:
             for item in self.lyrics:
-                mmss = msec2hhmmss(item[0], lrc=True)
+                mmss = msec2mmss(item[0])
                 lrc.write("[{time}]{line}\n".format(
                     time=mmss, line=item[1]))
 
@@ -149,7 +149,6 @@ class DubbingWorker:
         is not time effective, so in these situation we call ffmpeg command to 
         copy and split the song into the size of what we need.
         """
-
         done = False
         bgmloop = []
         def remaining():
@@ -186,6 +185,7 @@ class DubbingWorker:
 
         return sum(bgmloop)
 
+
 def copy_and_split(mp3path, output, ending):
     """
     :param mp3path: Path to mp3 file to copy and cut
@@ -209,12 +209,14 @@ def copy_and_split(mp3path, output, ending):
     import subprocess
     subprocess.call(command)
 
+
 def duration_tag(mp3path):
     """
     Returns the duration of given mp3 file in millisecond
     """
     Tag = tinytag.TinyTag.get(mp3path)
     return Tag.duration * 1000
+
 
 def reduce_dbfs(dbfs, percent):
     """
@@ -234,24 +236,20 @@ def reduce_dbfs(dbfs, percent):
     min_dbfs = -40
     if dbfs < min_dbfs:
         return 0
+
     return int(abs(min_dbfs - dbfs) * percent)
 
 
-def get_duration(mp3path, format="hhmmss"):
-    if format == "msec":
-        return len(Aseg.from_mp3(mp3path))
-    elif format == "hhmmss":
-        return msec2hhmmss(len(Aseg.from_mp3(mp3path)))
-    else:
-        raise Exception("Error: Wrong Duration format selected")
-
-def msec2hhmmss(msec, lrc=False):
+def msec2mmss(msec):
+    """
+    Given a millisecond value, returns a MM:SS string.
+    For a value over an hour, this returns MM:SS making MM
+    over 60 (e.g, 13,800,000 msec => 230:00.00).
+    The representation may break the LRC file format but
+    it seems the format itself doesn't specify the workaround
+    about this issue.
+    """
     sec = msec / 1000
     m, s = divmod(sec, 60)
-    h, m = divmod(m, 60)
-    mmss = "%02d:%02d" % (m, s)
-    if lrc:
-        mmss += ".%02d" % (msec % 100)
-        return mmss
-    hhmmss = "%02d:%02d:%02d" % (h, m, s)
-    return hhmmss
+    mmss = "%02d:%02d" % (m, s) + ".%02d" % (msec % 100)
+    return mmss

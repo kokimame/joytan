@@ -241,6 +241,9 @@ def getFile(parent, title, filter="*.*", dir=None):
 
 
 def path2filename(longpath):
+    """
+    Can we just use os.path.split()?
+    """
     return os.path.basename(os.path.normpath(longpath))
 
 def path_temp(_temp_dir):

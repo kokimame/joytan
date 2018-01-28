@@ -14,36 +14,48 @@ def on_textdialog(mw):
 
 
 class BookDesign:
+    """
+    Represents a design of textbook, parsing Jinja2 template of HTML to detect
+    the maximum number of images for a given Entry. The class provides an actual
+    template object from Jinja2 Environment in the process of creating a textbook.
+    """
 
     DEFAULT_DESIGN = ":/textbooks/simple.html"
     DEFAULT_DESIGN_NAME = DEFAULT_DESIGN.split('/')[2]
     RE_MAXIMG = re.compile(r'<!---maximg:(\d*)--->')
 
     def __init__(self, path=None):
-        self.path = path or self.DEFAULT_DESIGN
+        """
+        Initially, the class creates a HTML file based on a bundled textbook design,
+        which is pre-defined in 'design/textbooks'.
+        """
         if path:
+            self.path = path
             self.name = path2filename(path)
-            self.maximg = self._parse_custom_design(path)
         else:
+            if not os.path.isdir("./textbooks"):
+                os.makedirs("./textbooks")
+            self.path = os.path.join("./textbooks", self.DEFAULT_DESIGN_NAME)
             self.name = self.DEFAULT_DESIGN_NAME
-            self.maximg = self._parse_default_design()
+            default_file = QFile(self.DEFAULT_DESIGN)
+            default_file.open(QIODevice.ReadOnly)
+            with open(self.path, 'w') as new_file:
+                new_file.write(QTextStream(default_file).readAll())
+
+        self.maximg = self._parse_design()
         self.info = "%s / image:%d" % (self.name, self.maximg)
 
-    def _parse_custom_design(self, path):
-        with open(path, 'r') as f:
+    def _parse_design(self):
+        with open(self.path, 'r') as f:
             res = self.RE_MAXIMG.search(f.readline())
             assert res
-
         return int(res.group(1))
 
-    def _parse_default_design(self):
-        f = QFile(":/textbooks/simple.html")
-        f.open(QIODevice.ReadOnly)
-        res = self.RE_MAXIMG.search(QTextStream(f).readLine())
-        print(res)
-        f.close()
-        return int(res.group(1))
-
+    def get_template(self):
+        from jinja2 import Environment, FileSystemLoader
+        directory, filename = os.path.split(self.path)
+        env = Environment(loader=FileSystemLoader(directory))
+        return env.get_template(filename)
 
 
 class TextDialog(QDialog):
@@ -150,7 +162,6 @@ class TextDialog(QDialog):
             lane.clear_all()
 
     def _clear_imglist(self):
-        print("here comes")
         for _ in range(self.form.imgList.count()):
             self.form.imgList.takeItem(0)
 
@@ -173,11 +184,8 @@ class TextDialog(QDialog):
                     data['cite-%d' % (j + 1)] = tup[1]
             datas.append(data)
 
-        from jinja2 import Environment, FileSystemLoader
-        path, filename = os.path.split(self.book.path)
-        env = Environment(loader=FileSystemLoader(path or './'))
-        temp = env.get_template(filename)
-        rendered_temp = temp.render(entries=datas)
+        template = self.book.get_template()
+        rendered_temp = template.render(entries=datas)
 
         with open(self.destdir + ".html", 'w', encoding='utf-8') as f:
             f.write(rendered_temp)

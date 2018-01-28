@@ -133,7 +133,7 @@ class Amazon(Service):
 
     def make_readable(self, text):
         """
-        Amazon Polly fails to read some symbol propely such as '& (and)'.
+        Amazon Polly fails to read some symbols properly such as '& (and)'.
         So we normalize input text before passing it to the service
         """
         text = text.replace('&', 'and')

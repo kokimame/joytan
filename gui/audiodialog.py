@@ -127,10 +127,12 @@ class AudioDialog(QDialog):
                 _list.takeItem(i)
 
     def _on_create(self):
+        # Validation before starting to create audiobooks
         if self.mw.entrylist.count() == 0:
             showCritical("No entries found in your entry list.")
             return
 
+        # entries: The Entry to be included in the upcoming audiobook.
         if self.form.allBtn.isChecked():
             entries = self.mw.entrylist.get_entry_all()
         else:
@@ -157,6 +159,15 @@ class AudioDialog(QDialog):
                 gui.dialogs.open("Preferences", self.mw, back_to=self, tab="TTS")
                 return
 
+        if os.path.isdir(self._destdir()):
+            # When dubbing thread gets interrupted by exceptions that it fails to find dependencies
+            # (e.g, ffmpeg) while creating audio files, it may leave these files, like index.mp3, open.
+            # This situation causes permission error on Windows if user starts the thread again and
+            # tries to remove existing folders, because some of files in the folders are in use.
+            # Therefore, let's ignore errors from shutil below and let pydub raise an error later.
+            shutil.rmtree(self._destdir(), ignore_errors=True)
+            os.makedirs(self._destdir(), exist_ok=True)
+
         setting = self._get_setting()
 
         class DubbingThread(QThread):
@@ -180,10 +191,13 @@ class AudioDialog(QDialog):
                     except Exception as e:
                         self.fail.emit("Error occurs while creating audiobook. System stops "
                                        "with exception '%s'" % e)
-                        self.sleep(10000)
+                        self.sleep(100)
 
                 self.prog.emit("Mixing with BGM. This may take a few minutes.")
                 acapella = sum(self.worker.acapellas)
+                # Is this good for memory efficiency?
+                del self.worker.acapellas
+
                 if len(setting['loop']) != 0:
                     try:
                         finalmp3 = acapella.overlay(self.worker.get_bgmloop(len(acapella)))
@@ -210,7 +224,6 @@ class AudioDialog(QDialog):
             This slot gets called if the dubbing thread encounters an exception,
             then shows a critical error message and kills the thread.
             """
-            print("critical...")
             if self.thread:
                 self.thread.terminate()
             showCritical(msg)
@@ -231,8 +244,7 @@ class AudioDialog(QDialog):
     def _on_stop(self):
         if self.thread:
             self.thread.terminate()
-            destdir = os.path.join(self.mw.projectbase(), "audio")
-            shutil.rmtree(destdir)
+            shutil.rmtree(self._destdir())
             self.form.progressBar.reset()
             self.form.pgMsg.setText("")
         self.form.stopBtn.setEnabled(False)
@@ -257,16 +269,12 @@ class AudioDialog(QDialog):
         # TODO: Is it safe to return copied object from el?
         setting['ttsmap'] = el.get_config('ttsmap').copy()
 
-        _list = self.form.flowList
         undefs = el.get_config('undefined')
         # Safe to pop out ewkeys to which TTS voice is undefined but unused in audiobook
         for key in undefs:
             setting['ttsmap'].pop(key, None)
 
-        if os.path.isdir(self._destdir()):
-            shutil.rmtree(self._destdir())
         setting['dest'] = self._destdir()
-
         # Check if LRC file needs to be created
         setting['lrc'] = self.form.lrcCheck.isChecked()
 
@@ -290,7 +298,7 @@ class AudioDialog(QDialog):
         return setting
 
     def _destdir(self):
-        return os.path.join(self.mw.projectbase(), "audio")
+        return os.path.join(self.mw.projectbase(), "audiobook")
 
     def _init_progress(self):
         self.form.stopBtn.setEnabled(False)

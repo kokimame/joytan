@@ -20,7 +20,7 @@ class BookDesign:
     template object from Jinja2 Environment in the process of creating a textbook.
     """
 
-    DEFAULT_DESIGN = ":/textbooks/simple.html"
+    DEFAULT_DESIGN = ":/textbooks/default.html"
     DEFAULT_DESIGN_NAME = DEFAULT_DESIGN.split('/')[2]
     RE_MAXIMG = re.compile(r'<!---maximg:(\d*)--->')
 

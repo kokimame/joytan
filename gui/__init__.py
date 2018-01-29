@@ -42,7 +42,7 @@ except ImportError as e:
     raise
 
 from gui import preferences, audiodialog, textdialog, \
-    download, translate, copy, extract, sort
+    download, translate, copy, sort
 
 
 class DialogManager:
@@ -53,7 +53,6 @@ class DialogManager:
         "DownloadDialog": [download.DownloadDialog, None],
         "TranslateDialog": [translate.TranslateDialog, None],
         "CopyDialog": [copy.CopyDialog, None],
-        "ExtractDialog": [extract.ExtractDialog, None],
         "SortDialog": [sort.SortDialog, None],
     }
 

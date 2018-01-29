@@ -38,7 +38,6 @@ class JoytanMW(QMainWindow):
 
     def _ui_menu(self):
         form = self.form
-        form.actionExtract_2.triggered.connect(self._on_extract)
         form.actionPreferences.triggered.connect(self._on_preferences)
         form.actionCopy.triggered.connect(self._on_copy)
         form.actionSave.triggered.connect(self._on_save)
@@ -82,10 +81,6 @@ class JoytanMW(QMainWindow):
     def _on_sort(self):
         import gui.sort
         gui.sort.on_sort(self)
-
-    def _on_extract(self):
-        import gui.extract
-        gui.extract.on_extract(self)
 
     def _on_mode_update(self):
         if self.mode == "View":

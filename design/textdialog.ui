@@ -66,24 +66,21 @@
       <number>0</number>
      </property>
      <item>
-      <widget class="QLineEdit" name="followEdit">
-       <property name="placeholderText">
-        <string>Following text to search with</string>
+      <widget class="QLabel" name="label_3">
+       <property name="text">
+        <string>Extra Search Keyword: </string>
        </property>
       </widget>
      </item>
      <item>
-      <spacer name="horizontalSpacer_3">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
+      <widget class="QLineEdit" name="followEdit">
+       <property name="text">
+        <string/>
        </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
+       <property name="placeholderText">
+        <string>Input text to add search keywords</string>
        </property>
-      </spacer>
+      </widget>
      </item>
     </layout>
    </item>
@@ -101,12 +98,18 @@
        <property name="text">
         <string>Download All</string>
        </property>
+       <property name="autoDefault">
+        <bool>false</bool>
+       </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="clearAll">
        <property name="text">
         <string>Clear All</string>
+       </property>
+       <property name="autoDefault">
+        <bool>false</bool>
        </property>
       </widget>
      </item>
@@ -171,15 +174,21 @@
        <property name="text">
         <string>Stop</string>
        </property>
+       <property name="autoDefault">
+        <bool>false</bool>
+       </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="startBtn">
        <property name="text">
-        <string>Start</string>
+        <string>Create Textbook</string>
+       </property>
+       <property name="autoDefault">
+        <bool>false</bool>
        </property>
        <property name="default">
-        <bool>true</bool>
+        <bool>false</bool>
        </property>
       </widget>
      </item>

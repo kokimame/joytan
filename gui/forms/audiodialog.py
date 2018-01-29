@@ -195,5 +195,5 @@ class Ui_AudioDialog(object):
         self.bgmAdd.setText(_translate("AudioDialog", "Add Item"))
         self.label_7.setText(_translate("AudioDialog", "Progress:"))
         self.stopBtn.setText(_translate("AudioDialog", "Stop"))
-        self.createBtn.setText(_translate("AudioDialog", "Start"))
+        self.createBtn.setText(_translate("AudioDialog", "Create Audiobook"))
 

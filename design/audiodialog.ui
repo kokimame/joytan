@@ -359,7 +359,7 @@
          <item>
           <widget class="QPushButton" name="createBtn">
            <property name="text">
-            <string>Start</string>
+            <string>Create Audiobook</string>
            </property>
            <property name="checkable">
             <bool>false</bool>

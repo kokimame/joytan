@@ -86,7 +86,7 @@ def remove_trash_row(header):
 
 def validate_header(header):
     _valid_keys = ['atop']
-    _valid_keys.extend(['def-%d' % i for i in range(1, 10)])
-    _valid_keys.extend(['ex-%d-%d' % (i, j) for i in range(1, 10)
-                                            for j in range(1, 10)])
+    _valid_keys.extend(['def-%d' % i for i in range(1, 100)])
+    _valid_keys.extend(['ex-%d-%d' % (i, j) for i in range(1, 100)
+                                            for j in range(1, 100)])
     return (set(header) & set(_valid_keys)) == set(header)

@@ -18,7 +18,7 @@ class Editor(QWidget):
         super(Editor, self).__init__()
         self.ewkey = ewkey
         self.label = QLabel(ewkey)
-        self.label.setFixedWidth(40)
+        self.label.setFixedWidth(50)
         self.label.setFont(self._ITALIC)
         self.label.setStyleSheet(self._color(ewkey))
         self.editor = QLineEdit(text)

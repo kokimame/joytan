@@ -223,7 +223,7 @@ class Mp3Object(FlowItem):
 
 class EwkeyObject(FlowItem):
     """
-    Adds new Text-to-Speech segements in EntryWidget
+    Adds new Text-to-Speech segments in EntryWidget
     """
 
     def __init__(self, ewkey):

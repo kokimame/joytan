@@ -3,6 +3,7 @@
 # License: GPLv3 or later; http://www.gnu.org/licenses/gpl.html
 
 import shutil
+import pydub
 
 import gui
 from gui.qt import *
@@ -11,6 +12,12 @@ from gui.widgets.flowitem import FlowItem, Mp3Object, EwkeyObject, Rest, Index
 
 
 def on_audiodialog(mw):
+    # Check if the user install dependencies for pydub
+    if not pydub.utils.which("ffmpeg") and not pydub.utils.which("libav"):
+        showCritical("Error: Dependecies not found. "
+                     "Please install 'ffmpeg' or 'libav' to create audiobooks")
+        return
+
     gui.dialogs.open("AudioDialog", mw)
 
 

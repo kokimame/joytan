@@ -63,11 +63,12 @@ class TextDialog(QDialog):
         QDialog.__init__(self, mw, Qt.Window)
         self.mw = mw
         self.book = None
-        self.destdir = os.path.join(mw.projectbase(), "textbook")
-        if os.path.isdir(self.destdir):
+        # Thread pool for downloading images
+        self.pool = None
+        if os.path.isdir(self._destdir()):
             import shutil
-            shutil.rmtree(self.destdir)
-        os.makedirs(self.destdir)
+            shutil.rmtree(self._destdir())
+        os.makedirs(self._destdir())
         self.form = gui.forms.textdialog.Ui_TextDialog()
         self.form.setupUi(self)
         self.form.startBtn.clicked.connect(self._on_create)
@@ -79,8 +80,9 @@ class TextDialog(QDialog):
         label = self.form.designLbl
         label.selectionChanged.connect(label.deselect)
         self.form.designBtn.clicked.connect(self._on_design_select)
-        self.form.dlall.clicked.connect(self._autodownload)
-        self.form.clearAll.clicked.connect(self._clear_all_images)
+        self.form.dlAllBtn.clicked.connect(self._autodownload)
+        self.form.clearAllBtn.clicked.connect(self._clear_all_images)
+        self.form.stopBtn.clicked.connect(self._on_stop)
 
         self.book = BookDesign()
         self._activate_imglist()
@@ -125,7 +127,7 @@ class TextDialog(QDialog):
                 # if ew is empty, ignore it
                 continue
             group = ew['atop']
-            destdir = os.path.join(self.destdir, ew.str_index())
+            destdir = os.path.join(self._destdir(), ew.str_index())
             lwi1 = QListWidgetItem()
             lwi2 = QListWidgetItem()
             pb = QPushButton('+ Download %s' % group)
@@ -187,10 +189,21 @@ class TextDialog(QDialog):
         template = self.book.get_template()
         rendered_temp = template.render(entries=datas)
 
-        with open(self.destdir + ".html", 'w', encoding='utf-8') as f:
+        with open(self._destdir() + ".html", 'w', encoding='utf-8') as f:
             f.write(rendered_temp)
 
-        self._completed(self.destdir + ".html")
+        self._completed(self._destdir() + ".html")
+
+    def _on_stop(self):
+        if self.pool:
+            self.pool.clear()
+        for i in range(self.mw.entrylist.count()):
+            lane = self._get_lane(i)
+            if lane.is_waiting:
+                lane.force_finish()
+
+    def _destdir(self):
+        return os.path.join(self.mw.projectbase(), "textbook")
 
     def _completed(self, path):
         getCompleted(path, hint="\nOpen the file with your browser.")

@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>507</width>
+    <width>517</width>
     <height>653</height>
    </rect>
   </property>
@@ -87,16 +87,9 @@
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_5">
      <item>
-      <widget class="QLabel" name="label">
+      <widget class="QPushButton" name="dlAllBtn">
        <property name="text">
-        <string>Images to embed in your book</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="dlall">
-       <property name="text">
-        <string>Download All</string>
+        <string>Download All Images</string>
        </property>
        <property name="autoDefault">
         <bool>false</bool>
@@ -104,7 +97,20 @@
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="clearAll">
+      <widget class="QPushButton" name="stopBtn">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
+       <property name="text">
+        <string>Stop Download</string>
+       </property>
+       <property name="autoDefault">
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="clearAllBtn">
        <property name="text">
         <string>Clear All</string>
        </property>

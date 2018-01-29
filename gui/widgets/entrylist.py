@@ -73,6 +73,17 @@ class EntryList(QListWidget):
                     'ttsmap': self.ttsmap}
             return data
 
+    # A snippet displayed in EntryList every time the app are started
+    _STARTER_MESSAGE = """
+ Hi! Thank you for using Joytan!
+ To start creating audio/textbooks...
+ Drag text here (this only works properly for English)
+ or push (+) button bellow and type by yourself.
+ After bringing everything you need,
+ hit the button [-> Audio] or [-> Text]!
+ Tips: You can drag entries to reorder them.   
+    """
+
     def __init__(self, mw):
         super(EntryList, self).__init__()
         self.mw = mw
@@ -93,19 +104,14 @@ class EntryList(QListWidget):
         self.config = self._Configuration()
         self.config.shape.connect(lambda: self.update_all(reshape=True))
 
-        self._initial_help = True
-        instruction = QLabel("\nHi! Thank you for using Joytan!\n\n"
-                             "To start learning...\n"
-                             "Drag text here (only available for English text for now) \n"
-                             "or from files, use Tools/Extract...\n"
-                             "or push (+) button bellow and type anything!\n\n"
-                             "Tips: You can drag around entries to reorder them.\n")
+        self._has_starter_help = True
+        _starter_label = QLabel(self._STARTER_MESSAGE)
 
-        instruction.setStyleSheet("QLabel { color : green; }")
+        _starter_label.setStyleSheet("QLabel { color : green; }")
         lwi = QListWidgetItem()
-        lwi.setSizeHint(instruction.sizeHint())
+        lwi.setSizeHint(_starter_label.sizeHint())
         self.addItem(lwi)
-        self.setItemWidget(lwi, instruction)
+        self.setItemWidget(lwi, _starter_label)
 
     def mouseDoubleClickEvent(self, event):
         self.clearSelection()
@@ -121,13 +127,13 @@ class EntryList(QListWidget):
         m = QMenu(self.mw)
         a = m.addAction("Delete Selected Items")
         a.triggered.connect(self.remove_selected)
-        if self._initial_help:
+        if self._has_starter_help:
             a.setDisabled(True)
         above = m.addAction("Insert Item Above")
         bellow = m.addAction("Insert Item Bellow")
         above.triggered.connect(lambda: self._insert_entry())
         bellow.triggered.connect(lambda: self._insert_entry(above=False))
-        if len(self.selectedItems()) != 1 or self._initial_help:
+        if len(self.selectedItems()) != 1 or self._has_starter_help:
             above.setDisabled(True)
             bellow.setDisabled(True)
         m.exec_(QCursor.pos())
@@ -161,7 +167,7 @@ class EntryList(QListWidget):
             self._indexing()
 
     def count(self):
-        if self._initial_help:
+        if self._has_starter_help:
             return super().count() - 1
         else:
             return super().count()
@@ -177,9 +183,9 @@ class EntryList(QListWidget):
         return eui, ew
 
     def add_entry(self, atop='', duplicate=True):
-        if self._initial_help:
+        if self._has_starter_help:
             self.takeItem(0)
-            self._initial_help = False
+            self._has_starter_help = False
         if not duplicate:
             # If Entry with the new name already exists
             for ew in self.get_entry_all():
@@ -312,7 +318,7 @@ class EntryList(QListWidget):
             raise Exception("Unknown key: %s" % key)
 
     def remove_selected(self):
-        if self._initial_help:
+        if self._has_starter_help:
             return
 
         for ew in self.get_entry_selected():

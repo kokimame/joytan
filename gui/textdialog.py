@@ -6,7 +6,7 @@ import re
 import gui
 from gui.qt import *
 from gui.widgets.panellane import *
-from gui.utils import path2filename, showCritical, getCompleted, getFile
+from gui.utils import path2filename, showCritical, getCompleted, getFile, ConfirmDialog
 
 
 def on_textdialog(mw):
@@ -196,6 +196,14 @@ class TextDialog(QDialog):
         getCompleted(path, hint="\nOpen the file with your browser.")
 
     def reject(self):
-        self.done(0)
+        def close_dialog():
+            self.done(0)
+            gui.dialogs.close("TextDialog")
 
-        gui.dialogs.close("TextDialog")
+        # d = ConfirmDialog(self, "With version %s, " % gui.app_version +
+        #                           "all downloaded images will be lost after closing this dialog.\n"
+        #                           "Sorry for the inconvenience.")
+        # d.setWindowModality(Qt.WindowModal)
+        # d.accepted.connect(close_dialog)
+        # d.exec_()
+        close_dialog()

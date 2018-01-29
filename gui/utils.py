@@ -62,6 +62,38 @@ def defaultDocument():
     loc = QStandardPaths.writableLocation(QStandardPaths.DocumentsLocation)
     return loc
 
+
+class ConfirmDialog(QDialog):
+    """
+    Quickly implemented confirmation prompt.
+    The dialog itself has nothing to do, but connecting something to this accepted() event
+    realizes users' confirmation before doing something.
+    TODO: Make CompletedDialog below inherit this class.
+    """
+    def __init__(self, parent, message, title="Joytan", min_width=400):
+        QDialog.__init__(self, parent)
+        self.setWindowTitle(title)
+        self.setMinimumWidth(min_width)
+        label = QLabel(message)
+        ok = QPushButton("OK")
+        cancel = QPushButton("Cancel")
+        ok.clicked.connect(self.accept)
+        cancel.clicked.connect(self.reject)
+        ok.setDefault(True)
+        cancel.setAutoDefault(False)
+        cancel.setDefault(False)
+
+        hbox = QHBoxLayout()
+        hbox.addSpacerItem(QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum))
+        hbox.addWidget(cancel)
+        hbox.addWidget(ok)
+        hbox.addSpacerItem(QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum))
+        vbox = QVBoxLayout()
+        vbox.addWidget(label)
+        vbox.addLayout(hbox)
+        self.setLayout(vbox)
+
+
 class CompletedDialog(QDialog):
     _MESSAGE = "Successfully created {filename}. {hint}"
     if isWin:
@@ -71,11 +103,11 @@ class CompletedDialog(QDialog):
     else:
         _MANAGER = "Files"
 
-    def __init__(self, parent, path, title="Joytan", hint="", min_w=400):
+    def __init__(self, parent, path, title="Joytan", hint="", min_width=400):
         QDialog.__init__(self, parent)
         self.path = path
         self.setWindowTitle(title)
-        self.setMinimumWidth(min_w)
+        self.setMinimumWidth(min_width)
         label = QLabel(self._MESSAGE.format(filename=path2filename(path),
                                             hint=hint))
         ok = QPushButton("Show in '%s'" % self._MANAGER)

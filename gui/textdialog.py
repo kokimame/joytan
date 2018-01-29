@@ -21,7 +21,7 @@ class BookDesign:
     """
 
     DEFAULT_DESIGN = ":/textbooks/default.html"
-    DEFAULT_DESIGN_NAME = DEFAULT_DESIGN.split('/')[2]
+    DEFAULT_DESIGN_FILE = "default_textbook.html"
     RE_MAXIMG = re.compile(r'<!---maximg:(\d*)--->')
 
     def __init__(self, path=None):
@@ -33,10 +33,8 @@ class BookDesign:
             self.path = path
             self.name = path2filename(path)
         else:
-            if not os.path.isdir("./textbooks"):
-                os.makedirs("./textbooks")
-            self.path = os.path.join("./textbooks", self.DEFAULT_DESIGN_NAME)
-            self.name = self.DEFAULT_DESIGN_NAME
+            self.path = os.path.join(".", self.DEFAULT_DESIGN_FILE)
+            self.name = self.DEFAULT_DESIGN_FILE
             default_file = QFile(self.DEFAULT_DESIGN)
             default_file.open(QIODevice.ReadOnly)
             with open(self.path, 'w') as new_file:

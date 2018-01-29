@@ -266,6 +266,8 @@ class AudioDialog(QDialog):
 
     def _completed(self, path):
         self._init_progress()
+        # To debug audio elements of audiobooks, remove the line below.
+        shutil.rmtree(self._destdir(), ignore_errors=True)
         if self.thread.completed:
             getCompleted(path + ".mp3")
 
@@ -316,7 +318,6 @@ class AudioDialog(QDialog):
     def _init_spin(self):
         self.form.fromSpin.setValue(1)
         self.form.toSpin.setValue(1)
-
 
     def reject(self):
         self._init_progress()

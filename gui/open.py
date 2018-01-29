@@ -8,9 +8,12 @@ import json
 import gui
 from gui.utils import getFile
 
+# TODO: Logic for opening csv should be moved to joytan/joytan,
+# and in this directory we need to implement an open dialog to
+# preview csv files and give options about which columns & rows to open.
 
 def on_open(mw, file=None):
-    filter = "CSV file for Joytan EntryList (*.jel.csv)"
+    filter = "CSV file for Joytan EntryList (*.csv)"
     if not file:
         try:
             file = getFile(mw, "Open Existing Joytan EntryList",
@@ -22,11 +25,7 @@ def on_open(mw, file=None):
 
     with open(file, 'r', encoding='utf-8') as f:
         reader = csv.reader(f)
-        head = next(reader)
-
-        # TODO:
-        # if len(head) > 81, it's too large for Joytan
-        # Do something
+        head = remove_trash_row(next(reader))
 
         column = {}
         ndef, nex = 0, 0
@@ -53,7 +52,7 @@ def on_open(mw, file=None):
                     column['atop'] = [head[i - 1]]
                     header.append('atop')
                 elif (i + 8) % 10 == 0:
-                    ndef = (i + 8) / 10
+                    ndef = int((i + 8) / 10)
                     header.append('def-%d' % ndef)
                     column['def-%d' % ndef] = [head[i - 1]]
                 else:
@@ -78,11 +77,16 @@ def on_open(mw, file=None):
 
         mw.entrylist.update_all()
 
+def remove_trash_row(header):
+    TRASH = ['']
+    for tr in TRASH:
+        if tr in header:
+            header.remove(tr)
+    return header
 
 def validate_header(header):
     _valid_keys = ['atop']
     _valid_keys.extend(['def-%d' % i for i in range(1, 10)])
     _valid_keys.extend(['ex-%d-%d' % (i, j) for i in range(1, 10)
                                             for j in range(1, 10)])
-
     return (set(header) & set(_valid_keys)) == set(header)

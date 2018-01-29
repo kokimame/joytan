@@ -38,4 +38,3 @@ rm $temp
 
 echo "Building resources.."
 pyrcc5 design/icons.qrc -o gui/forms/icons_rc.py
-pyrcc5 design/textbooks.qrc -o gui/forms/textbooks_rc.py

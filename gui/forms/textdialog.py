@@ -106,4 +106,3 @@ class Ui_TextDialog(object):
         self.cancelBtn.setText(_translate("TextDialog", "Stop"))
         self.startBtn.setText(_translate("TextDialog", "Create Textbook"))
 
-from . import textbooks_rc

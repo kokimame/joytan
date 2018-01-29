@@ -20,28 +20,14 @@ class BookDesign:
     template object from Jinja2 Environment in the process of creating a textbook.
     """
 
-    DEFAULT_DESIGN = ":/textbooks/default.html"
-    DEFAULT_DESIGN_FILE = "default_textbook.html"
     RE_MAXIMG = re.compile(r'<!---maximg:(\d*)--->')
 
     def __init__(self, path=None):
-        """
-        Initially, the class creates a HTML file based on a bundled textbook design,
-        which is pre-defined in 'design/textbooks'.
-        """
+        self.path = path
         if path:
-            self.path = path
             self.name = path2filename(path)
-        else:
-            self.path = os.path.join(".", self.DEFAULT_DESIGN_FILE)
-            self.name = self.DEFAULT_DESIGN_FILE
-            default_file = QFile(self.DEFAULT_DESIGN)
-            default_file.open(QIODevice.ReadOnly)
-            with open(self.path, 'w') as new_file:
-                new_file.write(QTextStream(default_file).readAll())
-
-        self.maximg = self._parse_design()
-        self.info = "%s / image:%d" % (self.name, self.maximg)
+            self.maximg = self._parse_design()
+            self.info = "%s / image:%d" % (self.name, self.maximg)
 
     def _parse_design(self):
         with open(self.path, 'r') as f:
@@ -82,13 +68,10 @@ class TextDialog(QDialog):
         self.form.clearAllBtn.clicked.connect(self._clear_all_images)
         self.form.stopBtn.clicked.connect(self._on_stop)
 
-        self.book = BookDesign()
-        self._activate_imglist()
-        self.form.designLbl.setText(self.book.info)
-
     def _autodownload(self):
         if not self.book:
-            showCritical("Please select book design.")
+            showCritical("Please select textbook design. If you don't have any design file,"
+                         " you can download various designs from our website.")
             return
 
         for i in range(self.mw.entrylist.count()):
@@ -171,7 +154,8 @@ class TextDialog(QDialog):
 
     def _on_create(self):
         if not self.book:
-            showCritical("Book design is not selected.")
+            showCritical("Please select textbook design. If you don't have any design file,"
+                         " you can download various designs from our website.")
             return
         datas = []
         for i, ew in enumerate(self.mw.entrylist.get_entry_all()):

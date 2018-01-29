@@ -215,8 +215,5 @@
    </item>
   </layout>
  </widget>
- <resources>
-  <include location="textbooks.qrc"/>
- </resources>
  <connections/>
 </ui>

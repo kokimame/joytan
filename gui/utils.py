@@ -42,7 +42,8 @@ def defaultWorkspace():
         return os.path.expanduser("~/Joytan")
     elif isWin:
         loc = QStandardPaths.writableLocation(QStandardPaths.HomeLocation)
-        return os.path.join(loc, "Joytan")
+        # os.path.join(loc, "Joytan") returns weird-looking path like 'C:/Users/uname\Joytan'
+        return loc + "/Joytan"
     else:
         p = os.path.expanduser("~/Joytan")
         if os.path.exists(p):

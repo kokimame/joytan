@@ -63,7 +63,7 @@ def defaultDocument():
     return loc
 
 class CompletedDialog(QDialog):
-    _MSG = "Successfully created {filename}."
+    _MESSAGE = "Successfully created {filename}. {hint}"
     if isWin:
         _MANAGER = "Explorer"
     elif isMac:
@@ -71,13 +71,13 @@ class CompletedDialog(QDialog):
     else:
         _MANAGER = "Files"
 
-    def __init__(self, parent, path, title="Joytan", help=None, edit=None,
-                 default="", min_w=400):
+    def __init__(self, parent, path, title="Joytan", hint="", min_w=400):
         QDialog.__init__(self, parent)
         self.path = path
         self.setWindowTitle(title)
         self.setMinimumWidth(min_w)
-        label = QLabel(self._MSG.format(filename=path2filename(path)))
+        label = QLabel(self._MESSAGE.format(filename=path2filename(path),
+                                            hint=hint))
         ok = QPushButton("Show in '%s'" % self._MANAGER)
         cancel = QPushButton("Cancel")
         ok.clicked.connect(self.accept)
@@ -104,12 +104,10 @@ class CompletedDialog(QDialog):
         return QDialog.reject(self)
 
 
-def getCompleted(prompt, parent=None, help=None, edit=None, default="",
-            title="Joytan", **kwargs):
+def getCompleted(prompt, parent=None, hint="", title="Joytan", **kwargs):
     if not parent:
         parent = gui.mw.app.activeWindow() or gui.mw
-    d = CompletedDialog(parent, prompt, help=help, edit=edit,
-                      default=default, title=title, **kwargs)
+    d = CompletedDialog(parent, prompt, hint=hint, title=title, **kwargs)
     d.setWindowModality(Qt.WindowModal)
     d.exec_()
 

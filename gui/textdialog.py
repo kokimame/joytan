@@ -63,7 +63,7 @@ class TextDialog(QDialog):
         QDialog.__init__(self, mw, Qt.Window)
         self.mw = mw
         self.book = None
-        self.destdir = os.path.join(mw.projectbase(), "text")
+        self.destdir = os.path.join(mw.projectbase(), "textbook")
         if os.path.isdir(self.destdir):
             import shutil
             shutil.rmtree(self.destdir)
@@ -193,7 +193,7 @@ class TextDialog(QDialog):
         self._completed(self.destdir + ".html")
 
     def _completed(self, path):
-        getCompleted(path)
+        getCompleted(path, hint="\nOpen the file with your browser.")
 
     def reject(self):
         self.done(0)

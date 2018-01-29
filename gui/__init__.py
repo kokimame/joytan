@@ -5,10 +5,11 @@
 """
 Building and initializing GUI.
 
-Honor mention:
-PyQt programming pattern was learned from Anki project
+Acknowledgement:
+PyQt programming pattern is based on Anki project
 (https://github.com/dae/anki)
 """
+
 import optparse
 import tempfile
 
@@ -20,7 +21,6 @@ from joytan.config import Config
 from joytan import conversion as to
 
 
-# TODO: Deploy with confident. Very obscure right now
 if sys.version_info[0] < 3:
     raise Exception("Joytan requires Python 3.x")
 
@@ -28,7 +28,7 @@ if sys.getfilesystemencoding().lower() in ("ascii", "ansi_x3.4-1968"):
     raise Exception("Joytan requires a UTF-8 locale.")
 
 # build scripts grep this line, so keep this format
-app_version = "0.0.1beta1"
+app_version = "0.0.0"
 # Main window set in runtime
 mw = None
 logger = None

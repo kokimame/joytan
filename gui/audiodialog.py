@@ -251,7 +251,7 @@ class AudioDialog(QDialog):
     def _on_stop(self):
         if self.thread:
             self.thread.terminate()
-            shutil.rmtree(self._destdir())
+            shutil.rmtree(self._destdir(), ignore_errors=True)
             self.form.progressBar.reset()
             self.form.pgMsg.setText("")
         self.form.stopBtn.setEnabled(False)

@@ -16,12 +16,14 @@ install:
 	cd ${PREFIX}/share/joytan && (\
 		mv joytan.xpm ${PREFIX}/share/pixmaps;\
 		mv joytan.desktop ${PREFIX}/share/applications/)
+	@echo "Installing may take a minute."
 	xdg-mime install joytan.xml --novendor
 	xdg-mime default joytan.desktop applications/x-joytan
 	@echo
 	@echo "Install complete. Type 'joytan' to run."
 
 uninstall:
+	@echo "Uninstalling may take a minute."
 	-xdg-mime uninstall ${PREFIX}/share/joytan/joytan.xml
 	rm -rf ${PREFIX}/share/joytan
 	rm -rf ${PREFIX}/bin/joytan

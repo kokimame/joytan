@@ -14,7 +14,7 @@ install:
 	mkdir -p ${PREFIX}/share/pixmaps
 	mkdir -p ${PREFIX}/share/applications
 	cd ${PREFIX}/share/joytan && (\
-		mv joytan.xpm joytan.png ${PREFIX}/share/pixmaps;\
+		mv joytan.xpm ${PREFIX}/share/pixmaps;\
 		mv joytan.desktop ${PREFIX}/share/applications/)
 	xdg-mime install joytan.xml --novendor
 	xdg-mime default joytan.desktop applications/x-joytan
@@ -26,7 +26,6 @@ uninstall:
 	rm -rf ${PREFIX}/share/joytan
 	rm -rf ${PREFIX}/bin/joytan
 	rm -rf ${PREFIX}/share/pixmaps/joytan.xpm
-	rm -rf ${PREFIX}/share/pixmaps/joytan.png
 	rm -rf ${PREFIX}/share/applications/joytan.desktop
 	@echo
 	@echo "Uninstall complete. Thank you for using Joytan."

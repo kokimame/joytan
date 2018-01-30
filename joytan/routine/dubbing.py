@@ -3,10 +3,14 @@
 # License: GPLv3 or later; http://www.gnu.org/licenses/gpl.html
 
 import os
+import sys
 import pydub
 import tinytag
 from pydub import AudioSegment as Aseg
 
+from joytan.frozen import FROZEN_FFMPEG
+if getattr(sys, 'frozen', False):
+    Aseg.converter = FROZEN_FFMPEG
 
 class DubbingWorker:
     """
@@ -196,7 +200,13 @@ def copy_and_split(mp3path, output, ending):
     remaining time we need while making a looped BGM.
     This copies input mp3file and cuts it at given time then save it as 'output'. 
     """
-    program = pydub.utils.which("ffmpeg")
+
+    # Check if the user install dependencies for pydub
+    if getattr(sys, 'frozen', False):
+        program = FROZEN_FFMPEG
+    else:
+        program = pydub.utils.which("ffmpeg")
+
     command = [program,
                '-y',  # Say yes to override confirmation
                '-i', mp3path,

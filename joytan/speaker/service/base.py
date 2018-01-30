@@ -75,7 +75,12 @@ class Service(object, metaclass=abc.ABCMeta):
     CLI_DECODINGS = ['ascii', 'utf-8', 'latin-1']
 
     # where we can find the lame transcoder
-    CLI_LAME = 'lame'
+    if getattr(sys, 'frozen', False):
+        # if the app is bundled
+        from joytan.frozen import FROZEN_LAME
+        CLI_LAME = FROZEN_LAME
+    else:
+        CLI_LAME = 'lame'
 
     # where we can find the mplayer binary
     CLI_MPLAYER = 'mplayer'

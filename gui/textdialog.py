@@ -7,7 +7,7 @@ import gui
 from gui.qt import *
 from gui.widgets.panellane import *
 from gui.utils import path2filename, showCritical, getCompleted, getFile, ConfirmDialog
-
+from joytan.frozen import FROZEN_TEXTBOOK
 
 def on_textdialog(mw):
     gui.dialogs.open("TextDialog", mw)
@@ -23,9 +23,16 @@ class BookDesign:
     RE_MAXIMG = re.compile(r'<!---maximg:(\d*)--->')
 
     def __init__(self, path=None):
-        self.path = path
-        if path:
-            self.name = path2filename(path)
+        # If the app is bundled app and design is not specified,
+        # look for the default design, which was distributed with the app
+        if not path and getattr(sys, 'frozen', False):
+            if os.path.exists(FROZEN_TEXTBOOK):
+                self.path = FROZEN_TEXTBOOK
+        else:
+            self.path = path
+
+        if self.path:
+            self.name = path2filename(self.path)
             self.maximg = self._parse_design()
             self.info = "%s / image:%d" % (self.name, self.maximg)
 
@@ -46,7 +53,6 @@ class TextDialog(QDialog):
     def __init__(self, mw):
         QDialog.__init__(self, mw, Qt.Window)
         self.mw = mw
-        self.book = None
         # Thread pool for downloading images
         self.pool = None
         if os.path.isdir(self._destdir()):
@@ -57,6 +63,15 @@ class TextDialog(QDialog):
         self.form.setupUi(self)
         self.form.startBtn.clicked.connect(self._on_create)
         self._ui()
+
+        # Try to find default book design
+        try:
+            self.book = BookDesign()
+            self._activate_imglist()
+            self.form.designLbl.setText(self.book.info)
+        except:
+            pass
+
         self.show()
 
     def _ui(self):
@@ -100,7 +115,7 @@ class TextDialog(QDialog):
                 self.pool.start(Worker(lane))
 
     def _activate_imglist(self):
-        assert self.book, "Book design is not defined"
+        assert self.book.path, "Book design is not defined"
 
         _list = self.form.imgList
         for i, ew in enumerate(self.mw.entrylist.get_entry_all()):
@@ -153,7 +168,7 @@ class TextDialog(QDialog):
         return _list.itemWidget(_list.item(2 * i + 1))
 
     def _on_create(self):
-        if not self.book:
+        if not self.book.path:
             showCritical("Please select textbook design. If you don't have any design file,"
                          " you can download various designs from our website.")
             return

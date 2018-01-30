@@ -82,7 +82,7 @@ class Ui_TextDialog(object):
         self.cancelBtn.setObjectName("cancelBtn")
         self.horizontalLayout.addWidget(self.cancelBtn)
         self.startBtn = QtWidgets.QPushButton(TextDialog)
-        self.startBtn.setAutoDefault(False)
+        self.startBtn.setAutoDefault(True)
         self.startBtn.setDefault(False)
         self.startBtn.setObjectName("startBtn")
         self.horizontalLayout.addWidget(self.startBtn)

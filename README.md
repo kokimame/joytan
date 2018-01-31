@@ -4,6 +4,8 @@
      
 [![Build Status](https://travis-ci.org/kokimame/joytan.svg?branch=master)](https://travis-ci.org/kokimame/joytan)
 [![Gitter chat](https://badges.gitter.im/gitterHQ/gitter.png)](https://gitter.im/JoytanApp/Lobby)
+[![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+[![Twitter](https://img.shields.io/twitter/follow/JoytanApp.svg?style=social&label=Follow)](https://twitter.com/intent/follow?screen_name=JoytanApp)
 
 ***Joytan is in early development and does not yet have a stable production.***
 
@@ -29,9 +31,10 @@ Key features include:
 ## What You Create
 We are distributing some of sample creation on YouTube. Take a look!
 
-[![Sample1](https://img.youtube.com/vi/lbuPNw-T8Xo/0.jpg)](https://www.youtube.com/watch?v=lbuPNw-T8Xo)
+[![Sample1](https://img.youtube.com/vi/Qj_Nw97ZkPY/0.jpg)](https://www.youtube.com/watch?v=Qj_Nw97ZkPY)
 
-[![Sample2](https://img.youtube.com/vi/Qj_Nw97ZkPY/0.jpg)](https://www.youtube.com/watch?v=Qj_Nw97ZkPY)
+
+[![Sample2](https://img.youtube.com/vi/lbuPNw-T8Xo/0.jpg)](https://www.youtube.com/watch?v=lbuPNw-T8Xo)
 
 
 *NOTE: Videos were created from two resources. One is audiobooks which were

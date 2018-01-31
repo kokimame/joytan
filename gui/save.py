@@ -16,7 +16,7 @@ def on_save(mw):
         newfile = getFileToSave(mw, "Save Wordlist",
                                 dir=mw.config['workspace'],
                                 filter=filter,
-                                suffix="jel.csv")
+                                suffix="csv")
     except:
         return
 

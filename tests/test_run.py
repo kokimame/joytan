@@ -60,12 +60,12 @@ def test_open():
     print("\n== Test_open")
 
     # Sample Joytan EntryList file to open
-    test_jel = 'tests/assets/ja_en.jel.csv'
-    assert os.path.exists(test_jel), 'Test file %s not found' % test_jel
+    test_csv = 'tests/assets/ja_en.csv'
+    assert os.path.exists(test_csv), 'Test file %s not found' % test_csv
 
     with joytan_running() as mw:
         from gui.open import on_open
-        on_open(mw, file=test_jel)
+        on_open(mw, file=test_csv)
 
         assert mw.entrylist.count() == 4
         # We no longer save TTS information in .jel.csv file,
@@ -90,8 +90,8 @@ def test_open():
 #     print("== Test_audiodialog")
 #
 #     # Sample Joytan EntryList file to open
-#     test_jel = 'tests/assets/ja_en.jel.csv'
-#     assert os.path.exists(test_jel), 'Test file %s not found' % test_jel
+#     test_csv = 'tests/assets/ja_en.csv'
+#     assert os.path.exists(test_csv), 'Test file %s not found' % test_jel
 #
 #     with joytan_running() as mw:
 #         from gui.open import on_open

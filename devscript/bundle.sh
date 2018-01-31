@@ -8,6 +8,7 @@ fi
 
 cd ..
 # Setting input folder and output folder
+version=0.0.0
 inbase=joytan
 outbase=~/Desktop/$(date +"%m-%d_%H-%M-%S")_Joytan
 
@@ -35,7 +36,7 @@ if [[ "$OSTYPE" == "msys" ]]; then
     cp ${inbase}/devscript/build_nsis.nsi ${binary}
     cp "C:\Program Files (x86)\Lame For Audacity\lame.exe" ${binary}
     cp "C:\Program Files\ffmpeg\bin\ffmpeg.exe" ${binary}
-    makensis ${binary}/makensis.nsi
+    makensis ${binary}/build_nsis.nsi
 
 elif [[ "$OSTYPE" == "darwin"* ]]; then
     echo "Bundle for Mac"
@@ -48,7 +49,7 @@ elif [[ "$OSTYPE" == "darwin"* ]]; then
     cp /usr/local/bin/lame ${binary}/Joytan.app/Contents/MacOS
     cp ${inbase}/design/default_textbook.html ${binary}/Joytan.app/Contents/MacOS
     dmgbuild -s ${inbase}/devscript/build_dmg.py \
-        -D app=${binary}/Joytan.app "Joytan" ${binary}/joytan-0.0.0.dmg
+        -D app=${binary}/Joytan.app "Joytan" ${binary}/joytan-${version}.dmg
 
 else
     echo "Bundle for Linux"
@@ -58,10 +59,13 @@ else
        --name='joytan' --icon=${inbase}/logo/joytan.ico
 fi
 
+rm -rf ${outbase}/build ${outbase}/joytan.spec
+
 # Move requirements for Linux installation
 if [[ "$OSTYPE" == "linux-gnu" ]]; then
     cp ${inbase}/joytan.desktop ${inbase}/joytan.xml \
     ${inbase}/joytan.xpm ${inbase}/Makefile ${outbase}
+    cd ${outbase}
+    tar -cvjSf joytan-${version}-amd64.tar.bz2 *
 fi
 
-rm -rf ${outbase}/build ${outbase}/joytan.spec

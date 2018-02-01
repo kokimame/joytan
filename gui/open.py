@@ -51,16 +51,12 @@ def on_open(mw, file=None):
                 if i == 1:
                     column['atop'] = [head[i - 1]]
                     header.append('atop')
-                elif (i + 8) % 10 == 0:
-                    ndef = int((i + 8) / 10)
+                else:
+                    ndef = i - 1
                     header.append('def-%d' % ndef)
                     column['def-%d' % ndef] = [head[i - 1]]
-                else:
-                    nex = i - 1 - ndef
-                    header.append('ex-%d-%d' % (ndef, nex))
-                    column['ex-%d-%d' % (ndef, nex)] = [head[i - 1]]
 
-        mw.entrylist.set_config('reshape', dict(ndef=ndef, nex=nex))
+        mw.entrylist.set_config('reshape', dict(ndef=ndef, nex=0))
 
         for row in reader:
             for h, v in zip(header, row):

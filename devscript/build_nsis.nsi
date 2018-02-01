@@ -72,7 +72,7 @@ section "install"
 	# Start Menu
 	createDirectory "$SMPROGRAMS\${APPNAME}"
 	createShortCut "$SMPROGRAMS\${APPNAME}.lnk" "$INSTDIR\joytan.exe" "" "$INSTDIR\joytan.ico"
-	CreateShortCut "$DESKTOP\${APPNAME}.lnk" "$INSTDIR\joytan.exe" ""
+	createShortCut "$DESKTOP\${APPNAME}.lnk" "$INSTDIR\joytan.exe" "" "$INSTDIR\joytan.ico"
  
 	# Registry information for add/remove programs
 	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPNAME}" "DisplayName" "${APPNAME} - ${DESCRIPTION}"

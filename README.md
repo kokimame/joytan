@@ -31,10 +31,10 @@ Key features include:
 ## What You Create
 We are distributing some of sample creation on YouTube. Take a look!
 
-[![Sample1](https://img.youtube.com/vi/Qj_Nw97ZkPY/0.jpg)](https://www.youtube.com/watch?v=Qj_Nw97ZkPY)
+[![acronyms](https://img.youtube.com/vi/2wVEDKgj1TA/0.jpg)](https://www.youtube.com/watch?v=2wVEDKgj1TA)
 
+[![jlpt_sample](https://img.youtube.com/vi/Qj_Nw97ZkPY/0.jpg)](https://www.youtube.com/watch?v=Qj_Nw97ZkPY)
 
-[![Sample2](https://img.youtube.com/vi/lbuPNw-T8Xo/0.jpg)](https://www.youtube.com/watch?v=lbuPNw-T8Xo)
 
 
 *NOTE: Videos were created from two resources. One is audiobooks which were
@@ -84,9 +84,9 @@ This means previewing your audiobooks is free.
 
 To see its pricing and create free account, see [the website](https://aws.amazon.com/polly/pricing/).
 
-After successfully creating your Amazon Web Service (AWS) account, you get  from AWS. 
-To activate Amazon Polly from Joytan, you need to make two files in a specific folder to store settings. 
-The detail of this process is explained [here](https://github.com/boto/boto3).
+After successfully creating your Amazon Web Service (AWS) account, you have personal configurations of AWS. 
+To activate Amazon Polly on Joytan, you need to make two files in a specific folder to store settings. 
+The detail of this process is explained [here](https://boto3.readthedocs.io/en/latest/guide/configuration.html).
 
 1. Create your credentials file at 
 ```~/.aws/credentials``` (```C:\Users\USER_NAME\.aws\credentials``` for Windows users)

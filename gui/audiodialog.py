@@ -191,10 +191,10 @@ class AudioDialog(QDialog):
 
             def run(self):
                 self.completed = False
-                self.prog.emit("Setting up aufio files. This may take a few minutes")
+                self.prog.emit("Setting up audio files. This may take a few minutes")
                 self.worker.setup_audio()
                 for ew in entries:
-                    self.prog.emit("Creating audio file of %s." % ew['atop'])
+                    self.prog.emit("Creating audio file of Entry #%d" % (ew.row + 1))
                     os.makedirs(os.path.join(setting['dest'], ew.str_index()), exist_ok=True)
                     try:
                         self.worker.onepass(ew)

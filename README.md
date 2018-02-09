@@ -43,7 +43,7 @@ We are distributing some of sample creation on YouTube. Take a look!
 
 ## Download & Installation
 #### Windows
-1. Download [Windows Installer (.exe)](https://github.com/kokimame/joytan/releases/download/v0.0.0-beta/joytan-0.0.0-installer.exe)
+1. Download [Windows Installer (.exe)](https://drive.google.com/uc?export=download&id=1QhkcsuzZYVpWrNne8sh6qGUK0wh1JwVX)
 to your desktop or download folder.
 2. Double-click on the installer and follow instructions. Joytan will be installed to your computer.
 3. Double-click on the new Joytan icon on your desktop to start Joytan.
@@ -52,12 +52,12 @@ to your desktop or download folder.
 the strange behaviour arises from a difficulty of handling underlying processes on Windows.*
 
 #### Mac
-1. Download [Joytan for Mac (.dmg)](https://github.com/kokimame/joytan/releases/download/v0.0.0-beta/joytan-0.0.0.dmg)
+1. Download [Joytan for Mac (.dmg)](https://drive.google.com/uc?export=download&id=1KqcJqL4Xf_Zt105iIfrHJO1irNPcaK1U)
 to your desktop or download folder.
 2. Open the file and drag Joytan Icon into Application folder.
 
 #### Linux/BSD
-1. Download [Joytan for Linux (.zip)](https://github.com/kokimame/joytan/releases/download/v0.0.0-beta/joytan-0.0.0-amd64.tar.bz2)
+1. Download [Joytan for Linux (.zip)](https://drive.google.com/uc?export=download&id=1Uvgy4mIQ8xOYGXnD2jblojRUNXoAh7sd)
 2. Then from Terminal, the following commands install dependencies and Joytan. (Example on Ubuntu)
 ```
 $ tar xjf Downloads/joytan-0.0.0-amd64.tar.bz2

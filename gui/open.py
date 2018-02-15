@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-# Copyright (C) 2017-Present: Koki Mametani <kokimametani@gmail.com>
-# License: GPLv3 or later; http://www.gnu.org/licenses/gpl.html
+# Copyright (C) 2017-Present: Kohki Mametani <kohkimametani@gmail.com>
+# License: GNU GPL version 3 or later; http://www.gnu.org/licenses/gpl.html
 
 import csv
 import json
@@ -13,6 +13,9 @@ from gui.utils import getFile
 # preview csv files and give options about which columns & rows to open.
 
 def on_open(mw, file=None):
+    """
+    Open a File Dialog to let users select a CSV file of Joytan Entrylist.
+    """
     filter = "CSV file for Joytan EntryList (*.csv)"
     if not file:
         try:
@@ -46,6 +49,9 @@ def on_open(mw, file=None):
                     raise Exception("Invalid key found %s. "
                                     "Header-validation is failing." % key)
         else:
+            # If header is not specified by loaded csv file,
+            # read first column as 'atop' and the others as 'def-n'
+            nex = 0
             header = []
             for i in range(1, len(head) + 1):
                 if i == 1:
@@ -56,7 +62,7 @@ def on_open(mw, file=None):
                     header.append('def-%d' % ndef)
                     column['def-%d' % ndef] = [head[i - 1]]
 
-        mw.entrylist.set_config('reshape', dict(ndef=ndef, nex=0))
+        mw.entrylist.set_config('reshape', dict(ndef=ndef, nex=nex))
 
         for row in reader:
             for h, v in zip(header, row):

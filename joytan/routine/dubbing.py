@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-# Copyright (C) 2017-Present: Koki Mametani <kokimametani@gmail.com>
-# License: GPLv3 or later; http://www.gnu.org/licenses/gpl.html
+# Copyright (C) 2017-Present: Kohki Mametani <kohkimametani@gmail.com>
+# License: GNU GPL version 3 or later; http://www.gnu.org/licenses/gpl.html
 
 import os
 import sys
@@ -173,7 +173,7 @@ class DubbingWorker:
                     else:
                         bgm = Aseg.from_mp3(fi['path'])
                         rdbfs = reduce_dbfs(bgm.dBFS, (1 - fi['volume'] / 100))
-                        # Probably it's save to overlay even if BGM exceeds msec with
+                        # Probably it's safe to overlay BGM even if it exceeds msec with
                         # the repetition below.
                         for _ in range(fi['repeat']):
                             if not remaining():

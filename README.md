@@ -143,7 +143,7 @@ Now you are ready to run Joytan by:
 
 
 ## Disclaimer
-Copyright © 2017-Present Koki Mametani.
+Copyright © 2017-Present Kohki Mametani (kohkimametani@gmail.com).
 
 Joytan is lincenced under the GNU General Public License version 3.
 

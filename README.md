@@ -33,8 +33,7 @@ We are distributing some of sample creation on YouTube. Take a look!
 
 [![acronyms](https://img.youtube.com/vi/2wVEDKgj1TA/0.jpg)](https://www.youtube.com/watch?v=2wVEDKgj1TA)
 
-[![jlpt_sample](https://img.youtube.com/vi/Qj_Nw97ZkPY/0.jpg)](https://www.youtube.com/watch?v=Qj_Nw97ZkPY)
-
+[![jlpt_sample](https://img.youtube.com/vi/HOWVGxGHCMg/0.jpg)](https://www.youtube.com/watch?v=HOWVGxGHCMg)
 
 
 *NOTE: Videos were created from two resources. One is audiobooks which were
@@ -49,7 +48,8 @@ to your desktop or download folder.
 3. Double-click on the new Joytan icon on your desktop to start Joytan.
 
 *NOTE: You will see a black window (console) while running Joytan on Windows. Please don't close the window,
-the strange behaviour arises from a difficulty of handling underlying processes on Windows.*
+the strange behaviour arises from a difficulty of handling underlying processes on Windows.
+ [Help us!](https://github.com/kokimame/joytan/issues/2)*
 
 #### Mac
 1. Download [Joytan for Mac (.dmg)](https://drive.google.com/uc?export=download&id=1KqcJqL4Xf_Zt105iIfrHJO1irNPcaK1U)
@@ -79,14 +79,16 @@ We highly recommend you to use **Amazon Polly** as Text-to-Speech service of you
 because of its speech quality and cost-effectiveness.
 Although it's not free, but if you're first to use AWS, you're eligible to the AWS Free Tier and
 you are free to turn 5 million characters per month into speech for the first 12 months.
-Even if you're not, its free replay feature is very cost-effective especially for our usage.
-This means previewing your audiobooks is free.
+Even if you're not, pay-as-you-go $4.00 per 1 million characters for speech requests 
+is probably quite affordable.
 
-To see its pricing and create free account, see [the website](https://aws.amazon.com/polly/pricing/).
+To see its pricing and create free account, see [AWS official website](https://aws.amazon.com/polly/pricing/).
 
 After successfully creating your Amazon Web Service (AWS) account, you have personal configurations of AWS. 
 To activate Amazon Polly on Joytan, you need to make two files in a specific folder to store settings. 
 The detail of this process is explained [here](https://boto3.readthedocs.io/en/latest/guide/configuration.html).
+**The account credentials provide unlimited access to your AWS resources. 
+Store your credentials securely, do not share it.**
 
 1. Create your credentials file at 
 ```~/.aws/credentials``` (```C:\Users\USER_NAME\.aws\credentials``` for Windows users)

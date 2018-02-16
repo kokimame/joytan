@@ -61,10 +61,14 @@ class AudioDialog(QDialog):
             lambda: gui.dialogs.open("Preferences", self.mw, back_to=self, tab="TTS"))
 
     def _ui_progress(self):
-        self.form.progressBar.setValue(0)
+        self.form.stopBtn.setEnabled(False)
+        self.form.createBtn.setEnabled(True)
+        self.form.progressBar.reset()
+        self.form.pgMsg.setText("")
 
     def _ui_spin(self):
-        pass
+        self.form.fromSpin.setValue(1)
+        self.form.toSpin.setValue(1)
 
     def _ui_add_flow(self):
         fadd = self.form.flowAdd
@@ -149,14 +153,14 @@ class AudioDialog(QDialog):
             _from, _to = self.form.fromSpin.value(), self.form.toSpin.value()
             if _from > _to:
                 showCritical("The value in 'to' field is out of range.")
-                self._init_spin()
+                self._ui_spin()
                 return
             else:
                 try:
                     entries = self.mw.entrylist.get_entry_all()[_from-1:_to]
                 except IndexError:
                     showCritical("Index is out of range.")
-                    self._init_spin()
+                    self._ui_spin()
                     return
 
         # Open TTS setting dialog if TTS setting is incomplete.
@@ -255,8 +259,7 @@ class AudioDialog(QDialog):
         if self.thread:
             self.thread.terminate()
             shutil.rmtree(self._destdir(), ignore_errors=True)
-            self.form.progressBar.reset()
-            self.form.pgMsg.setText("")
+        self._ui_progress()
         self.form.stopBtn.setEnabled(False)
         self.form.createBtn.setEnabled(True)
 
@@ -268,7 +271,7 @@ class AudioDialog(QDialog):
                     iw.force_stop()
 
     def _completed(self, path):
-        self._init_progress()
+        self._ui_progress()
         # To debug audio elements of audiobooks, remove the line below.
         shutil.rmtree(self._destdir(), ignore_errors=True)
         if self.thread.completed:
@@ -312,18 +315,7 @@ class AudioDialog(QDialog):
     def _destdir(self):
         return os.path.join(self.mw.projectbase(), "audiobook")
 
-    def _init_progress(self):
-        self.form.stopBtn.setEnabled(False)
-        self.form.createBtn.setEnabled(True)
-        self.form.progressBar.reset()
-        self.form.pgMsg.setText("")
-
-    def _init_spin(self):
-        self.form.fromSpin.setValue(1)
-        self.form.toSpin.setValue(1)
-
     def reject(self):
-        self._init_progress()
         self._stop_all_audio()
         self.done(0)
         gui.dialogs.close("AudioDialog")

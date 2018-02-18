@@ -9,17 +9,16 @@
 
 ***Joytan is in early development and does not yet have a stable production.***
 
-Joytan is a small desktop app that automates the boring process of **creating your own audio/textbooks**.
-It's designed to be especially useful for language learner and encourages screen-free study in general.
+Joytan is a free, small cross-platform desktop app that facilitates the process of making audio/textbooks.
+Joytan comes with some powerful features which are especially designed to be useful for language-learners.
 
 Key features include:
-- Non-commercial open source and cross-platform desktop application
 - **Creating MP3 audiobooks with your best-loved songs and sound effects**
 - Full control of sequence and every timbre of your audiobook
-- Audiobook with **lifelike speech** from Amazon Polly
+- Audiobook with **lifelike speech** using Amazon Polly
 - Support free, fast and local Text-to-Speech alternatives
 - **Creating textbook** fast and locally for free, easy to export to PDF
-- **Designing your own original textbook** with basic HTML
+- **Designing original textbook** with basic HTML
 - **Automatic language translation** powered by Google Translation
 - **Automatic visual aid (images) download** to your textbook from Google Image
 - **Automatic online dictionary lookup** for language learning
@@ -31,10 +30,12 @@ Key features include:
 ## What You Create
 We are distributing some of sample creation on YouTube. Take a look!
 
-[![acronyms](https://img.youtube.com/vi/2wVEDKgj1TA/0.jpg)](https://www.youtube.com/watch?v=2wVEDKgj1TA)
-
-[![jlpt_sample](https://img.youtube.com/vi/HOWVGxGHCMg/0.jpg)](https://www.youtube.com/watch?v=HOWVGxGHCMg)
-
+<a href="https://www.youtube.com/watch?v=HOWVGxGHCMg">
+  <img src="https://img.youtube.com/vi/HOWVGxGHCMg/0.jpg" width="320" height=240" />
+</a>
+<a href="https://www.youtube.com/watch?v=2wVEDKgj1TA">
+  <img src="https://img.youtube.com/vi/2wVEDKgj1TA/0.jpg" width="320" height=240" />
+</a>
 
 *NOTE: Videos were created from two resources. One is audiobooks which were
  created with Joytan, the other is image clips which were created separately from the app.

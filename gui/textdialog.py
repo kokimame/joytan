@@ -91,7 +91,8 @@ class TextDialog(QDialog):
 
         for i in range(self.mw.entrylist.count()):
             lane = self._get_lane(i)
-            lane.wait_all()
+            if lane:
+                lane.wait_all()
 
         # The actual class to be run in the following pool
         class Worker(QRunnable):
@@ -109,10 +110,11 @@ class TextDialog(QDialog):
 
         for i in range(self.mw.entrylist.count()):
             lane = self._get_lane(i)
-            waiting = lane.is_waiting()
-            if waiting:
-                lane.thread.set_total(waiting)
-                self.pool.start(Worker(lane))
+            if lane:
+                waiting = lane.is_waiting()
+                if waiting:
+                    lane.thread.set_total(waiting)
+                    self.pool.start(Worker(lane))
 
     def _activate_imglist(self):
         assert self.book.path, "Book design is not defined"
@@ -157,7 +159,8 @@ class TextDialog(QDialog):
     def _clear_all_images(self):
         for i in range(self.mw.entrylist.count()):
             lane = self._get_lane(i)
-            lane.clear_all()
+            if lane:
+                lane.clear_all()
 
     def _clear_imglist(self):
         for _ in range(self.form.imgList.count()):
@@ -196,7 +199,7 @@ class TextDialog(QDialog):
             self.pool.clear()
         for i in range(self.mw.entrylist.count()):
             lane = self._get_lane(i)
-            if lane.is_waiting:
+            if lane and lane.is_waiting:
                 lane.force_finish()
 
     def _destdir(self):

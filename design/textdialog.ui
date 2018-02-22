@@ -99,7 +99,7 @@
      <item>
       <widget class="QPushButton" name="stopBtn">
        <property name="enabled">
-        <bool>true</bool>
+        <bool>false</bool>
        </property>
        <property name="text">
         <string>Stop Download</string>
@@ -174,16 +174,6 @@
         </size>
        </property>
       </spacer>
-     </item>
-     <item>
-      <widget class="QPushButton" name="cancelBtn">
-       <property name="text">
-        <string>Stop</string>
-       </property>
-       <property name="autoDefault">
-        <bool>false</bool>
-       </property>
-      </widget>
      </item>
      <item>
       <widget class="QPushButton" name="startBtn">

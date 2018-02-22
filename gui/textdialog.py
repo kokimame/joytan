@@ -50,6 +50,7 @@ class BookDesign:
 
 
 class TextDialog(QDialog):
+
     def __init__(self, mw):
         QDialog.__init__(self, mw, Qt.Window)
         self.mw = mw
@@ -79,11 +80,11 @@ class TextDialog(QDialog):
         label = self.form.designLbl
         label.selectionChanged.connect(label.deselect)
         self.form.designBtn.clicked.connect(self._on_design_select)
-        self.form.dlAllBtn.clicked.connect(self._autodownload)
+        self.form.dlAllBtn.clicked.connect(self._auto_download)
         self.form.clearAllBtn.clicked.connect(self._clear_all_images)
         self.form.stopBtn.clicked.connect(self._on_stop)
 
-    def _autodownload(self):
+    def _auto_download(self):
         if not self.book:
             showCritical("Please select textbook design. If you don't have any design file,"
                          " you can download various designs from our website.")
@@ -105,7 +106,7 @@ class TextDialog(QDialog):
                 self.lane.thread.run()
 
         self.pool = QThreadPool()
-        # Only 4 threads working at the same time
+        # Only 4 threads running at the same time
         self.pool.setMaxThreadCount(4)
 
         for i in range(self.mw.entrylist.count()):
@@ -115,6 +116,22 @@ class TextDialog(QDialog):
                 if waiting:
                     lane.thread.set_total(waiting)
                     self.pool.start(Worker(lane))
+        self._disable_inputs()
+
+        self.qtimer = self.ThreadPoolTimer(self.pool)
+        self.qtimer.done.connect(lambda: self._disable_inputs(flag=False))
+        self.qtimer.start()
+
+    def _disable_inputs(self, flag=True):
+        """
+        Disable (or enable if flag is False) inputs when downloading starts,
+        except the button to stop downloading
+        """
+        self.form.dlAllBtn.setDisabled(flag)
+        self.form.clearAllBtn.setDisabled(flag)
+        self.form.designBtn.setDisabled(flag)
+        self.form.followEdit.setDisabled(flag)
+        self.form.stopBtn.setDisabled(not flag)
 
     def _activate_imglist(self):
         assert self.book.path, "Book design is not defined"
@@ -124,22 +141,21 @@ class TextDialog(QDialog):
             if ew['atop'] == '':
                 # if ew is empty, ignore it
                 continue
-            group = ew['atop']
             destdir = os.path.join(self._destdir(), ew.str_index())
             lwi1 = QListWidgetItem()
             lwi2 = QListWidgetItem()
-            pb = QPushButton('+ Download %s' % group)
+            pb = QPushButton('+ Download: #%d (%s)' % (ew.row + 1, ew['atop']))
             pb.setStyleSheet("Text-align: left")
-            ip = PanelLane(group, self.form.followEdit.text(), destdir, self.book.maximg)
-            pb.clicked.connect(ip.on_download)
+            lane = PanelLane(ew['atop'], self.form.followEdit.text(), destdir, self.book.maximg)
+            pb.clicked.connect(lane.on_download)
             lwi1.setSizeHint(pb.sizeHint())
-            self.form.followEdit.textChanged.connect(ip.on_update_following)
-            lwi2.setSizeHint(ip.size())
+            self.form.followEdit.textChanged.connect(lane.on_update_following)
+            lwi2.setSizeHint(lane.size())
 
             _list.addItem(lwi1)
             _list.setItemWidget(lwi1, pb)
             _list.addItem(lwi2)
-            _list.setItemWidget(lwi2, ip)
+            _list.setItemWidget(lwi2, lane)
 
     def _on_design_select(self):
         try:
@@ -220,3 +236,17 @@ class TextDialog(QDialog):
         # d.accepted.connect(close_dialog)
         # d.exec_()
         close_dialog()
+
+    class ThreadPoolTimer(QThread):
+        """
+        Emit an signal when QThreadPool finishes the job
+        """
+        done = pyqtSignal()
+
+        def __init__(self, pool):
+            QThread.__init__(self)
+            self.pool = pool
+
+        def run(self):
+            self.pool.waitForDone()
+            self.done.emit()

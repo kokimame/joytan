@@ -79,7 +79,12 @@ class GimageThread(QThread):
             imgfile = download_image(link, os.path.join(path_temp(self.destdir)))
             if imgfile:
                 self.upload.emit(imgfile, link)
-                self.links.remove(link)
+                try:
+                    self.links.remove(link)
+                except:
+                    # Sometimes other threads remove the same link from the list
+                    # while downloading the image
+                    pass
                 uploads += 1
             if uploads >= self.img_total:
                 break

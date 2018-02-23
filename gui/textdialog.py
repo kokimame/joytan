@@ -90,11 +90,6 @@ class TextDialog(QDialog):
                          " you can download various designs from our website.")
             return
 
-        for i in range(self.mw.entrylist.count()):
-            lane = self._get_lane(i)
-            if lane:
-                lane.wait_all()
-
         # The actual class to be run in the following pool
         class Worker(QRunnable):
             def __init__(self, lane):
@@ -102,7 +97,7 @@ class TextDialog(QDialog):
                 self.lane = lane
 
             def run(self):
-                self.lane.start_working()
+                self.lane.set_panels_state("WORK")
                 self.lane.thread.run()
 
         self.pool = QThreadPool()
@@ -112,15 +107,21 @@ class TextDialog(QDialog):
         for i in range(self.mw.entrylist.count()):
             lane = self._get_lane(i)
             if lane:
-                waiting = lane.is_waiting()
-                if waiting:
-                    lane.thread.set_total(waiting)
+                ready = lane.count_initial()
+                if ready:
+                    lane.thread.set_total(ready)
                     self.pool.start(Worker(lane))
+
+        for i in range(self.mw.entrylist.count()):
+            lane = self._get_lane(i)
+            if lane:
+                lane.set_panels_state("WAIT")
+
         self._disable_inputs()
 
-        self.qtimer = self.ThreadPoolTimer(self.pool)
-        self.qtimer.done.connect(lambda: self._disable_inputs(flag=False))
-        self.qtimer.start()
+        self.ptimer = self.ThreadPoolTimer(self.pool)
+        self.ptimer.done.connect(lambda: self._disable_inputs(flag=False))
+        self.ptimer.start()
 
     def _disable_inputs(self, flag=True):
         """
@@ -184,7 +185,10 @@ class TextDialog(QDialog):
 
     def _get_lane(self, i):
         _list = self.form.imgList
-        return _list.itemWidget(_list.item(2 * i + 1))
+        try:
+            return _list.itemWidget(_list.item(2 * i + 1))
+        except:
+            return
 
     def _on_create(self):
         if not self.book.path:
@@ -215,7 +219,7 @@ class TextDialog(QDialog):
             self.pool.clear()
         for i in range(self.mw.entrylist.count()):
             lane = self._get_lane(i)
-            if lane and lane.is_waiting:
+            if lane:
                 lane.force_finish()
 
     def _destdir(self):
@@ -226,6 +230,7 @@ class TextDialog(QDialog):
 
     def reject(self):
         def close_dialog():
+            self._on_stop()
             self.done(0)
             gui.dialogs.close("TextDialog")
 

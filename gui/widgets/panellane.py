@@ -57,7 +57,7 @@ class Panel(QPushButton):
 
     def state_manager(self, state):
         # List of state:
-        # 'INIT': Initial state. Show the index in the lane and disable clicking,
+        # 'INIT': Initial state. Show the indices of panels in the lane and disable clicking,
         # 'WORK' Downloading in process. Use defined message and disable clicking
         # 'WAIT': Waiting for download thread. Use defined message and disable clicking
         # 'DONE': Image successfully downloaded and set. Enable right clicking.
@@ -108,26 +108,9 @@ class PanelLane(QListWidget):
             self.addItem(lwi)
             self.setItemWidget(lwi, panel)
 
-    def on_download(self):
-        waiting = 0
-        for i in range(self.count()):
-            p = self._get_panel(i)
-            if p.state in ['INIT', 'WORK', 'WAIT']:
-                p.state_manager('WORK')
-                waiting += 1
-        if waiting:
-            self.thread.set_total(waiting)
-            self.thread.start()
-
     def on_image_delete(self, count):
         self.imglist[count] = ('', '')
         self._get_panel(count).state_manager('INIT')
-
-    def _debug_panel_state(self):
-        for i in range(self.count()):
-            p = self._get_panel(i)
-            print(p.state, end='  ')
-        print()
 
     @pyqtSlot(int, str)
     def on_local_upload(self, count, imgpath):
@@ -138,8 +121,10 @@ class PanelLane(QListWidget):
         return
 
     def on_set_image(self, imgpath, link):
-        # Check from left to right among panels,
-        # set the new image at anything not done yet
+        """
+        Check from left to right among panels,
+        set the new image to any panel not in "DONE" state. 
+        """
         for i in range(self.count()):
             p = self._get_panel(i)
             if p.state != 'DONE':
@@ -147,14 +132,39 @@ class PanelLane(QListWidget):
                 self.imglist[i] = (imgpath, link)
                 break
 
-    def wait_all(self):
-        # Make everything but 'DONE' panel waiting
+    def on_download(self):
+        ready = self.count_initial()
+        if ready:
+            self.set_panels_state("WORK")
+            self.thread.set_total(ready)
+            self.thread.start()
+
+    def count_initial(self):
+        """
+        Count the number of panels in the "INIT" state, 
+        which is ready to spawn a new thread for downloading images
+        """
+        initial = 0
         for i in range(self.count()):
             p = self._get_panel(i)
-            if p.state != 'DONE':
-                p.state_manager('WAIT')
+            if p.state == 'INIT':
+                initial += 1
+        return initial
+
+    def set_panels_state(self, new_state):
+        """
+        Unify the state of panels 
+        """
+        assert new_state != "DONE"
+        for i in range(self.count()):
+            p = self._get_panel(i)
+            if p.state in ['INIT', 'WAIT']:
+                p.state_manager(new_state)
 
     def clear_all(self):
+        """
+        Clear all images of panels in the lane 
+        """
         for i in range(self.count()):
             self.on_image_delete(i)
 
@@ -176,20 +186,6 @@ class PanelLane(QListWidget):
             p = self._get_panel(i)
             if p.state != 'DONE':
                 p.state_manager('INIT')
-
-    def is_waiting(self):
-        waiting = 0
-        for i in range(self.count()):
-            p = self._get_panel(i)
-            if p.state in ['INIT', 'WORK', 'WAIT']:
-                waiting += 1
-        return waiting
-
-    def start_working(self):
-        for i in range(self.count()):
-            p = self._get_panel(i)
-            if p.state in ['INIT', 'WORK', 'WAIT']:
-                p.state_manager('WORK')
 
     def _get_panel(self, cnt):
         return self.itemWidget(self.item(cnt))

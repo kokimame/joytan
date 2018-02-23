@@ -42,24 +42,3 @@ def test_entrylist():
         # Test remove_all
         mw.entrylist.remove_entry_all()
         assert mw.entrylist.count() == 0
-
-
-def test_open():
-    # Sample Joytan EntryList file to open
-    test_csv = 'tests/assets/ja_en.csv'
-    assert os.path.exists(test_csv), 'Test file %s not found' % test_csv
-
-    with joytan_running() as mw:
-        from gui.open import on_open
-        on_open(mw, file=test_csv)
-
-        assert mw.entrylist.count() == 4
-
-        # Atop key is in ewkeys
-        assert 'atop' in mw.entrylist.get_config('ewkeys')
-        ndef = mw.entrylist.get_config('ndef')
-        nex = mw.entrylist.get_config('nex')
-
-        # Number of ewkeys: atop + def-n * (ex-n-m + 1)
-        n_keys = 1 + ndef * (nex + 1)
-        assert n_keys == len(mw.entrylist.get_config('ewkeys'))

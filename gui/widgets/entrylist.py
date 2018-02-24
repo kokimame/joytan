@@ -237,15 +237,16 @@ class EntryList(QListWidget):
             ew.row = i
             ew.update_view()
 
-    def _move_entry(self, now, next):
+    def _move_entry(self, now, next_row, to_update):
         """
-        :param now: Row of the entry to move
-        :param next: Row to which the entry moves
-        ============
-        Move EntryWidget by taking it from and inserting it to the list
+        :param now: Row of the target entry to move
+        :param next_row: Row to which the entry moves
+        :param to_update: Update the listwidget if True (True by default)
+        
+        Move EntryWidget by taking it from and inserting it back to the EntryList
         """
         # Check destination in the list
-        if not 0 <= next < self.count():
+        if not 0 <= next_row < self.count():
             return
 
         old_ew = self.get_entry_at(now)
@@ -253,18 +254,24 @@ class EntryList(QListWidget):
         eui.setSizeHint(old_ew.sizeHint())
 
         # Entry goes up
-        if next > old_ew.row:
-            to_insert = next + 1
+        if next_row > old_ew.row:
+            to_insert = next_row + 1
             to_take = old_ew.row
         # Entry goes down
         else:
-            to_insert = next
+            to_insert = next_row
             to_take = old_ew.row + 1
 
         self.insertItem(to_insert, eui)
         self.setItemWidget(eui, old_ew)
         self.takeItem(to_take)
-        self.update_all()
+
+        if to_update:
+            self.update_all()
+        else:
+            # TODO: Most of part duplicated with _indexing
+            for i, ew in enumerate(self.get_entry_all()):
+                ew.row = i
 
     def get_entry_at(self, row):
         return self.itemWidget(self.item(row))

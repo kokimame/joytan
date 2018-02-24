@@ -59,7 +59,7 @@ class EntryWidget(QWidget):
     _BOLD.setBold(True)
     _ITALIC.setItalic(True)
 
-    move = pyqtSignal(int, int)
+    move = pyqtSignal(int, int, bool)
     delete = pyqtSignal(int)
 
     def __init__(self, atop, mode, index, levels):
@@ -187,8 +187,8 @@ class EntryWidget(QWidget):
                 if 'ex-%d-%d' % (i, j) in items:
                     self['ex-%d-%d' % (i, j)] = items['ex-%d-%d' % (i, j)]
 
-    def move_to(self, next):
-        self.move.emit(self.row, next)
+    def move_to(self, next_row, to_update=True):
+        self.move.emit(self.row, next_row, to_update)
 
     def str_index(self):
         # Return string number from 00000 to 99999 based on the index

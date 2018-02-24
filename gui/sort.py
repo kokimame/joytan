@@ -67,14 +67,23 @@ class SortDialog(QDialog):
         self.reject()
 
     def _on_shuffle(self, targets):
+        self.form.progressBar.setRange(0, len(targets))
         import random
+        for i in range(0, len(targets)):
+            if i < len(targets) / 2:
+                ew = targets[i]
+                ew.move_to(targets[-i - 1].row, to_update=False)
+                self._on_progress(1)
+
         for i in range(0, len(targets), 2):
             ew = targets[i]
             ew.move_to(random.choice(targets).row, to_update=False)
+            self._on_progress(1)
         self.el.update_all()
 
     def _on_reverse(self, targets):
         length = len(targets)
+        self.form.progressBar.setRange(0, length/2)
         for i in range(0, length):
             if i == length - i - 1 or i == length / 2:
                 break
@@ -84,9 +93,15 @@ class SortDialog(QDialog):
                 top, bottom = targets[i].row, targets[-i - 1].row
                 targets[-i - 1].move_to(top, to_update=False)
                 targets[i].move_to(bottom, to_update=False)
+            self._on_progress(1)
 
         self.el.update_all()
 
+    def _on_progress(self, step):
+        val = self.form.progressBar.value()
+        self.form.progressBar.setValue(val + step)
+
     def reject(self):
+        self._ui_progress()
         self.done(0)
         gui.dialogs.close("CopyDialog")

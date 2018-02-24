@@ -8,7 +8,7 @@ import json
 
 import gui
 from gui.qt import *
-from gui.utils import isMac, isLin, isWin
+from gui.utils import isMac, isLin, isWin, showCritical
 
 
 class JoytanMW(QMainWindow):
@@ -43,6 +43,8 @@ class JoytanMW(QMainWindow):
         form.actionSave.triggered.connect(self._on_save)
         form.actionOpen.triggered.connect(self._on_open)
         form.actionSort.triggered.connect(self._on_sort)
+        form.actionTut.triggered.connect(self._on_tutorial)
+        form.actionWeb.triggered.connect(self._on_website)
 
     def _ui_button(self):
         form = self.form
@@ -122,6 +124,22 @@ class JoytanMW(QMainWindow):
     def _on_copy(self):
         import gui.copy
         gui.copy.on_copy(self)
+
+    def _on_tutorial(self):
+        try:
+            QDesktopServices.openUrl(QUrl("https://kokimame.github.io/joytan/tutorial.html"))
+        except Exception as e:
+            showCritical("Error occured while accessing to the Internet.\n"
+                         "Please report this bug to the developers via GitHub.\n"
+                         "(%s)" % e)
+
+    def _on_website(self):
+        try:
+            QDesktopServices.openUrl(QUrl("https://kokimame.github.io/joytan/"))
+        except Exception as e:
+            showCritical("Error occured while accessing to the Internet.\n"
+                         "Please report this bug to the developers via GitHub.\n"
+                         "(%s)" % e)
 
     def center(self):
         qr = self.frameGeometry()

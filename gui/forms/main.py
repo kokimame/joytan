@@ -134,6 +134,10 @@ class Ui_MainWindow(object):
         self.actionWord_length.setObjectName("actionWord_length")
         self.actionSort = QtWidgets.QAction(MainWindow)
         self.actionSort.setObjectName("actionSort")
+        self.actionTut = QtWidgets.QAction(MainWindow)
+        self.actionTut.setObjectName("actionTut")
+        self.actionWeb = QtWidgets.QAction(MainWindow)
+        self.actionWeb.setObjectName("actionWeb")
         self.menuFile.addAction(self.actionOpen)
         self.menuFile.addAction(self.actionSave)
         self.menuFile.addSeparator()
@@ -141,6 +145,9 @@ class Ui_MainWindow(object):
         self.menuEdit.addAction(self.actionSort)
         self.menuEdit.addSeparator()
         self.menuEdit.addAction(self.actionPreferences)
+        self.menuHelp.addAction(self.actionTut)
+        self.menuHelp.addSeparator()
+        self.menuHelp.addAction(self.actionWeb)
         self.menubar.addAction(self.menuFile.menuAction())
         self.menubar.addAction(self.menuEdit.menuAction())
         self.menubar.addAction(self.menuHelp.menuAction())
@@ -180,5 +187,7 @@ class Ui_MainWindow(object):
         self.actionWord_length.setText(_translate("MainWindow", "Word length"))
         self.actionSort.setText(_translate("MainWindow", "Sort entries"))
         self.actionSort.setShortcut(_translate("MainWindow", "Ctrl+F1"))
+        self.actionTut.setText(_translate("MainWindow", "Find Tutorials"))
+        self.actionWeb.setText(_translate("MainWindow", "Joytan Website"))
 
 from . import icons_rc

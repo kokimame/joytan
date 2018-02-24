@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="">
+  <meta name="keywords" content="language-learning,audiobook,Python">
+  <meta name="author" content="Kohki Mametani">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>Joytan - Free Creative Audio/Textbook Maker</title>
+  <link href='https://fonts.googleapis.com/css?family=Helvetica+Neue' rel='stylesheet' type='text/css'>
+  <link rel="shortcut icon" href="images/joytan.ico" type="image/x-icon" />
+  <link rel="stylesheet" type="text/css" href="./css/stylesheet.css" media="screen" />
+  <script src="./js/dropdown.js"></script>
+  <!--[if lt IE 9]>
+  <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+
+</head>
+
+<body>
+
+<header>
+  <div class="inner">
+    <h1><a href="./index.html">Joytan</a>
+      <img src="images/joytan.png" width="50" height="50">
+    </h1>
+    <h2>Free Creative Audio/Textbook Maker</h2>
+    <a href="https://github.com/kokimame/joytan"
+    class="button" id="gh-button">
+      <small>View project on</small> GitHub</a>
+    <a href="https://www.youtube.com/channel/UC0bLbtTI9uni3bNRPIJQAqA"
+      class="button" id="yt-button"><small>View samples on</small> YouTube</a>
+  </div>
+</header>
+
+<div class="topnav">
+  <a href="./index.html">Home</a>
+  <a href="./install.html">Installation</a>
+  <div class="dropdown">
+    <button onclick="getDropdown()" class="dropbtn" id="active">Tutorial</button>
+    <div id="tutorialDropdown" class="dropdown-content">
+      <a href="./tutorial.html">Setup Amazon Polly</a>
+      <a href="./tutorial_input.html">Organize for new books</a>
+      <a href="./tutorial_audio.html">How to make an audiobook</a>
+      <a href="./tutorial_text.html">How to make a textbooks</a>
+    </div>
+  </div>
+</div>
+
+
+
+<div id="content-wrapper">
+<div class="inner clearfix">
+<section id="main-content">
+
+<h1>Set up Amazon Polly</h1>
+
+<h2>Amazon Polly</h2>
+
+
+<p>
+  We highly recommend you to use <a href="https://aws.amazon.com/polly/">
+  Amazon Polly</a>  as Text-to-Speech service of your audiobooks
+  because of its speech quality and cost-effectiveness.
+  Although it's not free, but if you're first to use AWS,
+  you're eligible to the AWS Free Tier and
+  you can turn 5 million characters per month into speech for free
+  for the first 12 months, and it is almost impossible
+  for those who make audiobooks for language learning to exceed
+  this limit.
+  Even if you're not, pay-as-you-go $4.00 per 1 million characters
+  for speech requests is probably quite affordable.
+  You barely use the amount of 200,000 characters per month.
+</p>
+
+<p>
+  To see its pricing and create free account,
+  see <a href="https://aws.amazon.com/polly/pricing/">AWS official website</a>
+</p>
+
+After successfully creating your Amazon Web Service (AWS) account, you have personal configurations of AWS.
+To activate Amazon Polly on Joytan, you need to make two files in a specific folder to store settings.
+The detail of this process is explained
+<a href="https://boto3.readthedocs.io/en/latest/guide/configuration.html">
+here</a>.
+
+<p>
+  <b>The account credentials provide unlimited access to your AWS resources.
+  Store your credentials securely, do not share it.</b>
+</p>
+
+<h3>Step 1: Make a credentials file</h3>
+
+Create your credentials file at
+<pre>
+  ~/.aws/credentials
+</pre>
+(On Windows)
+<pre>
+  C:\Users\YOUR_USER_NAME\.aws\credentials
+</pre>
+
+ and save the following lines after replacing the placeholders with your own.
+
+<pre>
+  [default]
+  aws_access_key_id = YOUR_KEY
+  aws_secret_access_key = YOUR_SECRET
+</pre>
+
+<h3>Step 2: Make a config file</h3>
+Next, create your config file at
+
+<pre>
+  ~/.aws/config
+</pre>
+(On Windows)
+<pre>
+   C:\Users\YOUR_USER_NAME\.aws\config
+</pre>
+
+and save the following lines.
+
+
+<pre>
+  [default]
+  region=us-east-1
+</pre>
+
+<h2>Result</h2>
+<p>
+  Now you can choose Amazon Polly as
+  Text-to-Speech from Edit/Preferences/Text-to-Speech.
+</p>
+
+<p>
+  And also you should confirm that your AWS account is activated properly
+  after using Amazon Polly for the first time. You can check the details of
+  the AWS service charges from
+  <a href="https://signin.aws.amazon.com">your AWS account dashboard</a>
+</p>
+
+<figure>
+  <a href="images/aws_confirmed.png">
+    <img src="images/aws_confirmed.png"
+    alt="Screenshots of Amazon Polly configuration" width="280" height="240">
+  </a>
+  <figcaption>Amazon Polly on Joytan</figcaption>
+</figure>
+<figure>
+  <a href="images/aws_free_tier.png">
+    <img src="images/aws_free_tier.png"
+    alt="Screenshots of AWS dashboard" width="280" height="240">
+  </a>
+  <figcaption>AWS Free Tier works properly</figcaption>
+</figure>
+
+</section>
+
+<aside id="sidebar">
+  <h2>Index</h2>
+  <li class="current"><a href="./tutorial.html">Set up Amazon Polly</a></li>
+  <li><a href="./tutorial_input.html">Organize Things for Your Book</a></li>
+  <li><a href="./tutorial_audio.html">Make Audiobooks</a></li>
+  <li><a href="./tutorial_text.html">Make Textbooks</a></li>
+</aside>
+</div>
+</div>
+
+</body>
+</html>

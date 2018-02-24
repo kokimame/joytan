@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="">
+  <meta name="keywords" content="language-learning,audiobook,Python">
+  <meta name="author" content="Kohki Mametani">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>Joytan - Free Creative Audio/Textbook Maker</title>
+  <link href='https://fonts.googleapis.com/css?family=Helvetica+Neue' rel='stylesheet' type='text/css'>
+  <link rel="shortcut icon" href="images/joytan.ico" type="image/x-icon" />
+  <link rel="stylesheet" type="text/css" href="./css/stylesheet.css" media="screen" />
+  <!--[if lt IE 9]>
+  <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <script src="./js/dropdown.js"></script>
+
+</head>
+
+<body>
+
+<header>
+  <div class="inner">
+    <h1><a href="./index.html">Joytan</a>
+      <img src="images/joytan.png" width="50" height="50">
+    </h1>
+    <h2>Free Creative Audio/Textbook Maker</h2>
+    <a href="https://github.com/kokimame/joytan"
+    class="button" id="gh-button">
+      <small>View project on</small> GitHub</a>
+    <a href="https://www.youtube.com/channel/UC0bLbtTI9uni3bNRPIJQAqA"
+      class="button" id="yt-button"><small>View samples on</small> YouTube</a>
+  </div>
+</header>
+
+<div class="topnav">
+  <a class="active" href="./index.html">Home</a>
+  <a href="./install.html">Installation</a>
+  <div class="dropdown">
+    <button onclick="getDropdown()" class="dropbtn">Tutorial</button>
+    <div id="tutorialDropdown" class="dropdown-content">
+      <a href="./tutorial.html">Setup Amazon Polly</a>
+      <a href="./tutorial_input.html">Organize for new books</a>
+      <a href="./tutorial_audio.html">How to make an audiobook</a>
+      <a href="./tutorial_text.html">How to make a textbooks</a>
+    </div>
+  </div>
+  <!-- <a href="./index.html">Gallery</a>
+  <a href="./index.html">About</a> -->
+</div>
+
+
+<div id="content-wrapper">
+<div class="inner clearfix">
+
+<section id="main-content">
+<h2>Introduction</h2>
+  <p>Joytan (ジョイ単) is a free, small cross-platform desktop application that facilitates the process of
+    making audio/textbook and helps people create their own original educatinal materials.
+    It comes with some powerful features which are designed to be especially useful
+    for language-learners.
+  </p>
+
+<!-- Features -->
+<h2>Features</h2>
+<ul>
+<li>Creating MP3 audiobooks with your best-loved songs and sound effects</li>
+<li>Full control of sequence and every timbre of your audiobook</li>
+<li>Audiobook with lifelike speech using
+  <a href="https://aws.amazon.com/polly/">Amazon Polly</a>
+   (<b>in 24 languages with 52 voices!</b>)</li>
+<li>Support free, fast and local Text-to-Speech alternatives</li>
+<li>Creating textbook offline for free, easy to export to PDF</li>
+<li>Designing original textbooks with basic HTML</li>
+<li>Automatic language translation powered by Google Translation</li>
+<li>Automatic visual aid (images) downloading for textbook using Google Image</li>
+<li>Automatic online dictionary-lookup for language learning</li>
+<li>Saving scripts as light and readable CSV format</li>
+<li>With Google Sheets, you can edit scripts anywhere, anytime with your friends</li>
+<li>Simple and tiny GUI, just 3 key dialogs!</li>
+</ul>
+
+<!-- Screenshots of dialogs -->
+<h2>Screenshots</h2>
+<figure>
+  <a href="images/main_full.png">
+    <img class="thumb" src="images/main_full.png" alt="Screenshots of Input window">
+  </a>
+  <figcaption>Input window <br />(The Welcome Page)</figcaption>
+</figure>
+<figure>
+  <a href="images/audio_full.png">
+    <img class="thumb" src="images/audio_full.png" alt="Screenshots of Textbook setting window">
+  </a>
+  <figcaption>Audiobook setting window<br />&nbsp;</figcaption>
+</figure>
+<figure>
+  <a href="images/text_full.png">
+    <img class="thumb" src="images/text_full.png" alt="Screenshots of Audiobook setting window">
+  </a>
+  <figcaption>Textbook setting window<br />&nbsp;</figcaption>
+</figure>
+
+<!-- About CI -->
+<h2>Test suite status</h2>
+<p>Joytan has unit tests to ensure code quality.
+<a href="https://travis-ci.org/">Travis CI</a> is used for continuous build
+and test integration.</p>
+<p><a href="https://travis-ci.org/kokimame/joytan"><img alt="Build Status"
+  src="https://travis-ci.org/kokimame/joytan.png" /></a></p>
+
+<h2>Any Questions?</h2>
+<p>
+  If you need help, ask me on
+  <a href="https://twitter.com/JoytanApp">Twitter</a> or
+  <a href="https://gitter.im/JoytanApp/Lobby">Gitter</a>.
+</p>
+
+
+</section>
+
+<aside id="sidebar">
+<h2>Downloads</h2>
+<p>
+<a href="https://drive.google.com/uc?export=download&id=1QhkcsuzZYVpWrNne8sh6qGUK0wh1JwVX"
+  title="Download Windows installer (.exe)"
+  class="button"><span>Windows (beta)</span></a>
+<a href="https://drive.google.com/uc?export=download&id=1KqcJqL4Xf_Zt105iIfrHJO1irNPcaK1U"
+  title="Download Joytan for Mac (.dmg)"
+  class="button"><span>Mac (beta)</span></a>
+<a href="https://drive.google.com/uc?export=download&id=1Uvgy4mIQ8xOYGXnD2jblojRUNXoAh7sd"
+  title="Download Joytan for Linux (.tar.gz)"
+  class="button"><span>Linux (beta)</span></a>
+</p>
+
+<!--
+
+<p><a href="https://github.com/wummel/linkchecker/blob/master/doc/changelog.txt">Changelog</a></p>
+
+<p class="repo-owner"><a href="https://github.com/wummel/linkchecker">LinkChecker</a> is
+maintained
+by <a href="https://github.com/wummel">Bastian Kleineidam</a>.</p>
+<h2>Give back</h2>
+<p>
+<form action="https://www.paypal.com/cgi-bin/webscr" method="post">
+<input type="hidden" name="cmd" value="_s-xclick"/>
+<input type="hidden" name="hosted_button_id" value="XNUBD7FAG48M6"/>
+<input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif" border="0" name="submit" alt="PayPal"/>
+</form>
+</p>
+
+-->
+
+<h2>Support</h2>
+<p>
+<a href="https://github.com/kokimame/joytan/issues?state=open">Issue&nbsp;tracker</a><br/>
+</p>
+
+<!--
+<h2>Documentation</h2>
+<p>
+<a href="faq.html">FAQ</a><br/>
+<a href="man1/linkchecker.1.html">Manual page</a>
+</p>
+-->
+
+</aside>
+</div>
+</div>
+
+</body>
+</html>

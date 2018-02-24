@@ -1,0 +1,31 @@
+<!---maximg:0--->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Joytan Textbook</title>
+</head>
+<body>
+    <!--- index of textbook --->
+    <font size="5" color="blue">Table of Contents</font><br>
+    {% for ew in entries %}
+        <font size="3">{{ ew['idx'] }} ..... {{ ew['atop'] }}  /  </font>
+        {% if loop.index % 5 == 0 %}
+            <br>
+        {% endif %}
+    {% endfor %}
+    <br><br>
+    <hr>
+    <br><br>
+
+    <!--- each entry --->
+    {% for ew in entries %}
+        <font size="5" color="blue">{{ ew['idx'] }}.  {{  ew['atop'] }}</font><br>
+        <font size="5"><b>{{ ew['def-1'] }}</b></font>
+        <font size="5">{{ ew['def-2'] }}    </font>
+        <font size="5" color="blue">{{ ew['def-3'] }}  </font>
+        <br>
+        <br>
+
+    {% endfor %}
+</body>
+</html>

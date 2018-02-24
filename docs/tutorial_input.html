@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="">
+  <meta name="keywords" content="language-learning,audiobook,Python">
+  <meta name="author" content="Kohki Mametani">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>Joytan - Free Creative Audio/Textbook Maker</title>
+  <link href='https://fonts.googleapis.com/css?family=Helvetica+Neue' rel='stylesheet' type='text/css'>
+  <link rel="shortcut icon" href="images/joytan.ico" type="image/x-icon" />
+  <link rel="stylesheet" type="text/css" href="./css/stylesheet.css" media="screen" />
+  <script src="./js/dropdown.js"></script>
+  <!--[if lt IE 9]>
+  <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+
+</head>
+
+<body>
+
+<header>
+  <div class="inner">
+    <h1><a href="./index.html">Joytan</a>
+      <img src="images/joytan.png" width="50" height="50">
+    </h1>
+    <h2>Free Creative Audio/Textbook Maker</h2>
+    <a href="https://github.com/kokimame/joytan"
+    class="button" id="gh-button">
+      <small>View project on</small> GitHub</a>
+    <a href="https://www.youtube.com/channel/UC0bLbtTI9uni3bNRPIJQAqA"
+      class="button" id="yt-button"><small>View samples on</small> YouTube</a>
+  </div>
+</header>
+
+<div class="topnav">
+  <a href="./index.html">Home</a>
+  <a href="./install.html">Installation</a>
+  <div class="dropdown">
+    <button onclick="getDropdown()" class="dropbtn" id="active">Tutorial</button>
+    <div id="tutorialDropdown" class="dropdown-content">
+      <a href="./tutorial.html">Setup Amazon Polly</a>
+      <a href="./tutorial_input.html">Organize for new books</a>
+      <a href="./tutorial_audio.html">How to make an audiobook</a>
+      <a href="./tutorial_text.html">How to make a textbooks</a>
+    </div>
+  </div>
+</div>
+
+
+<div id="content-wrapper">
+<div class="inner clearfix">
+<section id="main-content">
+
+<h1>Organize things for your book</h1>
+
+<p>
+  In this tutorial, you're going to learn how to organize things you want to have
+  in your book and how to amplify them with Joytan's features such as
+  automatic translation and automatic dictionary-lookup. Don't worry, it's
+  nothing complecated.
+</p>
+
+<h2>The structure of Entry</h2>
+
+<center>
+  <figure>
+    <a href="./images/entry_structure.png">
+          <img src="./images/entry_structure.png"
+          alt="Structure of Entry" width=640 height=220>
+    </a>
+    <figcaption>A structure of Entry</figcaption>
+  </figure>
+</center>
+
+<p>
+  Your book will consist of a number of "Entry", which is just like a dictionary
+  entry.
+  The structure of an Entry is a tree structure of depth 2, constructed with
+  three sections; "atop", "def", and "ex".
+</p>
+<p>
+  An Entry must have one and only one "atop" (<img src="./images/atop_label.png" />) section,
+  which is placed on the top of its sections and represents the Entry
+  like its title and heading.
+
+<p>
+  "def" (<img src="./images/def_label.png" />)
+  will be used to overwrite and store the definitions of a word in
+  the <img src="./images/atop_label.png" /> section if possible
+  when you use automatic dictionary-lookup feature, but other than that
+  you can use "def" section to store any Entry's item as it's like a
+  bulleted list even if it's not a definition. The default number of
+  definitions per an Entry is set to 1.
+</p>
+
+<p>
+  Probably you may only use "ex" (<img src="./images/ex_label.png" />)
+  section to store word examples when you use automatic dictionary-lookup.
+  The default number of examples per a definition is set to 0 so you
+  cannot see it unless you increment the number on the Preferences.
+</p>
+
+<p>
+  The number of "def" and "ex" is shared over all of entries (EntryList).
+  You can change the values from Preferences.
+</p>
+
+<h2>Using Spreadsheet</h2>
+
+<center>
+  <figure>
+    <a href="./images/using_spreadsheet.png">
+          <img src="./images/using_spreadsheet.png"
+          alt="Using Google Sheets" width=600 height=280>
+    </a>
+    <figcaption>Editing Joytan Entry on Google Sheets</figcaption>
+  </figure>
+</center>
+
+<p>
+  One of the facts that makes Joytan simple and  easy to use is
+  it uses a comma-separated value (CSV) file as its core data file..
+  For the reason, you can write and edit the entries of your book
+  with common spreadsheet editor, such as Google Sheets and Excel,
+  instead of launching Joytan. <b>Furthermore, with Google Sheets, you can
+  collaborate with others to make a book anywhere, anytime.</b>
+</p>
+
+<h2>Load & Save</h2>
+<p>
+  You can open your CSV file in Joytan from File/Open (shortcut: Ctrl+O).
+  After editing the content of the file, don't forget to save the content
+  on Joytan. You can save it from File/Save (shortcut: Ctrl+S).
+</p>
+
+<h2>Automatic dictionary-lookup</h2>
+This is the feature where the statement: "Joytan is made for
+ language-learners" comes from and the reason why Joytan uses a depth-2 tree
+ structure. You can activate the feature by clicking the
+ <img src="./images/download_button.png" /> button
+ at the bottom of the Welcome Page.
+  Currently, Joytan is able to automatically download dictionary entries from
+ <a href="https://www.wiktionary.org/">Wiktionary</a> and
+ <a href="http://www.dictionary.com/">Dictionary.com</a>.
+
+<h2>Automatic translation</h2>
+Joytan is able to translate the text in Entry's sections using Google Translation.
+You can activate the feature by clicking the
+   <img src="./images/translate_button.png" /> button
+   at the bottom of the Welcome Page.
+
+<h2>Next</h2>
+<p>
+  Alright, now you've passed everything you want in your book to Joytan and
+  completed the most laborious part of Joytan.
+</p>
+
+<p>
+  You are ready to create both of your original audiobook and textbook.
+  If you want both of them, I suggest you make an audiobook first because
+  the process of making textbooks is extremely fast (although downloading
+  online images for a textbook may take considerable time) but
+  you will have to wait for a few minutes until Joytan finishes making
+  your audiobook.
+</p>
+
+<p>
+  Next tutorial for making an audiobook...
+  <a href="./tutorial_audio.html">[Let's make audiobooks!]</a>
+</p>
+
+<p>
+  Next tutorial for making a textbook...
+  <a href="./tutorial_audio.html">[Let's make textbooks!]</a>
+</p>
+
+<h2>Any Questions?</h2>
+<p>
+  If you need help, ask me on
+  <a href="https://twitter.com/JoytanApp">Twitter</a> or
+  <a href="https://gitter.im/JoytanApp/Lobby">Gitter</a>.
+</p>
+
+
+</section>
+
+<aside id="sidebar">
+  <h2>Index</h2>
+  <li><a href="./tutorial.html">Set up Amazon Polly</a></li>
+  <li class="current"><a href="./tutorial_input.html">Organize Things for Your Book</a></li>
+  <li><a href="./tutorial_audio.html">Make Audiobooks</a></li>
+  <li><a href="./tutorial_text.html">Make Textbooks</a></li>
+</aside>
+</div>
+</div>
+
+</body>
+</html>

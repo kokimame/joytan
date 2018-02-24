@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="">
+  <meta name="keywords" content="language-learning,audiobook,Python">
+  <meta name="author" content="Kohki Mametani">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>Joytan - Free Creative Audio/Textbook Maker</title>
+  <link href='https://fonts.googleapis.com/css?family=Helvetica+Neue' rel='stylesheet' type='text/css'>
+  <link rel="shortcut icon" href="images/joytan.ico" type="image/x-icon" />
+  <link rel="stylesheet" type="text/css" href="./css/stylesheet.css" media="screen" />
+  <!--[if lt IE 9]>
+  <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <script src="./js/dropdown.js"></script>
+
+</head>
+
+<body>
+
+<header>
+  <div class="inner">
+    <h1><a href="./index.html">Joytan</a>
+      <img src="images/joytan.png" width="50" height="50">
+    </h1>
+    <h2>Free Creative Audio/Textbook Maker</h2>
+    <a href="https://github.com/kokimame/joytan"
+    class="button" id="gh-button">
+      <small>View project on</small> GitHub</a>
+    <a href="https://www.youtube.com/channel/UC0bLbtTI9uni3bNRPIJQAqA"
+      class="button" id="yt-button"><small>View samples on</small> YouTube</a>
+  </div>
+</header>
+
+<div class="topnav">
+  <a href="./index.html">Home</a>
+  <a class="active" href="./install.html">Installation</a>
+  <div class="dropdown">
+    <button onclick="getDropdown()" class="dropbtn">Tutorial</button>
+    <div id="tutorialDropdown" class="dropdown-content">
+      <a href="./tutorial.html">Setup Amazon Polly</a>
+      <a href="./tutorial_input.html">Organize for new books</a>
+      <a href="./tutorial_audio.html">How to make an audiobook</a>
+      <a href="./tutorial_text.html">How to make a textbooks</a>
+    </div>
+  </div>
+  <!-- <a href="./index.html">Gallery</a>
+  <a href="./index.html">About</a> -->
+</div>
+
+
+<div id="content-wrapper">
+<div class="inner clearfix">
+<section id="main-content">
+
+<h1>Installation</h1>
+
+<h2>Windows</h2>
+
+<p>1. Download <a href="https://drive.google.com/uc?export=download&id=1QhkcsuzZYVpWrNne8sh6qGUK0wh1JwVX">
+  Windows Installer (.exe)</a> to your desktop or download foder.</p>
+
+<p>2. Double-click on the installer and follow instructions.
+  Joytan will be installed to your computer.</p>
+
+<p>3. Double-click on the new Joytan icon on your desktop to start Joytan.</p>
+
+<p><i>NOTE: You will see a black window (console)
+  while running Joytan on Windows.
+Please don't close the window, the strange behaviour arises
+from a difficulty of handling underlying processes on Windows.
+ <a href="https://github.com/kokimame/joytan/issues/2">Help us!</a></i></p>
+
+<h2>Mac</h2>
+
+<p>1. Download <a href="https://drive.google.com/uc?export=download&id=1KqcJqL4Xf_Zt105iIfrHJO1irNPcaK1U">Joytan for Mac (.dmg)</a>
+to your desktop or download folder.</p>
+
+<p>
+  2. Open the file and drag Joytan Icon into Application folder.
+</p>
+
+<h2>Linux</h2>
+
+<p>
+  1. Download <a href="https://drive.google.com/uc?export=download&id=1Uvgy4mIQ8xOYGXnD2jblojRUNXoAh7sd">Joytan for Linux (.zip)</a>
+</p>
+
+<p>
+  2. Then from Terminal, the following commands install dependencies and Joytan.
+   (Example on Ubuntu)
+</p>
+
+<pre>
+$ tar xjf Downloads/joytan-0.0.0-amd64.tar.bz2
+$ cd joytan-0.0.0
+$ sudo apt-get install ffmpeg
+$ sudo apt-get install lame
+$ make
+$ sudo make install
+</pre>
+
+<h2>Any Questions?</h2>
+<p>
+  If you need help, ask me on
+  <a href="https://twitter.com/JoytanApp">Twitter</a> or
+  <a href="https://gitter.im/JoytanApp/Lobby">Gitter</a>.
+</p>
+
+
+</section>
+</div>
+</div>
+
+</body>
+</html>

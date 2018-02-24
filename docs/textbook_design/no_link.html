@@ -1,0 +1,29 @@
+<!---maximg:3--->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sample Texbook design</title>
+</head>
+<body>
+    <!--- each entry --->
+    {% for ew in entries %}
+        <font size="5" color="blue">{{ ew['idx'] }}.  {{  ew['atop'] }} : {{ew['def-1']}}</font><br>
+        <img src="{{ ew['img-1'] }}" width="260" height="170" />
+        <img src="{{ ew['img-2'] }}" width="260" height="170" />
+        <img src="{{ ew['img-3'] }}" width="260" height="170" /><br>
+
+    {% endfor %}
+
+    <hr>
+    <br><br>
+
+    <!--- index of textbook --->
+    <font size="5" color="blue">Table of Contents</font><br>
+    {% for ew in entries %}
+        <font size="3">{{ ew['idx'] }} ..... {{ ew['atop'] }}  /  </font>
+        {% if loop.index % 5 == 0 %}
+            <br>
+        {% endif %}
+    {% endfor %}
+</body>
+</html>

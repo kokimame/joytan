@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="">
+  <meta name="keywords" content="language-learning,audiobook,Python">
+  <meta name="author" content="Kohki Mametani">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>Joytan - Free Creative Audio/Textbook Maker</title>
+  <link href='https://fonts.googleapis.com/css?family=Helvetica+Neue' rel='stylesheet' type='text/css'>
+  <link rel="shortcut icon" href="images/joytan.ico" type="image/x-icon" />
+  <link rel="stylesheet" type="text/css" href="./css/stylesheet.css" media="screen" />
+  <script src="./js/dropdown.js"></script>
+  <!--[if lt IE 9]>
+  <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+
+</head>
+
+<body>
+
+<header>
+  <div class="inner">
+    <h1><a href="./index.html">Joytan</a>
+      <img src="images/joytan.png" width="50" height="50">
+    </h1>
+    <h2>Free Creative Audio/Textbook Maker</h2>
+    <a href="https://github.com/kokimame/joytan"
+    class="button" id="gh-button">
+      <small>View project on</small> GitHub</a>
+    <a href="https://www.youtube.com/channel/UC0bLbtTI9uni3bNRPIJQAqA"
+      class="button" id="yt-button"><small>View samples on</small> YouTube</a>
+  </div>
+</header>
+
+<div class="topnav">
+  <a href="./index.html">Home</a>
+  <a href="./install.html">Installation</a>
+  <div class="dropdown">
+    <button onclick="getDropdown()" class="dropbtn" id="active">Tutorial</button>
+    <div id="tutorialDropdown" class="dropdown-content">
+      <a href="./tutorial.html">Setup Amazon Polly</a>
+      <a href="./tutorial_input.html">Organize for new books</a>
+      <a href="./tutorial_audio.html">How to make an audiobook</a>
+      <a href="./tutorial_text.html">How to make a textbooks</a>
+    </div>
+  </div>
+</div>
+
+
+<div id="content-wrapper">
+<div class="inner clearfix">
+<section id="main-content">
+
+<h1>Let's make textbooks!</h1>
+
+<p>
+  In this tutorial, you're going to learn everything you need to know when
+  you make a textbook with Joytan. Before making a textbook, you should
+  have passed everything you need in your upcoming book
+  to Joytan following the steps of
+  <a href="./tutorial_input.html">the previous tutorial</a>.
+</p>
+
+<center>
+  <figure>
+    <a href="images/text_full.png">
+      <img class="thumb" src="images/text_full.png" alt="Screenshots of Audiobook setting window">
+    </a>
+    <figcaption>Textbook setting window<br />&nbsp;</figcaption>
+  </figure>
+</center>
+
+<p>
+  The variety of textbooks is broad.
+</p>
+
+<p>
+  1. Click "Text-setting button" on the welcome page
+  to open Text-setting window
+</p>
+
+<p>
+  2. If your textbook design requires <b>some images</b>,
+  the easiest and fastest way
+  to get a lot of images is to use automatic download. Click the
+  "automatic download" button (<img src="./images/download_all.png" />),
+   then Joytan searchs for images of the word or
+  the text stored in "atop" section in
+  Google Image and downloads the required number of images.
+</p>
+
+<p>
+  3. Done! Now you can create a textbook by clicking the "create" button
+  (<img src="./images/create_text.png" />).
+</p>
+
+<p>
+  4. Joytan will immediately generate "<b>textbook.html</b>", which is placed under
+  the "<b>joytan-sample</b>" folder by default. <br />
+  This is <b>NOT</b> a PDF file
+  which you probably want. To convert textbooks in HTML to PDF textbooks,
+  open the HTML textbook in your browser, then save it as PDF. For example,
+  on Chrome, open the "Print" dialog by using shortcut "Ctrl+P" and
+  change the "Destination" to "Save as PDF". Most of browsers have
+  shortcut "Ctrl+P" for opening "Print" dialogs and support
+  "Print to File" instead of using an actual printers.
+</p>
+
+<h2>Designing Textbooks</h2>
+<p>
+  It's very easy to modify the default textbook design and even create
+  a whole new design. Let's start designing with editing our sample designs.
+   Designs are written in HTML, and you can open the files below with
+  your favorite text-editors or browser consoles. Make a change in
+  designs to meet the structure of Entry you use.
+</p>
+
+<p>
+  For example, if your Entry doesn't have an "ex" (
+  <img src="./images/ex_label.png" />) section, it's safe to delete
+  the corresponding items like "ew['ex-1-1']" in your design.
+</p>
+
+<h2>Design Samples</h2>
+<p>
+<b> We're developing more functional textbook designs with JavaScript.
+  Stay tuned!</b><br />
+
+  <p>
+    Download sample designs as HTML from link below.
+    (The HTML files will be rendered, but typically you can download raw HTML
+    file using "View page source" or "Saving as..." and saving as HTML.)
+  </p>
+  <a href="./textbook_design/no_link.html">[Without image links]</a><br />
+
+  <a href="./textbook_design/quiz.html">[Matching Quizs]</a><br />
+
+  <a href="./textbook_design/link.html">[With image links]</a><br />
+
+  <a href="./textbook_design/one-by-one.html">[Simplest]</a><br />
+
+  <a href="./textbook_design/only_image.html">[Images only]</a><br />
+</p>
+
+<h2>Any Questions?</h2>
+<p>
+  If you need help, ask me on
+  <a href="https://twitter.com/JoytanApp">Twitter</a> or
+  <a href="https://gitter.im/JoytanApp/Lobby">Gitter</a>.
+</p>
+
+
+</section>
+
+<aside id="sidebar">
+  <h2>Index</h2>
+  <li><a href="./tutorial.html">Set up Amazon Polly</a></li>
+  <li><a href="./tutorial_input.html">Organize Things for Your Book</a></li>
+  <li><a href="./tutorial_audio.html">Make Audiobooks</a></li>
+  <li class="current"><a href="./tutorial_text.html">Make Textbooks</a></li>
+</aside>
+</div>
+</div>
+
+</body>
+</html>

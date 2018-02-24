@@ -1,0 +1,39 @@
+<!---maximg:0--->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sample Texbook design</title>
+</head>
+<body>
+    <br><b>Choose the word that best matches the definition.<br>
+    You can find the answer at the bottom of this page.</b><br><br><br>
+    <!--- Quiz --->
+    {% for ew in entries %}
+        <font size="4">Quiz. {{ ew['idx'] }}.  {{ ew['def-3'] }}</font><br>
+	{% set n_choice = 4 %}
+	{% set answer = range(0, n_choice) | random %}
+	{% for i in range(0, 4) %}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	    {% if i == answer %}
+                <font size="4">&nbsp;&nbsp;{{ i+1 }}. {{ ew['atop'] }}&nbsp;&nbsp;</font>
+	    {% else %}
+		{% set false_ew = entries | random %}
+	        <font size="4">&nbsp;&nbsp;{{ i+1 }}. {{ false_ew['atop'] }}&nbsp;&nbsp;</font>
+	    {% endif %}
+	{% endfor %}
+        <br><br><br><br>
+
+    {% endfor %}
+
+    <!--- Answers --->
+    <hr>
+    <font size="5" color="blue">Answers</font><br>
+    {% for ew in entries %}
+        <font size="3">{{ ew['idx'] }} ..... {{ ew['atop'] }}  /  </font>
+        {% if loop.index % 5 == 0 %}
+            <br>
+        {% endif %}
+    {% endfor %}
+    <br><br>
+
+</body>
+</html>

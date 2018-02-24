@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="">
+  <meta name="keywords" content="language-learning,audiobook,Python">
+  <meta name="author" content="Kohki Mametani">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>Joytan - Free Creative Audio/Textbook Maker</title>
+  <link href='https://fonts.googleapis.com/css?family=Helvetica+Neue' rel='stylesheet' type='text/css'>
+  <link rel="shortcut icon" href="images/joytan.ico" type="image/x-icon" />
+  <link rel="stylesheet" type="text/css" href="./css/stylesheet.css" media="screen" />
+  <script src="./js/dropdown.js"></script>
+  <!--[if lt IE 9]>
+  <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+
+</head>
+
+<body>
+
+<header>
+  <div class="inner">
+    <h1><a href="./index.html">Joytan</a>
+      <img src="images/joytan.png" width="50" height="50">
+    </h1>
+    <h2>Free Creative Audio/Textbook Maker</h2>
+    <a href="https://github.com/kokimame/joytan"
+    class="button" id="gh-button">
+      <small>View project on</small> GitHub</a>
+    <a href="https://www.youtube.com/channel/UC0bLbtTI9uni3bNRPIJQAqA"
+      class="button" id="yt-button"><small>View samples on</small> YouTube</a>
+  </div>
+</header>
+
+<div class="topnav">
+  <a href="./index.html">Home</a>
+  <a href="./install.html">Installation</a>
+  <div class="dropdown">
+    <button onclick="getDropdown()" class="dropbtn" id="active">Tutorial</button>
+    <div id="tutorialDropdown" class="dropdown-content">
+      <a href="./tutorial.html">Setup Amazon Polly</a>
+      <a href="./tutorial_input.html">Organize for new books</a>
+      <a href="./tutorial_audio.html">How to make an audiobook</a>
+      <a href="./tutorial_text.html">How to make a textbooks</a>
+    </div>
+  </div>
+</div>
+
+
+
+<div id="content-wrapper">
+<div class="inner clearfix">
+<section id="main-content">
+
+<h1>Let's make audiobooks!</h1>
+<p>
+  In this tutorial, you're going to learn everything you need to know when
+  you make an audiobook with Joytan. Before making a textbook, you should
+  have passed everything you need in your upcoming book
+  to Joytan following the steps of
+  <a href="./tutorial_input.html">the previous tutorial</a>
+</p>
+
+<center>
+  <figure>
+    <a href="./images/audio_full.png">
+      <center>
+        <img src="./images/audio_full.png"
+        alt="Audio setting window" text-aligh="center" class="thumb">
+      </center>
+    </a>
+    <figcaption>Audio-setting window</figcaption>
+  </figure>
+</center>
+
+<p>
+  1. Click "Go to Audio-setting" button (<img src="./images/audio_button.png" /><img />)
+   on the welcome page to open Audio-setting window.
+</p>
+
+<p>
+  2. Click the button of <img src="./images/tts_setting.png" /><img />
+  to open "TTS/Preferences" and
+   allocate a voice to each section in an Entry.
+</p>
+
+<p>
+  3. In the "TTS/Preferences", set your favorite TTS voices to each section of
+  an Entry, confirming all section to be read in your book are allocated
+  with a voice.
+</p>
+
+<center>
+  <figure>
+    <a href="./images/atts_setting.png">
+      <center>
+        <img src="./images/atts_setting.png"
+        alt="TTS setting window" text-aligh="center" width=300 height=200>
+      </center>
+    </a>
+    <figcaption>Text-to-Speech setting dialog</figcaption>
+  </figure>
+</center>
+
+<p>
+  4. After selecting the voices, click the "OK button" below to go back
+  to the Audio-setting window.
+</p>
+
+<p>
+  5. <b>To suit your needs and taste, tune the parameters of audible items</b>,
+  such as Entry's sections, sound effects (<img src="./images/sfx_label.png" />),
+   and rest intervals (<img src="./images/rest_label.png" />).
+  For example, how many times do you want the text in each "atop" section
+  to be read?
+  How much rest do you want between each of audible items?
+  You can change these parameters in "Audio Flow" by dragging and dropping
+  items.
+</p>
+
+<center>
+  <figure>
+    <a href="./images/audio_flow.png">
+      <center>
+        <img src="./images/audio_flow.png"
+        alt="Audio Flow editing" text-aligh="center" width=280 height=120>
+      </center>
+    </a>
+    <figcaption>Editing Audio Flow</figcaption>
+  </figure>
+</center>
+
+<p>
+  6. Arrange the looped background music (BGM) by the same way you did
+  in the previous step. It's fascinating to set your best-loved songs as BGM!
+</p>
+
+<p>
+  7. Done! Click the "create button" (<img src="./images/create_audio.png" />).
+  After successfully Joytan finishes the process, you get "audiobook.mp3"
+  in a folder with your project name ('joytan-sample' by default).
+
+</p>
+<p>
+   If you are not sure about what the final output sounds like,
+   <b>you can make a preview using a few of entries
+  instead of making a full audiobook and waiting for long time until
+  the process finishes.</b>
+  You can change the number of entries to use in your audiobook in
+  the top-left corner of the Audio-setting window.
+</p>
+
+<center>
+  <figure>
+    <a href="./images/audio_range.png">
+      <center>
+        <img src="./images/audio_range.png"
+        alt="Changing the range of entries"
+         text-aligh="center" width=200 height=70>
+      </center>
+    </a>
+    <figcaption>Making a preview</figcaption>
+  </figure>
+</center>
+
+<p>
+  That's it. Now you can create your own audiobooks, then next
+  let's make a textbook! <a href="./tutorial_text.html">
+    [-> Next Tutorial]</a>
+</p>
+
+<h2>Any Questions?</h2>
+<p>
+  If you need help, ask me on
+  <a href="https://twitter.com/JoytanApp">Twitter</a> or
+  <a href="https://gitter.im/JoytanApp/Lobby">Gitter</a>.
+</p>
+
+
+</section>
+
+<aside id="sidebar">
+  <h2>Index</h2>
+  <li><a href="./tutorial.html">Set up Amazon Polly</a></li>
+  <li><a href="./tutorial_input.html">Organize Things for Your Book</a></li>
+  <li class="current"><a href="./tutorial_audio.html">Make Audiobooks</a></li>
+  <li><a href="./tutorial_text.html">Make Textbooks</a></li>
+</aside>
+</div>
+</div>
+
+</body>
+</html>

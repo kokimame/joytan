@@ -178,6 +178,7 @@ class Ui_MainWindow(object):
         self.actionReverse.setText(_translate("MainWindow", "Reverse"))
         self.actionAlphabetically.setText(_translate("MainWindow", "Alphabetically"))
         self.actionWord_length.setText(_translate("MainWindow", "Word length"))
-        self.actionSort.setText(_translate("MainWindow", "Sort Entrylist"))
+        self.actionSort.setText(_translate("MainWindow", "Sort entries"))
+        self.actionSort.setShortcut(_translate("MainWindow", "Ctrl+F1"))
 
 from . import icons_rc

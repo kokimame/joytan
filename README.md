@@ -7,7 +7,8 @@
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![Twitter](https://img.shields.io/twitter/follow/JoytanApp.svg?style=social&label=Follow)](https://twitter.com/intent/follow?screen_name=JoytanApp)
 
-***Joytan is in early development and does not yet have a stable production.***
+Website: https://kokimame.github.io/joytan/
+
 
 #### Convert CSV files to your original audio/textbooks with Joytan.
 Joytan is a free, small cross-platform desktop app that facilitates the process of making audio/textbooks.
@@ -16,26 +17,49 @@ Joytan comes with some powerful features which are especially designed to be use
 Key features include:
 - **Creating MP3 audiobooks with your best-loved songs and sound effects**
 - Full control of sequence and every timbre of your audiobook
-- Audiobook with **lifelike speech** using Amazon Polly
+- Audiobook with **lifelike speech using [Amazon Polly](https://aws.amazon.com/polly/)**
 - Support free, fast and local Text-to-Speech alternatives
 - **Creating textbook** fast and locally for free, easy to export to PDF
 - **Designing original textbook** with basic HTML
 - **Automatic language translation** powered by Google Translation
 - **Automatic visual aid (images) download** to your textbook from Google Image
-- **Automatic online dictionary lookup** for language learning
-- Saving scripts as light and readable CSV format
-- With Google Sheets, you can edit scripts anywhere, anytime with your friends
+- **Automatic online dictionary-lookup** for language learning
+- **Saving scripts in CSV files, ready to export to [Anki](https://apps.ankiweb.net)**
+- Editing scripts online even with people around the world via Google Sheets
 - Simple and tiny GUI, just 3 main dialogs!
 
 
+## What You See
+<!-- Screenshots of dialogs -->
+<figure>
+  <a href="./docs/images/main_full.png">
+    <img src="./docs/images/main_full.png"
+    alt="Screenshots of Input window" width="150" height="180">
+  </a>
+</figure>
+<figure>
+  <a href="./docs/images/audio_full.png">
+    <img src="./docs/images/audio_full.png"
+    alt="Screenshots of Textbook setting window" width="150" height="180">
+  </a>
+</figure>
+<figure>
+  <a href="./docs/images/text_full.png">
+    <img src="./docs/images/text_full.png"
+    alt="Screenshots of Audiobook setting window" width="150" height="180">
+  </a>
+</figure>
+
+
+
 ## What You Get
-We are distributing some of sample creation on YouTube. Take a look!
+We are distributing some of sample creations on [YouTube](https://www.youtube.com/channel/UC0bLbtTI9uni3bNRPIJQAqA). Take a look!
 
 <a href="https://www.youtube.com/watch?v=HOWVGxGHCMg">
-  <img src="https://img.youtube.com/vi/HOWVGxGHCMg/0.jpg" width="320" height=240" />
+  <img src="https://img.youtube.com/vi/HOWVGxGHCMg/0.jpg" width="260" height=180" />
 </a>
 <a href="https://www.youtube.com/watch?v=2wVEDKgj1TA">
-  <img src="https://img.youtube.com/vi/2wVEDKgj1TA/0.jpg" width="320" height=240" />
+  <img src="https://img.youtube.com/vi/2wVEDKgj1TA/0.jpg" width="260" height=180" />
 </a>
 
 *NOTE: Videos were created from two resources. One is audiobooks which were
@@ -43,73 +67,18 @@ We are distributing some of sample creation on YouTube. Take a look!
  Video-making feature is not included in the current version of Joytan.*
 
 ## Download & Installation
-#### Windows
-1. Download [Windows Installer (.exe)](https://drive.google.com/uc?export=download&id=1QhkcsuzZYVpWrNne8sh6qGUK0wh1JwVX)
-to your desktop or download folder.
-2. Double-click on the installer and follow instructions. Joytan will be installed to your computer.
-3. Double-click on the new Joytan icon on your desktop to start Joytan.
+Joytan works on Windows, Mac, and Linux.
 
-*NOTE: You will see a black window (console) while running Joytan on Windows. Please don't close the window,
-the strange behaviour arises from a difficulty of handling underlying processes on Windows.
- [Help us!](https://github.com/kokimame/joytan/issues/2)*
-
-#### Mac
-1. Download [Joytan for Mac (.dmg)](https://drive.google.com/uc?export=download&id=1KqcJqL4Xf_Zt105iIfrHJO1irNPcaK1U)
-to your desktop or download folder.
-2. Open the file and drag Joytan Icon into Application folder.
-
-#### Linux/BSD
-1. Download [Joytan for Linux (.zip)](https://drive.google.com/uc?export=download&id=1Uvgy4mIQ8xOYGXnD2jblojRUNXoAh7sd)
-2. Then from Terminal, the following commands install dependencies and Joytan. (Example on Ubuntu)
-```
-$ tar xjf Downloads/joytan-0.0.0-amd64.tar.bz2
-$ cd joytan-0.0.0
-$ sudo apt-get install ffmpeg
-$ sudo apt-get install lame
-$ make
-$ sudo make install
-```
-
-
-#### Others
-- [Source (.zip)](https://github.com/kokimame/joytan/archive/v0.0.0-beta.zip)
-- [Source (.tar.gz)](https://github.com/kokimame/joytan/archive/v0.0.0-beta.tar.gz)
+Please download & installation Joytan from [our website](https://kokimame.github.io/joytan/install.html
+).
 
 ## Quick Start
+Tutorials are available on [our website](https://kokimame.github.io/joytan/index.html).
+- [Set up Amazon Polly](https://kokimame.github.io/joytan/tutorial.html)
+- [How to Organize for your book](https://kokimame.github.io/joytan/tutorial_input.html)
+- [How to Make Audiobooks](https://kokimame.github.io/joytan/tutorial_audio.html)
+- [How to Make Textbooks](https://kokimame.github.io/joytan/tutorial_text.html)
 
-We highly recommend you to use **Amazon Polly** as Text-to-Speech service of your audiobooks
-because of its speech quality and cost-effectiveness.
-Although it's not free, but if you're first to use AWS, you're eligible to the AWS Free Tier and
-you are free to turn 5 million characters per month into speech for the first 12 months.
-Even if you're not, pay-as-you-go $4.00 per 1 million characters for speech requests 
-is probably quite affordable.
-
-To see its pricing and create free account, see [AWS official website](https://aws.amazon.com/polly/pricing/).
-
-After successfully creating your Amazon Web Service (AWS) account, you have personal configurations of AWS. 
-To activate Amazon Polly on Joytan, you need to make two files in a specific folder to store settings. 
-The detail of this process is explained [here](https://boto3.readthedocs.io/en/latest/guide/configuration.html).
-**The account credentials provide unlimited access to your AWS resources. 
-Store your credentials securely, do not share it.**
-
-1. Create your credentials file at 
-```~/.aws/credentials``` (```C:\Users\USER_NAME\.aws\credentials``` for Windows users)
- and save the following lines after replacing the placeholders with your own.
-```
-[default]
-aws_access_key_id = YOUR_KEY
-aws_secret_access_key = YOUR_SECRET
-```
-
-2. Next, create your config file at
-```~/.aws/config``` (```C:\Users\USER_NAME\.aws\config``` for Windows users)
- and save the following lines.
-```
-[default]
-region=us-east-1
-```
-
-3. That's it. Now you can select Amazon Polly on Text-to-Speech selector from Edit/Preferences. 
 
 ## Development
 Joytan requires:
@@ -141,7 +110,7 @@ Now you are ready to run Joytan by:
 
 
 ## Contribution
-- Report a bug: See [issues]()
+- Report a bug: See [issues](https://github.com/kokimame/joytan/issues)
 - Feature/Content request and feedback on [Twitter](https://twitter.com/JoytanApp), 
 [YouTube](https://www.youtube.com/channel/UC0bLbtTI9uni3bNRPIJQAqA) are appreciated.
 

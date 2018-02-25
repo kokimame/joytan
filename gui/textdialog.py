@@ -209,7 +209,8 @@ class TextDialog(QDialog):
         template = self.book.get_template()
         rendered_temp = template.render(entries=datas,
                                         ndef=self.mw.entrylist.get_config('ndef'),
-                                        nex=self.mw.entrylist.get_config('nex'))
+                                        nex=self.mw.entrylist.get_config('nex'),
+                                        n_panels=self.form.imgSpin.value())
 
         with open(self._destdir() + ".html", 'w', encoding='utf-8') as f:
             f.write(rendered_temp)

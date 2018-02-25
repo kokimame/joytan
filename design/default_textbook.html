@@ -86,19 +86,17 @@ function hideElementsByClass(elt) {
       {% endfor %}
 
       <div class="images">
-        <img src="{{ ew['img-1'] }}" width="160" height="100" />
-        <img src="{{ ew['img-2'] }}" width="160" height="100" />
-        <img src="{{ ew['img-3'] }}" width="160" height="100" />
-        <img src="{{ ew['img-4'] }}" width="160" height="100" /><br>
+        {% for i in range(n_panels) %}
+          <img src="{{ ew['img-%d'|format(i+1)] }}" width="160" height="100" />
+        {% endfor %}<br>
       </div>
 
       <!-- Not to display by default -->
       <div class="imageLink" style="display:none">
         <font size="1" color="gray">Image links from left to right:</font><br>
-        <font size="1" color="gray">[1] {{ ew['cite-1'] }}</font><br>
-        <font size="1" color="gray">[2] {{ ew['cite-2'] }}</font><br>
-        <font size="1" color="gray">[3] {{ ew['cite-3'] }}</font><br>
-        <font size="1" color="gray">[4] {{ ew['cite-4'] }}</font><br>
+        {% for i in range(n_panels) %}
+          <font size="1" color="gray">[{{ i+1 }}] {{ ew['cite-%d'|format(i+1)] }}</font><br>
+        {% endfor %}
         <br>
       </div>
       <br>

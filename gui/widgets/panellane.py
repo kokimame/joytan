@@ -9,6 +9,13 @@ from joytan.routine.gimage import GimageThread
 
 
 class Panel(QPushButton):
+    """
+    Pushbutton panel to show a downloaded image
+    for the next textbook. While downloading an
+    image, this also shows the status of download.
+    At first, you can click this panel to upload
+    an image locally from your computer.
+    """
     _STATE_MSG = {'INIT': None,
                   'WORK': 'Downloading',
                   'WAIT': 'Waiting',
@@ -63,6 +70,7 @@ class Panel(QPushButton):
         # 'DONE': Image successfully downloaded and set. Enable right clicking.
         if state == 'INIT':
             self.setIcon(QIcon())
+            # Show the index at the center of a panel
             self.setText('%d' % (self.count + 1))
             self.setDisabled(False)
         elif state == 'WORK':
@@ -81,41 +89,63 @@ class Panel(QPushButton):
 
 
 class PanelLane(QListWidget):
+    """
+    A collection of panels, grouping a bunch of panels by
+    the 'atop' of its parent EntryWidget.
+    """
 
-    def __init__(self, group, following, destdir, maximg):
+    def __init__(self, atop, following, destdir, n_panels):
         super(PanelLane, self).__init__()
-        self.group = group
+        self.atop = atop
         self.destdir = destdir
-        self.maximg = maximg
-        self.thread = GimageThread(' '.join([self.group, following]), destdir)
+        self.n_panels = n_panels
+        self.imglist = []
+        self.thread = GimageThread(' '.join([self.atop, following]), destdir)
         self.thread.upload.connect(self.on_set_image)
         self.thread.finished.connect(self.on_finish_working)
-
-        # Because QPixmap doesn't store the path of they image they display,
-        # all paths of images and URL are stored as tuple like ('imgpath', 'link')
-        self.imglist = [('', '') for _ in range(self.maximg)]
 
         self.setFlow(QListView.LeftToRight)
         self.setFixedHeight(150)
 
-        for i in range(self.maximg):
-            panel = Panel('INIT', i)
-            panel.delete.connect(self.on_image_delete)
-            panel.upload.connect(self.on_local_upload)
-            panel.setFixedSize(*Panel.FIXED_SIZE)
-            lwi = QListWidgetItem()
-            lwi.setSizeHint(panel.size())
-            self.addItem(lwi)
-            self.setItemWidget(lwi, panel)
+        for i in range(self.n_panels):
+            self._add_panel(i)
+
+    def resize_panels(self, npl):
+        """
+        Set the number of panels in a lane to 'npl'
+        """
+        if npl < self.n_panels:
+            for i in range(npl, self.n_panels):
+                self._remove_panel_at(i)
+        elif npl > self.n_panels:
+            for i in range(self.n_panels, npl):
+                self._add_panel(i)
+
+        self.n_panels = npl
+
+    def _add_panel(self, count):
+        panel = Panel('INIT', count)
+        panel.delete.connect(self.on_image_delete)
+        panel.upload.connect(self.on_local_upload)
+        panel.setFixedSize(*Panel.FIXED_SIZE)
+        lwi = QListWidgetItem()
+        lwi.setSizeHint(panel.size())
+        self.addItem(lwi)
+        self.setItemWidget(lwi, panel)
+        # Because QPixmap doesn't store the path of they image they're displaying,
+        # all paths of images and URL are stored as tuple like as follow: ('imgpath', 'link')
+        self.imglist.append(('', ''))
+        return panel
+
 
     def on_image_delete(self, count):
         self.imglist[count] = ('', '')
-        self._get_panel(count).state_manager('INIT')
+        self._get_panel_at(count).state_manager('INIT')
 
     @pyqtSlot(int, str)
     def on_local_upload(self, count, imgpath):
         self.on_image_delete(count)
-        p = self._get_panel(count)
+        p = self._get_panel_at(count)
         p.set_image(imgpath)
         self.imglist[count] = (imgpath, 'Image locally uploaded')
         return
@@ -126,7 +156,7 @@ class PanelLane(QListWidget):
         set the new image to any panel not in "DONE" state. 
         """
         for i in range(self.count()):
-            p = self._get_panel(i)
+            p = self._get_panel_at(i)
             if p.state != 'DONE':
                 p.set_image(imgpath)
                 self.imglist[i] = (imgpath, link)
@@ -146,7 +176,7 @@ class PanelLane(QListWidget):
         """
         initial = 0
         for i in range(self.count()):
-            p = self._get_panel(i)
+            p = self._get_panel_at(i)
             if p.state == 'INIT':
                 initial += 1
         return initial
@@ -157,9 +187,15 @@ class PanelLane(QListWidget):
         """
         assert new_state != "DONE"
         for i in range(self.count()):
-            p = self._get_panel(i)
+            p = self._get_panel_at(i)
             if p.state in ['INIT', 'WAIT']:
                 p.state_manager(new_state)
+
+    def _get_panel_at(self, cnt):
+        return self.itemWidget(self.item(cnt))
+
+    def _remove_panel_at(self, cnt):
+        self.takeItem(cnt)
 
     def clear_all(self):
         """
@@ -170,12 +206,12 @@ class PanelLane(QListWidget):
 
     @pyqtSlot(str)
     def on_update_following(self, following):
-        self.thread.update_keyword(' '.join([self.group, following]))
+        self.thread.update_keyword(' '.join([self.atop, following]))
 
     @pyqtSlot()
     def on_finish_working(self):
         for i in range(self.count()):
-            p = self._get_panel(i)
+            p = self._get_panel_at(i)
             if p.state  == 'WORK':
                 p.state_manager('INIT')
             elif p.state == 'WAIT':
@@ -183,9 +219,6 @@ class PanelLane(QListWidget):
 
     def force_finish(self):
         for i in range(self.count()):
-            p = self._get_panel(i)
+            p = self._get_panel_at(i)
             if p.state != 'DONE':
                 p.state_manager('INIT')
-
-    def _get_panel(self, cnt):
-        return self.itemWidget(self.item(cnt))

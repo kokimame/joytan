@@ -19,9 +19,6 @@ class BookDesign:
     the maximum number of images for a given Entry. The class provides an actual
     template object from Jinja2 Environment in the process of creating a textbook.
     """
-
-    RE_MAXIMG = re.compile(r'<!---maximg:(\d*)--->')
-
     def __init__(self, path=None):
         # If the app is bundled app and design is not specified,
         # look for the default design, which was distributed with the app
@@ -33,14 +30,6 @@ class BookDesign:
 
         if self.path:
             self.name = path2filename(self.path)
-            self.maximg = self._parse_design()
-            self.info = "%s / image:%d" % (self.name, self.maximg)
-
-    def _parse_design(self):
-        with open(self.path, 'r') as f:
-            res = self.RE_MAXIMG.search(f.readline())
-            assert res
-        return int(res.group(1))
 
     def get_template(self):
         from jinja2 import Environment, FileSystemLoader
@@ -69,7 +58,7 @@ class TextDialog(QDialog):
         try:
             self.book = BookDesign()
             self._activate_imglist()
-            self.form.designLbl.setText(self.book.info)
+            self.form.designLbl.setText(self.book.name)
         except:
             pass
 
@@ -80,6 +69,7 @@ class TextDialog(QDialog):
         label = self.form.designLbl
         label.selectionChanged.connect(label.deselect)
         self.form.designBtn.clicked.connect(self._on_design_select)
+        self.form.imgSpin.valueChanged.connect(self._on_lane_size_change)
         self.form.dlAllBtn.clicked.connect(self._auto_download)
         self.form.clearAllBtn.clicked.connect(self._clear_all_images)
         self.form.stopBtn.clicked.connect(self._on_stop)
@@ -132,6 +122,7 @@ class TextDialog(QDialog):
         self.form.clearAllBtn.setDisabled(flag)
         self.form.designBtn.setDisabled(flag)
         self.form.followEdit.setDisabled(flag)
+        self.form.imgSpin.setDisabled(flag)
         self.form.stopBtn.setDisabled(not flag)
 
     def _activate_imglist(self):
@@ -147,7 +138,7 @@ class TextDialog(QDialog):
             lwi2 = QListWidgetItem()
             pb = QPushButton('+ Download: #%d (%s)' % (ew.row + 1, ew['atop']))
             pb.setStyleSheet("Text-align: left")
-            lane = PanelLane(ew['atop'], self.form.followEdit.text(), destdir, self.book.maximg)
+            lane = PanelLane(ew['atop'], self.form.followEdit.text(), destdir, self.form.imgSpin.value())
             pb.clicked.connect(lane.on_download)
             lwi1.setSizeHint(pb.sizeHint())
             self.form.followEdit.textChanged.connect(lane.on_update_following)
@@ -157,6 +148,15 @@ class TextDialog(QDialog):
             _list.setItemWidget(lwi1, pb)
             _list.addItem(lwi2)
             _list.setItemWidget(lwi2, lane)
+
+    def _on_lane_size_change(self, new_size):
+        for i in range(self.mw.entrylist.count()):
+            lane = self._get_lane(i)
+            try:
+                lane.resize_panels(new_size)
+            except:
+                # NoneType
+                pass
 
     def _on_design_select(self):
         try:
@@ -168,7 +168,7 @@ class TextDialog(QDialog):
             self.book = BookDesign(path)
             self._clear_imglist()
             self._activate_imglist()
-            self.form.designLbl.setText(self.book.info)
+            self.form.designLbl.setText(self.book.name)
         except AssertionError:
             showCritical("Invalid book design (Image number not found)")
 

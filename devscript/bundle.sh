@@ -8,7 +8,7 @@ fi
 
 cd ..
 # Setting input folder and output folder
-version=0.0.0
+version=0.1.0
 inbase=joytan
 outbase=~/Desktop/$(date +"%m-%d_%H-%M-%S")_Joytan
 
@@ -65,6 +65,9 @@ rm -rf ${outbase}/build ${outbase}/joytan.spec
 if [[ "$OSTYPE" == "linux-gnu" ]]; then
     cp ${inbase}/joytan.desktop ${inbase}/joytan.xml \
     ${inbase}/joytan.xpm ${inbase}/Makefile ${outbase}
+    cp /usr/bin/ffmpeg ${outbase}/bin/
+	cp /usr/bin/lame ${outbase}/bin/
+	cp ${inbase}/design/default_textbook.html ${outbase}/bin/
     cd ${outbase}
     tar -cvjSf joytan-${version}-amd64.tar.bz2 *
 fi

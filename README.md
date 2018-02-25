@@ -7,7 +7,7 @@
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![Twitter](https://img.shields.io/twitter/follow/JoytanApp.svg?style=social&label=Follow)](https://twitter.com/intent/follow?screen_name=JoytanApp)
 
-Website: https://kokimame.github.io/joytan/
+**Website**: https://kokimame.github.io/joytan/
 
 
 #### Convert CSV files to your original audio/textbooks with Joytan.

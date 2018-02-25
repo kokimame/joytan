@@ -8,11 +8,11 @@
 # show up in a few places.
 # All the other settings can be tweaked by editing the !defines at the top of this script
 !define APPNAME "Joytan"
-!define COMPANYNAME "Koki Mametani"
-!define DESCRIPTION "Create Audio/Textbooks for your study"
+!define COMPANYNAME "Kohki Mametani"
+!define DESCRIPTION "Free Creative Audio/Textbook Maker"
 # These three must be integers
 !define VERSIONMAJOR 0
-!define VERSIONMINOR 0
+!define VERSIONMINOR 1
 !define VERSIONBUILD 0
 # These will be displayed by the "Click here for support information" link in "Add/Remove Programs"
 # It is possible to use "mailto:" links in here to open the email client

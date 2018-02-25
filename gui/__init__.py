@@ -28,7 +28,7 @@ if sys.getfilesystemencoding().lower() in ("ascii", "ansi_x3.4-1968"):
     raise Exception("Joytan requires a UTF-8 locale.")
 
 # build scripts grep this line, so keep this format
-app_version = "0.0.0"
+app_version = "0.1.0"
 # Main window set in runtime
 mw = None
 logger = None

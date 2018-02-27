@@ -56,10 +56,10 @@ Key features include:
 We are distributing some of sample creations on [YouTube](https://www.youtube.com/channel/UC0bLbtTI9uni3bNRPIJQAqA). Take a look!
 
 <a href="https://www.youtube.com/watch?v=HOWVGxGHCMg">
-  <img src="https://img.youtube.com/vi/HOWVGxGHCMg/0.jpg" width="260" height=180" />
+  <img src="https://img.youtube.com/vi/tEIpgTREexQ/0.jpg" width="260" height=180" />
 </a>
 <a href="https://www.youtube.com/watch?v=2wVEDKgj1TA">
-  <img src="https://img.youtube.com/vi/2wVEDKgj1TA/0.jpg" width="260" height=180" />
+  <img src="https://img.youtube.com/vi/ehkQu1mKyeU/0.jpg" width="260" height=180" />
 </a>
 
 *NOTE: Videos were created from two resources. One is audiobooks which were

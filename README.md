@@ -19,7 +19,7 @@
 </center>
 
 Joytan is a free, small cross-platform desktop app that facilitates the process of making audio/textbooks.
-Joytan comes with some powerful features which are especially designed to be useful for language-learners.
+Joytan comes with some powerful features which are specially designed to be useful for language learners.
 Convert CSV files to your original audio/textbooks with Joytan!
 
 Key features include:
@@ -77,7 +77,7 @@ We are distributing some of sample creations on [YouTube](https://www.youtube.co
 ## Download & Installation
 Joytan works on Windows, Mac, and Linux.
 
-Please download & installation Joytan from [our website](https://kokimame.github.io/joytan/install.html
+Please download & install Joytan from [our website](https://kokimame.github.io/joytan/install.html
 ).
 
 ## Quick Start

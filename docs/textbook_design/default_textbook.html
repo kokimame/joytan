@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sample Texbook design</title>
+</head>
+
+<button onclick="hideElementsByClass(this)"
+swapText="Show Table of Contents"
+ targetClass="tableOfContents">
+  Hide Table of Contents</button>
+<br />
+
+<button onclick="hideElementsByClass(this)" swapText="Show index"
+  targetClass="index">Hide index</button>
+
+<button onclick="hideElementsByClass(this)" swapText="Show atop"
+  targetClass="atop">Hide atop</button>
+
+{% for i in range(ndef) %}
+
+  <button onclick="hideElementsByClass(this)"
+    swapText="Show def-{{ i+1 }}" targetClass="def-{{ i+1 }}">
+    Hide def-{{i+1}}</button>
+
+  {% for j in range(nex) %}
+
+    <button onclick="hideElementsByClass(this)"
+      swapText="Show ex-{{ i+1 }}-{{ j+1 }}" targetClass="ex-{{ i+1 }}-{{ j+1 }}">
+      Hide ex-{{ i+1 }}-{{ j+1 }}</button>
+
+  {% endfor %}
+{% endfor %}
+<br />
+
+<button onclick="hideElementsByClass(this)"
+  swapText="Show images" targetClass="images">Hide images</button>
+<button onclick="hideElementsByClass(this)"
+swapText="Hide image links" targetClass="imageLink">
+  Show image links
+</button><br />
+
+<script>
+function hideElementsByClass(elt) {
+  var elements = document.getElementsByClassName(elt.getAttribute("targetClass"))
+
+  for(var i = elements.length - 1; i >= 0; i--) {
+    if (elements[i].style.display === "none") {
+      elements[i].style.display = "inline-block";
+    } else {
+      elements[i].style.display = "none";
+    }
+  }
+  var tempText = elt.innerHTML
+  elt.innerHTML = elt.getAttribute("swapText")
+  elt.setAttribute("swapText", tempText)
+}
+</script>
+
+<body>
+    <!--- index of textbook --->
+    <div class="tableOfContents">
+      <font size="5" color="blue">Table of Contents</font><br>
+      {% for ew in entries %}
+          <font size="3">{{ ew['idx'] }} ..... {{ ew['atop'] }}  /  </font>
+          {% if loop.index % 5 == 0 %}
+              <br>
+          {% endif %}
+      {% endfor %}
+      <br><br>
+      <hr>
+    </div><br />
+
+    <!--- each entry --->
+    {% for ew in entries %}
+      <font class="index" size="5" color="blue">{{ ew['idx'] }}.  </font>
+      <font class="atop" size="5" color="blue">{{ ew['atop'] }}</font>
+      <br />
+
+      {% for i in range(ndef) %}
+        <font class="def-{{ i+1 }}" size="4">
+          - {{ ew['def-%d'|format(i+1)] }}</font><br />
+        {% for j in range(nex) %}
+          <font class="ex-{{ i+1 }}-{{ j+1 }}" size="4">
+            "{{ ew['ex-%d-%d'|format(i+1, j+1)] }}"<br></font>
+        {% endfor %}
+      {% endfor %}
+
+      <div class="images">
+        {% for i in range(n_panels) %}
+          <img src="{{ ew['img-%d'|format(i+1)] }}" width="160" height="100" />
+        {% endfor %}<br>
+      </div>
+
+      <!-- Not to display by default -->
+      <div class="imageLink" style="display:none">
+        <font size="1" color="gray">Image links from left to right:</font><br>
+        {% for i in range(n_panels) %}
+          <font size="1" color="gray">[{{ i+1 }}] {{ ew['cite-%d'|format(i+1)] }}</font><br>
+        {% endfor %}
+        <br>
+      </div>
+      <br>
+    {% endfor %}
+
+
+</body>
+</html>

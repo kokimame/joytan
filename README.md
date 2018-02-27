@@ -55,10 +55,10 @@ Key features include:
 ## What You Get
 We are distributing some of sample creations on [YouTube](https://www.youtube.com/channel/UC0bLbtTI9uni3bNRPIJQAqA). Take a look!
 
-<a href="https://www.youtube.com/watch?v=HOWVGxGHCMg">
+<a href="https://www.youtube.com/watch?v=tEIpgTREexQ">
   <img src="https://img.youtube.com/vi/tEIpgTREexQ/0.jpg" width="260" height=180" />
 </a>
-<a href="https://www.youtube.com/watch?v=2wVEDKgj1TA">
+<a href="https://www.youtube.com/watch?v=ehkQu1mKyeU">
   <img src="https://img.youtube.com/vi/ehkQu1mKyeU/0.jpg" width="260" height=180" />
 </a>
 

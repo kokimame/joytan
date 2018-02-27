@@ -9,10 +9,18 @@
 
 **Website**: https://kokimame.github.io/joytan/
 
+<center>
+    <figure>
+      <a href="./docs/images/app_pros.png">
+        <img src="./docs/images/app_pros.png"
+        alt="Fig: Pros of Joytan" width="400" height="150">
+      </a>
+    </figure>
+</center>
 
-#### Convert CSV files to your original audio/textbooks with Joytan.
 Joytan is a free, small cross-platform desktop app that facilitates the process of making audio/textbooks.
 Joytan comes with some powerful features which are especially designed to be useful for language-learners.
+Convert CSV files to your original audio/textbooks with Joytan!
 
 Key features include:
 - **Creating MP3 audiobooks with your best-loved songs and sound effects**

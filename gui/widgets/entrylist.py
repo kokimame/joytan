@@ -78,7 +78,7 @@ class EntryList(QListWidget):
  Hi! Thank you for using Joytan!
  To start creating audio/textbooks...
  Drag text here (this only works properly for English)
- or push (+) button bellow and type by yourself.
+ or push (+) button below and type by yourself.
  After bringing everything you need,
  hit the button [-> Audio] or [-> Text]!
  Tips: You can drag entries to reorder them.   
@@ -130,12 +130,12 @@ class EntryList(QListWidget):
         if self._has_starter_help:
             a.setDisabled(True)
         above = m.addAction("Insert Item Above")
-        bellow = m.addAction("Insert Item Bellow")
+        below = m.addAction("Insert Item Below")
         above.triggered.connect(lambda: self._insert_entry())
-        bellow.triggered.connect(lambda: self._insert_entry(above=False))
+        below.triggered.connect(lambda: self._insert_entry(above=False))
         if len(self.selectedItems()) != 1 or self._has_starter_help:
             above.setDisabled(True)
-            bellow.setDisabled(True)
+            below.setDisabled(True)
         m.exec_(QCursor.pos())
 
     def dragEnterEvent(self, event):

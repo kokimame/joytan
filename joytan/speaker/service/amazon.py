@@ -51,8 +51,11 @@ class Amazon(Service):
 
         self.polly = boto3.client('polly')
 
+        def no_acute(name):
+            return name.replace('é', 'e').replace('ó', 'o').replace('ê', 'e')
+
         self._voice_list = [
-            (item['Name'], "%s (%s)" % (item['Name'], item['LanguageName']))
+            (no_acute(item['Name']), "%s (%s)" % (item['Name'], item['LanguageName']))
             for item in sorted(
                 self.polly.describe_voices()['Voices'], key=lambda x: x['LanguageCode'])
         ]

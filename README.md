@@ -1,13 +1,13 @@
 ## Joytan ジョイ単
 
 <img src="./logo/joytan.png" align="right" width="90" height="90" title="logo">
-     
+
+**Website**: https://kokimame.github.io/joytan/
+
 [![Build Status](https://travis-ci.org/kokimame/joytan.svg?branch=master)](https://travis-ci.org/kokimame/joytan)
 [![Gitter chat](https://badges.gitter.im/gitterHQ/gitter.png)](https://gitter.im/JoytanApp/Lobby)
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![Twitter](https://img.shields.io/twitter/follow/JoytanApp.svg?style=social&label=Follow)](https://twitter.com/intent/follow?screen_name=JoytanApp)
-
-**Website**: https://kokimame.github.io/joytan/
 
 <center>
     <figure>
@@ -19,8 +19,7 @@
 </center>
 
 Joytan is a free, small cross-platform desktop app that facilitates the process of making audio/textbooks.
-Joytan comes with some powerful features which are specially designed to be useful for language learners.
-Convert CSV files to your original audio/textbooks with Joytan!
+It comes with some powerful features which are specially designed to be useful for language learners.
 
 Key features include:
 - **Creating MP3 audiobooks with your best-loved songs and sound effects**
@@ -28,7 +27,7 @@ Key features include:
 - Audiobook with **lifelike speech using [Amazon Polly](https://aws.amazon.com/polly/)**
 - Support free, fast and local Text-to-Speech alternatives
 - **Creating textbook** fast and locally for free, easy to export to PDF
-- **Designing original textbook** with basic HTML
+- Designing original textbook with basic HTML
 - **Automatic language translation** powered by Google Translation
 - **Automatic visual aid (images) download** to your textbook from Google Image
 - **Automatic online dictionary-lookup** for language learning
@@ -63,12 +62,19 @@ Key features include:
 ## What You Get
 We are distributing some of sample creations on [YouTube](https://www.youtube.com/channel/UC0bLbtTI9uni3bNRPIJQAqA). Take a look!
 
+**Audiobook Sample:**
+
 <a href="https://www.youtube.com/watch?v=tEIpgTREexQ">
   <img src="https://img.youtube.com/vi/tEIpgTREexQ/0.jpg" width="260" height=180" />
 </a>
 <a href="https://www.youtube.com/watch?v=ehkQu1mKyeU">
   <img src="https://img.youtube.com/vi/ehkQu1mKyeU/0.jpg" width="260" height=180" />
 </a>
+
+[**See Textbook Sample**](https://drive.google.com/open?id=15_k1pJdWzUldhL9HYP6vAOllSqAIjaHr)
+
+[**See Matching Quiz Sample**](https://drive.google.com/open?id=124X0_d2It0MKF0HauGMq2SuOCEyrzn-t)
+
 
 *NOTE: Videos were created from two resources. One is audiobooks which were
  created with Joytan, the other is image clips which were created separately from the app.
@@ -78,7 +84,7 @@ We are distributing some of sample creations on [YouTube](https://www.youtube.co
 Joytan works on Windows, Mac, and Linux.
 
 Please download & install Joytan from [our website](https://kokimame.github.io/joytan/install.html
-).
+) or [releases](https://github.com/kokimame/joytan/releases).
 
 ## Quick Start
 Tutorials are available on [our website](https://kokimame.github.io/joytan/index.html).

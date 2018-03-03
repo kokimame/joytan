@@ -44,13 +44,12 @@ class DubbingWorker:
                 raise e
 
         routers = {}
-        for key in self.setting['ttsmap']:
-            routers[key] = lambda path, text, svc_id=self.setting['ttsmap'][key][1],\
-                                  options=self.setting['ttsmap'][key][2]: force_run(
-                                               svc_id=svc_id,
-                                               options=options,
-                                               path=path,
-                                               text=text)
+        for key, val in self.setting['ttsmap'].items():
+            routers[key] = \
+                lambda path, text, svc_id=val[1], options=val[2]: force_run(svc_id=svc_id,
+                                                                            options=options,
+                                                                            path=path,
+                                                                            text=text)
 
         return routers
 

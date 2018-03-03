@@ -2,14 +2,14 @@
 # Copyright (C) 2017-Present: Kohki Mametani <kohkimametani@gmail.com>
 # License: GNU GPL version 3 or later; http://www.gnu.org/licenses/gpl.html
 
-class BaseDownloader:
+class BaseDictionary:
     """
     Experimental base class for downloader services.
     """
     SOURCE_URL = None
     SOURCE_NAME = None
 
-    def get_url(self, query):
+    def make_url(self, query):
         """
         Make a complete URL based on given search query
         """

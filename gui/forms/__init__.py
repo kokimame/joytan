@@ -2,7 +2,7 @@
 __all__ = [
  "audiodialog",
  "copydialog",
- "download",
+ "lookup",
  "main",
  "opendialog",
  "preferences",
@@ -12,7 +12,7 @@ __all__ = [
 ]
 from . import audiodialog
 from . import copydialog
-from . import download
+from . import lookup
 from . import main
 from . import opendialog
 from . import preferences

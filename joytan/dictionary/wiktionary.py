@@ -5,9 +5,9 @@
 import re
 
 from bs4 import BeautifulSoup
-from joytan.dictionary.base import BaseDownloader
+from joytan.dictionary.base import BaseDictionary
 
-class WiktionaryDownloader(BaseDownloader):
+class Wiktionary(BaseDictionary):
     """
     Provides an interface to fetch dictionary entries from Wiktionary
     """
@@ -16,9 +16,9 @@ class WiktionaryDownloader(BaseDownloader):
     SOURCE_NAME = "Wiktionary"
 
     def __init__(self):
-        BaseDownloader.__init__(self)
+        BaseDictionary.__init__(self)
 
-    def get_url(self, query):
+    def make_url(self, query):
         if not query:
             return ''
         return self.SOURCE_URL + query

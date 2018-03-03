@@ -99,8 +99,8 @@ class JoytanMW(QMainWindow):
     def _on_download(self):
         # To update 'Empty entry' if a name is added to it
         self.entrylist.update_all()
-        import gui.download
-        gui.download.on_download(self)
+        import gui.lookup
+        gui.lookup.on_lookup(self)
 
     def _on_translate(self):
         # To update 'Empty entry' if a name is added to it

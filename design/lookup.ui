@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>DownloadDialog</class>
- <widget class="QDialog" name="DownloadDialog">
+ <class>LookupDialog</class>
+ <widget class="QDialog" name="LookupDialog">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -11,13 +11,13 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Download Setting</string>
+   <string>Lookup Setting</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <widget class="QCheckBox" name="onlyCheck">
      <property name="text">
-      <string>Download only selected entries</string>
+      <string>Look-up only selected entries</string>
      </property>
     </widget>
    </item>
@@ -26,7 +26,7 @@
      <item>
       <widget class="QLabel" name="label">
        <property name="text">
-        <string>Online sources</string>
+        <string>Online Dictionary</string>
        </property>
       </widget>
      </item>
@@ -121,7 +121,7 @@
      <item>
       <widget class="QPushButton" name="startBtn">
        <property name="text">
-        <string>Download</string>
+        <string>Start</string>
        </property>
        <property name="default">
         <bool>true</bool>

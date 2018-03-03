@@ -5,9 +5,9 @@
 import re
 
 from bs4 import BeautifulSoup
-from joytan.dictionary.base import BaseDownloader
+from joytan.dictionary.base import BaseDictionary
 
-class DictionaryComDownloader(BaseDownloader):
+class DictionaryCom(BaseDictionary):
     """
     Provides an interface to fetch dictionary entries from Dictionary.com
     """
@@ -16,9 +16,9 @@ class DictionaryComDownloader(BaseDownloader):
     SOURCE_NAME = "Dicitionary.com"
 
     def __init__(self):
-        BaseDownloader.__init__(self)
+        BaseDictionary.__init__(self)
 
-    def get_url(self, query):
+    def make_url(self, query):
         return self.SOURCE_URL + query
 
     def run(self, html):

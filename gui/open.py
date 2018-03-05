@@ -5,7 +5,7 @@
 import gui
 from gui.qt import *
 from gui.utils import showCritical, showWarning, getFile, path2filename
-from joytan.routine.opencsv import CsvOpenThread
+from joytan.routine.opencsv import OpenCsvThread
 
 
 def on_open(mw):
@@ -49,7 +49,7 @@ class OpenDialog(QDialog):
             showCritical("File not specified.")
             return
 
-        self.thread = CsvOpenThread(self.path)
+        self.thread = OpenCsvThread(self.path)
         self.thread.reshape.connect(lambda x: self.mw.entrylist.set_config('reshape', x))
         self.thread.new_entry.connect(self._on_progress)
         self.thread.finished.connect(self._completed)
@@ -80,7 +80,7 @@ class OpenDialog(QDialog):
             return
 
     def _on_stop(self):
-        if isinstance(self.thread, CsvOpenThread):
+        if isinstance(self.thread, OpenCsvThread):
             self.thread.terminate()
         self._ui_reset()
         self.mw.entrylist.update_all()

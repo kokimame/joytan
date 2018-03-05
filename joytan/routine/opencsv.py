@@ -9,7 +9,7 @@ from gui.qt import *
 from gui.utils import path_temp
 
 
-class CsvOpenThread(QThread):
+class OpenCsvThread(QThread):
 
     new_entry = pyqtSignal(str, dict)
     reshape = pyqtSignal(dict)

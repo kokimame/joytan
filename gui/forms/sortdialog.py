@@ -62,9 +62,6 @@ class Ui_SortDialog(object):
         self.horizontalLayout_3.setObjectName("horizontalLayout_3")
         spacerItem1 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout_3.addItem(spacerItem1)
-        self.stopBtn = QtWidgets.QPushButton(SortDialog)
-        self.stopBtn.setObjectName("stopBtn")
-        self.horizontalLayout_3.addWidget(self.stopBtn)
         self.okBtn = QtWidgets.QPushButton(SortDialog)
         self.okBtn.setDefault(True)
         self.okBtn.setObjectName("okBtn")
@@ -85,6 +82,5 @@ class Ui_SortDialog(object):
         self.optionBox.setItemText(1, _translate("SortDialog", "Shuffle"))
         self.label_2.setText(_translate("SortDialog", "Sort by"))
         self.label_3.setText(_translate("SortDialog", "Progress:"))
-        self.stopBtn.setText(_translate("SortDialog", "Stop"))
-        self.okBtn.setText(_translate("SortDialog", "OK"))
+        self.okBtn.setText(_translate("SortDialog", "Sort"))
 

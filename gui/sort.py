@@ -31,7 +31,6 @@ class SortDialog(QDialog):
         self._on_option_changed(self.form.optionBox.currentText())
 
     def _ui_progress(self):
-        self.form.stopBtn.setEnabled(False)
         self.form.okBtn.setEnabled(True)
         self.form.progressBar.reset()
         self.form.pgMsg.setText("")

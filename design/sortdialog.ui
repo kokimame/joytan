@@ -120,16 +120,9 @@
       </spacer>
      </item>
      <item>
-      <widget class="QPushButton" name="stopBtn">
-       <property name="text">
-        <string>Stop</string>
-       </property>
-      </widget>
-     </item>
-     <item>
       <widget class="QPushButton" name="okBtn">
        <property name="text">
-        <string>OK</string>
+        <string>Sort</string>
        </property>
        <property name="default">
         <bool>true</bool>

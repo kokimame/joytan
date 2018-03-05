@@ -45,6 +45,7 @@ class JoytanMW(QMainWindow):
         form.actionSort.triggered.connect(self._on_sort)
         form.actionTut.triggered.connect(self._on_tutorial)
         form.actionWeb.triggered.connect(self._on_website)
+        form.actionMemrise.triggered.connect(self._on_memrise)
 
     def _ui_button(self):
         form = self.form
@@ -79,6 +80,10 @@ class JoytanMW(QMainWindow):
     def _on_save(self):
         import gui.save
         gui.save.on_save(self)
+
+    def _on_memrise(self):
+        import gui.memrise
+        gui.memrise.on_memrise(self)
 
     def _on_sort(self):
         import gui.sort

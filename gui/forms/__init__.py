@@ -4,6 +4,7 @@ __all__ = [
  "copydialog",
  "lookup",
  "main",
+ "memrise",
  "opendialog",
  "preferences",
  "sortdialog",
@@ -14,6 +15,7 @@ from . import audiodialog
 from . import copydialog
 from . import lookup
 from . import main
+from . import memrise
 from . import opendialog
 from . import preferences
 from . import sortdialog

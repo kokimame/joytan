@@ -179,8 +179,15 @@
     <addaction name="separator"/>
     <addaction name="actionWeb"/>
    </widget>
+   <widget class="QMenu" name="menuTools">
+    <property name="title">
+     <string>&amp;Tools</string>
+    </property>
+    <addaction name="actionMemrise"/>
+   </widget>
    <addaction name="menuFile"/>
    <addaction name="menuEdit"/>
+   <addaction name="menuTools"/>
    <addaction name="menuHelp"/>
   </widget>
   <action name="actionUndo">
@@ -313,6 +320,16 @@
   <action name="actionWeb">
    <property name="text">
     <string>Joytan Website</string>
+   </property>
+  </action>
+  <action name="actionLoad_Memrise_cards2">
+   <property name="text">
+    <string>Load Memrise cards2</string>
+   </property>
+  </action>
+  <action name="actionMemrise">
+   <property name="text">
+    <string>Load Memrise level</string>
    </property>
   </action>
  </widget>

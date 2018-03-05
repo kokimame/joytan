@@ -22,17 +22,18 @@ Joytan is a free, small cross-platform desktop app that facilitates the process 
 It comes with some powerful features which are specially designed to be useful for language learners.
 
 Key features include:
-- **Creating MP3 audiobooks with your best-loved songs and sound effects**
-- Full control of sequence and every timbre of your audiobook
-- Audiobook with **lifelike speech using [Amazon Polly](https://aws.amazon.com/polly/)**
-- Support free, fast and local Text-to-Speech alternatives
-- **Creating textbook** fast and locally for free, easy to export to PDF
-- Designing original textbook with basic HTML
-- **Automatic language translation** powered by Google Translation
-- **Automatic visual aid (images) download** to your textbook from Google Image
-- **Automatic online dictionary-lookup** for language learning
-- **Saving scripts in CSV files, ready to export to [Anki](https://apps.ankiweb.net)**
-- Editing scripts online even with people around the world via Google Sheets
+- **MP3 audiobooks with your best-loved songs and sound effects**
+- **Lifelike speech using [Amazon Polly](https://aws.amazon.com/polly/) (24 languages in 52 voices)**
+- **High-quality HTML/PDF textbooks (and quiz)**
+- **Saving data as CSV files, ready to export to [Anki](https://apps.ankiweb.net)**
+- **Google Image download (a ton of visual aids)**
+- **Various online dictionary lookups**
+- **[Memrise](https://www.memrise.com/) download**
+- Support for Local Text-to-Speech alternatives (eSpeak, say, etc)
+- Original design of textbooks with basic HTML
+- Data format editable on Google Sheets
+- Language translation powered by Google Translation
+- Self-made editable pattern of audiobooks
 - Simple and tiny GUI, just 3 main dialogs!
 
 

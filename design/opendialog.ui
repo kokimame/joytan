@@ -59,6 +59,24 @@
     </spacer>
    </item>
    <item>
+    <widget class="QLabel" name="label">
+     <property name="text">
+      <string>&lt;html&gt;&lt;style&gt;
+p.small {
+    line-height: 1px;
+}
+&lt;/style&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;To cancel &amp;amp; stop opening a file, &lt;br&gt;please click the close button above.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="Line" name="line">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+   </item>
+   <item>
     <layout class="QHBoxLayout" name="horizontalLayout_3">
      <item>
       <widget class="QLabel" name="label_3">
@@ -103,13 +121,6 @@
         </size>
        </property>
       </spacer>
-     </item>
-     <item>
-      <widget class="QPushButton" name="stopBtn">
-       <property name="text">
-        <string>Stop</string>
-       </property>
-      </widget>
      </item>
      <item>
       <widget class="QPushButton" name="openBtn">

@@ -31,6 +31,14 @@ class Ui_OpenDialog(object):
         self.verticalLayout.addLayout(self.horizontalLayout_5)
         spacerItem = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.verticalLayout.addItem(spacerItem)
+        self.label = QtWidgets.QLabel(OpenDialog)
+        self.label.setObjectName("label")
+        self.verticalLayout.addWidget(self.label)
+        self.line = QtWidgets.QFrame(OpenDialog)
+        self.line.setFrameShape(QtWidgets.QFrame.HLine)
+        self.line.setFrameShadow(QtWidgets.QFrame.Sunken)
+        self.line.setObjectName("line")
+        self.verticalLayout.addWidget(self.line)
         self.horizontalLayout_3 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_3.setObjectName("horizontalLayout_3")
         self.label_3 = QtWidgets.QLabel(OpenDialog)
@@ -54,9 +62,6 @@ class Ui_OpenDialog(object):
         self.horizontalLayout_4.setObjectName("horizontalLayout_4")
         spacerItem1 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout_4.addItem(spacerItem1)
-        self.stopBtn = QtWidgets.QPushButton(OpenDialog)
-        self.stopBtn.setObjectName("stopBtn")
-        self.horizontalLayout_4.addWidget(self.stopBtn)
         self.openBtn = QtWidgets.QPushButton(OpenDialog)
         self.openBtn.setDefault(True)
         self.openBtn.setObjectName("openBtn")
@@ -73,7 +78,11 @@ class Ui_OpenDialog(object):
         OpenDialog.setWindowTitle(_translate("OpenDialog", "Open file "))
         self.label_2.setText(_translate("OpenDialog", "Selected file:"))
         self.fileBtn.setText(_translate("OpenDialog", "..."))
+        self.label.setText(_translate("OpenDialog", "<html><style>\n"
+"p.small {\n"
+"    line-height: 1px;\n"
+"}\n"
+"</style><head/><body><p>To cancel &amp; stop opening a file, <br>please click the close button above.</p></body></html>"))
         self.label_3.setText(_translate("OpenDialog", "Progress:"))
-        self.stopBtn.setText(_translate("OpenDialog", "Stop"))
         self.openBtn.setText(_translate("OpenDialog", "Open"))
 

@@ -18,8 +18,8 @@ def on_open(mw):
 class OpenDialog(QDialog):
     """
     Dialog showing some info and data to users before opening a file.
-    Data may include the number of row & column of a file to open, and
-    info may include a warning that too many entries slower or freeze at worst
+    Data will include the number of row & column of a file to open, and
+    info will include a warning that tells too many entries slower or freeze at worst
     the app on the beta version.
     """
     def __init__(self, mw):
@@ -31,7 +31,7 @@ class OpenDialog(QDialog):
         self.form.setupUi(self)
 
         self._ui_button()
-        self._ui_progress()
+        self._ui_reset()
 
         self._get_file()
 
@@ -40,11 +40,10 @@ class OpenDialog(QDialog):
     def _ui_button(self):
         self.form.fileBtn.clicked.connect(self._get_file)
         self.form.openBtn.clicked.connect(self._on_open)
-        self.form.stopBtn.clicked.connect(self._on_stop)
 
-    def _ui_progress(self):
-        self.form.stopBtn.setEnabled(False)
+    def _ui_reset(self):
         self.form.openBtn.setEnabled(True)
+        self.form.fileBtn.setEnabled(True)
         self.form.progressBar.reset()
         self.form.pgMsg.setText("")
 
@@ -60,7 +59,7 @@ class OpenDialog(QDialog):
 
         self.form.progressBar.setRange(0, self._count_row())
         self.form.openBtn.setEnabled(False)
-        self.form.stopBtn.setEnabled(True)
+        self.form.fileBtn.setEnabled(False)
         self.thread.start()
 
     def _on_progress(self, atop, items):
@@ -84,18 +83,13 @@ class OpenDialog(QDialog):
             return
 
     def _on_stop(self):
-        """
-        TODO: Because the background thread for opening a file is too fast,
-        the method to stop the thread fails to do the job although clicking the
-        'stop button' quickly multiple times sometimes become successful.
-        """
         if self.thread:
             self.thread.terminate()
-        self._ui_progress()
+        self._ui_reset()
         self.mw.entrylist.update_all()
 
     def _completed(self):
-        self._ui_progress()
+        self._ui_reset()
         self.mw.entrylist.update_all()
         self.reject()
 
@@ -104,3 +98,8 @@ class OpenDialog(QDialog):
             for i, l in enumerate(f):
                 pass
         return i + 1
+
+    def reject(self):
+        self._on_stop()
+        self.done(0)
+        gui.dialogs.close("OpenDialog")

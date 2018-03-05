@@ -70,7 +70,7 @@ class CsvOpenThread(QThread):
                         continue
                     items[ewkey] = column[ewkey][i]
                 self.new_entry.emit(atop, items)
-                time.sleep(0.01)
+                self.msleep(50)
 
 
 def remove_trash_row(header):

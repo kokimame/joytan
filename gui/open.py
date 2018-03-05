@@ -7,13 +7,10 @@ from gui.qt import *
 from gui.utils import showCritical, showWarning, getFile, path2filename
 from joytan.routine.opencsv import CsvOpenThread
 
-# TODO: Logic for opening csv should be moved to joytan/joytan,
-# and in this directory we need to implement an open dialog to
-# preview csv files and give options about which columns & rows to open.
-
 
 def on_open(mw):
     gui.dialogs.open("OpenDialog", mw)
+
 
 class OpenDialog(QDialog):
     """
@@ -83,7 +80,7 @@ class OpenDialog(QDialog):
             return
 
     def _on_stop(self):
-        if self.thread:
+        if isinstance(self.thread, CsvOpenThread):
             self.thread.terminate()
         self._ui_reset()
         self.mw.entrylist.update_all()

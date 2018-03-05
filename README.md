@@ -9,14 +9,12 @@
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![Twitter](https://img.shields.io/twitter/follow/JoytanApp.svg?style=social&label=Follow)](https://twitter.com/intent/follow?screen_name=JoytanApp)
 
-<center>
-    <figure>
-      <a href="./docs/images/app_pros.png">
-        <img src="./docs/images/app_pros.png"
-        alt="Fig: Pros of Joytan" width="400" height="150">
-      </a>
-    </figure>
-</center>
+<p align="center">
+  <a href="./docs/images/app_pros.png">
+    <img src="./docs/images/app_pros.png"
+    alt="Fig: Pros of Joytan" width="450" height="170">
+  </a>
+</p>
 
 Joytan is a free, small cross-platform desktop app that facilitates the process of making audio/textbooks.
 It comes with some powerful features which are specially designed to be useful for language learners.
@@ -29,7 +27,9 @@ Key features include:
 - **Google Image download (a ton of visual aids)**
 - **Various online dictionary lookups**
 - **[Memrise](https://www.memrise.com/) download**
-- Support for Local Text-to-Speech alternatives (eSpeak, say, etc)
+- **10,000+ ready-to-convert sample entries (from [Duolingo](https://www.duolingo.com/),
+ Memrise, etc) [here](https://drive.google.com/drive/u/0/folders/1tbAViNauTU4Pdl7il0AV-6FajYUIimas)**
+- Support for local Text-to-Speech alternatives (eSpeak, say, etc)
 - Original design of textbooks with basic HTML
 - Data format editable on Google Sheets
 - Language translation powered by Google Translation
@@ -72,7 +72,7 @@ We are distributing some of sample creations on [YouTube](https://www.youtube.co
   <img src="https://img.youtube.com/vi/ehkQu1mKyeU/0.jpg" width="260" height=180" />
 </a>
 
-[**See Textbook Sample**](https://drive.google.com/open?id=15_k1pJdWzUldhL9HYP6vAOllSqAIjaHr)
+[**See Textbook Sample (compressed)**](https://drive.google.com/open?id=15_k1pJdWzUldhL9HYP6vAOllSqAIjaHr)
 
 [**See Matching Quiz Sample**](https://drive.google.com/open?id=124X0_d2It0MKF0HauGMq2SuOCEyrzn-t)
 

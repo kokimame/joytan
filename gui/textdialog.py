@@ -247,7 +247,7 @@ class TextDialog(QDialog):
 
     class ThreadPoolTimer(QThread):
         """
-        Emit an signal when QThreadPool finishes the job
+        Emit a signal when QThreadPool finishes the job
         """
         done = pyqtSignal()
 

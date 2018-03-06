@@ -8,7 +8,7 @@ fi
 
 cd ..
 # Setting input folder and output folder
-version=0.1.0
+version=0.2.0
 inbase=joytan
 outbase=~/Desktop/$(date +"%m-%d_%H-%M-%S")_Joytan
 
@@ -49,7 +49,7 @@ elif [[ "$OSTYPE" == "darwin"* ]]; then
     cp /usr/local/bin/lame ${binary}/Joytan.app/Contents/MacOS
     cp ${inbase}/design/default_textbook.html ${binary}/Joytan.app/Contents/MacOS
     dmgbuild -s ${inbase}/devscript/build_dmg.py \
-        -D app=${binary}/Joytan.app "Joytan" ${binary}/joytan-${version}.dmg
+        -D app=${binary}/Joytan.app "Joytan" ${binary}/joytan-v${version}.dmg
 
 else
     echo "Bundle for Linux"
@@ -69,6 +69,6 @@ if [[ "$OSTYPE" == "linux-gnu" ]]; then
 	cp /usr/bin/lame ${outbase}/bin/
 	cp ${inbase}/design/default_textbook.html ${outbase}/bin/
     cd ${outbase}
-    tar -cvjSf joytan-${version}-amd64.tar.bz2 *
+    tar -cvjSf joytan-v${version}-amd64.tar.bz2 *
 fi
 

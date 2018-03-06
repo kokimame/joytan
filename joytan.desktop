@@ -8,5 +8,5 @@ Icon=joytan
 Categories=Education;Languages;Qt;
 Terminal=false
 Type=Application
-Version=0.0.0
+Version=0.2.0
 MimeType=application/x-joytan;

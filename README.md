@@ -22,18 +22,18 @@ It comes with some powerful features which are specially designed to be useful f
 Key features include:
 - **MP3 audiobooks with your best-loved songs and sound effects**
 - **Lifelike speech using [Amazon Polly](https://aws.amazon.com/polly/) (24 languages in 52 voices)**
+- **Support for 100+ voices of Text-to-Speech alternatives(from [AwesomeTTS](https://ankiatts.appspot.com/))**
 - **High-quality HTML/PDF textbooks (and quiz)**
 - **Saving data as CSV files, ready to export to [Anki](https://apps.ankiweb.net)**
-- **Google Image download (a ton of visual aids)**
-- **Various online dictionary lookups**
-- **[Memrise](https://www.memrise.com/) download**
+- **Google Image downloader (a ton of visual aids)**
+- **Automatic lookup to various online dictionaries**
+- **[Memrise](https://www.memrise.com/) downloader**
 - **10,000+ ready-to-convert sample entries (from [Duolingo](https://www.duolingo.com/),
  Memrise, etc) [here](https://drive.google.com/drive/u/0/folders/1tbAViNauTU4Pdl7il0AV-6FajYUIimas)**
-- Support for a dozen of Text-to-Speech alternatives (from [AwesomeTTS](https://ankiatts.appspot.com/))
+- Self-made editable pattern of audiobooks
 - Original design of textbooks with basic HTML
 - Data format editable on Google Sheets
 - Language translation powered by Google Translation
-- Self-made editable pattern of audiobooks
 - Simple and tiny GUI, just 3 main dialogs!
 
 

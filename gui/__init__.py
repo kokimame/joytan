@@ -28,7 +28,7 @@ if sys.getfilesystemencoding().lower() in ("ascii", "ansi_x3.4-1968"):
     raise Exception("Joytan requires a UTF-8 locale.")
 
 # build scripts grep this line, so keep this format
-app_version = "0.1.0"
+app_version = "0.2.0"
 # Main window set in runtime
 mw = None
 logger = None
@@ -193,7 +193,9 @@ def _run(argv=None, exec=True):
 
     global mw
     import gui.main
-
+    print("Hi Windows users, don't close this black window. Sorry for your inconvenience.\n"
+          "Without this window, the audiobook feature cannot work on Windows because of an technical issue.\n"
+          "This will be fixed in the future!")
     mw = gui.main.JoytanMW(app, config, sys.argv)
     if exec:
         app.exec_()

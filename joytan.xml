@@ -2,7 +2,7 @@
  <mime-info xmlns='http://www.freedesktop.org/standards/shared-mime-info'>
 
    <mime-type type="application/x-joytan">
-   <comment>Joytan 0.0 Entry</comment>
+   <comment>Joytan 0.2.0</comment>
    <glob pattern="*.joytan"/>
    </mime-type>
 

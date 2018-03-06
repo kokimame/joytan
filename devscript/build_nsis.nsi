@@ -7,12 +7,12 @@
 # If you change the names "app.exe", "logo.ico", or "license.rtf" you should do a search and replace - they
 # show up in a few places.
 # All the other settings can be tweaked by editing the !defines at the top of this script
-!define APPNAME "Joytan"
+!define APPNAME "joytan"
 !define COMPANYNAME "Kohki Mametani"
 !define DESCRIPTION "Free Creative Audio/Textbook Maker"
 # These three must be integers
 !define VERSIONMAJOR 0
-!define VERSIONMINOR 1
+!define VERSIONMINOR 2
 !define VERSIONBUILD 0
 # These will be displayed by the "Click here for support information" link in "Add/Remove Programs"
 # It is possible to use "mailto:" links in here to open the email client
@@ -31,7 +31,7 @@ LicenseData "LICENSE.txt"
 # This will be in the installer/uninstaller's title bar
 Name "${APPNAME}"
 Icon "${APPNAME}.ico"
-outFile "${APPNAME}-installer.exe"
+outFile "${APPNAME}-v${VERSIONMAJOR}.${VERSIONMINOR}.${VERSIONBUILD}-installer.exe"
  
 !include LogicLib.nsh
  

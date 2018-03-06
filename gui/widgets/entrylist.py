@@ -85,6 +85,8 @@ After bringing everything you need for your book,<br>
 hit the button [-> Audio] or [-> Text]!<br>
 <b>In the early version, you cannot UNDO in the app. <br>
 Please save your file carefully!</b><br>
+<b>Also, be sure you have plenty of free memory when<br>
+you make an audiobook with many entries.</b><br>
 Tips: You can drag entries to reorder them.
 <br>
 </html> 

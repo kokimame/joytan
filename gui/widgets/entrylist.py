@@ -75,14 +75,20 @@ class EntryList(QListWidget):
 
     # A snippet displayed in EntryList every time the app are started
     _STARTER_MESSAGE = """
- Hi! Thank you for using Joytan!
- To start creating audio/textbooks...
- Drag text here (this only works properly for English)
- or push (+) button below and type by yourself.
- After bringing everything you need,
- hit the button [-> Audio] or [-> Text]!
- Tips: You can drag entries to reorder them.   
-    """
+<html>
+<br>
+Hi! Thank you for using Joytan!<br>
+To start creating audio/textbooks...<br>
+Drag text here (this only works properly for English)<br>
+or push (+) button below and type by yourself.<br>
+After bringing everything you need for your book,<br>
+hit the button [-> Audio] or [-> Text]!<br>
+<b>In the early version, you cannot UNDO in the app. <br>
+Please save your file carefully!</b><br>
+Tips: You can drag entries to reorder them.
+<br>
+</html> 
+"""
 
     def __init__(self, mw):
         super(EntryList, self).__init__()

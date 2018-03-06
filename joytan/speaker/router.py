@@ -344,6 +344,7 @@ class Router(object):
             if not text:
                 raise ValueError("Text not usable by " + service['class'].NAME)
 
+            service['instance'].net_reset()
             service['instance'].run(text, options, path)
 
         except Exception as e:

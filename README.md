@@ -29,7 +29,7 @@ Key features include:
 - **[Memrise](https://www.memrise.com/) download**
 - **10,000+ ready-to-convert sample entries (from [Duolingo](https://www.duolingo.com/),
  Memrise, etc) [here](https://drive.google.com/drive/u/0/folders/1tbAViNauTU4Pdl7il0AV-6FajYUIimas)**
-- Support for local Text-to-Speech alternatives (eSpeak, say, etc)
+- Support for a dozen of Text-to-Speech alternatives (from [AwesomeTTS](https://ankiatts.appspot.com/))
 - Original design of textbooks with basic HTML
 - Data format editable on Google Sheets
 - Language translation powered by Google Translation
@@ -123,6 +123,18 @@ Now you are ready to run Joytan by:
 ./runapp
 ```
 
+## TODO
+- Memrise Course Downloader
+- More dictionary interfaces (from Weblio to Urban Dictionary)
+- Chunking large audiobook in the process for memory efficiency
+- Voice Recording
+- Cell View (without rendering EntryList to speed up loading)
+- Title/Ending editor for audiobook
+- UNDO
+- Drag & drop on Panel to download online images
+- Search entries
+- Multilingual Support
+- More test
 
 ## Contribution
 - Report a bug: See [issues](https://github.com/kokimame/joytan/issues)

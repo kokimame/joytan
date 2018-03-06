@@ -78,17 +78,6 @@ class ServiceQuo(QLabel):
     def summarizer(self):
         pass
 
-
-from gui.utils import isMac, isLin
-if isLin:
-    _AVAIL_TTS = ['espeak']
-elif isMac:
-    _AVAIL_TTS = ['say']
-else:
-    _AVAIL_TTS = ['sapijs', 'sapicom']
-_AVAIL_TTS.append('amazon')
-
-
 class AwesomeTTS(QWidget):
     _FONT_HEADER = QFont()
     _FONT_HEADER.setPointSize(12)
@@ -229,7 +218,7 @@ class AwesomeTTS(QWidget):
         for i, ewkey in enumerate(self.el_conf[0]('ewkeys')):
             quo = ServiceQuo(ewkey)
             svc_values = self.el_conf[0](ewkey)
-            if svc_values and svc_values[1] in _AVAIL_TTS:
+            if svc_values:
                 quo.idx = svc_values[0]
                 # Pass svc_id & options
                 quo.set_desc(svc_values[1], svc_values[2])

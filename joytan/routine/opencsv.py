@@ -17,6 +17,7 @@ class OpenCsvThread(QThread):
     def __init__(self, path):
         QThread.__init__(self)
         self.path = path
+        self.is_aborted = False
 
     def run(self):
         assert self.path
@@ -65,12 +66,17 @@ class OpenCsvThread(QThread):
 
             for i, atop in enumerate(column['atop']):
                 items = {}
+                if self.is_aborted:
+                    break
                 for ewkey in list(column.keys()):
                     if ewkey == 'atop':
                         continue
                     items[ewkey] = column[ewkey][i]
                 self.new_entry.emit(atop, items)
                 self.msleep(50)
+
+    def to_abort(self):
+        self.is_aborted = True
 
 
 def remove_trash_row(header):

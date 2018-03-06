@@ -81,7 +81,7 @@ class OpenDialog(QDialog):
 
     def _on_stop(self):
         if isinstance(self.thread, OpenCsvThread):
-            self.thread.terminate()
+            self.thread.to_abort()
         self._ui_reset()
         self.mw.entrylist.update_all()
 

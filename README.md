@@ -22,7 +22,7 @@ It comes with some powerful features which are specially designed to be useful f
 Key features include:
 - **MP3 audiobooks with your best-loved songs and sound effects**
 - **Lifelike speech using [Amazon Polly](https://aws.amazon.com/polly/) (24 languages in 52 voices)**
-- **Support for 100+ voices of Text-to-Speech alternatives(from [AwesomeTTS](https://ankiatts.appspot.com/))**
+- **100+ voices from Text-to-Speech alternatives (by [AwesomeTTS](https://ankiatts.appspot.com/))**
 - **High-quality HTML/PDF textbooks (and quiz)**
 - **Saving data as CSV files, ready to export to [Anki](https://apps.ankiweb.net)**
 - **Google Image downloader (a ton of visual aids)**

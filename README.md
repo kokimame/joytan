@@ -70,6 +70,10 @@ We are distributing some of sample creations on [YouTube](https://www.youtube.co
 </a>
 <a href="https://www.youtube.com/watch?v=ehkQu1mKyeU">
   <img src="https://img.youtube.com/vi/ehkQu1mKyeU/0.jpg" width="260" height=180" />
+</a><br>
+
+<a href="https://www.youtube.com/watch?v=9Xqy4V_7otk">
+  <img src="https://img.youtube.com/vi/9Xqy4V_7otk/0.jpg" width="260" height=180" />
 </a>
 
 [**See Textbook Sample (compressed)**](https://drive.google.com/open?id=15_k1pJdWzUldhL9HYP6vAOllSqAIjaHr)

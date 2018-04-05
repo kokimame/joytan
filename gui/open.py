@@ -21,7 +21,6 @@ class OpenDialog(QDialog):
     """
     def __init__(self, mw):
         QDialog.__init__(self, mw, Qt.Window)
-        self.setModal(True)
         self.mw = mw
         self.path = None
         self.form = gui.forms.opendialog.Ui_OpenDialog()

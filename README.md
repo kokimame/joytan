@@ -17,7 +17,8 @@
 </p>
 
 Joytan is a free, small cross-platform desktop app that facilitates the process of making audio/textbooks.
-It comes with some powerful features which are specially designed to be useful for language learners.
+With Joytan, you can create your own audio/textbooks based on what you really want to learn by yourself,
+such as a Memrise course and Anki cards.
 
 Key features include:
 - **MP3 audiobooks with your best-loved songs and sound effects**
@@ -68,16 +69,18 @@ We are distributing some of sample creations on [YouTube](https://www.youtube.co
 <a href="https://www.youtube.com/watch?v=tEIpgTREexQ">
   <img src="https://img.youtube.com/vi/tEIpgTREexQ/0.jpg" width="260" height=180" />
 </a>
+<a href="https://www.youtube.com/watch?v=0KR9DKZeTqk">
+  <img src="https://img.youtube.com/vi/0KR9DKZeTqk/0.jpg" width="260" height=180" />
+</a>
+<br>
+
+<a href="https://www.youtube.com/watch?v=AZ0K6Pnffvo">
+  <img src="https://img.youtube.com/vi/AZ0K6Pnffvo/0.jpg" width="260" height=180" />
+</a>
 <a href="https://www.youtube.com/watch?v=ehkQu1mKyeU">
   <img src="https://img.youtube.com/vi/ehkQu1mKyeU/0.jpg" width="260" height=180" />
-</a><br>
+</a>
 
-<a href="https://www.youtube.com/watch?v=9Xqy4V_7otk">
-  <img src="https://img.youtube.com/vi/9Xqy4V_7otk/0.jpg" width="260" height=180" />
-</a>
-<a href="https://www.youtube.com/watch?v=ysMp0k4oR5c">
-  <img src="https://img.youtube.com/vi/ysMp0k4oR5c/0.jpg" width="260" height=180" />
-</a>
 
 [**See Textbook Sample (compressed)**](https://drive.google.com/open?id=15_k1pJdWzUldhL9HYP6vAOllSqAIjaHr)
 

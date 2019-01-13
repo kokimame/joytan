@@ -65,9 +65,6 @@ We are distributing some of sample creations on [YouTube](https://www.youtube.co
 
 **Audiobook Sample:**
 
-<a href="https://www.youtube.com/watch?v=IxoVBZAMeWY">
-  <img src="https://img.youtube.com/vi/IxoVBZAMeWY/0.jpg" width="260" height=180" />
-</a>
 <a href="https://www.youtube.com/watch?v=0KR9DKZeTqk">
   <img src="https://img.youtube.com/vi/0KR9DKZeTqk/0.jpg" width="260" height=180" />
 </a>

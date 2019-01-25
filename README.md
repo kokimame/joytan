@@ -28,8 +28,6 @@ Key features include:
 - **Google Image downloader for tons of visual aids**
 - **Automatic lookup to various online dictionaries**
 - **[Memrise](https://www.memrise.com/) downloader**
-- **10,000+ ready-to-convert sample entries (from [Duolingo](https://www.duolingo.com/),
- Memrise, etc) [here](https://drive.google.com/drive/u/0/folders/1tbAViNauTU4Pdl7il0AV-6FajYUIimas)**
 - Self-made editable pattern of audiobooks
 - Original design for textbooks with basic HTML
 - Data format editable on Google Sheets

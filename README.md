@@ -63,17 +63,12 @@ We are distributing some of sample creations on [YouTube](https://www.youtube.co
 
 **Audiobook Sample:**
 
+<a href="https://www.youtube.com/watch?v=tSzgD99iBE4">
+  <img src="https://img.youtube.com/vi/tSzgD99iBE4/0.jpg" width="260" height=180" />
+</a>                                                                             
 <a href="https://www.youtube.com/watch?v=0KR9DKZeTqk">
   <img src="https://img.youtube.com/vi/0KR9DKZeTqk/0.jpg" width="260" height=180" />
 </a>
-<br>
-<a href="https://www.youtube.com/watch?v=AZ0K6Pnffvo">
-  <img src="https://img.youtube.com/vi/AZ0K6Pnffvo/0.jpg" width="260" height=180" />
-</a>                                                                             
-<a href="https://www.youtube.com/watch?v=tEIpgTREexQ">
-  <img src="https://img.youtube.com/vi/tEIpgTREexQ/0.jpg" width="260" height=180" />
-</a>
-
 [**See Textbook Sample (compressed)**](https://drive.google.com/open?id=15_k1pJdWzUldhL9HYP6vAOllSqAIjaHr)
 
 [**See Matching Quiz Sample**](https://drive.google.com/open?id=124X0_d2It0MKF0HauGMq2SuOCEyrzn-t)

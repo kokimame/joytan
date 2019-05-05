@@ -1,5 +1,7 @@
 ## Joytan ジョイ単
 
+#### While this repository seems inactive, I'm still working hard on the Joytan project privately (see the Joytan App on YouTube). My goal is to make the most AI-powered channel on YouTube. If you have trouble using this desktop application, please throw questions on GitHub or Gitter. If some interested developers come across this repo, I'm ready to come back to open-source.
+
 <img src="./logo/joytan.png" align="right" width="90" height="90" title="logo">
 
 **Website**: https://kokimame.github.io/joytan/

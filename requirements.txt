@@ -4,7 +4,7 @@ googletrans==2.2.0
 Jinja2==2.10
 pydub==0.20.0
 PyQt5==5.9.2
-requests==2.18.4
+requests==2.20.0
 tinytag==0.18.0
 coverage==4.0.3
 mock==2.0.0

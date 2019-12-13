@@ -90,6 +90,7 @@ class OpenDialog(QDialog):
         self.reject()
 
     def _count_row(self):
+        return 0
         with open(self.path, encoding='utf-8') as f:
             for i, l in enumerate(f):
                 pass

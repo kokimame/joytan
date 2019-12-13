@@ -356,7 +356,8 @@ class Router(object):
 
 
     def __call__(self, svc_id, text, options, callbacks,
-                 want_human=False, note=None, async=True):
+                 want_human=False, note=None, _async=True):
+        # DON'T USE 'async' as a keyword parameter because it is reserved in built-in
         """
         Given the service ID and associated options, pass the text into
         the service for processing.
@@ -582,7 +583,7 @@ class Router(object):
             def task():
                 service['instance'].run(text, options, path)
 
-            if async:
+            if _async:
                 def do_spawn():
                     """Call if ready to start a thread to run the service."""
                     self._pool.spawn(

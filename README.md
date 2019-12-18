@@ -81,6 +81,10 @@ We are distributing some of sample creations on [YouTube](https://www.youtube.co
  created with Joytan, the other is image clips which were created separately from the app.
  Video-making feature is not included in the current version of Joytan.*
 
+## Known bugs
+- There are some encodings (e.g. "windows-1252") of CSV files which the app cannot load and result in a crash.
+- The ffmpeg embeded in the app may not be compatible on some machines, thus the audiobook-making feature is not available. 
+
 ## Download & Installation
 Joytan works on Windows, Mac, and Linux.
 

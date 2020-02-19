@@ -3,6 +3,7 @@
 # License: GNU GPL version 3 or later; http://www.gnu.org/licenses/gpl.html
 
 import os
+import shutil
 import sys
 import pydub
 import tinytag
@@ -25,6 +26,21 @@ class DubbingWorker:
         self.currentTime = 0
         self.lyrics = []
         self.routers = self._get_routers()
+        self.loop=self.setting['loop']
+        self.bgmLoopCursor=0
+        self.bgmRepeatCursor=0
+
+    def cleanData(self):
+        self.acapellas = []
+        self.currentTime = 0
+        self.lyrics = []
+        return
+
+    def _nextCursor(self):
+        self.bgmLoopCursor+=1
+        if self.bgmLoopCursor>=len(self.loop):
+            self.bgmLoopCursor=0
+        self.bgmRepeatCursor=0
 
     def _get_routers(self):
         """
@@ -157,39 +173,64 @@ class DubbingWorker:
         def remaining():
             return max(audiobook_in_msec - sum([len(aseg) for aseg in bgmloop]), 0)
 
+        output = os.path.join(self.setting['dest'],
+                              'last_fraction_bgm.mp3')
+        output2 =os.path.join(self.setting['dest'],
+                                        'remain_bgm.mp3')
+        output3 = os.path.join(self.setting['dest'],
+                               'replicate_bgm.mp3')
+        if os.path.exists(output2):
+            bgm=Aseg.from_mp3(output2)
+            bgmdur=bgm.duration_seconds*1000
+            if bgmdur>remaining():
+                shutil.copyfile(output2,output3)
+                copy_and_split(output3, output, remaining(),
+                               output2)
+                bgm = Aseg.from_mp3(output)
+                rdbfs = reduce_dbfs(bgm.dBFS,
+                                    (1 - self.loop[self.bgmLoopCursor]['volume'] / 100))
+                bgmloop.append((bgm - rdbfs))
+                done=True
+            else:
+                rdbfs = reduce_dbfs(bgm.dBFS,
+                                    (1 -
+                                     self.loop[self.bgmLoopCursor][
+                                         'volume'] / 100))
+                bgmloop.append((bgm-rdbfs))
+                os.remove(output2)
+
         while not done:
             # Reading flowitem from audio dialog setting
-            for fi in self.setting['loop']:
-                if fi['desc'] == "MP3":
-                    duration = duration_tag(fi['path'])
-                    if duration > remaining():
-                        output = os.path.join(self.setting['dest'], 'last_fraction_bgm.mp3')
-                        copy_and_split(fi['path'], output, remaining())
-                        bgm = Aseg.from_mp3(output)
-                        rdbfs = reduce_dbfs(bgm.dBFS, (1 - fi['volume'] / 100))
+            fi=self.loop[self.bgmLoopCursor]
+            if fi['desc'] == "MP3":
+                duration = duration_tag(fi['path'])
+                if duration > remaining():
+                    copy_and_split(fi['path'], output, remaining(),output2)
+                    bgm = Aseg.from_mp3(output)
+                    rdbfs = reduce_dbfs(bgm.dBFS, (1 - fi['volume'] / 100))
+                    bgmloop.append((bgm - rdbfs))
+                    done = True
+                else:
+                    bgm = Aseg.from_mp3(fi['path'])
+                    rdbfs = reduce_dbfs(bgm.dBFS, (1 - fi['volume'] / 100))
+                    # Probably it's safe to overlay BGM even if it exceeds msec with
+                    # the repetition below.
+                    if self.bgmRepeatCursor< fi['repeat']:
+                        self.bgmRepeatCursor+=1
                         bgmloop.append((bgm - rdbfs))
-                        done = True
+                        if fi['postrest'] > 0:
+                            bgmloop.append(Aseg.silent(int(fi['postrest'] * 1000)))
                     else:
-                        bgm = Aseg.from_mp3(fi['path'])
-                        rdbfs = reduce_dbfs(bgm.dBFS, (1 - fi['volume'] / 100))
-                        # Probably it's safe to overlay BGM even if it exceeds msec with
-                        # the repetition below.
-                        for _ in range(fi['repeat']):
-                            if not remaining():
-                                done = True
-                                break
-                            bgmloop.append((bgm - rdbfs))
-                            if fi['postrest'] > 0:
-                                bgmloop.append(Aseg.silent(int(fi['postrest'] * 1000)))
-                elif fi['desc'] == "REST" and fi['postrest'] > 0:
-                    bgmloop.append(Aseg.silent(int(fi['postrest'] * 1000)))
-                if done or not remaining():
-                    break
+                        self._nextCursor()
+            elif fi['desc'] == "REST" and fi['postrest'] > 0:
+                bgmloop.append(Aseg.silent(int(fi['postrest'] * 1000)))
+            if done or not remaining():
+                break
 
         return sum(bgmloop)
 
 
-def copy_and_split(mp3path, output, ending):
+def copy_and_split(mp3path, output, ending, output2=""):
     """
     :param mp3path: Path to mp3 file to copy and cut
     :param output: Path to output mp3 file
@@ -217,6 +258,16 @@ def copy_and_split(mp3path, output, ending):
 
     import subprocess
     subprocess.call(command)
+
+    if output2!="":
+        command = [program,
+                   '-y',  # Say yes to override confirmation
+                   '-i', mp3path,
+                   '-acodec', 'copy',
+                   '-loglevel', 'panic',
+                   '-ss', str(ending / 1000),
+                   output2]
+        subprocess.call(command)
 
 
 def duration_tag(mp3path):

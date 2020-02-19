@@ -69,6 +69,8 @@ class AudioDialog(QDialog):
     def _ui_spin(self):
         self.form.fromSpin.setValue(1)
         self.form.toSpin.setValue(1)
+        self.form.pieceSpin.setValue(1)
+        self.form.pieceSpin.setMaximum(max(1,self.mw.entrylist.count()))
 
     def _ui_add_flow(self):
         fadd = self.form.flowAdd
@@ -162,7 +164,7 @@ class AudioDialog(QDialog):
                     showCritical("Index is out of range.")
                     self._ui_spin()
                     return
-
+        _piecesNum=self.form.pieceSpin.value()
         # Open TTS setting dialog if TTS setting is incomplete.
         _list = self.form.flowList
         undefs = self.mw.entrylist.get_config('undefined')
@@ -197,33 +199,50 @@ class AudioDialog(QDialog):
                 self.completed = False
                 self.prog.emit("Setting up audio files. This may take a few minutes")
                 self.worker.setup_audio()
-                for ew in entries:
-                    self.prog.emit("Creating audio file of Entry #%d" % (ew.row + 1))
-                    os.makedirs(os.path.join(setting['dest'], ew.str_index()), exist_ok=True)
-                    try:
-                        self.worker.onepass(ew)
-                    except Exception as e:
-                        self.fail.emit("Error occurs while creating audiobook. System stops "
-                                       "with exception '%s'" % e)
-                        self.sleep(100)
+                entryNum = len(entries)
+                pieceSize = entryNum / _piecesNum
 
-                self.prog.emit("Mixing with BGM. This may take a few minutes.")
-                acapella = sum(self.worker.acapellas)
-                # Is this good for memory efficiency?
-                del self.worker.acapellas
+                for i in range(_piecesNum):
+                    numStr = str(i) if _piecesNum > 1 else ""
+                    sidx = int(i * pieceSize)
+                    eidx = int((i + 1) * pieceSize)
+                    for ew in entries[sidx:eidx]:
+                        self.prog.emit("Creating audio file of Entry #%d" % (ew.row + 1))
+                        os.makedirs(os.path.join(setting['dest'], ew.str_index()), exist_ok=True)
+                        tryNum=0
+                        while tryNum<3:
+                            try:
+                                self.worker.onepass(ew)
+                                tryNum=3
+                            except Exception as e:
+                                tryNum+=1;
+                                if tryNum==2:
+                                    self.fail.emit("Error occurs while creating audiobook at Entry"
+                                                   " No.%d. System stops with exception '%s'"
+                                                   % (ew.row + 1,e))
+                                self.sleep(100)
 
-                if len(setting['loop']) != 0:
-                    try:
-                        finalmp3 = acapella.overlay(self.worker.get_bgmloop(len(acapella)))
-                        finalmp3.export(setting['dest'] + ".mp3")
-                    except Exception as e:
-                        self.fail.emit("Error occurs while making a looped BGM. System stops "
-                                       "with exception '%s'" % e)
-                else:
-                    acapella.export(setting['dest'] + ".mp3")
+                    self.prog.emit("Mixing with BGM. This may take a few minutes.")
 
-                if setting['lrc']:
-                    self.worker.make_lyrics(setting['dest'] + ".lrc")
+
+                    acapella = sum(self.worker.acapellas)
+                    # Is this good for memory efficiency?
+                    # del self.worker.acapellas
+
+                    if len(setting['loop']) != 0:
+                        try:
+                            finalmp3 = acapella.overlay(self.worker.get_bgmloop(len(acapella)))
+                            finalmp3.export(setting['dest']+numStr + ".mp3")
+                        except Exception as e:
+                            self.fail.emit("Error occurs while making a looped BGM. System stops "
+                                           "with exception '%s'" % e)
+                    else:
+                        acapella.export(setting['dest'] +numStr+ ".mp3")
+
+                    if setting['lrc']:
+                        self.worker.make_lyrics(setting['dest']+numStr + ".lrc")
+
+                    self.worker.cleanData()
 
                 self.completed = True
                 self.quit()
@@ -253,7 +272,7 @@ class AudioDialog(QDialog):
         self.form.createBtn.setEnabled(False)
         self.form.stopBtn.setEnabled(True)
         # Progress contains fixed 2 step; setting up audio files, mixing with BGM
-        self.form.progressBar.setRange(0, len(entries)+3)
+        self.form.progressBar.setRange(0, len(entries)+2+_piecesNum)
 
     def _on_stop(self):
         if self.thread:

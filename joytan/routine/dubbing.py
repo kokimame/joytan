@@ -8,10 +8,12 @@ import sys
 import pydub
 import tinytag
 from pydub import AudioSegment as Aseg
+from joytan.routine.chikana import injpchar,modi2chikana
 
 from joytan.frozen import FROZEN_FFMPEG
 if getattr(sys, 'frozen', False):
     Aseg.converter = FROZEN_FFMPEG
+
 
 class DubbingWorker:
     """
@@ -50,15 +52,45 @@ class DubbingWorker:
         Say on Mac, espeak on Linux.
         """
         from joytan.speaker import router
+        def chikana_force_run(svc_id, options, path, text):
+            opt=options.copy()
+            opt['chikana']=None
+            jpopt=opt.copy()
+            jpopt['voice']=jpopt['voice2']
+            opt['voice2']=None
+            jpopt['voice2']=None
+
+            chikana=modi2chikana(text)
+            asegs=[]
+            if len(chikana) == 1:
+                word=chikana[0]
+                if word[0]:
+                    router.force_run(svc_id, jpopt, path, word[1])
+                else:
+                    router.force_run(svc_id, options, path, word[1])
+            else:
+                for word in chikana:
+                    if word[0]:
+                        router.force_run(svc_id, jpopt, path, word[1])
+                    else:
+                        router.force_run(svc_id, options, path, word[1])
+
+                    aseg=Aseg.from_mp3(path)
+                    asegs.append(aseg)
+
+                wholeWord=sum(asegs)
+                wholeWord.export(path)
 
         def force_run(svc_id, options, path, text):
             try:
-                router.force_run(svc_id, options, path, text)
+                if 'chikana' in options and options['chikana'] == True:
+                    chikana_force_run(svc_id, options, path, text)
+                else:
+                    router.force_run(svc_id, options, path, text)
             except Exception as e:
                 #Any exception is thrown to the screen as a critical message,
                 #then the dubbing thread will immediately be killed.
                 raise e
-
         routers = {}
         for key, val in self.setting['ttsmap'].items():
             routers[key] = \

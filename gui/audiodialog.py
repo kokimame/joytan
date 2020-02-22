@@ -209,19 +209,21 @@ class AudioDialog(QDialog):
                     for ew in entries[sidx:eidx]:
                         self.prog.emit("Creating audio file of Entry #%d" % (ew.row + 1))
                         os.makedirs(os.path.join(setting['dest'], ew.str_index()), exist_ok=True)
+                        # self.worker.onepass(ew)
                         tryNum=0
                         while tryNum<3:
                             try:
                                 self.worker.onepass(ew)
                                 tryNum=3
                             except Exception as e:
-                                tryNum+=1;
+                                msg="Error:"+str(e).replace('\n','').replace('/r','').strip()
+                                self.prog.emit(msg)
+                                tryNum+=1
                                 if tryNum==2:
                                     self.fail.emit("Error occurs while creating audiobook at Entry"
                                                    " No.%d. System stops with exception '%s'"
                                                    % (ew.row + 1,e))
                                 self.sleep(100)
-
                     self.prog.emit("Mixing with BGM. This may take a few minutes.")
 
 
@@ -250,7 +252,8 @@ class AudioDialog(QDialog):
         def _on_progress(msg):
             self.form.pgMsg.setText(msg)
             val = self.form.progressBar.value()
-            self.form.progressBar.setValue(val+1)
+            if msg.find("Error:") < 0:
+                self.form.progressBar.setValue(val+1)
 
         def _on_fail(msg):
             """

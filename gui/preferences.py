@@ -80,6 +80,7 @@ class Preferences(QDialog):
         self.mw.config['worddir'] = form.wordEdit.text()
         self.mw.config['bgmdir'] = form.bgmEdit.text()
         self.mw.config['sfxdir'] = form.sfxEdit.text()
+        a=dict(ndef=self.form.dpwSpin.value(), nex=self.form.epdSpin.value())
         self.mw.entrylist.set_config('reshape',
                                      dict(ndef=self.form.dpwSpin.value(), nex=self.form.epdSpin.value()))
 
@@ -89,3 +90,5 @@ class Preferences(QDialog):
             self.back_to.raise_()
         self.done(0)
         gui.dialogs.close("Preferences")
+
+    # def on_reload(self):

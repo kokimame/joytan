@@ -8,7 +8,6 @@ import sys
 import pydub
 import tinytag
 from pydub import AudioSegment as Aseg
-from joytan.routine.chikana import injpchar,modi2chikana
 
 from joytan.frozen import FROZEN_FFMPEG
 if getattr(sys, 'frozen', False):
@@ -54,12 +53,12 @@ class DubbingWorker:
         from joytan.speaker import router
         def chikana_force_run(svc_id, options, path, text):
             opt=options.copy()
-            opt['chikana']=None
+            opt.pop('chikana')
             jpopt=opt.copy()
             jpopt['voice']=jpopt['voice2']
-            opt['voice2']=None
-            jpopt['voice2']=None
-
+            opt.pop('voice2')
+            jpopt.pop('voice2')
+            from joytan.routine.chikana import modi2chikana
             chikana=modi2chikana(text)
             asegs=[]
             if len(chikana) == 1:

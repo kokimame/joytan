@@ -21,3 +21,4 @@ from . import preferences
 from . import sortdialog
 from . import textdialog
 from . import translate
+from . import bulkadd

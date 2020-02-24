@@ -1,12 +1,14 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'design/audiodialog.ui'
+# Form implementation generated from reading ui file 'audiodialog.ui'
 #
-# Created by: PyQt5 UI code generator 5.9.2
+# Created by: PyQt5 UI code generator 5.13.0
 #
 # WARNING! All changes made in this file will be lost!
 
+
 from PyQt5 import QtCore, QtGui, QtWidgets
+
 
 class Ui_AudioDialog(object):
     def setupUi(self, AudioDialog):
@@ -60,6 +62,9 @@ class Ui_AudioDialog(object):
         self.horizontalLayout_7.addWidget(self.flowAdd)
         spacerItem2 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout_7.addItem(spacerItem2)
+        self.bulkaddBtn = QtWidgets.QPushButton(AudioDialog)
+        self.bulkaddBtn.setObjectName("bulkaddBtn")
+        self.horizontalLayout_7.addWidget(self.bulkaddBtn)
         self.verticalLayout_4.addLayout(self.horizontalLayout_7)
         self.horizontalLayout_1.addLayout(self.verticalLayout_4)
         self.line_2 = QtWidgets.QFrame(AudioDialog)
@@ -120,6 +125,9 @@ class Ui_AudioDialog(object):
         self.verticalLayout_5.addLayout(self.horizontalLayout_2)
         self.horizontalLayout_1.addLayout(self.verticalLayout_5)
         self.verticalLayout.addLayout(self.horizontalLayout_1)
+        self.horizontalLayout_3 = QtWidgets.QHBoxLayout()
+        self.horizontalLayout_3.setObjectName("horizontalLayout_3")
+        self.verticalLayout.addLayout(self.horizontalLayout_3)
         self.verticalLayout_3 = QtWidgets.QVBoxLayout()
         self.verticalLayout_3.setSpacing(3)
         self.verticalLayout_3.setObjectName("verticalLayout_3")
@@ -202,6 +210,7 @@ class Ui_AudioDialog(object):
         self.lrcCheck.setText(_translate("AudioDialog", "Create Lyrics file"))
         self.label_2.setText(_translate("AudioDialog", "<html><head/><body><p>Audio Flow</p></body></html>"))
         self.flowAdd.setText(_translate("AudioDialog", "Add Item"))
+        self.bulkaddBtn.setText(_translate("AudioDialog", "Bulk Add"))
         self.label_5.setText(_translate("AudioDialog", "Entries:"))
         self.label_6.setText(_translate("AudioDialog", "Output"))
         self.label_8.setText(_translate("AudioDialog", "files"))

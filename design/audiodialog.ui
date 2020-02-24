@@ -134,6 +134,13 @@
              </property>
             </spacer>
            </item>
+           <item>
+            <widget class="QPushButton" name="bulkaddBtn">
+             <property name="text">
+              <string>Bulk Add</string>
+             </property>
+            </widget>
+           </item>
           </layout>
          </item>
         </layout>
@@ -258,6 +265,9 @@
         </layout>
        </item>
       </layout>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_3"/>
      </item>
      <item>
       <layout class="QVBoxLayout" name="verticalLayout_3">

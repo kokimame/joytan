@@ -9,7 +9,7 @@ import pydub
 
 import gui
 from gui.qt import *
-from gui.utils import showCritical, getFiles, getCompleted
+from gui.utils import showCritical, getFiles, getCompleted,showWarning
 from gui.widgets.flowitem import FlowItem, Mp3Object, EwkeyObject, Rest, Index
 
 def on_audiodialog(mw):
@@ -59,6 +59,9 @@ class AudioDialog(QDialog):
         self.form.stopBtn.clicked.connect(self._on_stop)
         self.form.settingBtn.clicked.connect(
             lambda: gui.dialogs.open("Preferences", self.mw, back_to=self, tab="TTS"))
+        import gui.bulkadd
+        self.form.bulkaddBtn.clicked.connect(
+            lambda: gui.dialogs.open("BulkaddDialog", self))
 
     def _ui_progress(self):
         self.form.stopBtn.setEnabled(False)
@@ -81,6 +84,57 @@ class AudioDialog(QDialog):
         self._add_item(self.list_lookup['flow'], Index)
         for ewkey in self.mw.entrylist.get_config('ewkeys'):
             self._add_item(self.list_lookup['flow'], EwkeyObject, ewkey)
+
+    def _remove_flow(self):
+        flow=self.list_lookup['flow']['ui']
+        for i in range(flow.count()):
+            flow.takeItem(0)
+
+    def bulkadd_flow(self,text):
+        self._remove_flow()
+        cursor=0
+        lent=len(text)
+        plan=[]
+        while cursor<lent:
+            if cursor>0 and text[cursor-1]==text[cursor] and text[cursor]!='r':
+                plan[len(plan)-1][1]+=1
+            else:
+                if text[cursor]=='a':
+                    plan.append(['atop',1])
+                if text[cursor]=='i':
+                    plan.append(['index',1])
+                elif text[cursor]=='r':
+                    plan.append(['rest',1])
+                elif '1'<=text[cursor]<='9':
+                    plan.append(['def-'+text[cursor],1])
+                elif text[cursor]=='e':
+                    cursor+=1
+                    if(cursor==lent):
+                        break
+                    plan.append(['ex-'+text[cursor],1])
+            cursor+=1
+        errMsg=""
+        for ewkey in plan:
+            if ewkey[0]=='index':
+                self._add_item(self.list_lookup['flow'],
+                               Index)
+            elif ewkey[0]=='rest':
+                self._add_item(self.list_lookup['flow'],
+                               Rest)
+            else:
+                if ewkey[0] not in self.mw.entrylist.get_config('ewkeys'):
+                    errMsg+="warning:"+ ewkey[0] + " is not defined.\n"
+                self._add_item(self.list_lookup['flow'],
+                               EwkeyObject, ewkey[0])
+            if ewkey[1]>1:
+                flow = self.list_lookup['flow']['ui']
+                inner=flow.itemWidget(flow.item(flow.count()-1))
+                repeat=inner.findChild(QSpinBox,"repeat")
+                repeat.setValue(ewkey[1])
+
+        if errMsg!="":
+            showWarning(errMsg)
+
 
     def _ui_add_bgm(self):
         badd = self.form.bgmAdd

@@ -389,7 +389,7 @@ class AudioDialog(QDialog):
         return setting
 
     def _destdir(self):
-        return os.path.join(self.mw.projectbase(), "audiobook")
+        return os.path.join(self.mw.projectbase(), self.mw.config['title'])
 
     def reject(self):
         self._stop_all_audio()

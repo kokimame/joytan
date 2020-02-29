@@ -304,7 +304,10 @@ def _kanji2(kanji):
 def injpchar(char):
     return char in jpchar
 
-def modi2chikana(text):
+def inChinese(ch):
+    return '\u4e00' <= ch <= '\u9fff'
+
+def modi2chikana(text, c2c=True):
     text = str(text)
     newtext = ""
     for idx,char in enumerate(text):
@@ -321,13 +324,13 @@ def modi2chikana(text):
             newtext += "停顿"
         if char=='ー':
             newtext += '长音'
-        if char in jpchar:
+        if char in jpchar and c2c:
             newtext += ","
     text = newtext
-
-    for long in longer:
-        split = long[0] + "," + long[1]
-        text = text.replace(split, long)
+    if c2c:
+        for long in longer:
+            split = long[0] + "," + long[1]
+            text = text.replace(split, long)
 
     newtext = ""
     state = -1
@@ -339,7 +342,11 @@ def modi2chikana(text):
                 newtext += ","
             cursor += 1
             continue
-        newstate = text[cursor] in jpchar
+        newstate=state
+        if inChinese(text[cursor]):
+            newstate = 2
+        if text[cursor] in jpchar:
+            newstate = 1
         if state == -1 or newstate == state:
             newtext += text[cursor]
             state = newstate

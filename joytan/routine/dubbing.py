@@ -53,24 +53,30 @@ class DubbingWorker:
         from joytan.speaker import router
         def chikana_force_run(svc_id, options, path, text):
             opt=options.copy()
-            opt.pop('chikana')
-            jpopt=opt.copy()
-            jpopt['voice']=jpopt['voice2']
-            opt.pop('voice2')
-            jpopt.pop('voice2')
+            jpopt=options['addPara']['chikanaOpt']
+            if 'service' in jpopt:
+                jpsvc = jpopt['service']
+            elif 'svc' in jpopt:
+                jpsvc = jpopt['svc']
+            else:
+                jpsvc = svc_id
             from joytan.routine.chikana import modi2chikana
-            chikana=modi2chikana(text)
+            if 'c2c' in jpopt:
+                chikana = modi2chikana(text,jpopt['c2c'])
+            else:
+                chikana = modi2chikana(text)
+
             asegs=[]
             if len(chikana) == 1:
                 word=chikana[0]
                 if word[0]:
-                    router.force_run(svc_id, jpopt, path, word[1])
+                    router.force_run(jpsvc, jpopt, path, word[1])
                 else:
                     router.force_run(svc_id, options, path, word[1])
             else:
                 for word in chikana:
                     if word[0]:
-                        router.force_run(svc_id, jpopt, path, word[1])
+                        router.force_run(jpsvc, jpopt, path, word[1])
                     else:
                         router.force_run(svc_id, options, path, word[1])
 
@@ -82,8 +88,11 @@ class DubbingWorker:
 
         def force_run(svc_id, options, path, text):
             try:
-                if 'chikana' in options and options['chikana'] == True:
-                    chikana_force_run(svc_id, options, path, text)
+                if 'addPara' in options:
+                    if 'chikana' in options['addPara'] and options['addPara']['chikana']==True:
+                        chikana_force_run(svc_id, options, path, text)
+                    else:
+                        router.force_run(svc_id, options, path, text)
                 else:
                     router.force_run(svc_id, options, path, text)
             except Exception as e:

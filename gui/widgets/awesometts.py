@@ -71,7 +71,9 @@ class ServiceQuo(QLabel):
         else:
             content = self._BODY.format(body=self.ewkey, svc=svc_id)
             # desc = self.summarizer(option)
-            content += self._OPTIONS.format(options=str(sorted(options.items())))
+            s=str(options.items())
+            s=str(options.items())[12:len(s)-1]
+            content += self._OPTIONS.format(options=s)
             self.options = options
         self.setText(content)
 
@@ -167,8 +169,6 @@ class AwesomeTTS(QWidget):
             text.setText("")
         except AttributeError:
             text.setPlainText("")
-
-        self._check_chikana()
 
 
     def _control(self):
@@ -490,35 +490,15 @@ class AwesomeTTS(QWidget):
                 vinput.currentIndexChanged.connect(self._on_voice_change)
             row += 1
 
-        val = str(options[0]['values'])
-        havezh = max(val.find('zh'), val.find('Chinese'))
-        havejp = max(val.find('jp'), val.find('Japanese'))
-        if havezh>=0 and havejp>=0:
-            # prounce the kanji in Japanese by Chinese vocal
-            label = Label("Chinese kanji+Japanese kana:")
-            label.setFont(self._FONT_LABEL)
-            check = QCheckBox()
-            label.setObjectName("chikanaLabel")
-            check.setObjectName("chikanaCheck")
-            check.stateChanged.connect(self._update_overview)
-            panel.addWidget(label, row, 0)
-            panel.addWidget(check, row, 1, 1, 2)
-            row+=1
-            label2 = Label("Second voice:")
-            label.setFont(self._FONT_LABEL)
-            drop=QComboBox()
-            label2.setObjectName("chikanaLabel2")
-            drop.setObjectName("chikanaDrop")
-            for value, text in options[0]['values']:
-                drop.addItem(text, value)
-            drop.currentIndexChanged.connect(self._update_overview)
-            panel.addWidget(label2, row, 0)
-            panel.addWidget(drop, row, 1, 1, 2)
-            label.hide()
-            check.hide()
-            label2.hide()
-            drop.hide()
-            row+=1
+        label = Label("Additional Parameters:")
+        line = QLineEdit()
+        label.setObjectName("addLabel")
+        line.setObjectName("addLine")
+        line.textChanged.connect(self._update_overview)
+        panel.addWidget(label, row, 0)
+        panel.addWidget(line, row, 1, 1, 2)
+        row+=1
+
 
         extras = self.router.get_extras(svc_id)
         if extras:
@@ -580,9 +560,6 @@ class AwesomeTTS(QWidget):
 
         vinputs = widget.findChildren(self._OPTIONS_WIDGETS)
 
-        if len(vinputs) >len(options): # remove chikana
-            vinputs.pop()
-
         assert len(vinputs) == len(options)
 
         for i, opt in enumerate(options):
@@ -621,14 +598,9 @@ class AwesomeTTS(QWidget):
                         idx = 0
 
                 vinput.setCurrentIndex(idx)
-        if use_options and 'chikana' in use_options and use_options['chikana']==True:
-            check = widget.findChild(QCheckBox, "chikanaCheck")
-            v2= widget.findChild(QComboBox, "chikanaDrop")
-            check.setChecked(True)
-            idx = v2.findData(use_options['voice2'])
-            v2.setCurrentIndex(idx)
-
-
+        if use_options and 'addPara' in use_options:
+            line = widget.findChild(QLineEdit, "addLine")
+            line.setText(str(use_options['addPara']))
 
 
 
@@ -867,27 +839,25 @@ class AwesomeTTS(QWidget):
             .widget(idx).findChildren(self._OPTIONS_WIDGETS)
         options = self.router.get_options(svc_id)
 
-        if len(vinputs) >len(options): #remove chikana
-            vinputs.pop()
         assert len(options) == len(vinputs)
+        from collections import OrderedDict
+        optVal=OrderedDict()
+        for i in range(len(options)):
+            if isinstance(vinputs[i], QAbstractSpinBox):
+                optVal[options[i]['key']]=vinputs[i].value()
+            else:
+                optVal[options[i]['key']]=vinputs[i].itemData(vinputs[i].currentIndex())
 
-        optVal={
-            options[i]['key']:
-                vinputs[i].value()
-                if isinstance(vinputs[i], QAbstractSpinBox)
-                else vinputs[i].itemData(vinputs[i].currentIndex())
-            for i in range(len(options))
-        }
 
-        check = self.findChild(QStackedWidget, 'panels') \
-            .widget(idx).findChild(QCheckBox, "chikanaCheck")
-        if check!=None and check.isChecked():
-            optVal['chikana']=True
-            v2 = self.findChild(QStackedWidget, 'panels') \
-                .widget(idx).findChild(QComboBox, "chikanaDrop")
-            if v2!=None:
-                optVal['voice2']=v2.itemData(v2.currentIndex())
-
+        line= self.findChild(QStackedWidget, 'panels') \
+            .widget(idx).findChild(QLineEdit,"addLine")
+        if line.text().strip()!="":
+            try:
+                d=eval(line.text())
+                if(type(d).__name__=='dict'):
+                    optVal['addPara']=d
+            except:
+                pass
         return svc_id, optVal
 
     def _get_service_text(self):
@@ -946,50 +916,17 @@ class AwesomeTTS(QWidget):
         return frame
 
     def _on_voice_change(self):
-        self._check_chikana()
-
-    def _check_chikana(self):
         dropdown = self.findChild(QComboBox, 'service')
         idx = dropdown.currentIndex()
         svc_id = dropdown.itemData(idx)
         # if svc_id.startswith('group:'):
         #     return svc_id, None
-        widge= self.findChild(QStackedWidget, 'panels') \
-            .widget(idx)
-        stack = widge.findChildren(self._OPTIONS_WIDGETS)
-        if len(stack)>0:
-            optIdx = stack[0].currentIndex()
-            options = self.router.get_options(svc_id)
-            label = widge.findChild(QLabel, "chikanaLabel")
-            check = widge.findChild(QCheckBox, "chikanaCheck")
-            if label!=None and options[0]['key'] == 'voice':
-                val = str(options[0]['values'][optIdx])
-                iszh = max(val.find('zh'), val.find('Chinese'))
-                val = str(options[0]['values'])
-                havejp = max(val.find('jp'),val.find('Japanese'))
-                if iszh >= 0 and havejp>=0:
-                    self._chikana_vis(idx,True)
-                else:
-                    self._chikana_vis(idx,False)
-                    check.setChecked(False)
-
-    def _chikana_vis(self,idx,vis):
         widge = self.findChild(QStackedWidget, 'panels') \
             .widget(idx)
-        label = widge.findChild(QLabel, "chikanaLabel")
-        check = widge.findChild(QCheckBox, "chikanaCheck")
-        label2 = widge.findChild(QLabel, "chikanaLabel2")
-        drop = widge.findChild(QComboBox, "chikanaDrop")
-        if vis==True:
-            label.setVisible(True)
-            check.setVisible(True)
-            label2.setVisible(True)
-            drop.setVisible(True)
-        else:
-            label.hide()
-            check.hide()
-            label2.hide()
-            drop.hide()
+        line=widge.findChild(QLineEdit,"addLine")
+        if line!=None:
+            line.setText("")
+
 
 
 

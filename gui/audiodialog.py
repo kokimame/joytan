@@ -54,6 +54,7 @@ class AudioDialog(QDialog):
         self.show()
 
     def _ui_button(self):
+        self.form.pauseBtn.clicked.connect(self._on_pause)
         self.form.createBtn.clicked.connect(self._on_create)
         self.form.stopBtn.setEnabled(False)
         self.form.stopBtn.clicked.connect(self._on_stop)
@@ -65,6 +66,7 @@ class AudioDialog(QDialog):
 
     def _ui_progress(self):
         self.form.stopBtn.setEnabled(False)
+        self.form.pauseBtn.setEnabled(False)
         self.form.createBtn.setEnabled(True)
         self.form.progressBar.reset()
         self.form.pgMsg.setText("")
@@ -201,7 +203,7 @@ class AudioDialog(QDialog):
         if self.mw.entrylist.count() == 0:
             showCritical("No entries found in your entry list.")
             return
-
+        self.form.pauseBtn.setEnabled(True)
         # entries: The Entry to be included in the upcoming audiobook.
         if self.form.allBtn.isChecked():
             entries = self.mw.entrylist.get_entry_all()
@@ -253,6 +255,7 @@ class AudioDialog(QDialog):
                 self.completed = False
                 self.prog.emit("Setting up audio files. This may take a few minutes")
                 self.worker.setup_audio()
+                self.wait=0
                 entryNum = len(entries)
                 pieceSize = entryNum / _piecesNum
 
@@ -266,6 +269,13 @@ class AudioDialog(QDialog):
                         # self.worker.onepass(ew)
                         tryNum=0
                         while tryNum<3:
+                            if self.wait>0:
+                                if(self.wait==1):
+                                    self.prog.emit("Paused.")
+                                    self.wait=2
+                                self.sleep(1)
+                                tryNum=0
+                                continue
                             try:
                                 self.worker.onepass(ew)
                                 tryNum=3
@@ -273,6 +283,11 @@ class AudioDialog(QDialog):
                                 msg="Error:"+str(e).replace('\n','').replace('/r','').strip()
                                 self.prog.emit(msg)
                                 tryNum+=1
+                                if tryNum==1:
+                                    showWarning("Error occurs while creating audiobook at Entry"
+                                                   " No.%d. System stops with exception '%s'\n"
+                                                "Would retry after 100 seconds."
+                                                   % (ew.row + 1,e))
                                 if tryNum==2:
                                     self.fail.emit("Error occurs while creating audiobook at Entry"
                                                    " No.%d. System stops with exception '%s'"
@@ -306,7 +321,7 @@ class AudioDialog(QDialog):
         def _on_progress(msg):
             self.form.pgMsg.setText(msg)
             val = self.form.progressBar.value()
-            if msg.find("Error:") < 0:
+            if msg.find("Error:") < 0 or msg.find("Paus")<0:
                 self.form.progressBar.setValue(val+1)
 
         def _on_fail(msg):
@@ -328,6 +343,7 @@ class AudioDialog(QDialog):
 
         self.form.createBtn.setEnabled(False)
         self.form.stopBtn.setEnabled(True)
+        self.form.pauseBtn.setEnabled(True)
         # Progress contains fixed 2 step; setting up audio files, mixing with BGM
         self.form.progressBar.setRange(0, len(entries)+2+_piecesNum)
 
@@ -338,6 +354,19 @@ class AudioDialog(QDialog):
         self._ui_progress()
         self.form.stopBtn.setEnabled(False)
         self.form.createBtn.setEnabled(True)
+        self.form.pauseBtn.setEnabled(False)
+
+    def _on_pause(self):
+        text = self.form.pauseBtn.text()
+        if (text == "Pause"):
+            self.form.pauseBtn.setText("Resume")
+            self.thread.prog.emit("Pausing, please wait some time.")
+            self.thread.wait=1
+        else:
+            self.form.pauseBtn.setText("Pause")
+            self.thread.prog.emit("Pause resuming, please wait some time.")
+            self.thread.wait=0
+
 
     def _stop_all_audio(self):
         for _list in [self.form.flowList, self.form.bgmList]:
@@ -394,4 +423,6 @@ class AudioDialog(QDialog):
     def reject(self):
         self._stop_all_audio()
         self.done(0)
+        gui.dialogs.close("BulkaddDialog")
         gui.dialogs.close("AudioDialog")
+

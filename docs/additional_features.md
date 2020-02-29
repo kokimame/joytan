@@ -13,11 +13,11 @@ To enable this feature, you should choose your Chinese TTS service first, and ad
 'chikana':True  
 'chikanaOpt':  
 --'service': String. the name of the TTS service, would be the same as the Chinese TTS service by default. You should use the name of TTS engine shown in the overview panel (the left side of preference panel).(Optional)  
---'c2c': Boolean. True if you want to pronounce kanas character to character (by adding ',' between them).(Optional, default is True)   
+--'c2c': Boolean. True if you want to pronounce kanas character to character (by adding ',' between them).(Optional, default is True)  
 --other options: all the options required for the japanese TTS service. You should used the name of options according to the text shown in the the overview panel (the left side of preference panel).
 
-For example, if you are using Amazon Polly, you may add the following addtional parameters.
+For example, if you are using Amazon Polly, you may add the following addtional parameters (Case sensitively).
 
-{'chikana':True,'chikanaOpt':{'voice':'mizuki','variant':'x-slow','c2c': True}}
+{'chikana':True,'chikanaOpt':{'voice':'Mizuki','variant':'x-slow','c2c': True}}
 
 Note: this feature could make the generation process become very slow, especially when Japanese and Chinese words are mixed toghether.

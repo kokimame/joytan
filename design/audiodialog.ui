@@ -351,6 +351,12 @@
            <property name="text">
             <string>Progress:</string>
            </property>
+           <property name="alignment">
+            <set>Qt::AlignBottom|Qt::AlignLeading|Qt::AlignLeft</set>
+           </property>
+           <property name="wordWrap">
+            <bool>true</bool>
+           </property>
           </widget>
          </item>
          <item>
@@ -372,6 +378,9 @@
             </size>
            </property>
           </spacer>
+         </item>
+         <item>
+          <layout class="QVBoxLayout" name="verticalLayout_6"/>
          </item>
         </layout>
        </item>
@@ -396,6 +405,16 @@
             </size>
            </property>
           </spacer>
+         </item>
+         <item>
+          <widget class="QPushButton" name="pauseBtn">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
+           <property name="text">
+            <string>Pause</string>
+           </property>
+          </widget>
          </item>
          <item>
           <widget class="QPushButton" name="stopBtn">

@@ -69,13 +69,13 @@ class DubbingWorker:
             asegs=[]
             if len(chikana) == 1:
                 word=chikana[0]
-                if word[0]:
+                if word[0]==1:
                     router.force_run(jpsvc, jpopt, path, word[1])
                 else:
                     router.force_run(svc_id, options, path, word[1])
             else:
                 for word in chikana:
-                    if word[0]:
+                    if word[0]==1:
                         router.force_run(jpsvc, jpopt, path, word[1])
                     else:
                         router.force_run(svc_id, options, path, word[1])

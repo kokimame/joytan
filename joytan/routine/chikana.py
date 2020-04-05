@@ -291,7 +291,8 @@ jpcndict={
 '無':'无', '夢':'梦', '網':'网', '黙':'默', '匁':'两', '訳':'译', '薬':'药',
 '癒':'愈', '猶':'犹', '遊':'游', '揺':'摇', '葉':'叶', '様':'样', '謡':'谣',
 '裏':'里', '竜':'龙', '猟':'猎', '糧':'粮', '隣':'邻', '涙':'泪', '塁':'垒',
-'霊':'灵', '隷':'隶', '齢':'龄', '錬':'炼', '労':'劳', '枠':'桦', '鹸':'碱'
+'霊':'灵', '隷':'隶', '齢':'龄', '錬':'炼', '労':'劳', '枠':'桦', '唸':'念',
+'繋':'系', '籤':'签', '鹸':'碱'
 }
 
 
@@ -318,9 +319,9 @@ def modi2chikana(text, c2c=True):
         else:
             if c2c:
                 if char == 'ん' or char == 'ン':
-                    newtext += "恩"
+                    newtext += r' <phoneme alphabet="ipa" ph="ɴɴ">n</phoneme>. '
                 elif char == 'は' or char == 'ハ':
-                    newtext += "哈"
+                    newtext += r'<phoneme alphabet="ipa" ph="hä">ha</phoneme>'
                 elif char== 'っ':
                     newtext += "停顿"
                 elif char=='ー':
@@ -350,8 +351,10 @@ def modi2chikana(text, c2c=True):
         newstate=state
         if inChinese(text[cursor]):
             newstate = 2
-        if text[cursor] in jpchar:
-            newstate = 1
+        # if text[cursor] in jpchar:
+        #     newstate = 1
+        else:
+            newstate=1
         if state == -1 or newstate == state:
             newtext += text[cursor]
             state = newstate

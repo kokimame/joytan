@@ -283,12 +283,12 @@ class AudioDialog(QDialog):
                                 msg="Error:"+str(e).replace('\n','').replace('/r','').strip()
                                 self.prog.emit(msg)
                                 tryNum+=1
-                                if tryNum==1:
+                                if tryNum==2:
                                     showWarning("Error occurs while creating audiobook at Entry"
                                                    " No.%d. System stops with exception '%s'\n"
                                                 "Would retry after 100 seconds."
                                                    % (ew.row + 1,e))
-                                if tryNum==2:
+                                if tryNum==3:
                                     self.fail.emit("Error occurs while creating audiobook at Entry"
                                                    " No.%d. System stops with exception '%s'"
                                                    % (ew.row + 1,e))

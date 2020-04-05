@@ -291,7 +291,7 @@ jpcndict={
 '無':'无', '夢':'梦', '網':'网', '黙':'默', '匁':'两', '訳':'译', '薬':'药',
 '癒':'愈', '猶':'犹', '遊':'游', '揺':'摇', '葉':'叶', '様':'样', '謡':'谣',
 '裏':'里', '竜':'龙', '猟':'猎', '糧':'粮', '隣':'邻', '涙':'泪', '塁':'垒',
-'霊':'灵', '隷':'隶', '齢':'龄', '錬':'炼', '労':'劳', '枠':'桦'
+'霊':'灵', '隷':'隶', '齢':'龄', '錬':'炼', '労':'劳', '枠':'桦', '鹸':'碱'
 }
 
 
@@ -313,17 +313,20 @@ def modi2chikana(text, c2c=True):
     for idx,char in enumerate(text):
         if char in replichar:
             newtext += text[idx-1]
-            continue
-        if char in jpcndict:
+        elif char in jpcndict:
             newtext += jpcndict[char]
-            continue
-        newtext +=char
-        if char == 'ん' or char == 'ン':
-            newtext += "n"
-        if char== 'っ':
-            newtext += "停顿"
-        if char=='ー':
-            newtext += '长音'
+        else:
+            if c2c:
+                if char == 'ん' or char == 'ン':
+                    newtext += "恩"
+                elif char == 'は' or char == 'ハ':
+                    newtext += "哈"
+                elif char== 'っ':
+                    newtext += "停顿"
+                elif char=='ー':
+                    newtext += '长音'
+            else:
+                newtext += char
         if char in jpchar and c2c:
             newtext += ","
     text = newtext

@@ -325,6 +325,8 @@ def modi2chikana(text, c2c=True):
                     newtext += "停顿"
                 elif char=='ー':
                     newtext += '长音'
+                else:
+                    newtext += char
             else:
                 newtext += char
         if char in jpchar and c2c:

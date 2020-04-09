@@ -1,12 +1,14 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'design/opendialog.ui'
+# Form implementation generated from reading ui file 'opendialog.ui'
 #
-# Created by: PyQt5 UI code generator 5.9.2
+# Created by: PyQt5 UI code generator 5.13.0
 #
 # WARNING! All changes made in this file will be lost!
 
+
 from PyQt5 import QtCore, QtGui, QtWidgets
+
 
 class Ui_OpenDialog(object):
     def setupUi(self, OpenDialog):
@@ -31,6 +33,16 @@ class Ui_OpenDialog(object):
         self.verticalLayout.addLayout(self.horizontalLayout_5)
         spacerItem = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.verticalLayout.addItem(spacerItem)
+        self.horizontalLayout = QtWidgets.QHBoxLayout()
+        self.horizontalLayout.setObjectName("horizontalLayout")
+        self.shuffleCheck = QtWidgets.QCheckBox(OpenDialog)
+        self.shuffleCheck.setObjectName("shuffleCheck")
+        self.horizontalLayout.addWidget(self.shuffleCheck)
+        self.nameCheck = QtWidgets.QCheckBox(OpenDialog)
+        self.nameCheck.setChecked(True)
+        self.nameCheck.setObjectName("nameCheck")
+        self.horizontalLayout.addWidget(self.nameCheck)
+        self.verticalLayout.addLayout(self.horizontalLayout)
         self.label = QtWidgets.QLabel(OpenDialog)
         self.label.setObjectName("label")
         self.verticalLayout.addWidget(self.label)
@@ -78,6 +90,8 @@ class Ui_OpenDialog(object):
         OpenDialog.setWindowTitle(_translate("OpenDialog", "Open file "))
         self.label_2.setText(_translate("OpenDialog", "Selected file:"))
         self.fileBtn.setText(_translate("OpenDialog", "..."))
+        self.shuffleCheck.setText(_translate("OpenDialog", "Shuffle Entries"))
+        self.nameCheck.setText(_translate("OpenDialog", "Use filename as output name"))
         self.label.setText(_translate("OpenDialog", "<html><style>\n"
 "p.small {\n"
 "    line-height: 1px;\n"
@@ -85,4 +99,3 @@ class Ui_OpenDialog(object):
 "</style><head/><body><p>To cancel &amp; stop opening a file, <br>please click the close button above.</p></body></html>"))
         self.label_3.setText(_translate("OpenDialog", "Progress:"))
         self.openBtn.setText(_translate("OpenDialog", "Open"))
-

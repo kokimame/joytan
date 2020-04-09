@@ -59,6 +59,27 @@
     </spacer>
    </item>
    <item>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QCheckBox" name="shuffleCheck">
+       <property name="text">
+        <string>Shuffle Entries</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QCheckBox" name="nameCheck">
+       <property name="text">
+        <string>Use filename as output name</string>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
     <widget class="QLabel" name="label">
      <property name="text">
       <string>&lt;html&gt;&lt;style&gt;

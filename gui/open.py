@@ -56,7 +56,30 @@ class OpenDialog(QDialog):
         self.form.progressBar.setRange(0, self._count_row())
         self.form.openBtn.setEnabled(False)
         self.form.fileBtn.setEnabled(False)
+
+        if self.form.nameCheck.isChecked():
+            mpath=self.form.fileLbl.text().replace(".csv","")
+            midx=mpath.find('/')
+            if midx>0:
+                mpath=mpath[midx+1:len(midx)-1]
+            self.mw.config['title']=mpath
         self.thread.start()
+        if self.form.shuffleCheck.isChecked():
+            self.thread.finished.connect(lambda : self._shuffle())
+
+
+    def _shuffle(self):
+        targets=self.mw.entrylist.get_entry_all()
+        import random
+        for i in range(0, len(targets)):
+            if i < len(targets) / 2:
+                ew = targets[i]
+                ew.move_to(targets[-i - 1].row, to_update=False)
+
+        for i in range(0, len(targets), 2):
+            ew = targets[i]
+            ew.move_to(random.choice(targets).row, to_update=False)
+        self.mw.entrylist.update_all()
 
     def _on_progress(self, atop, items):
         ew = self.mw.entrylist.add_entry(atop=atop)

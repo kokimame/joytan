@@ -323,6 +323,8 @@ class AudioDialog(QDialog):
             val = self.form.progressBar.value()
             if msg.find("Error:") < 0 or msg.find("Paus")<0:
                 self.form.progressBar.setValue(val+1)
+            elif msg.find("Error:") > 0:
+                self.form.progressBar.setValue(val - 1)
 
         def _on_fail(msg):
             """

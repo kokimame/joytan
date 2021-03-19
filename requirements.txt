@@ -1,7 +1,7 @@
 boto3==1.5.9
 bs4==0.0.1
 googletrans==2.4.0
-Jinja2==2.10
+Jinja2==2.11.3
 pydub==0.20.0
 PyQt5==5.9.2
 requests==2.20.0
